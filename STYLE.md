@@ -57,11 +57,6 @@
 - `<style scoped>` is a good home for styles that genuinely belong to one component. Be careful not to reach
   for it just to avoid engaging with the shared stylesheets in `src/styles/`.
 
-## Rewriting text people read
-- If you rewrite any text that someone will read, it is probably already translated. Changing it likely
-  breaks those translations.
-- Nothing catches this for you, so be careful.
-
 ## Escape hatches
 - Do not use the non-null assertion `!`. It is an ESLint error in `src`, and is only allowed in tests.
   Narrowing with an `if` is usually the best answer.

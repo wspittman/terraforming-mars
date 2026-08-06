@@ -1,5 +1,5 @@
 <template>
-  <div class="card-list-container" :class="getLanguageCssClass()">
+  <div class="card-list-container">
     <h1 v-i18n>Cards List</h1>
 
       <!-- start filters -->
@@ -187,7 +187,6 @@
         <div v-show="scrolled" class="sidebar_item card-list-scroll-top" title="Scroll to top" @click="scrollToTop()">
           <div class="card-list-scroll-top-arrow">↑</div>
         </div>
-        <LanguageIcon class="corner-language-icon"/>
         <PreferencesIcon/>
       </div>
   </div>
@@ -222,7 +221,6 @@ import Card from '@/client/components/card/Card.vue';
 import Colony from '@/client/components/colonies/Colony.vue';
 import GlobalEvent from '@/client/components/turmoil/GlobalEvent.vue';
 import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
-import LanguageIcon from '@/client/components/LanguageIcon.vue';
 import Milestone from '@/client/components/Milestone.vue';
 import Award from '@/client/components/Award.vue';
 import TurmoilAgendaContainer from '@/client/components/cardlist/TurmoilAgendaContainer.vue';
@@ -246,7 +244,6 @@ export default defineComponent({
     Award,
     TurmoilAgendaContainer,
     PreferencesIcon,
-    LanguageIcon,
   },
   data() {
     return {
@@ -534,10 +531,6 @@ export default defineComponent({
         return false;
       }
       return this.expansions[getAward(name).requirements ?? 'base'] === true;
-    },
-    getLanguageCssClass() {
-      const language = getPreferences().lang;
-      return 'language-' + language;
     },
     colonyModel(colonyName: ColonyName): ColonyModel {
       return {

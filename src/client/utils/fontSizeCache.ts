@@ -1,5 +1,5 @@
 // Persistent cache of fitted font sizes (see textFit), keyed on the rendered
-// (translated) text, which keeps it locale-correct automatically.
+// rendered text, which keeps the cached size correct automatically.
 //
 // Stored in localStorage rather than a cookie so it isn't sent to the server on
 // every request. Each entry is namespaced by a prefix. Entries expire two days

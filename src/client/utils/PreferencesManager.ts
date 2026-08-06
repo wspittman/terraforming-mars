@@ -20,7 +20,6 @@ export type Preferences = {
   symbol_overlay: boolean,
   animated_title: boolean,
   experimental_ui: boolean,
-  lang: string,
 }
 
 export type Preference = keyof Preferences;
@@ -30,8 +29,6 @@ const defaults: Preferences = {
   enable_sounds: true,
   magnify_cards: true,
   show_alerts: true,
-  lang: 'en',
-
   hide_hand: false,
   hide_awards_and_milestones: false,
   show_milestone_details: true,
@@ -76,11 +73,7 @@ export class PreferencesManager {
   }
 
   private _set(key: Preference, val: string | boolean) {
-    if (key === 'lang') {
-      this._values.lang = String(val);
-    } else {
-      this._values[key] = typeof(val) === 'boolean' ? val : (val === '1');
-    }
+    this._values[key] = typeof(val) === 'boolean' ? val : (val === '1');
   }
 
   // Making this Readonly means that it's Typescript-impossible to
@@ -96,11 +89,7 @@ export class PreferencesManager {
     }
     this._set(name, val);
     if (this.localStorageSupported()) {
-      if (name === 'lang') {
-        localStorage.setItem(name, this._values.lang);
-      } else {
-        localStorage.setItem(name, val ? '1' : '0');
-      }
+      localStorage.setItem(name, val ? '1' : '0');
     }
   }
 }

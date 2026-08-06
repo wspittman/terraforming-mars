@@ -162,14 +162,7 @@ export default defineComponent({
       }
 
       for (const k of Object.keys(this.prefs) as Array<Preference>) {
-        if (k === 'lang') {
-          continue;
-        }
         this.setBoolPreferencesCSS(target, this.prefs[k], k);
-      }
-
-      if (!target.classList.contains('language-' + this.prefs.lang)) {
-        target.classList.add('language-' + this.prefs.lang);
       }
     },
     okClicked(): void {

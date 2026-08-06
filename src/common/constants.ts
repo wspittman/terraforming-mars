@@ -78,27 +78,6 @@ export const BONUS_SECONDS_PER_ACTION = 5;
 // Leaders/CEOs
 export const ASIMOV_AWARD_BONUS = 2;
 
-export const ALL_LANGUAGES = ['en', 'de', 'fr', 'ru', 'cn', 'pl', 'es', 'br', 'it', 'ko', 'nl', 'hu', 'jp', 'bg', 'nb', 'ua', 'fi'] as const;
-export type LANGUAGE = typeof ALL_LANGUAGES[number];
-export const LANGUAGES: Record<LANGUAGE, [string, string]> = {
-  en: ['English', 'English'],
-  de: ['Deutsch', 'German'],
-  fr: ['Français', 'French'],
-  ru: ['Русский', 'Russian'],
-  cn: ['华语', 'Chinese'],
-  pl: ['Polski', 'Polish'],
-  es: ['Español', 'Spanish'],
-  br: ['Português Brasileiro', 'Brazilian Portugese'],
-  it: ['Italiano', 'Italian'],
-  ko: ['한국어', 'Korean'],
-  nl: ['Nederlands', 'Dutch'],
-  hu: ['Magyar', 'Hungarian'],
-  jp: ['日本語', 'Japanese'],
-  bg: ['Български', 'Bulgarian'],
-  nb: ['Norsk', 'Norwegian'],
-  ua: ['Українська', 'Ukrainian'],
-  fi: ['Suomi', 'Finnish'],
-};
 
 export const APP_NAME = 'Terraforming Mars';
 export const DISCORD_INVITE = 'https://discord.gg/afeyggbN6Y';

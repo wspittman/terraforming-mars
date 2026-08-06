@@ -25,7 +25,7 @@ npm run build                # Full build: CSS + JSON static files, server (tsc)
 npm run build:server         # TypeScript compile server only: tsc --build src/tsconfig.json
 npm run build:client         # Webpack production bundle (runs make:cards first)
 npm run build:test           # Compile tests: tsc --build tests/tsconfig.json
-npm run lint                 # All lints: eslint + i18n audit + vue-tsc
+npm run lint                 # All lints: eslint + vue-tsc + stylelint
 npm run lint:client          # Vue type checking: vue-tsc --noEmit
 npm run lint:server          # ESLint on src and tests
 npm run lint:fix             # ESLint autofix
@@ -138,9 +138,9 @@ Good wiki pages:
 - Client tests: use `@vue/test-utils` mount/shallowMount with JSDOM setup from `tests/client/components/setup.ts`.
 - Test framework: Mocha + Chai (expect style). Client tests use mochapack.
 
-### Internationalization
+### English text rendering
 
-Custom i18n via `src/client/directives/i18n.ts` with `v-i18n` directive. Translation files in `src/locales/`. Strings are matched by exact text content. See the wiki's [Translations](https://github.com/terraforming-mars/terraforming-mars/wiki/Translations) page for the contributor workflow.
+The client is English-only. The legacy-named `v-i18n` directive and `$t` helper remain responsible for interpolating dynamic log and UI message parameters; they do not load or select translations. Do not add locale selection or translation files.
 
 ## Style Guide
 

@@ -50,8 +50,6 @@ import {Log} from '@/common/logs/Log';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {undergroundResourceTokenDescription} from '@/common/underworld/UndergroundResourceToken';
 import {isMoonSpace, getSpaceName} from '@/common/boards/spaces';
-import {getPreferences} from '@/client/utils/PreferencesManager';
-import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
 import {range} from '@/common/utils/utils';
 
 const cardTypeToCss: Record<CardType, string | undefined> = {
@@ -165,7 +163,7 @@ export default defineComponent({
       return tileTypeToString;
     },
     formatter(): Intl.ListFormat {
-      return new Intl.ListFormat(gameLocaleToIntlLocale(getPreferences().lang), {type: 'conjunction', style: 'long'});
+      return new Intl.ListFormat('en', {type: 'conjunction', style: 'long'});
     },
   },
 });

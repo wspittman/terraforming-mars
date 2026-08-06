@@ -2,7 +2,7 @@
 
 export enum LogMessageDataType {
   STRING, // 0
-  RAW_STRING, // Raw strings are untranslated.  // 1
+  RAW_STRING, // Raw strings are inserted without special formatting.  // 1
   PLAYER, // 2
   CARD, // 3
   AWARD, // 4

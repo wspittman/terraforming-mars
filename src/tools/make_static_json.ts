@@ -1,4 +1,4 @@
-// Generates the files settings.json and translations.json, stored in src/genfiles
+// Generates settings.json in src/genfiles.
 import '@/server/init';
 
 import child_process from 'child_process';

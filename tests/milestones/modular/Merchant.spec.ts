@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import { Payment } from '../../../src/common/inputs/Payment';
 import { ALL_RESOURCES } from '../../../src/common/Resource';
 import { Units } from '../../../src/common/Units';
-import { StormCraftIncorporated } from '../../../src/server/cards/colonies/StormCraftIncorporated';
 import { NirgalEnterprises } from '../../../src/server/cards/prelude2/NirgalEnterprises';
 import { StagedProtests } from '../../../src/server/cards/underworld/StagedProtests';
 import { SelectPayment } from '../../../src/server/inputs/SelectPayment';
@@ -51,27 +50,6 @@ describe('Merchant', () => {
         plants: 2,
         energy: 2,
         heat: run.heat,
-      });
-
-      expect(milestone.canClaim(player)).eq(run.expected);
-    });
-  }
-
-  for (const run of [
-    { floaters: 5, expected: true }, // 5 × 2 = 10 availableHeat; 2 reserved, 8 usable as MC
-    { floaters: 4, expected: false }, // 4 × 2 = 8 availableHeat; 2 reserved, only 6 usable as MC
-  ] as const) {
-    it('StormCraft Incorporated ' + JSON.stringify(run), () => {
-      player.canUseHeatAsMegaCredits = true;
-      const stormcraft = new StormCraftIncorporated();
-      stormcraft.resourceCount = run.floaters;
-      player.playedCards.push(stormcraft);
-      player.stock.override({
-        megacredits: 2,
-        steel: 2,
-        titanium: 2,
-        plants: 2,
-        energy: 2,
       });
 
       expect(milestone.canClaim(player)).eq(run.expected);

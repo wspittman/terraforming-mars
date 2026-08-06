@@ -1,6 +1,22 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+A personal fork of [terraforming-mars/terraforming-mars](https://github.com/terraforming-mars/terraforming-mars) intended to emulate a multiplayer player game, in the style my group plays it, but with only a single player. It is intended to only be run locally.
+
+We will be liberally removing functionality that is unnecessary to achieve this goal.
+
+## Workflows
+
+- Create or continue a plan: use the `planning-with-files` skill. When continuing, only implement changes in the **next phase** of the plan before stopping for feedback.
+- Write unit tests: use the `write-unit-test` skill, but disregard the instruction to use `node:test`. This repo uses Mocha tests instead.
+
+### Verifying Changes
+
+- Take a step back and consider if the changes solve the right problem.
+- If you are working with or from a plan, review to ensure that the plan files are structured correctly and up to date.
+- Ensure error cases are handled gracefully, predictably, and provide enough information for future maintainers.
+- Update `README.md` and any relevant `AGENTS.md` files as necessary when changes affect them.
+
+---
 
 ## Build & Development Commands
 
@@ -106,7 +122,9 @@ Vue 3 with Options API. Components are in `src/client/components/`. The root `Ap
 Pluggable backends in `src/server/database/`: `SQLite`, `PostgreSQL`, `LocalFilesystem`. Games are serialized/deserialized through `SerializedGame`/`SerializedPlayer` types. `GameLoader` handles caching and retrieval.
 
 ### Wiki
+
 Good wiki pages:
+
 - [Databases](https://github.com/terraforming-mars/terraforming-mars/wiki/Databases)
 - [dot-env](https://github.com/terraforming-mars/terraforming-mars/wiki/dot-env) pages for local setup
 - [Development tips](https://github.com/terraforming-mars/terraforming-mars/wiki/Development-tips)
@@ -126,4 +144,4 @@ Custom i18n via `src/client/directives/i18n.ts` with `v-i18n` directive. Transla
 
 ## Style Guide
 
-Read STYLE.md. Adhere to it as best as you can, alling out outliers.
+Read STYLE.md. Adhere to it as best as you can, calling out outliers.

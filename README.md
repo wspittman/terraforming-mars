@@ -1,3 +1,11 @@
+# Terraforming Mars - Solo Multiplayer Edition
+
+This is a personal fork of [terraforming-mars/terraforming-mars](https://github.com/terraforming-mars/terraforming-mars) intended to emulate a four-player game, in the style my group plays it, but with only a single player. It is intended to only be run locally.
+
+Other functionality from the upstream repo has been liberally removed.
+
+---
+
 # <a name="README"> Terraforming Mars Open-source
 
 <div align="center">
@@ -29,9 +37,11 @@ to foster. Note that any new features you see on this repo made available on tha
 The board game is great and this repository highly recommends [purchasing it](https://www.amazon.com/Stronghold-Games-6005SG-Terraforming-Board/dp/B01GSYA4K2) for personal use.
 
 ## ⬤ I want to join the community!
+
 [Join us over on Discord!](https://discord.gg/afeyggbN6Y).
 
 ## ⬤ I want to play!
+
 There's a instance available at https://terraforming-mars.herokuapp.com/. It's generally reliable, but read more below.
 
 There's also this excellent
@@ -42,25 +52,30 @@ Unfinished solo games are flushed after one day. We continue to make stability a
 but to make sure your game remains, we highly recommended to host your own web server.
 
 ## ⬤ I want to learn how to play
+
 There are far too many good tutorials online. [Here are the rulebooks, though.](https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks)
 
 ## ⬤ I want to run a copy of the server locally
+
 Check out our [Local setup wiki page](https://github.com/bafolts/terraforming-mars/wiki/Local-Setup)
 
 Honestly, it's really simple.
 
 ## ⬤ I want to run a copy of the server on Heroku
+
 Check out our [Heroku setup wiki page](https://github.com/bafolts/terraforming-mars/wiki/Heroku-Setup)
 
 (As of 2022-11-28, Heroku no longer has a free tier. However, it is still our recommended way to deploy,
 as they're the clearest instructions.)
 
 ## ⬤ I want to run a copy of the server on Docker
+
 Check out our [Docker setup wiki page](https://github.com/bafolts/terraforming-mars/wiki/Docker-Setup)
 
 (Warning, this is not aggressively supported, though some people are on the Discord.)
 
 ## ⬤ I want to run a copy on a YunoHost server
+
 [![Install Terraforming Mars with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=terraforming-mars)
 
 The code for the Yunohost Terraforming-Mars package is in this [GitHub repo](https://github.com/YunoHost-Apps/terraforming-mars_ynh)
@@ -68,12 +83,15 @@ The code for the Yunohost Terraforming-Mars package is in this [GitHub repo](htt
 (Warning, this is not specifically supported.)
 
 ## ⬤ I want to report a bug or feature request
+
 Add it to our [issues tab](https://github.com/bafolts/terraforming-mars/issues/new).
 
 ## ⬤ I want to contribute to development
+
 See [contribution guide](https://github.com/terraforming-mars/terraforming-mars/blob/main/CONTRIBUTING.md) and [local development setup](https://github.com/terraforming-mars/terraforming-mars/wiki/Local-Setup).
 
 ## ⬤ I want to win!
+
 Me too, pal. Me too.
 
 ## ✨ Contributors ✨
@@ -137,11 +155,10 @@ Thanks goes to these wonderful people:
   </tdata>
 </table>
 
-
 ## LICENSE
 
 GPLv3
 
 Russian Prototype font: https://fonts-online.ru/fonts/prototype-rus-daymarius (copyright 2001, free for personal use)
 Polish Prototype font: https://www.gry-planszowe.pl/viewtopic.php?p=1489006#p1489006 (copyright 2001, free for personal use)
-Baord Game Icons: http://www.kenney.nl/  (Creative Commons Zero, CC0)
+Baord Game Icons: http://www.kenney.nl/ (Creative Commons Zero, CC0)

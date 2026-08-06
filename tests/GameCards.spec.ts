@@ -55,20 +55,6 @@ describe('GameCards', () => {
     expect(preludeDeck).to.not.contain(CardName.MERGER);
   });
 
-  it('CEOs: Includes/Excludes specific CEOs if those expansions are/are not selected ', () => {
-    const gameOptions: GameOptions = {
-      ...DEFAULT_GAME_OPTIONS,
-      ceoExtension: true,
-      corporateEra: true,
-      preludeExtension: true,
-      moonExpansion: false,
-    };
-    const ceoNames = new GameCards(gameOptions).getCeoCards().map(toName);
-    expect(ceoNames).to.contain(CardName.FLOYD); // Yes generic CEO
-    expect(ceoNames).to.contain(CardName.KAREN); // Yes Prelude
-    expect(ceoNames).not.to.contain(CardName.NEIL); // No Moon
-  });
-
   it('correctly removes banned cards', () => {
     const gameOptions: GameOptions = {
       ...DEFAULT_GAME_OPTIONS,

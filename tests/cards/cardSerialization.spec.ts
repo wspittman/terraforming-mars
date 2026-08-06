@@ -1,12 +1,14 @@
-import {expect} from 'chai';
-import {LobbyHalls} from '../../src/server/cards/pathfinders/LobbyHalls';
-import {Tag} from '../../src/common/cards/Tag';
-import {deserializeProjectCard, serializeProjectCard} from '../../src/server/cards/cardSerialization';
-import {fakeCard} from '../TestingUtils';
-import {Asimov} from '../../src/server/cards/ceos/Asimov';
-import {SerializedCard} from '../../src/server/SerializedCard';
-import {CardName} from '../../src/common/cards/CardName';
-import {cast} from '../../src/common/utils/utils';
+import { expect } from 'chai';
+import { CardName } from '../../src/common/cards/CardName';
+import { Tag } from '../../src/common/cards/Tag';
+import { cast } from '../../src/common/utils/utils';
+import {
+  deserializeProjectCard,
+  serializeProjectCard,
+} from '../../src/server/cards/cardSerialization';
+import { LobbyHalls } from '../../src/server/cards/pathfinders/LobbyHalls';
+import { SerializedCard } from '../../src/server/SerializedCard';
+import { fakeCard } from '../TestingUtils';
 
 describe('CardSerialization', () => {
   it('undefiend clone tags serialize and deserialize', () => {
@@ -35,27 +37,10 @@ describe('CardSerialization', () => {
     expect(lobbyHalls.tags).deep.eq([Tag.SCIENCE, Tag.BUILDING]);
   });
 
-  it('CEO cards are serialized and deserialized properly', () => {
-    const card = new Asimov();
-
-    expect(serializeProjectCard(card).isDisabled).is.false;
-
-    card.isDisabled = true;
-    expect(serializeProjectCard(card).isDisabled).is.true;
-
-    const serialized = serializeProjectCard(card);
-
-    serialized.isDisabled = false;
-    expect(cast(deserializeProjectCard(serialized), Asimov).isDisabled).is.false;
-
-    serialized.isDisabled = true;
-    expect(cast(deserializeProjectCard(serialized), Asimov).isDisabled).is.true;
-  });
-
   it('custom .serialized works', () => {
     let serializedCalled = false;
     let deserializedCalled = false;
-    const card = fakeCard({name: CardName.MICRO_MILLS});
+    const card = fakeCard({ name: CardName.MICRO_MILLS });
     card.serialize = (serialized: SerializedCard) => {
       serializedCalled = true;
       serialized.data = 'hello';

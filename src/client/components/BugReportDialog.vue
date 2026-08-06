@@ -112,7 +112,6 @@ export default defineComponent({
           version: raw_settings.head,
           builtAt: raw_settings.builtAt,
           browser: browser(),
-          language: getPreferences().lang,
           experimental_ui: getPreferences().experimental_ui,
         });
       this.message = JSON.stringify(content, null, 2);

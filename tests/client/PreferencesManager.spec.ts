@@ -20,7 +20,6 @@ describe('PreferencesManager', () => {
   it('default values', () => {
     const values = instance.values();
     expect(values.hide_active_cards).eq(false);
-    expect(values.lang).eq('en');
     expect(values.enable_sounds).eq(true);
     expect(values.animated_title).eq(true);
   });
@@ -55,14 +54,5 @@ describe('PreferencesManager', () => {
 
     expect(localStorage.hasItem('hide_active_cards')).is.false;
     expect(values.hide_active_cards).eq(false);
-  });
-
-  it('initially stored values override defaults', () => {
-    localStorage.setItem('lang', 'fr');
-    PreferencesManager.resetForTest();
-
-    const values = PreferencesManager.INSTANCE.values();
-
-    expect(values.lang).eq('fr');
   });
 });

@@ -5,19 +5,16 @@ import { Resource } from '../../../src/common/Resource';
 import { TileType } from '../../../src/common/TileType';
 import { PartyName } from '../../../src/common/turmoil/PartyName';
 import { OneOrArray } from '../../../src/common/utils/types';
-import { asArray, cast } from '../../../src/common/utils/utils';
+import { asArray } from '../../../src/common/utils/utils';
 import { AdaptationTechnology } from '../../../src/server/cards/base/AdaptationTechnology';
 import { Ants } from '../../../src/server/cards/base/Ants';
-import { SmallAsteroid } from '../../../src/server/cards/promo/SmallAsteroid';
 import { CardRequirements } from '../../../src/server/cards/requirements/CardRequirements';
 import { Ceres } from '../../../src/server/colonies/Ceres';
-import { OrOptions } from '../../../src/server/inputs/OrOptions';
 import { IPlayer } from '../../../src/server/IPlayer';
 import { testGame } from '../../TestGame';
 import {
   addGreenery,
   fakeCard,
-  runAllActions,
   setOxygenLevel,
   setTemperature,
   setVenusScaleLevel,
@@ -237,21 +234,6 @@ describe('CardRequirements', () => {
       PartyName.MARS,
       player.game,
     );
-    expect(satisfies(requirements, player)).eq(true);
-  });
-
-  it('satisfies properly for plantsRemoved', () => {
-    const requirements = { plantsRemoved: true };
-    expect(satisfies(requirements, player)).eq(false);
-
-    player2.plants = 1;
-    const smallAsteroid = new SmallAsteroid();
-    smallAsteroid.play(player);
-    // Choose Remove 1 plant option
-    runAllActions(player.game);
-    const orOptions = cast(player.getWaitingFor(), OrOptions);
-    orOptions.options[0].cb([player2]);
-
     expect(satisfies(requirements, player)).eq(true);
   });
 

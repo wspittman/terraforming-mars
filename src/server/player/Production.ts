@@ -1,8 +1,7 @@
-import {LawSuit} from '../cards/promo/LawSuit';
-import {Resource} from '../../common/Resource';
-import {From, isFromPlayer} from '../logs/From';
-import {BaseStock} from './StockBase';
-import {IPlayer} from '../IPlayer';
+import { Resource } from '../../common/Resource';
+import { IPlayer } from '../IPlayer';
+import { From, isFromPlayer } from '../logs/From';
+import { BaseStock } from './StockBase';
 
 export class Production extends BaseStock {
   constructor(player: IPlayer) {
@@ -10,21 +9,26 @@ export class Production extends BaseStock {
   }
   public add(
     resource: Resource,
-    amount : number,
-    options? : { log: boolean, from? : From, stealing?: boolean},
+    amount: number,
+    options?: { log: boolean; from?: From; stealing?: boolean },
   ) {
     const adj = resource === Resource.MEGACREDITS ? -5 : 0;
-    const delta = (amount >= 0) ? amount : Math.max(amount, -(this[resource] - adj));
+    const delta =
+      amount >= 0 ? amount : Math.max(amount, -(this[resource] - adj));
     this[resource] += delta;
 
     if (options?.log === true) {
-      this.logUnitDelta(resource, amount, /* production*/ true, options.from, options.stealing);
+      this.logUnitDelta(
+        resource,
+        amount,
+        /* production*/ true,
+        options.from,
+        options.stealing,
+      );
     }
 
     const from = options?.from;
     if (isFromPlayer(from)) {
-      LawSuit.resourceHook(this.player, delta, from.player);
-
       // Mons Insurance hook
       if (delta < 0 && from.player.id !== this.player.id) {
         this.player.resolveInsurance();

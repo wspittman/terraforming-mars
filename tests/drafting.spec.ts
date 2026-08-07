@@ -250,7 +250,7 @@ describe('drafting', () => {
       CardName.GENE_REPAIR,
       CardName.HACKERS,
       CardName.IMPORTED_GHG,
-      CardName.JOVIAN_EMBASSY,
+      CardName.ADAPTED_LICHEN,
       CardName.KELP_FARMING,
       CardName.LAND_CLAIM,
     ]);
@@ -277,7 +277,7 @@ describe('drafting', () => {
 
     expect(draftSelection(player3)).deep.eq([
       CardName.IMPORTED_GHG,
-      CardName.JOVIAN_EMBASSY,
+      CardName.ADAPTED_LICHEN,
       CardName.KELP_FARMING,
       CardName.LAND_CLAIM,
     ]);
@@ -295,7 +295,7 @@ describe('drafting', () => {
     // Second card
 
     expect(draftSelection(player1)).deep.eq([
-      CardName.JOVIAN_EMBASSY,
+      CardName.ADAPTED_LICHEN,
       CardName.KELP_FARMING,
       CardName.LAND_CLAIM,
     ]);
@@ -312,13 +312,13 @@ describe('drafting', () => {
       CardName.HACKERS,
     ]);
 
-    selectCard(player1, CardName.JOVIAN_EMBASSY);
+    selectCard(player1, CardName.ADAPTED_LICHEN);
     selectCard(player2, CardName.BLACK_POLAR_DUST);
     selectCard(player3, CardName.FISH);
 
     expect(player1.draftedCards.map(toName)).deep.eq([
       CardName.ACQUIRED_COMPANY,
-      CardName.JOVIAN_EMBASSY,
+      CardName.ADAPTED_LICHEN,
     ]);
     expect(player2.draftedCards.map(toName)).deep.eq([
       CardName.EARTH_OFFICE,
@@ -357,7 +357,7 @@ describe('drafting', () => {
 
     expect(draftSelection(player1)).deep.eq([
       CardName.ACQUIRED_COMPANY,
-      CardName.JOVIAN_EMBASSY,
+      CardName.ADAPTED_LICHEN,
       CardName.GENE_REPAIR,
       CardName.DECOMPOSERS,
     ]);
@@ -391,7 +391,7 @@ describe('drafting', () => {
       CardName.GENE_REPAIR,
       CardName.HACKERS,
       CardName.IMPORTED_GHG,
-      CardName.JOVIAN_EMBASSY,
+      CardName.ADAPTED_LICHEN,
       CardName.KELP_FARMING,
       CardName.LAND_CLAIM,
     ]);
@@ -418,7 +418,7 @@ describe('drafting', () => {
 
     expect(draftSelection(player3)).deep.eq([
       CardName.IMPORTED_GHG,
-      CardName.JOVIAN_EMBASSY,
+      CardName.ADAPTED_LICHEN,
       CardName.KELP_FARMING,
       CardName.LAND_CLAIM,
     ]);
@@ -442,7 +442,7 @@ describe('drafting', () => {
     ]);
 
     expect(draftSelection(player2)).deep.eq([
-      CardName.JOVIAN_EMBASSY,
+      CardName.ADAPTED_LICHEN,
       CardName.KELP_FARMING,
       CardName.LAND_CLAIM,
     ]);
@@ -454,7 +454,7 @@ describe('drafting', () => {
     ]);
 
     selectCard(player1, CardName.FISH);
-    selectCard(player2, CardName.JOVIAN_EMBASSY);
+    selectCard(player2, CardName.ADAPTED_LICHEN);
     selectCard(player3, CardName.BLACK_POLAR_DUST);
 
     expect(player1.draftedCards.map(toName)).deep.eq([
@@ -463,7 +463,7 @@ describe('drafting', () => {
     ]);
     expect(player2.draftedCards.map(toName)).deep.eq([
       CardName.EARTH_OFFICE,
-      CardName.JOVIAN_EMBASSY,
+      CardName.ADAPTED_LICHEN,
     ]);
     expect(player3.draftedCards.map(toName)).deep.eq([
       CardName.IMPORTED_GHG,
@@ -504,7 +504,7 @@ describe('drafting', () => {
     ]);
     expect(draftSelection(player2)).deep.eq([
       CardName.EARTH_OFFICE,
-      CardName.JOVIAN_EMBASSY,
+      CardName.ADAPTED_LICHEN,
       CardName.CAPITAL,
       CardName.HACKERS,
     ]);

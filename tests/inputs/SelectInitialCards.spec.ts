@@ -28,8 +28,8 @@ describe('SelectInitialCards', () => {
     ]);
     player.dealtProjectCards = cardsFromJSON([
       CardName.ANTS,
-      CardName.BACTOVIRAL_RESEARCH,
-      CardName.COMET_AIMING,
+      CardName.BIRDS,
+      CardName.DUST_SEALS,
     ]);
     selectInitialCards = new SelectInitialCards(player, cb);
   });
@@ -99,8 +99,8 @@ describe('SelectInitialCards', () => {
     expect(player.cardsInHand.map(toName)).to.have.members([CardName.ANTS]); // But it does set their cards in hand.
 
     expect(player.game.projectDeck.discardPile.map(toName)).to.have.members([
-      CardName.BACTOVIRAL_RESEARCH,
-      CardName.COMET_AIMING,
+      CardName.BIRDS,
+      CardName.DUST_SEALS,
     ]);
     expect(player.game.corporationDeck.discardPile.map(toName)).to.have.members(
       [CardName.HELION],
@@ -117,8 +117,8 @@ describe('SelectInitialCards', () => {
     ]);
     player.dealtProjectCards = cardsFromJSON([
       CardName.ANTS,
-      CardName.BACTOVIRAL_RESEARCH,
-      CardName.COMET_AIMING,
+      CardName.BIRDS,
+      CardName.DUST_SEALS,
     ]);
     selectInitialCards = new SelectInitialCards(player, cb);
 
@@ -138,8 +138,8 @@ describe('SelectInitialCards', () => {
     expect(player.cardsInHand.map(toName)).to.have.members([CardName.ANTS]); // But it does set their cards in hand.
 
     expect(player.game.projectDeck.discardPile.map(toName)).to.have.members([
-      CardName.BACTOVIRAL_RESEARCH,
-      CardName.COMET_AIMING,
+      CardName.BIRDS,
+      CardName.DUST_SEALS,
     ]);
     expect(player.game.corporationDeck.discardPile.map(toName)).to.have.members(
       [CardName.HELION],

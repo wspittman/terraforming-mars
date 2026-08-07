@@ -19,7 +19,6 @@ import { RegolithEaters } from '../../src/server/cards/base/RegolithEaters';
 import { Tardigrades } from '../../src/server/cards/base/Tardigrades';
 import { Helion } from '../../src/server/cards/corporation/Helion';
 import { IProjectCard } from '../../src/server/cards/IProjectCard';
-import { SaturnSurfing } from '../../src/server/cards/promo/SaturnSurfing';
 import { IGame } from '../../src/server/IGame';
 import { OrOptions } from '../../src/server/inputs/OrOptions';
 import { SelectCard } from '../../src/server/inputs/SelectCard';
@@ -315,18 +314,6 @@ describe('Executor', () => {
     runAllActions(game);
 
     expect(tardigrades.resourceCount).eq(4);
-  });
-
-  // This is a special test that ensure counting the resources works appropriately.
-  // Because beforehand, it counted an additional tag.
-  it('add resources to specific card - includes self', () => {
-    const saturnSurfing = new SaturnSurfing();
-    player.playedCards.set(fakeCard({ tags: [Tag.EARTH, Tag.EARTH] }));
-    player.megaCredits = saturnSurfing.cost;
-    player.playCard(saturnSurfing);
-    runAllActions(game);
-
-    expect(saturnSurfing.resourceCount).eq(3);
   });
 
   it('add resources to any card - type undefined (any resource card)', () => {

@@ -1,7 +1,6 @@
 import { expect } from 'chai';
 import { SpaceName } from '../../src/common/boards/SpaceName';
 import { SpaceType } from '../../src/common/boards/SpaceType';
-import { CardName } from '../../src/common/cards/CardName';
 import { NamedMoonSpaces } from '../../src/common/moon/NamedMoonSpaces';
 import { TileType } from '../../src/common/TileType';
 import { SpaceId } from '../../src/common/Types';
@@ -335,14 +334,6 @@ describe('Board', () => {
     {
       cards: [],
       spaces: [SpaceName.GANYMEDE_COLONY, SpaceName.PHOBOS_SPACE_HAVEN],
-    },
-    {
-      cards: [CardName.STANFORD_TORUS],
-      spaces: [
-        SpaceName.GANYMEDE_COLONY,
-        SpaceName.PHOBOS_SPACE_HAVEN,
-        SpaceName.STANFORD_TORUS,
-      ],
     },
   ] as const;
   for (const run of runs) {

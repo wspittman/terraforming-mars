@@ -3,7 +3,6 @@ import { isIActionCard } from '../../src/server/cards/ICard';
 import { MicroMills } from '../../src/server/cards/base/MicroMills';
 import { Tardigrades } from '../../src/server/cards/base/Tardigrades';
 import { EcoLine } from '../../src/server/cards/corporation/EcoLine';
-import { MercurianAlloys } from '../../src/server/cards/promo/MercurianAlloys';
 
 describe('ICard', () => {
   const runs = [
@@ -12,11 +11,6 @@ describe('ICard', () => {
       description: 'blue card with active effect',
       card: new Tardigrades(),
       expected: true,
-    },
-    {
-      description: 'blue card with passive effect',
-      card: new MercurianAlloys(),
-      expected: false,
     },
     {
       description: 'corporation with passive effect',

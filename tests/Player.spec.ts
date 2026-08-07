@@ -8,21 +8,17 @@ import { SerializedTimer } from '../src/common/SerializedTimer';
 import { Timer } from '../src/common/Timer';
 import { CardName } from '../src/common/cards/CardName';
 import { InputResponse } from '../src/common/inputs/InputResponse';
-import { Payment } from '../src/common/inputs/Payment';
 import { PartyName } from '../src/common/turmoil/PartyName';
 import { Game } from '../src/server/Game';
 import { Player } from '../src/server/Player';
 import { SerializedPlayer } from '../src/server/SerializedPlayer';
-import { IProjectCard } from '../src/server/cards/IProjectCard';
 import { EnergyTapping } from '../src/server/cards/base/EnergyTapping';
 import { Insulation } from '../src/server/cards/base/Insulation';
 import { IoMiningIndustries } from '../src/server/cards/base/IoMiningIndustries';
 import { LunarBeam } from '../src/server/cards/base/LunarBeam';
 import { Pets } from '../src/server/cards/base/Pets';
-import { PhysicsComplex } from '../src/server/cards/base/PhysicsComplex';
 import { PowerSupplyConsortium } from '../src/server/cards/base/PowerSupplyConsortium';
 import { SaturnSystems } from '../src/server/cards/corporation/SaturnSystems';
-import { SelfReplicatingRobots } from '../src/server/cards/promo/SelfReplicatingRobots';
 import { OrOptions } from '../src/server/inputs/OrOptions';
 import { SelectAmount } from '../src/server/inputs/SelectAmount';
 import { SelectCard } from '../src/server/inputs/SelectCard';
@@ -327,33 +323,6 @@ describe('Player', () => {
 
     expect(newPlayer.color).eq('purple');
     expect(newPlayer.colonies.usedTradeFleets).eq(100);
-  });
-
-  it('pulls self replicating robots target cards', () => {
-    const player = new Player('blue', 'blue', false, 0, 'p-blue');
-    expect(player.getSelfReplicatingRobotsTargetCards()).is.empty;
-    const srr = new SelfReplicatingRobots();
-    player.playedCards.push(srr);
-    srr.targetCards.push(new LunarBeam());
-    expect(player.getSelfReplicatingRobotsTargetCards()).has.length(1);
-  });
-
-  it('removes tags from card played from self replicating robots', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    Game.newInstance('gameid', [player], player, 'spectatorid');
-    const srr = new SelfReplicatingRobots();
-    player.stock.megacredits = 10;
-    player.playedCards.push(srr);
-    const physicsComplex = new PhysicsComplex();
-    player.cardsInHand.push(physicsComplex);
-    const action = cast(srr.action(player), OrOptions);
-    action.options[0].cb([
-      cast(action.options[0], SelectCard<IProjectCard>).cards[0],
-    ]);
-    expect(srr.targetCards[0].resourceCount).to.eq(2);
-    player.playCard(physicsComplex, Payment.of({ megacredits: 10 }));
-    expect(player.playedCards.asArray()).to.include(physicsComplex);
-    expect(physicsComplex.resourceCount).to.eq(0);
   });
 
   it('addResourceTo', () => {

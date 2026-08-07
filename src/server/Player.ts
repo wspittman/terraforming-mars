@@ -49,9 +49,6 @@ import { IProjectCard } from './cards/IProjectCard';
 import { IStandardProjectCard } from './cards/IStandardProjectCard';
 import { PlayedCards } from './cards/PlayedCards';
 import { IPreludeCard } from './cards/prelude/IPreludeCard';
-import { MonsInsurance } from './cards/promo/MonsInsurance';
-import { SelfReplicatingRobots } from './cards/promo/SelfReplicatingRobots';
-import { Supercapacitors } from './cards/promo/Supercapacitors';
 import { CeoExtension } from './CeoExtension';
 import { ColoniesHandler } from './colonies/ColoniesHandler';
 import {
@@ -328,12 +325,6 @@ export class Player implements IPlayer {
   }
 
   public getSelfReplicatingRobotsTargetCards(): Array<IProjectCard> {
-    const selfReplicatingRobots = this.tableau.get(
-      CardName.SELF_REPLICATING_ROBOTS,
-    );
-    if (selfReplicatingRobots instanceof SelfReplicatingRobots) {
-      return selfReplicatingRobots.targetCards;
-    }
     return [];
   }
 
@@ -511,22 +502,9 @@ export class Player implements IPlayer {
     });
   }
 
-  public resolveInsurance() {
-    const monsInsuranceOwner = this.game.monsInsuranceOwner;
-    if (monsInsuranceOwner !== undefined && monsInsuranceOwner !== this) {
-      const monsInsurance = <MonsInsurance>(
-        monsInsuranceOwner.tableau.get(CardName.MONS_INSURANCE)
-      );
-      monsInsurance.payDebt(monsInsuranceOwner, this);
-    }
-  }
+  public resolveInsurance() {}
 
-  public resolveInsuranceInSoloGame() {
-    const monsInsurance = <MonsInsurance>(
-      this.tableau.get(CardName.MONS_INSURANCE)
-    );
-    monsInsurance?.payDebt(this, undefined);
-  }
+  public resolveInsuranceInSoloGame() {}
 
   public getColoniesCount() {
     if (!this.game.gameOptions.coloniesExtension) {
@@ -721,13 +699,10 @@ export class Player implements IPlayer {
 
     this.turmoilPolicyActionUsed = false;
     this.politicalAgendasActionUsedCount = 0;
-    if (this.playedCards.has(CardName.SUPERCAPACITORS)) {
-      Supercapacitors.onProduction(this);
-    } else {
-      this.heat += this.energy;
-      this.energy = 0;
-      this.finishProductionPhase();
-    }
+
+    this.heat += this.energy;
+    this.energy = 0;
+    this.finishProductionPhase();
   }
 
   public finishProductionPhase() {
@@ -1002,15 +977,6 @@ export class Player implements IPlayer {
   ): void {
     if (payment !== undefined) {
       this.pay(payment);
-    }
-
-    const selfReplicatingRobots = this.tableau.get(
-      CardName.SELF_REPLICATING_ROBOTS,
-    );
-    if (selfReplicatingRobots instanceof SelfReplicatingRobots) {
-      if (inplaceRemove(selfReplicatingRobots.targetCards, selectedCard)) {
-        selectedCard.resourceCount = 0;
-      }
     }
 
     ColoniesHandler.maybeActivateColonies(this.game, selectedCard);
@@ -1427,11 +1393,6 @@ export class Player implements IPlayer {
 
   public getPlayableCards(): Array<IProjectCard> {
     const candidateCards: Array<IProjectCard> = [...this.cardsInHand];
-    // Self Replicating robots check
-    const card = this.tableau.get(CardName.SELF_REPLICATING_ROBOTS);
-    if (card instanceof SelfReplicatingRobots) {
-      candidateCards.push(...card.targetCards);
-    }
 
     const playableCards: Array<IProjectCard> = [];
     for (const card of candidateCards) {

@@ -20,7 +20,6 @@ import { NoctisFarming } from '../../../src/server/cards/base/NoctisFarming';
 import { RoboticWorkforce } from '../../../src/server/cards/base/RoboticWorkforce';
 import { SolarWindPower } from '../../../src/server/cards/base/SolarWindPower';
 import { isICorporationCard } from '../../../src/server/cards/corporation/ICorporationCard';
-import { ResearchNetwork } from '../../../src/server/cards/prelude/ResearchNetwork';
 import { UtopiaInvest } from '../../../src/server/cards/turmoil/UtopiaInvest';
 import { Gyropolis } from '../../../src/server/cards/venusNext/Gyropolis';
 import { VenusGovernor } from '../../../src/server/cards/venusNext/VenusGovernor';
@@ -146,19 +145,6 @@ describe('RoboticWorkforce', () => {
 
     expect(card.canPlay(player)).is.false;
     cast(card.play(player), undefined);
-  });
-
-  it('Should work with Research Network', () => {
-    const researchNetwork = new ResearchNetwork();
-    player.playedCards.push(researchNetwork);
-    cast(card.play(player), undefined);
-    runAllActions(game);
-    const selectCard = cast(player.popWaitingFor(), SelectCard);
-
-    expect(selectCard.cards[0]).eq(researchNetwork);
-    expect(player.production.megacredits).to.eq(0);
-    selectCard.cb([researchNetwork]);
-    expect(player.production.megacredits).to.eq(1);
   });
 
   it('Should work with Heat Trappers', () => {

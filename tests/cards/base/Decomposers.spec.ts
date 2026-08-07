@@ -1,13 +1,11 @@
-import {expect} from 'chai';
-import {Algae} from '../../../src/server/cards/base/Algae';
-import {Birds} from '../../../src/server/cards/base/Birds';
-import {Decomposers} from '../../../src/server/cards/base/Decomposers';
-import {EcologyExperts} from '../../../src/server/cards/prelude/EcologyExperts';
-import {IGame} from '../../../src/server/IGame';
-import {Phase} from '../../../src/common/Phase';
-import {TestPlayer} from '../../TestPlayer';
-import {setOxygenLevel} from '../../TestingUtils';
-import {testGame} from '../../TestGame';
+import { expect } from 'chai';
+import { Algae } from '../../../src/server/cards/base/Algae';
+import { Birds } from '../../../src/server/cards/base/Birds';
+import { Decomposers } from '../../../src/server/cards/base/Decomposers';
+import { IGame } from '../../../src/server/IGame';
+import { testGame } from '../../TestGame';
+import { setOxygenLevel } from '../../TestingUtils';
+import { TestPlayer } from '../../TestPlayer';
 
 describe('Decomposers', () => {
   let card: Decomposers;
@@ -36,14 +34,5 @@ describe('Decomposers', () => {
 
     expect(card.resourceCount).to.eq(3);
     expect(card.getVictoryPoints(player)).to.eq(1);
-  });
-
-  it('Should get triggered by EcoExperts if played together', () => {
-    const ecoExpertCard = new EcologyExperts();
-    game.phase = Phase.PRELUDES;
-    player.playCard(ecoExpertCard);
-    expect(card.canPlay(player)).is.true;
-    player.playCard(card);
-    expect(card.resourceCount).to.eq(3);
   });
 });

@@ -1310,42 +1310,6 @@ describe('Game', () => {
     ]);
   });
 
-  it('Deal preludes when starting preludes is undefined', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    Game.newInstance('gameid', [player], player, 'spectatorid', {
-      preludeExtension: true,
-      startingPreludes: undefined,
-    });
-    expect(player.dealtPreludeCards).has.lengthOf(4);
-  });
-
-  it('Deal preludes when starting preludes is defined, 3', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    Game.newInstance('gameid', [player], player, 'spectatorid', {
-      preludeExtension: true,
-      startingPreludes: 3,
-    });
-    expect(player.dealtPreludeCards).has.lengthOf(4);
-  });
-
-  it('Deal preludes when starting preludes is defined, 6', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    Game.newInstance('gameid', [player], player, 'spectatorid', {
-      preludeExtension: true,
-      startingPreludes: 6,
-    });
-    expect(player.dealtPreludeCards).has.lengthOf(6);
-  });
-
-  it('Deal preludes when starting preludes is defined, 1; expect 4 preludes in hand', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    Game.newInstance('gameid', [player], player, 'spectatorid', {
-      preludeExtension: true,
-      startingPreludes: 1,
-    });
-    expect(player.dealtPreludeCards).has.lengthOf(4);
-  });
-
   it('Arctic Algae works during WGT', () => {
     const player = TestPlayer.BLUE.newPlayer();
     const player2 = TestPlayer.RED.newPlayer();

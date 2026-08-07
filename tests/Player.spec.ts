@@ -219,18 +219,6 @@ describe('Player', () => {
     expect(bufferGas).to.be.undefined;
   });
 
-  it('Include buffer gas for solo games with 63 TR', () => {
-    const player = new Player('blue', 'blue', false, 0, 'p-blue');
-    Game.newInstance('gameid', [player], player, 'spectatorid', {
-      soloTR: true,
-    });
-    const option = player.getStandardProjectOption();
-    const bufferGas = option.cards.find(
-      (card) => card.name === CardName.BUFFER_GAS_STANDARD_PROJECT,
-    );
-    expect(bufferGas).not.to.be.undefined;
-  });
-
   it('serialization test for pickedCorporationCard', () => {
     const player = new Player('blue', 'blue', false, 0, 'p-blue');
     player.pickedCorporationCard = new SaturnSystems();

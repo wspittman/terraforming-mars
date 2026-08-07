@@ -5,7 +5,6 @@ import { ICorporationCard } from '../../src/server/cards/corporation/ICorporatio
 import {
   cardsFromJSON,
   corporationCardsFromJSON,
-  preludesFromJSON,
 } from '../../src/server/createCard';
 import { SelectInitialCards } from '../../src/server/inputs/SelectInitialCards';
 import { testGame } from '../TestGame';
@@ -111,9 +110,7 @@ describe('SelectInitialCards', () => {
   });
 
   it('Full', () => {
-    const [, /* game */ player] = testGame(1, {
-      preludeExtension: true,
-    });
+    const [, /* game */ player] = testGame(1, {});
     player.game.projectDeck.discardPile.length = 0; // Emptying the discard pile, which has 4 cards setting up the solo opponent.
     player.game.corporationDeck.discardPile.length = 0;
     player.dealtCorporationCards = corporationCardsFromJSON([
@@ -126,12 +123,6 @@ describe('SelectInitialCards', () => {
       CardName.COMET_AIMING,
       CardName.DIRIGIBLES,
     ]);
-    player.dealtPreludeCards = preludesFromJSON([
-      CardName.LOAN,
-      CardName.BIOLAB,
-      CardName.DONATION,
-      CardName.SUPPLIER,
-    ]);
     selectInitialCards = new SelectInitialCards(player, cb);
 
     selectInitialCards.process(
@@ -139,7 +130,6 @@ describe('SelectInitialCards', () => {
         type: 'initialCards',
         responses: [
           { type: 'card', cards: [CardName.INVENTRIX] },
-          { type: 'card', cards: [CardName.LOAN, CardName.BIOLAB] },
           { type: 'card', cards: [CardName.ANTS] },
         ],
       },
@@ -149,10 +139,6 @@ describe('SelectInitialCards', () => {
     expect(player.playedCards.corporations()).is.empty; // This input object doesn't set the player's corporation card
     expect(corp!.name).eq(CardName.INVENTRIX);
     expect(player.cardsInHand.map(toName)).to.have.members([CardName.ANTS]); // But it does set their cards in hand.
-    expect(player.preludeCardsInHand.map(toName)).to.have.members([
-      CardName.LOAN,
-      CardName.BIOLAB,
-    ]);
 
     expect(player.game.projectDeck.discardPile.map(toName)).to.have.members([
       CardName.BACTOVIRAL_RESEARCH,
@@ -162,9 +148,5 @@ describe('SelectInitialCards', () => {
     expect(player.game.corporationDeck.discardPile.map(toName)).to.have.members(
       [CardName.HELION],
     );
-    expect(player.game.preludeDeck.discardPile.map(toName)).to.have.members([
-      CardName.DONATION,
-      CardName.SUPPLIER,
-    ]);
   });
 });

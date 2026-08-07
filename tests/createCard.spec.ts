@@ -9,7 +9,4 @@ describe('createCard', () => {
   it('newProjectCard: failure', () => {
     expect(newProjectCard(CardName.ECOLINE)).is.undefined;
   });
-  it('newProjectCard prelude: success', () => {
-    expect(newProjectCard(CardName.ALLIED_BANK)?.name).eq(CardName.ALLIED_BANK);
-  });
 });

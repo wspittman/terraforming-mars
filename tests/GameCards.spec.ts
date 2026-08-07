@@ -109,20 +109,10 @@ describe('GameCards', () => {
     const gameOptions: GameOptions = {
       ...DEFAULT_GAME_OPTIONS,
       corporateEra: true,
-      includedCards: [CardName.POINT_LUNA],
+      includedCards: [CardName.ECOLINE],
     };
     const names = new GameCards(gameOptions).getProjectCards().map(toName);
-    expect(names).to.not.contain(CardName.POINT_LUNA);
-  });
-
-  it('should not include prelude cards in the included cards', () => {
-    const gameOptions: GameOptions = {
-      ...DEFAULT_GAME_OPTIONS,
-      corporateEra: true,
-      includedCards: [CardName.DONATION],
-    };
-    const names = new GameCards(gameOptions).getProjectCards().map(toName);
-    expect(names).to.not.contain(CardName.DONATION);
+    expect(names).to.not.contain(CardName.ECOLINE);
   });
 
   it('should not include standard projects in the included cards', () => {

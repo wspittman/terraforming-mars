@@ -1,5 +1,5 @@
 <template>
-  <div id="player-home" :class="(game.turmoil ? 'with-turmoil': '')">
+  <div id="player-home">
     <TopBar :playerView="playerView" />
 
     <div v-if="game.phase === 'end'">
@@ -13,13 +13,9 @@
       :actingPlayer="isPlayerActing(playerView)"
       :playerColor="thisPlayer.color"
       :generation="game.generation"
-      :coloniesCount="game.colonies.length"
       :temperature = "game.temperature"
       :oxygen = "game.oxygenLevel"
       :oceans = "game.oceans"
-      :venus = "game.venusScaleLevel"
-      :turmoil = "game.turmoil"
-      :moonData="game.moon"
       :gameOptions = "game.gameOptions"
       :playerNumber = "playerView.players.length"
       :lastSoloGeneration = "game.lastSoloGeneration"
@@ -93,9 +89,6 @@
         <div v-for="card in getCardsByType(thisPlayer.tableau, [CardType.CORPORATION])" :key="card.name" class="cardbox">
             <Card :card="card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color"/>
         </div>
-        <div v-for="card in getCardsByType(thisPlayer.tableau, [CardType.CEO])" :key="card.name" class="cardbox">
-            <Card :card="card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color"/>
-        </div>
         <div v-show="isVisible('ACTIVE')" v-for="card in activeTableauCards" :key="card.name" class="cardbox">
             <Card :card="card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color"/>
         </div>
@@ -116,29 +109,9 @@
       </div>
     </div>
 
-    <div v-if="thisPlayer.underworldData.tokens.length > 0">
-      <DynamicTitle title="Claimed Underground Resource Tokens" :color="thisPlayer.color"/>
-      <UndergroundTokens :underworldData="thisPlayer.underworldData"/>
-    </div>
-
     <template v-if="thisPlayer.tableau.length === 0">
       <PlayerSetupView :playerView="playerView" :tileView="tileView"/>
     </template>
-
-    <div v-if="game.colonies.length > 0" class="player_home_block" ref="colonies" id="shortkey-colonies">
-      <a name="colonies" class="player_home_anchor hotkey-target"></a>
-      <DynamicTitle title="Colonies" :color="thisPlayer.color"/>
-      <div class="colonies-fleets-cont">
-        <div class="colonies-player-fleets" v-for="colonyPlayer in playerView.players" :key="colonyPlayer.color">
-          <div :class="'colonies-fleet colonies-fleet-'+ colonyPlayer.color" v-for="idx in getFleetsCountRange(colonyPlayer)" :key="idx"></div>
-        </div>
-      </div>
-      <div class="player_home_colony_cont">
-        <div class="player_home_colony" v-for="colony in game.colonies" :key="colony.name">
-          <Colony :colony="colony" :active="colony.isActive"/>
-        </div>
-      </div>
-    </div>
 
     <div v-if="game.spectatorId">
       <a :href="'/spectator?id=' +game.spectatorId" target="_blank" rel="noopener noreferrer" v-i18n>Spectator link</a>
@@ -155,7 +128,6 @@ import Card from '@/client/components/card/Card.vue';
 import PlayersOverview from '@/client/components/overview/PlayersOverview.vue';
 import WaitingFor from '@/client/components/WaitingFor.vue';
 import Sidebar from '@/client/components/Sidebar.vue';
-import Colony from '@/client/components/colonies/Colony.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import GameBoardView from '@/client/components/GameBoardView.vue';
 import PlayerSetupView from '@/client/components/PlayerSetupView.vue';
@@ -164,7 +136,6 @@ import SortableCards from '@/client/components/SortableCards.vue';
 import TopBar from '@/client/components/TopBar.vue';
 import StackedCards from '@/client/components/StackedCards.vue';
 import PurgeWarning from '@/client/components/common/PurgeWarning.vue';
-import UndergroundTokens from '@/client/components/underworld/UndergroundTokens.vue';
 import KeyboardShortcuts from '@/client/components/KeyboardShortcuts.vue';
 import {getPreferences, Preferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {GameModel} from '@/common/models/GameModel';
@@ -236,29 +207,27 @@ export default defineComponent({
     },
     cardsInHandCount(): number {
       const playerView = this.playerView;
-      return playerView.cardsInHand.length + playerView.preludeCardsInHand.length + playerView.ceoCardsInHand.length;
+      return playerView.cardsInHand.length;
     },
     allCardsInHand(): Array<CardModel> {
       const playerView = this.playerView;
-      return playerView.preludeCardsInHand
-        .concat(playerView.ceoCardsInHand)
-        .concat(playerView.cardsInHand);
+      return playerView.cardsInHand.slice();
     },
     activeTableauCount(): number {
       return getCardsByType(this.thisPlayer.tableau, [CardType.ACTIVE]).length;
     },
     automatedTableauCount(): number {
-      return getCardsByType(this.thisPlayer.tableau, [CardType.AUTOMATED, CardType.PRELUDE]).length;
+      return getCardsByType(this.thisPlayer.tableau, [CardType.AUTOMATED]).length;
     },
     eventTableauCount(): number {
       return getCardsByType(this.thisPlayer.tableau, [CardType.EVENT]).length;
     },
     activeTableauCards(): Array<CardModel> {
-      const cards = getCardsByType(this.thisPlayer.tableau, [CardType.ACTIVE, CardType.PRELUDE]);
+      const cards = getCardsByType(this.thisPlayer.tableau, [CardType.ACTIVE]);
       return [...sortActiveCards(cards.filter((c) => this.isActive(c)))];
     },
     automatedTableauCards(): Array<CardModel> {
-      const cards = getCardsByType(this.thisPlayer.tableau, [CardType.AUTOMATED, CardType.PRELUDE]);
+      const cards = getCardsByType(this.thisPlayer.tableau, [CardType.AUTOMATED]);
       return cards.filter((c) => this.isNotActive(c));
     },
     eventTableauCards(): Array<CardModel> {
@@ -281,7 +250,6 @@ export default defineComponent({
     PlayersOverview,
     WaitingFor,
     Sidebar,
-    Colony,
     LogPanel,
     SortableCards,
     TopBar,
@@ -289,19 +257,11 @@ export default defineComponent({
     PlayerSetupView,
     StackedCards,
     PurgeWarning,
-    UndergroundTokens,
     KeyboardShortcuts,
   },
   methods: {
     isPlayerActing(playerView: PlayerViewModel) : boolean {
       return playerView.players.length > 1 && playerView.waitingFor !== undefined && !playerView.waitingFor.optional;
-    },
-    getFleetsCountRange(player: PublicPlayerModel): Array<number> {
-      const fleetsRange = [];
-      for (let i = 0; i < player.fleetSize - player.tradesThisGeneration; i++) {
-        fleetsRange.push(i);
-      }
-      return fleetsRange;
     },
     toggle(type: ToggleableCardType): void {
       this[typeToDataModel[type].key] = !this[typeToDataModel[type].key];

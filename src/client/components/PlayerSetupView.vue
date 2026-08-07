@@ -78,19 +78,8 @@
       <div class="accordion-body">
         <Board
           :spaces="game.spaces"
-          :expansions="game.gameOptions.expansions"
-          :venusScaleLevel="game.venusScaleLevel"
           :boardName ="game.gameOptions.boardName"
-          :aresData="game.aresData"
-          :altVenusBoard="game.gameOptions.altVenusBoard"/>
-
-        <Turmoil v-if="game.turmoil" :turmoil="game.turmoil"/>
-
-        <PlanetaryTracks v-if="game.gameOptions.expansions.pathfinders" :tracks="game.pathfinders" :gameOptions="game.gameOptions"/>
-
-        <a name="moonBoard" class="player_home_anchor"></a>
-        <MoonBoard v-if="game.moon !== undefined" :model="game.moon" :tileView="tileView"/>
-        <DeltaProjectBoard v-if="game.gameOptions.expansions.deltaProject" :players="playerView.players"/>
+          />
       </div>
     </details>
   </div>
@@ -101,14 +90,10 @@ import {defineComponent} from 'vue';
 
 import Board from '@/client/components/Board.vue';
 import Card from '@/client/components/card/Card.vue';
-import DeltaProjectBoard from '@/client/components/delta/DeltaProjectBoard.vue';
 import DynamicTitle from '@/client/components/common/DynamicTitle.vue';
 import Milestones from '@/client/components/Milestones.vue';
 import Awards from '@/client/components/Awards.vue';
 import WaitingFor from '@/client/components/WaitingFor.vue';
-import Turmoil from '@/client/components/turmoil/Turmoil.vue';
-import MoonBoard from '@/client/components/moon/MoonBoard.vue';
-import PlanetaryTracks from '@/client/components/pathfinders/PlanetaryTracks.vue';
 import {playerColorClass} from '@/common/utils/utils';
 import {Phase} from '@/common/Phase';
 import {GameModel} from '@/common/models/GameModel';
@@ -141,14 +126,10 @@ export default defineComponent({
   components: {
     Board,
     Card,
-    DeltaProjectBoard,
     DynamicTitle,
     WaitingFor,
     Milestones,
     Awards,
-    Turmoil,
-    PlanetaryTracks,
-    MoonBoard,
   },
   methods: {
     getPlayerCssForTurnOrder: (

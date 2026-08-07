@@ -65,7 +65,7 @@ describe('ApiCreateGame', () => {
         expansions: {
           corpera: true,
           promo: false,
-          venus: false,
+          venus: true,
           colonies: false,
           prelude: false,
           prelude2: false,
@@ -110,7 +110,7 @@ describe('ApiCreateGame', () => {
         requiresVenusTrackCompletion: false,
         moonStandardProjectVariant: false,
         moonStandardProjectVariant1: false,
-        altVenusBoard: false,
+        altVenusBoard: true,
         escapeVelocity: undefined,
         twoCorpsVariant: false,
         customCeos: [],
@@ -129,6 +129,10 @@ describe('ApiCreateGame', () => {
     const game = await scaffolding.ctx.gameLoader.getGame(model.id);
     expect(game).is.not.undefined;
     expect(game!.players[0].name).eq('Robot');
+    expect(game!.gameOptions.corporateEra).is.true;
+    expect(game!.gameOptions.venusNextExtension).is.false;
+    expect(game!.gameOptions.expansions.venus).is.false;
+    expect(game!.gameOptions.altVenusBoard).is.false;
   });
 
   it('red rover solo game', async () => {

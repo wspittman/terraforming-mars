@@ -15,5 +15,9 @@ describe('GameBoardView', () => {
       },
     });
     expect(wrapper.exists()).to.be.true;
+    expect(wrapper.findComponent({name: 'Turmoil'}).exists()).to.be.false;
+    expect(wrapper.findComponent({name: 'MoonBoard'}).exists()).to.be.false;
+    expect(wrapper.findComponent({name: 'PlanetaryTracks'}).exists()).to.be.false;
+    expect(wrapper.findComponent({name: 'DeltaProjectBoard'}).exists()).to.be.false;
   });
 });

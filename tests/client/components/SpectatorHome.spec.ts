@@ -28,5 +28,6 @@ describe('SpectatorHome', () => {
       },
     });
     expect(wrapper.exists()).to.be.true;
+    expect(wrapper.findComponent({name: 'Colony'}).exists()).to.be.false;
   });
 });

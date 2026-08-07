@@ -17,6 +17,7 @@ import {Request} from '../Request';
 import {Response} from '../Response';
 import {QuotaConfig, QuotaHandler} from '../server/QuotaHandler';
 import {durationToMilliseconds} from '../utils/durations';
+import {DEFAULT_EXPANSIONS} from '../../common/cards/GameModule';
 
 function parseQuotaConfig(struct: any): QuotaConfig {
   let {limit} = struct;
@@ -124,24 +125,29 @@ export class ApiCreateGame extends Handler {
           const boards = ApiCreateGame.boardOptions(gameReq.board);
           gameReq.board = boards[Math.floor(Math.random() * boards.length)];
 
+          const expansions = {
+            ...DEFAULT_EXPANSIONS,
+            corpera: gameReq.expansions.corpera,
+          };
+
           const gameOptions: GameOptions = {
-            altVenusBoard: gameReq.altVenusBoard,
-            aresExtension: gameReq.expansions.ares,
+            altVenusBoard: false,
+            aresExtension: expansions.ares,
             aresHazards: true, // Not a runtime option.
-            aresExtremeVariant: gameReq.aresExtremeVariant,
+            aresExtremeVariant: false,
             bannedCards: gameReq.bannedCards,
             boardName: gameReq.board,
-            ceoExtension: gameReq.expansions.ceo,
+            ceoExtension: expansions.ceo,
             clonedGamedId: gameReq.clonedGamedId,
-            coloniesExtension: gameReq.expansions.colonies,
-            communityCardsOption: gameReq.expansions.community,
-            expansions: gameReq.expansions,
-            ceosDraftVariant: gameReq.ceosDraftVariant,
-            corporateEra: gameReq.expansions.corpera,
-            customCeos: gameReq.customCeos,
-            customColoniesList: gameReq.customColoniesList,
+            coloniesExtension: expansions.colonies,
+            communityCardsOption: expansions.community,
+            expansions,
+            ceosDraftVariant: false,
+            corporateEra: expansions.corpera,
+            customCeos: [],
+            customColoniesList: [],
             customCorporationsList: gameReq.customCorporationsList,
-            customPreludes: gameReq.customPreludes,
+            customPreludes: [],
             draftVariant: gameReq.draftVariant,
             escapeVelocity: gameReq.escapeVelocity,
             fastModeOption: gameReq.fastModeOption,
@@ -149,34 +155,34 @@ export class ApiCreateGame extends Handler {
             includeFanMA: gameReq.includeFanMA,
             initialDraftVariant: gameReq.initialDraft,
             modularMA: gameReq.modularMA,
-            moonExpansion: gameReq.expansions.moon,
-            moonStandardProjectVariant: gameReq.moonStandardProjectVariant,
-            moonStandardProjectVariant1: gameReq.moonStandardProjectVariant1,
-            pathfindersExpansion: gameReq.expansions.pathfinders,
-            politicalAgendasExtension: gameReq.politicalAgendasExtension,
-            prelude2Expansion: gameReq.expansions.prelude2,
-            preludeDraftVariant: gameReq.preludeDraftVariant,
-            preludeExtension: gameReq.expansions.prelude,
-            promoCardsOption: gameReq.expansions.promo,
+            moonExpansion: expansions.moon,
+            moonStandardProjectVariant: false,
+            moonStandardProjectVariant1: false,
+            pathfindersExpansion: expansions.pathfinders,
+            politicalAgendasExtension: 'Standard',
+            prelude2Expansion: expansions.prelude2,
+            preludeDraftVariant: false,
+            preludeExtension: expansions.prelude,
+            promoCardsOption: expansions.promo,
             randomMA: gameReq.randomMA,
-            removeNegativeGlobalEventsOption: gameReq.removeNegativeGlobalEventsOption,
-            requiresMoonTrackCompletion: gameReq.requiresMoonTrackCompletion,
-            requiresVenusTrackCompletion: gameReq.requiresVenusTrackCompletion,
+            removeNegativeGlobalEventsOption: false,
+            requiresMoonTrackCompletion: false,
+            requiresVenusTrackCompletion: false,
             showOtherPlayersVP: gameReq.showOtherPlayersVP,
             showTimers: gameReq.showTimers,
             shuffleMapOption: gameReq.shuffleMapOption,
             solarPhaseOption: gameReq.solarPhaseOption,
             soloTR: gameReq.soloTR,
-            startingCeos: gameReq.startingCeos,
+            startingCeos: 0,
             startingCorporations: gameReq.startingCorporations,
-            startingPreludes: gameReq.startingPreludes,
-            starWarsExpansion: gameReq.expansions.starwars,
-            turmoilExtension: gameReq.expansions.turmoil,
+            startingPreludes: 0,
+            starWarsExpansion: expansions.starwars,
+            turmoilExtension: expansions.turmoil,
             twoCorpsVariant: gameReq.twoCorpsVariant,
-            underworldExpansion: gameReq.expansions.underworld,
-            deltaProjectExpansion: gameReq.expansions.deltaProject,
+            underworldExpansion: expansions.underworld,
+            deltaProjectExpansion: expansions.deltaProject,
             undoOption: gameReq.undoOption,
-            venusNextExtension: gameReq.expansions.venus,
+            venusNextExtension: expansions.venus,
           };
 
           let game: IGame;
@@ -197,4 +203,3 @@ export class ApiCreateGame extends Handler {
     });
   }
 }
-

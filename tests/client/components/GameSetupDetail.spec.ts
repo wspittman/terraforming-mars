@@ -15,5 +15,10 @@ describe('GameSetupDetail', () => {
       },
     });
     expect(wrapper.exists()).to.be.true;
+    expect(wrapper.text()).to.include('Game Version:');
+    expect(wrapper.text()).to.include('Corporate Era');
+    expect(wrapper.text()).to.not.include('Venus');
+    expect(wrapper.text()).to.not.include('Prelude');
+    expect(wrapper.text()).to.not.include('Turmoil');
   });
 });

@@ -43,6 +43,18 @@ describe('CreateGameForm', () => {
     expect(wrapper.exists()).to.be.true;
   });
 
+  it('only offers Base and Corporate Era', () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+
+    expect(wrapper.find('#corporateEra-checkbox').exists()).to.be.true;
+    expect(wrapper.find('#prelude-checkbox').exists()).to.be.false;
+    expect(wrapper.find('#venusNext-checkbox').exists()).to.be.false;
+    expect(wrapper.find('#colonies-checkbox').exists()).to.be.false;
+    expect(wrapper.find('#turmoil-checkbox').exists()).to.be.false;
+  });
+
   it('restores the last saved game settings on load', async () => {
     new CreateGameSettingsStorage(localStorage).saveSettings(createGameSettings({
       expansions: {...DEFAULT_EXPANSIONS, venus: true},

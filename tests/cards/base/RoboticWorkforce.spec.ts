@@ -5,7 +5,7 @@ import { TileType } from '../../../src/common/TileType';
 import { Units } from '../../../src/common/Units';
 import { CardName } from '../../../src/common/cards/CardName';
 import { Tag } from '../../../src/common/cards/Tag';
-import { cast, toName } from '../../../src/common/utils/utils';
+import { cast } from '../../../src/common/utils/utils';
 import { IGame } from '../../../src/server/IGame';
 import { ALL_MODULE_MANIFESTS } from '../../../src/server/cards/AllManifests';
 import { ICard } from '../../../src/server/cards/ICard';
@@ -19,10 +19,7 @@ import { MarsUniversity } from '../../../src/server/cards/base/MarsUniversity';
 import { NoctisFarming } from '../../../src/server/cards/base/NoctisFarming';
 import { RoboticWorkforce } from '../../../src/server/cards/base/RoboticWorkforce';
 import { SolarWindPower } from '../../../src/server/cards/base/SolarWindPower';
-import { TitaniumMine } from '../../../src/server/cards/base/TitaniumMine';
 import { isICorporationCard } from '../../../src/server/cards/corporation/ICorporationCard';
-import { LunarMineUrbanization } from '../../../src/server/cards/moon/LunarMineUrbanization';
-import { Odyssey } from '../../../src/server/cards/pathfinders/Odyssey';
 import { SpecializedSettlement } from '../../../src/server/cards/pathfinders/SpecializedSettlement';
 import { ResearchNetwork } from '../../../src/server/cards/prelude/ResearchNetwork';
 import { UtopiaInvest } from '../../../src/server/cards/turmoil/UtopiaInvest';
@@ -252,28 +249,6 @@ describe('RoboticWorkforce', () => {
     runAllActions(game);
 
     expect(player.production.asUnits()).deep.eq(Units.of({ megacredits: 3 }));
-  });
-
-  it('Events with building tags should be unselectable without Odyssey', () => {
-    const lunarMineUrbanization = new LunarMineUrbanization();
-    const titaniumMine = new TitaniumMine();
-    player.playedCards.push(lunarMineUrbanization, titaniumMine);
-
-    card.play(player);
-    runAllActions(game);
-    const selectCard = cast(player.popWaitingFor(), SelectCard);
-    expect(selectCard.cards.map(toName)).deep.eq([titaniumMine.name]);
-
-    const odyssey = new Odyssey();
-    player.playedCards.push(odyssey);
-
-    card.play(player);
-    runAllActions(game);
-    const selectCard2 = cast(player.popWaitingFor(), SelectCard);
-    expect(selectCard2.cards.map(toName)).to.have.members([
-      titaniumMine.name,
-      lunarMineUrbanization.name,
-    ]);
   });
 
   describe('test all cards', () => {

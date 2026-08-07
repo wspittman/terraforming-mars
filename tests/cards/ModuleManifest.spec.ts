@@ -8,7 +8,6 @@ import { RadChemFactory } from '../../src/server/cards/base/RadChemFactory';
 import { ICard } from '../../src/server/cards/ICard';
 import { IProjectCard } from '../../src/server/cards/IProjectCard';
 import { CardManifest } from '../../src/server/cards/ModuleManifest';
-import { EarthEmbassy } from '../../src/server/cards/moon/EarthEmbassy';
 import { BannedDelegate } from '../../src/server/cards/turmoil/BannedDelegate';
 
 describe('ModuleManifest', () => {
@@ -18,7 +17,6 @@ describe('ModuleManifest', () => {
     [CardName.CALLISTO_PENAL_MINES]: { Factory: CallistoPenalMines },
     [CardName.CEOS_FAVORITE_PROJECT]: { Factory: CEOsFavoriteProject },
     [CardName.RAD_CHEM_FACTORY]: { Factory: RadChemFactory },
-    [CardName.EARTH_EMBASSY]: { Factory: EarthEmbassy },
   };
 
   it('findCardByName: success', () => {
@@ -34,7 +32,6 @@ describe('ModuleManifest', () => {
       CardName.CALLISTO_PENAL_MINES,
       CardName.CEOS_FAVORITE_PROJECT,
       CardName.RAD_CHEM_FACTORY,
-      CardName.EARTH_EMBASSY,
     ]);
   });
 
@@ -46,7 +43,6 @@ describe('ModuleManifest', () => {
       CardName.CALLISTO_PENAL_MINES,
       CardName.CEOS_FAVORITE_PROJECT,
       CardName.RAD_CHEM_FACTORY,
-      CardName.EARTH_EMBASSY,
     ]);
   });
 
@@ -65,7 +61,6 @@ describe('ModuleManifest', () => {
       [CardName.CALLISTO_PENAL_MINES, CardName.CALLISTO_PENAL_MINES],
       [CardName.CEOS_FAVORITE_PROJECT, CardName.CEOS_FAVORITE_PROJECT],
       [CardName.RAD_CHEM_FACTORY, CardName.RAD_CHEM_FACTORY],
-      [CardName.EARTH_EMBASSY, CardName.EARTH_EMBASSY],
     ]);
   });
 });

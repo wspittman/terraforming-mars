@@ -1,13 +1,16 @@
-import {inplaceRemove, copyAndClear as copyAndEmpty, zip} from '../common/utils/utils';
-import {CardName} from '../common/cards/CardName';
-import {IGame} from './IGame';
-import {IPlayer} from './IPlayer';
-import {IProjectCard} from './cards/IProjectCard';
-import {LunaProjectOffice} from './cards/moon/LunaProjectOffice';
-import {SelectCard} from './inputs/SelectCard';
-import {message} from './logs/MessageBuilder';
-import {IPreludeCard} from './cards/prelude/IPreludeCard';
-import {ICeoCard} from './cards/ceos/ICeoCard';
+import { CardName } from '../common/cards/CardName';
+import {
+  copyAndClear as copyAndEmpty,
+  inplaceRemove,
+  zip,
+} from '../common/utils/utils';
+import { IGame } from './IGame';
+import { IPlayer } from './IPlayer';
+import { IProjectCard } from './cards/IProjectCard';
+import { ICeoCard } from './cards/ceos/ICeoCard';
+import { IPreludeCard } from './cards/prelude/IPreludeCard';
+import { SelectCard } from './inputs/SelectCard';
+import { message } from './logs/MessageBuilder';
 
 export type DraftType = 'none' | 'initial' | 'prelude' | 'ceos' | 'standard';
 
@@ -17,13 +20,16 @@ export type DraftType = 'none' | 'initial' | 'prelude' | 'ceos' | 'standard';
  * Draft iteration: A complete cycle of draft rounds. In the standard draft, there are 4 draft rounds in a draft iteration.
  *  In the initial draft, there are 2 iterations, or up to 3 with preludes.
  * Draft round: A single pass through the players, where each player gets to pick a card.
-*/
+ */
 
 /**
  * Implements a specific draft.
  */
 export abstract class Draft {
-  constructor(public readonly type: DraftType, protected readonly game: IGame) {}
+  constructor(
+    public readonly type: DraftType,
+    protected readonly game: IGame,
+  ) {}
 
   /** draw cards into hand at the start of the iteration. */
   protected abstract draw(player: IPlayer): Array<IProjectCard>;
@@ -103,12 +109,16 @@ export abstract class Draft {
 
   /** The player this player is taking their cards from when everybody passes their draft hands */
   private takingFrom(player: IPlayer): IPlayer {
-    return this.passDirection() === 'after' ? this.game.getPlayerBefore(player) : this.game.getPlayerAfter(player);
+    return this.passDirection() === 'after' ?
+      this.game.getPlayerBefore(player) :
+      this.game.getPlayerAfter(player);
   }
 
   /** The player this player is givign their cards to when everybody passes their draft hands */
   private givingTo(player: IPlayer): IPlayer {
-    return this.passDirection() === 'after' ? this.game.getPlayerAfter(player) : this.game.getPlayerBefore(player);
+    return this.passDirection() === 'after' ?
+      this.game.getPlayerAfter(player) :
+      this.game.getPlayerBefore(player);
   }
 
   /**
@@ -121,12 +131,17 @@ export abstract class Draft {
     let cardsToConsider: Array<IProjectCard>;
     let enabled: Array<boolean> | undefined;
     if (repick) {
-      cardsToConsider = [...player.draftHand, ...player.draftedCards.slice(-cardsToKeep)];
+      cardsToConsider = [
+        ...player.draftHand,
+        ...player.draftedCards.slice(-cardsToKeep),
+      ];
       // Disable the picked card only if we're keeping one card. If we keep more than
       // one card, we need to keep them all enabled since we might repick
       // one of the cards we previously picked plus a new card.
       if (cardsToKeep === 1) {
-        enabled = cardsToConsider.map((_, idx) => idx < player.draftHand.length);
+        enabled = cardsToConsider.map(
+          (_, idx) => idx < player.draftHand.length,
+        );
       }
     } else {
       cardsToConsider = player.draftHand;
@@ -134,24 +149,30 @@ export abstract class Draft {
 
     const messageTitle = repick ?
       'You can change your selection until all players have selected a card. Passing to ${0}' :
-      (cardsToKeep === 1 ?
+      cardsToKeep === 1 ?
         'Select a card to keep and pass the rest to ${0}' :
-        'Select two cards to keep and pass the rest to ${0}');
+        'Select two cards to keep and pass the rest to ${0}';
     const selectCard = new SelectCard(
       message(messageTitle, (b) => b.player(giveTo)),
       'Select',
       cardsToConsider,
       {
-        min: cardsToKeep, max: cardsToKeep, played: false,
+        min: cardsToKeep,
+        max: cardsToKeep,
+        played: false,
         enabled: enabled,
-      });
+      },
+    );
     selectCard.optional = repick;
-    player.setWaitingFor(selectCard
-      .andThen((selected) => {
+    player.setWaitingFor(
+      selectCard.andThen((selected) => {
         if (repick) {
           const startIndex = player.draftedCards.length - cardsToKeep;
 
-          const movedCards = player.draftedCards.splice(startIndex, cardsToKeep);
+          const movedCards = player.draftedCards.splice(
+            startIndex,
+            cardsToKeep,
+          );
           player.draftHand.push(...movedCards);
         }
         for (const card of selected) {
@@ -191,7 +212,9 @@ export abstract class Draft {
 
     // Push last cards for each player
     for (const player of this.game.players) {
-      player.draftedCards.push(...copyAndEmpty(this.takingFrom(player).draftHand));
+      player.draftedCards.push(
+        ...copyAndEmpty(this.takingFrom(player).draftHand),
+      );
       player.needsToDraft = undefined;
     }
 
@@ -210,9 +233,6 @@ class StandardDraft extends Draft {
   }
 
   private cardsToDraw(player: IPlayer): number {
-    if (LunaProjectOffice.isActive(player)) {
-      return 5;
-    }
     if (player.tableau.has(CardName.MARS_MATHS)) {
       return 5;
     }
@@ -222,9 +242,6 @@ class StandardDraft extends Draft {
 
   override cardsToKeep(player: IPlayer): number {
     if (this.game.draftRound === 1) {
-      if (LunaProjectOffice.isActive(player)) {
-        return 2;
-      }
       if (player.tableau.has(CardName.MARS_MATHS)) {
         return 2;
       }
@@ -274,9 +291,15 @@ class InitialDraft extends Draft {
         player.dealtProjectCards = player.draftedCards;
         player.draftedCards = [];
       }
-      if (this.game.gameOptions.preludeExtension && this.game.gameOptions.preludeDraftVariant) {
+      if (
+        this.game.gameOptions.preludeExtension &&
+          this.game.gameOptions.preludeDraftVariant
+      ) {
         newPreludeDraft(this.game).startDraft();
-      } else if (this.game.gameOptions.ceoExtension && this.game.gameOptions.ceosDraftVariant) {
+      } else if (
+        this.game.gameOptions.ceoExtension &&
+          this.game.gameOptions.ceosDraftVariant
+      ) {
         this.game.initialDraftIteration++;
         newCEOsDraft(this.game).startDraft();
       } else {
@@ -313,7 +336,10 @@ class PreludeDraft extends Draft {
       player.dealtPreludeCards = player.draftedCards as Array<IPreludeCard>;
       player.draftedCards = [];
     }
-    if (this.game.gameOptions.ceoExtension && this.game.gameOptions.ceosDraftVariant) {
+    if (
+      this.game.gameOptions.ceoExtension &&
+      this.game.gameOptions.ceosDraftVariant
+    ) {
       this.game.draftRound = 1;
       newCEOsDraft(this.game).startDraft();
     } else {

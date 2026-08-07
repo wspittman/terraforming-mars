@@ -1,14 +1,14 @@
-import {expect} from 'chai';
-import {Tag} from '../../src/common/cards/Tag';
-import {IPlayer} from '../../src/server/IPlayer';
-import {TestPlayer} from '../TestPlayer';
-import {Tags} from '../../src/server/player/Tags';
-import {fakeCard, testGame} from '../TestingUtils';
-import {CardType} from '../../src/common/cards/CardType';
-import {CardName} from '../../src/common/cards/CardName';
-import {newCard, newProjectCard} from '../../src/server/createCard';
-import {GameOptions} from '../../src/server/game/GameOptions';
-import {Odyssey} from '../../src/server/cards/pathfinders/Odyssey';
+import { expect } from 'chai';
+import { CardName } from '../../src/common/cards/CardName';
+import { CardType } from '../../src/common/cards/CardType';
+import { Tag } from '../../src/common/cards/Tag';
+import { Odyssey } from '../../src/server/cards/pathfinders/Odyssey';
+import { newCard, newProjectCard } from '../../src/server/createCard';
+import { GameOptions } from '../../src/server/game/GameOptions';
+import { IPlayer } from '../../src/server/IPlayer';
+import { Tags } from '../../src/server/player/Tags';
+import { fakeCard, testGame } from '../TestingUtils';
+import { TestPlayer } from '../TestPlayer';
 
 // Exposes rawCount available for testing.
 class TestableTags extends Tags {
@@ -30,17 +30,17 @@ describe('Tags', () => {
   });
 
   function playFakeCorporation(...tags: Array<Tag>) {
-    const card = fakeCard({type: CardType.CORPORATION, tags: tags});
+    const card = fakeCard({ type: CardType.CORPORATION, tags: tags });
     player.playedCards.push(card);
   }
 
   function playFakeEvent(...tags: Array<Tag>) {
-    const card = fakeCard({type: CardType.EVENT, tags: tags});
+    const card = fakeCard({ type: CardType.EVENT, tags: tags });
     player.playedCards.push(card);
   }
 
   function playFakeProject(...tags: Array<Tag>) {
-    const card = fakeCard({type: CardType.AUTOMATED, tags: tags});
+    const card = fakeCard({ type: CardType.AUTOMATED, tags: tags });
     player.playedCards.push(card);
   }
 
@@ -48,9 +48,9 @@ describe('Tags', () => {
   // count(...)
 
   const cardHasTagRuns = [
-    {card: CardName.MICRO_MILLS, tag: Tag.ANIMAL, expected: false},
-    {card: CardName.BIRDS, tag: Tag.ANIMAL, expected: true},
-    {card: CardName.BRIBED_COMMITTEE, tag: Tag.EVENT, expected: true},
+    { card: CardName.MICRO_MILLS, tag: Tag.ANIMAL, expected: false },
+    { card: CardName.BIRDS, tag: Tag.ANIMAL, expected: true },
+    { card: CardName.BRIBED_COMMITTEE, tag: Tag.EVENT, expected: true },
   ] as const;
   for (const run of cardHasTagRuns) {
     it('cardHasTag ' + JSON.stringify(run), () => {
@@ -60,12 +60,12 @@ describe('Tags', () => {
 
   it('count ignores event', () => {
     const [_, player] = testGame(1);
-    const card = fakeCard({tags: [Tag.JOVIAN]});
+    const card = fakeCard({ tags: [Tag.JOVIAN] });
     player.playedCards.push(card);
 
     expect(player.tags.count(Tag.JOVIAN)).eq(1);
 
-    const event = fakeCard({type: CardType.EVENT, tags: [Tag.JOVIAN]});
+    const event = fakeCard({ type: CardType.EVENT, tags: [Tag.JOVIAN] });
     player.playedCards.set(event);
 
     expect(player.tags.count(Tag.JOVIAN)).eq(0);
@@ -73,8 +73,8 @@ describe('Tags', () => {
 
   it('count and distinctCount for Odyssey', () => {
     const [_, player] = testGame(1);
-    const event = fakeCard({type: CardType.EVENT, tags: [Tag.JOVIAN]});
-    const nonEvent = fakeCard({tags: [Tag.JOVIAN, Tag.BUILDING]});
+    const event = fakeCard({ type: CardType.EVENT, tags: [Tag.JOVIAN] });
+    const nonEvent = fakeCard({ tags: [Tag.JOVIAN, Tag.BUILDING] });
     const odyssey = new Odyssey();
     player.playedCards.push(odyssey);
     player.playedCards.push(event);
@@ -92,13 +92,18 @@ describe('Tags', () => {
   // cardTagCount()
   // multipleCount
 
-  const tagsInGameRuns: ReadonlyArray<{options: Partial<GameOptions>, expected: number}> = [
-    {options: {}, expected: 10},
-    {options: {venusNextExtension: true}, expected: 11},
-    {options: {coloniesExtension: true}, expected: 10},
-    {options: {pathfindersExpansion: true}, expected: 11},
-    {options: {venusNextExtension: true, pathfindersExpansion: true}, expected: 12},
-    {options: {moonExpansion: true}, expected: 11},
+  const tagsInGameRuns: ReadonlyArray<{
+    options: Partial<GameOptions>;
+    expected: number;
+  }> = [
+    { options: {}, expected: 10 },
+    { options: { venusNextExtension: true }, expected: 11 },
+    { options: { coloniesExtension: true }, expected: 10 },
+    { options: { pathfindersExpansion: true }, expected: 11 },
+    {
+      options: { venusNextExtension: true, pathfindersExpansion: true },
+      expected: 12,
+    },
   ] as const;
   for (const run of tagsInGameRuns) {
     it('tagsInGame ' + JSON.stringify(run), () => {

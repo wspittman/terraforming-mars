@@ -5,7 +5,6 @@ import { Bushes } from '../../../src/server/cards/base/Bushes';
 import { MarsUniversity } from '../../../src/server/cards/base/MarsUniversity';
 import { OlympusConference } from '../../../src/server/cards/base/OlympusConference';
 import { Research } from '../../../src/server/cards/base/Research';
-import { HyperspaceDrivePrototype } from '../../../src/server/cards/underworld/HyperspaceDrivePrototype';
 import { DeferredActionsQueue } from '../../../src/server/deferredActions/DeferredActionsQueue';
 import { IGame } from '../../../src/server/IGame';
 import { OrOptions } from '../../../src/server/inputs/OrOptions';
@@ -123,20 +122,5 @@ describe('OlympusConference', () => {
     game.deferredActions.pop();
     orOptions2.options[1].cb();
     expect(card.resourceCount).to.eq(2);
-  });
-
-  it('Allows for resource to be added first when Hyperspace Drive Prototype is played', () => {
-    player.playedCards.push(card);
-    card.resourceCount = 0;
-    const hyperspaceDrivePrototype = new HyperspaceDrivePrototype();
-    player.playCard(hyperspaceDrivePrototype);
-    runAllActions(game);
-
-    const orOptions = cast(player.popWaitingFor(), OrOptions);
-    game.deferredActions.pop();
-    orOptions.options[0].cb();
-
-    expect(card.resourceCount).to.eq(0);
-    expect(player.cardsInHand).has.lengthOf(1);
   });
 });

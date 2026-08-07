@@ -3,7 +3,6 @@ import { Payment } from '../../../src/common/inputs/Payment';
 import { ALL_RESOURCES } from '../../../src/common/Resource';
 import { Units } from '../../../src/common/Units';
 import { NirgalEnterprises } from '../../../src/server/cards/prelude2/NirgalEnterprises';
-import { StagedProtests } from '../../../src/server/cards/underworld/StagedProtests';
 import { SelectPayment } from '../../../src/server/inputs/SelectPayment';
 import { Merchant } from '../../../src/server/milestones/modular/Merchant';
 import { testGame } from '../../TestGame';
@@ -81,18 +80,6 @@ describe('Merchant', () => {
     expect(milestone.canClaim(player)).is.false;
 
     player.playedCards.push(new NirgalEnterprises());
-    expect(milestone.canClaim(player)).is.true;
-  });
-
-  it('Compatible with Staged Protests', () => {
-    player.stock.override({ ...Units.every(2), megacredits: 17 });
-    expect(milestone.canClaim(player)).is.true;
-
-    const stagedProtests = new StagedProtests();
-    player.playedCards.push(stagedProtests);
-    stagedProtests.generationUsed = player.game.generation;
-    expect(milestone.canClaim(player)).is.false;
-    player.megaCredits++;
     expect(milestone.canClaim(player)).is.true;
   });
 

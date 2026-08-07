@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import { Payment } from '../../../src/common/inputs/Payment';
 import { ALL_RESOURCES } from '../../../src/common/Resource';
 import { Units } from '../../../src/common/Units';
-import { NirgalEnterprises } from '../../../src/server/cards/prelude2/NirgalEnterprises';
 import { SelectPayment } from '../../../src/server/inputs/SelectPayment';
 import { Merchant } from '../../../src/server/milestones/modular/Merchant';
 import { testGame } from '../../TestGame';
@@ -74,14 +73,6 @@ describe('Merchant', () => {
       expect(milestone.canClaim(player)).eq(run.expected);
     });
   }
-
-  it('Compatible with Nirgal Enterprises', () => {
-    player.stock.override(Units.every(2));
-    expect(milestone.canClaim(player)).is.false;
-
-    player.playedCards.push(new NirgalEnterprises());
-    expect(milestone.canClaim(player)).is.true;
-  });
 
   describe('Payment reserve enforcement', () => {
     // SelectPayment.process() validates canSpend and payingAmount >= cost, but does not

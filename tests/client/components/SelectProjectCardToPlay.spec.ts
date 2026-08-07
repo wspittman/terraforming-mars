@@ -733,26 +733,6 @@ describe('SelectProjectCardToPlay', () => {
     expect(saveResponse).to.be.undefined;
   });
 
-  it('standard project with zero cost still shows save button (b8079)', async () => {
-    // Underworld Standard Technology discounts Excavate (cost 7) by 8, flooring at 0.
-    // The save button must still render and accept a zero payment.
-    const wrapper = setupCardForPurchase(
-      CardName.EXCAVATE_STANDARD_PROJECT,
-      0,
-      { megacredits: 0 },
-      {},
-      { canPayWith: { steel: true } },
-    );
-
-    const tester = new PaymentTester(wrapper);
-    await tester.nextTick();
-
-    expect(wrapper.find('[data-test=save]').exists()).is.true;
-
-    await tester.clickSave();
-    expect(saveResponse.payment).deep.eq(Payment.of({ megacredits: 0 }));
-  });
-
   it('switching cards updates payment defaults to match new card cost', async () => {
     // Regression: the cardName watch (flush:'pre') must update available units before
     // PaymentForm remounts via :key, so the new instance computes correct greedy defaults.

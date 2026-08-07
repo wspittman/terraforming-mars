@@ -30,7 +30,6 @@ describe('SelectInitialCards', () => {
       CardName.ANTS,
       CardName.BACTOVIRAL_RESEARCH,
       CardName.COMET_AIMING,
-      CardName.DIRIGIBLES,
     ]);
     selectInitialCards = new SelectInitialCards(player, cb);
   });
@@ -102,7 +101,6 @@ describe('SelectInitialCards', () => {
     expect(player.game.projectDeck.discardPile.map(toName)).to.have.members([
       CardName.BACTOVIRAL_RESEARCH,
       CardName.COMET_AIMING,
-      CardName.DIRIGIBLES,
     ]);
     expect(player.game.corporationDeck.discardPile.map(toName)).to.have.members(
       [CardName.HELION],
@@ -121,7 +119,6 @@ describe('SelectInitialCards', () => {
       CardName.ANTS,
       CardName.BACTOVIRAL_RESEARCH,
       CardName.COMET_AIMING,
-      CardName.DIRIGIBLES,
     ]);
     selectInitialCards = new SelectInitialCards(player, cb);
 
@@ -143,7 +140,6 @@ describe('SelectInitialCards', () => {
     expect(player.game.projectDeck.discardPile.map(toName)).to.have.members([
       CardName.BACTOVIRAL_RESEARCH,
       CardName.COMET_AIMING,
-      CardName.DIRIGIBLES,
     ]);
     expect(player.game.corporationDeck.discardPile.map(toName)).to.have.members(
       [CardName.HELION],

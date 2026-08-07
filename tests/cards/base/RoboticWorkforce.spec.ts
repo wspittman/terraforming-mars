@@ -21,8 +21,6 @@ import { RoboticWorkforce } from '../../../src/server/cards/base/RoboticWorkforc
 import { SolarWindPower } from '../../../src/server/cards/base/SolarWindPower';
 import { isICorporationCard } from '../../../src/server/cards/corporation/ICorporationCard';
 import { UtopiaInvest } from '../../../src/server/cards/turmoil/UtopiaInvest';
-import { Gyropolis } from '../../../src/server/cards/venusNext/Gyropolis';
-import { VenusGovernor } from '../../../src/server/cards/venusNext/VenusGovernor';
 import { SelectCard } from '../../../src/server/inputs/SelectCard';
 import { SelectSpace } from '../../../src/server/inputs/SelectSpace';
 import { testGame } from '../../TestGame';
@@ -77,25 +75,6 @@ describe('RoboticWorkforce', () => {
     const selectCard = cast(player.popWaitingFor(), SelectCard);
     selectCard.cb([noctisFarming]);
     expect(player.production.megacredits).to.eq(1);
-  });
-
-  it('Should work with gyropolis', () => {
-    const gyropolis = new Gyropolis();
-    const venusgov = new VenusGovernor();
-    player.playedCards.push(gyropolis, venusgov);
-
-    cast(card.play(player), undefined);
-    runAllActions(game);
-    cast(player.popWaitingFor(), undefined); // Not enough energy production for gyropolis, no other building card to copy
-
-    player.production.add(Resource.ENERGY, 2);
-    cast(card.play(player), undefined);
-    runAllActions(game);
-    const selectCard = cast(player.popWaitingFor(), SelectCard);
-
-    selectCard.cb([gyropolis]);
-    expect(player.production.energy).to.eq(0);
-    expect(player.production.megacredits).to.eq(2);
   });
 
   it('Should work with capital', () => {

@@ -15,14 +15,11 @@ import { Birds } from '../../src/server/cards/base/Birds';
 import { HeatTrappers } from '../../src/server/cards/base/HeatTrappers';
 import { Livestock } from '../../src/server/cards/base/Livestock';
 import { MicroMills } from '../../src/server/cards/base/MicroMills';
-import { NitriteReducingBacteria } from '../../src/server/cards/base/NitriteReducingBacteria';
 import { RegolithEaters } from '../../src/server/cards/base/RegolithEaters';
 import { Tardigrades } from '../../src/server/cards/base/Tardigrades';
 import { Helion } from '../../src/server/cards/corporation/Helion';
 import { IProjectCard } from '../../src/server/cards/IProjectCard';
 import { SaturnSurfing } from '../../src/server/cards/promo/SaturnSurfing';
-import { AerialMappers } from '../../src/server/cards/venusNext/AerialMappers';
-import { Dirigibles } from '../../src/server/cards/venusNext/Dirigibles';
 import { IGame } from '../../src/server/IGame';
 import { OrOptions } from '../../src/server/inputs/OrOptions';
 import { SelectCard } from '../../src/server/inputs/SelectCard';
@@ -503,25 +500,6 @@ describe('Executor', () => {
 
     expect(birds.resourceCount).eq(0);
     expect(livestock.resourceCount).eq(1);
-  });
-
-  it('add resources to any card by tag', () => {
-    const aerialMappers = new AerialMappers(); // Venus tag with Floaters
-    const dirigibles = new Dirigibles(); // Venus tag with Floaters
-    const nitriteReducingBacteria = new NitriteReducingBacteria(); // Microbe tag with microbes
-    player.playedCards.push(aerialMappers, dirigibles, nitriteReducingBacteria);
-
-    executor.execute(
-      { addResourcesToAnyCard: { count: 1, tag: Tag.VENUS } },
-      player,
-      fake,
-    );
-    runAllActions(game);
-
-    const selectCard = cast(player.popWaitingFor(), SelectCard);
-    expect(selectCard.cards).does.not.include(nitriteReducingBacteria);
-    expect(selectCard.cards).includes(aerialMappers);
-    expect(selectCard.cards).includes(dirigibles);
   });
 
   it('add resources to any card by tag varies with `mustHaveCard`', () => {

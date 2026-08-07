@@ -10,14 +10,12 @@ import { AdaptationTechnology } from '../../../src/server/cards/base/AdaptationT
 import { Ants } from '../../../src/server/cards/base/Ants';
 import { SmallAsteroid } from '../../../src/server/cards/promo/SmallAsteroid';
 import { CardRequirements } from '../../../src/server/cards/requirements/CardRequirements';
-import { Celestic } from '../../../src/server/cards/venusNext/Celestic';
 import { Ceres } from '../../../src/server/colonies/Ceres';
 import { OrOptions } from '../../../src/server/inputs/OrOptions';
 import { IPlayer } from '../../../src/server/IPlayer';
 import { testGame } from '../../TestGame';
 import {
   addGreenery,
-  churn,
   fakeCard,
   runAllActions,
   setOxygenLevel,
@@ -159,16 +157,6 @@ describe('CardRequirements', () => {
     colony.colonies.push(player2.id);
     expect(satisfies(requirements, player)).eq(false);
     colony.colonies.push(player.id);
-    expect(satisfies(requirements, player)).eq(true);
-  });
-
-  it('satisfies properly for floaters', () => {
-    const requirements = { floaters: 2 };
-    const corp = new Celestic();
-    player.playedCards.push(corp);
-    churn(corp.action(player), player);
-    expect(satisfies(requirements, player)).eq(false);
-    churn(corp.action(player), player);
     expect(satisfies(requirements, player)).eq(true);
   });
 

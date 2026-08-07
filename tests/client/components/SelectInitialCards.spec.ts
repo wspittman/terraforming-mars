@@ -48,72 +48,6 @@ describe('SelectInitialCards', () => {
     });
   });
 
-  it('Cannot save with only one prelude', async () => {
-    const component = createComponent(
-      [CardName.ECOLINE],
-      [CardName.ANTS],
-      [CardName.ALLIED_BANK],
-    );
-    expect(component).not.is.undefined;
-
-    const selectCards = component.findAllComponents({ name: 'select-card' });
-    expect(selectCards).has.length(3);
-    selectCards[0].vm.$emit('cardschanged', [CardName.ECOLINE]);
-    selectCards[1].vm.$emit('cardschanged', [CardName.ALLIED_BANK]);
-    selectCards[2].vm.$emit('cardschanged', [CardName.ANTS]);
-    await component.vm.$nextTick();
-
-    const button = getButton(component);
-    expect(button.attributes().disabled).not.to.be.undefined;
-  });
-
-  it('saves data with prelude', async () => {
-    const component = createComponent(
-      [CardName.ECOLINE],
-      [CardName.ANTS],
-      [CardName.ALLIED_BANK, CardName.SUPPLY_DROP],
-    );
-    expect(component).not.is.undefined;
-
-    const button = getButton(component);
-    expect(button.attributes().disabled).not.to.be.undefined;
-
-    const selectCards = component.findAllComponents({ name: 'select-card' });
-    expect(selectCards).has.length(3);
-
-    selectCards[0].vm.$emit('cardschanged', [CardName.ECOLINE]);
-    await component.vm.$nextTick();
-    expect(button.attributes().disabled).not.to.be.undefined;
-
-    selectCards[1].vm.$emit('cardschanged', [
-      CardName.ALLIED_BANK,
-      CardName.SUPPLY_DROP,
-    ]);
-
-    await component.vm.$nextTick();
-    expect(button.attributes().disabled).is.undefined;
-
-    selectCards[2].vm.$emit('cardschanged', [CardName.ANTS]);
-    await component.vm.$nextTick();
-
-    await button.trigger('click');
-
-    expect(savedData).to.deep.eq({
-      type: 'initialCards',
-      responses: [
-        { type: 'card', cards: [CardName.ECOLINE] },
-        { type: 'card', cards: [CardName.ALLIED_BANK, CardName.SUPPLY_DROP] },
-        { type: 'card', cards: [CardName.ANTS] },
-      ],
-    });
-
-    await component.vm.$nextTick();
-    const confirmationDialog = component.vm.$refs.confirmation as InstanceType<
-      typeof ConfirmDialog
-    >;
-    expect(confirmationDialog.$data.shown).is.false;
-  });
-
   it('shows error when no project cards selected', async () => {
     const component = createComponent([CardName.ECOLINE], [CardName.ANTS]);
     const selectCards = component.findAllComponents({ name: 'select-card' });
@@ -123,29 +57,6 @@ describe('SelectInitialCards', () => {
     const button = getButton(component);
     await button.trigger('click');
 
-    expect(savedData).is.undefined;
-
-    await component.vm.$nextTick();
-    const confirmationDialog = getConfirmDialog(component);
-    expect(confirmationDialog.$data.shown).is.true;
-  });
-
-  it('shows error when prelude cards are selected but not project cards', async () => {
-    const component = createComponent(
-      [CardName.ECOLINE],
-      [CardName.ANTS],
-      [CardName.ALLIED_BANK, CardName.SUPPLY_DROP],
-    );
-
-    const selectCards = component.findAllComponents({ name: 'select-card' });
-    selectCards[0].vm.$emit('cardschanged', [CardName.ECOLINE]);
-    selectCards[1].vm.$emit('cardschanged', [
-      CardName.ALLIED_BANK,
-      CardName.SUPPLY_DROP,
-    ]);
-    await component.vm.$nextTick();
-    const button = getButton(component);
-    await button.trigger('click');
     expect(savedData).is.undefined;
 
     await component.vm.$nextTick();

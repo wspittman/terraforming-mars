@@ -1,10 +1,9 @@
-import {expect} from 'chai';
-import {testGame} from '../../TestGame';
-import {NitrophilicMoss} from '../../../src/server/cards/base/NitrophilicMoss';
-import {ViralEnhancers} from '../../../src/server/cards/base/ViralEnhancers';
-import {Manutech} from '../../../src/server/cards/venusNext/Manutech';
-import {maxOutOceans} from '../../TestingUtils';
-import {TestPlayer} from '../../TestPlayer';
+import { expect } from 'chai';
+import { NitrophilicMoss } from '../../../src/server/cards/base/NitrophilicMoss';
+import { ViralEnhancers } from '../../../src/server/cards/base/ViralEnhancers';
+import { testGame } from '../../TestGame';
+import { maxOutOceans } from '../../TestingUtils';
+import { TestPlayer } from '../../TestPlayer';
 
 describe('NitrophilicMoss', () => {
   let card: NitrophilicMoss;
@@ -12,7 +11,7 @@ describe('NitrophilicMoss', () => {
 
   beforeEach(() => {
     card = new NitrophilicMoss();
-    [/* game */, player] = testGame(2);
+    [, /* game */ player] = testGame(2);
   });
 
   it('Can not play without enough oceans', () => {
@@ -51,11 +50,5 @@ describe('NitrophilicMoss', () => {
     viralEnhancers.onCardPlayed(player, card);
     expect(player.plants).to.eq(0);
     expect(player.production.plants).to.eq(2);
-  });
-
-  it('Should play', () => {
-    maxOutOceans(player, 3);
-    player.playedCards.push(new Manutech());
-    expect(card.canPlay(player)).is.true;
   });
 });

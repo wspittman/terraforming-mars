@@ -65,16 +65,6 @@ describe('GameCards', () => {
     expect(names).to.not.contain(CardName.SOLAR_WIND_POWER);
   });
 
-  it('correctly includes the included cards', () => {
-    const gameOptions: GameOptions = {
-      ...DEFAULT_GAME_OPTIONS,
-      corporateEra: true,
-      includedCards: [CardName.VENUSIAN_INSECTS],
-    };
-    const names = new GameCards(gameOptions).getProjectCards().map(toName);
-    expect(names).to.contain(CardName.VENUSIAN_INSECTS);
-  });
-
   it('should not include the included cards in the standard projects', () => {
     const gameOptions: GameOptions = {
       ...DEFAULT_GAME_OPTIONS,

@@ -20,7 +20,6 @@ import { NoctisFarming } from '../../../src/server/cards/base/NoctisFarming';
 import { RoboticWorkforce } from '../../../src/server/cards/base/RoboticWorkforce';
 import { SolarWindPower } from '../../../src/server/cards/base/SolarWindPower';
 import { isICorporationCard } from '../../../src/server/cards/corporation/ICorporationCard';
-import { SpecializedSettlement } from '../../../src/server/cards/pathfinders/SpecializedSettlement';
 import { ResearchNetwork } from '../../../src/server/cards/prelude/ResearchNetwork';
 import { UtopiaInvest } from '../../../src/server/cards/turmoil/UtopiaInvest';
 import { Gyropolis } from '../../../src/server/cards/venusNext/Gyropolis';
@@ -187,68 +186,6 @@ describe('RoboticWorkforce', () => {
       Units.of({ heat: 1, energy: 1 }),
     );
     expect(player2.production.asUnits()).deep.eq(Units.EMPTY);
-  });
-
-  it('Should work with Specialized Settlement', () => {
-    const specializedSettlement = new SpecializedSettlement();
-    player.playedCards.push(specializedSettlement);
-    specializedSettlement.bonusResource = [Resource.HEAT];
-
-    expect(card.canPlay(player)).is.false;
-
-    player.production.override(Units.of({ energy: 1 }));
-
-    expect(card.canPlay(player)).is.true;
-
-    cast(card.play(player), undefined);
-    runAllActions(game);
-    const selectCard = cast(player.popWaitingFor(), SelectCard);
-
-    expect(selectCard.cards).deep.eq([specializedSettlement]);
-
-    selectCard.cb([specializedSettlement]);
-    runAllActions(game);
-
-    expect(player.production.asUnits()).deep.eq(
-      Units.of({ heat: 1, megacredits: 3 }),
-    );
-  });
-
-  it('Should work with Specialized Settlement, duplicate', () => {
-    const specializedSettlement = new SpecializedSettlement();
-    player.playedCards.push(specializedSettlement);
-    specializedSettlement.bonusResource = [Resource.MEGACREDITS];
-    player.production.override(Units.of({ energy: 1 }));
-    cast(card.play(player), undefined);
-    runAllActions(game);
-    const selectCard = cast(player.popWaitingFor(), SelectCard);
-
-    expect(selectCard.cards).deep.eq([specializedSettlement]);
-
-    selectCard.cb([specializedSettlement]);
-    runAllActions(game);
-
-    expect(player.production.asUnits()).deep.eq(Units.of({ megacredits: 4 }));
-  });
-
-  it('Should work with Specialized Settlement, if when is energy', () => {
-    const specializedSettlement = new SpecializedSettlement();
-    player.playedCards.push(specializedSettlement);
-    expect(card.canPlay(player)).is.false;
-    specializedSettlement.bonusResource = [Resource.ENERGY];
-
-    expect(card.canPlay(player)).is.true;
-
-    cast(card.play(player), undefined);
-    runAllActions(game);
-    const selectCard = cast(player.popWaitingFor(), SelectCard);
-
-    expect(selectCard.cards).deep.eq([specializedSettlement]);
-
-    selectCard.cb([specializedSettlement]);
-    runAllActions(game);
-
-    expect(player.production.asUnits()).deep.eq(Units.of({ megacredits: 3 }));
   });
 
   describe('test all cards', () => {

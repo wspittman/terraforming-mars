@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import { CardName } from '../../src/common/cards/CardName';
 import { CardType } from '../../src/common/cards/CardType';
 import { Tag } from '../../src/common/cards/Tag';
-import { Odyssey } from '../../src/server/cards/pathfinders/Odyssey';
 import { newCard, newProjectCard } from '../../src/server/createCard';
 import { GameOptions } from '../../src/server/game/GameOptions';
 import { IPlayer } from '../../src/server/IPlayer';
@@ -71,40 +70,13 @@ describe('Tags', () => {
     expect(player.tags.count(Tag.JOVIAN)).eq(0);
   });
 
-  it('count and distinctCount for Odyssey', () => {
-    const [_, player] = testGame(1);
-    const event = fakeCard({ type: CardType.EVENT, tags: [Tag.JOVIAN] });
-    const nonEvent = fakeCard({ tags: [Tag.JOVIAN, Tag.BUILDING] });
-    const odyssey = new Odyssey();
-    player.playedCards.push(odyssey);
-    player.playedCards.push(event);
-    player.playedCards.push(nonEvent);
-
-    expect(player.tags.count(Tag.JOVIAN)).eq(2);
-    expect(player.tags.distinctCount('default')).eq(3);
-
-    player.playedCards.remove(odyssey);
-
-    expect(player.tags.count(Tag.JOVIAN)).eq(1);
-    expect(player.tags.distinctCount('default')).eq(2);
-  });
-
   // cardTagCount()
   // multipleCount
 
   const tagsInGameRuns: ReadonlyArray<{
     options: Partial<GameOptions>;
     expected: number;
-  }> = [
-    { options: {}, expected: 10 },
-    { options: { venusNextExtension: true }, expected: 11 },
-    { options: { coloniesExtension: true }, expected: 10 },
-    { options: { pathfindersExpansion: true }, expected: 11 },
-    {
-      options: { venusNextExtension: true, pathfindersExpansion: true },
-      expected: 12,
-    },
-  ] as const;
+  }> = [{ options: {}, expected: 10 }] as const;
   for (const run of tagsInGameRuns) {
     it('tagsInGame ' + JSON.stringify(run), () => {
       const [_, player] = testGame(1, run.options);

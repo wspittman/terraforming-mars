@@ -1,6 +1,5 @@
 import { GameModule } from '../../common/cards/GameModule';
 import { ColonyName } from '../../common/colonies/ColonyName';
-import { IapetusII } from '../cards/pathfinders/IapetusII';
 import { Callisto } from './Callisto';
 import { Ceres } from './Ceres';
 import { Colony } from './Colony';
@@ -38,10 +37,7 @@ export const COMMUNITY_COLONIES_TILES: Array<IColonyFactory<Colony>> = [
   { colonyName: ColonyName.DEIMOS, Factory: Deimos },
 ];
 
-export const PATHFINDERS_COLONIES_TILES: Array<IColonyFactory<Colony>> = [
-  // {colonyName: ColonyName.LEAVITT_II, Factory: LeavittII},
-  { colonyName: ColonyName.IAPETUS_II, Factory: IapetusII },
-];
+export const PATHFINDERS_COLONIES_TILES: Array<IColonyFactory<Colony>> = [];
 
 export const ALL_COLONIES_TILES = [
   ...BASE_COLONIES_TILES,

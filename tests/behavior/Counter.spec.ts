@@ -4,16 +4,13 @@ import { CardName } from '../../src/common/cards/CardName';
 import { Tag } from '../../src/common/cards/Tag';
 import { TileType } from '../../src/common/TileType';
 import { Units } from '../../src/common/Units';
-import { cast } from '../../src/common/utils/utils';
 import { Counter } from '../../src/server/behavior/Counter';
 import { IceAsteroid } from '../../src/server/cards/base/IceAsteroid';
 import { ImportedHydrogen } from '../../src/server/cards/base/ImportedHydrogen';
 import { Virus } from '../../src/server/cards/base/Virus';
 import { IProjectCard } from '../../src/server/cards/IProjectCard';
-import { Wetlands } from '../../src/server/cards/pathfinders/Wetlands';
 import { ProxyCard } from '../../src/server/cards/ProxyCard';
 import { IGame } from '../../src/server/IGame';
-import { SelectSpace } from '../../src/server/inputs/SelectSpace';
 import { MoonExpansion } from '../../src/server/moon/MoonExpansion';
 import { Turmoil } from '../../src/server/turmoil/Turmoil';
 import { testGame } from '../TestGame';
@@ -173,13 +170,6 @@ describe('Counter', () => {
     addGreenery(player2);
 
     expect(counter.count({ greeneries: {} })).eq(3);
-
-    maxOutOceans(player);
-    const wetlands = new Wetlands();
-    player.plants = 4;
-    const selectSpace = cast(wetlands.play(player), SelectSpace);
-    selectSpace.cb(selectSpace.spaces[0]);
-    expect(counter.count({ greeneries: {} })).eq(4);
   });
 
   it('count greeneries that you ownown', () => {
@@ -217,13 +207,6 @@ describe('Counter', () => {
     maxOutOceans(player, 6);
 
     expect(counter.count({ oceans: {} })).eq(6);
-
-    maxOutOceans(player);
-    const wetlands = new Wetlands();
-    player.plants = 4;
-    const selectSpace = cast(wetlands.play(player), SelectSpace);
-    selectSpace.cb(selectSpace.spaces[0]);
-    expect(counter.count({ oceans: {} })).eq(10);
   });
 
   it('nextToThis: oceans', () => {

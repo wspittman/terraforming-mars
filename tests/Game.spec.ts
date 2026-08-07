@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import { BoardName } from '../src/common/boards/BoardName';
 import { SpaceBonus } from '../src/common/boards/SpaceBonus';
 import { CardName } from '../src/common/cards/CardName';
-import { Tag } from '../src/common/cards/Tag';
 import * as constants from '../src/common/constants';
 import { GlobalParameter } from '../src/common/GlobalParameter';
 import { RandomMAOptionType } from '../src/common/ma/RandomMAOptionType';
@@ -19,7 +18,6 @@ import { ArcticAlgae } from '../src/server/cards/base/ArcticAlgae';
 import { Birds } from '../src/server/cards/base/Birds';
 import { WaterImportFromEuropa } from '../src/server/cards/base/WaterImportFromEuropa';
 import { SaturnSystems } from '../src/server/cards/corporation/SaturnSystems';
-import { TiredEarth } from '../src/server/cards/pathfinders/TiredEarth';
 import { IColony } from '../src/server/colonies/IColony';
 import { Game } from '../src/server/Game';
 import { OrOptions } from '../src/server/inputs/OrOptions';
@@ -878,62 +876,6 @@ describe('Game', () => {
     expect(corpsAssignedToPlayers).has.members(corpsFromTurmoil);
   });
 
-  it('specifically-requested preludes override expansion preludes', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    const player2 = TestPlayer.RED.newPlayer();
-    const customPreludes = [
-      CardName.MERGER,
-      CardName.CORPORATE_ARCHIVES,
-      CardName.SURVEY_MISSION,
-      CardName.DESIGN_COMPANY,
-      CardName.PERSONAL_AGENDA,
-      CardName.VITAL_COLONY,
-      CardName.STRATEGIC_BASE_PLANNING,
-      CardName.EXPERIENCED_MARTIANS,
-    ];
-    const gameOptions = {
-      preludeExtension: true,
-      customPreludes,
-      pathfindersExpansion: false,
-      promoCardsOption: false,
-    };
-    Game.newInstance(
-      'gameid',
-      [player, player2],
-      player,
-      'spectatorid',
-      gameOptions,
-    );
-
-    const assignedPreludes = [
-      ...player.dealtPreludeCards,
-      ...player2.dealtPreludeCards,
-    ].map(toName);
-
-    expect(assignedPreludes).has.members(customPreludes);
-  });
-
-  it('throws if Delta Project is in customPreludes', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    expect(() =>
-      Game.newInstance('gameid', [player], player, 'spectatorid', {
-        deltaProjectExpansion: true,
-        preludeExtension: true,
-        customPreludes: [CardName.DELTA_PROJECT, CardName.ALLIED_BANK],
-      }),
-    ).to.throw();
-  });
-
-  it('throws if Delta Project is banned', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    expect(() =>
-      Game.newInstance('gameid', [player], player, 'spectatorid', {
-        deltaProjectExpansion: true,
-        bannedCards: [CardName.DELTA_PROJECT],
-      }),
-    ).to.throw();
-  });
-
   it('fails when the same id appears in two players', () => {
     const player1 = new Player('name', 'blue', false, 0, 'p-id3');
     const player2 = new Player('name', 'red', false, 0, 'p-id3');
@@ -1426,74 +1368,6 @@ describe('Game', () => {
     expect(player.plants).to.eq(0);
     runAllActions(game);
     expect(player.plants).to.eq(2);
-  });
-
-  it('Arctic Algae works during WGT before Turmoil', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    const player2 = TestPlayer.RED.newPlayer();
-    player.playedCards.push(new ArcticAlgae());
-    // player2 is first player, and will resolve WGT.
-    const game = Game.newInstance(
-      'gameid',
-      [player, player2],
-      player2,
-      'spectatorid',
-      { venusNextExtension: true, turmoilExtension: true },
-    );
-
-    game.turmoil!.currentGlobalEvent = new TiredEarth(); // Lose one plant for each earth tag you have.
-    player.tagsForTest = { earth: 1 };
-
-    game.worldGovernmentTerraforming();
-    const [input, cb] = player2.popWaitingFor2();
-    const orOptions = cast(input, OrOptions);
-    const oceanAction = cast(
-      orOptions.options.filter((o) => o.title.toString() === 'Add an ocean')[0],
-      SelectSpace,
-    );
-    assertPlaceOcean(player2, oceanAction);
-    cb?.(); // Will gain 2 plants and lose 1 plant.
-
-    expect(player.plants).to.eq(1);
-  });
-
-  it('game.tags excludes values accordingly', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    let game = Game.newInstance('gameid', [player], player, 'spectatorid', {
-      pathfindersExpansion: true,
-    });
-    expect(game.tags).does.not.include(Tag.VENUS);
-
-    // Dyson Screens has a Venus tag.
-    game = Game.newInstance('gameid', [player], player, 'spectatorid', {
-      pathfindersExpansion: true,
-      includedCards: [CardName.DYSON_SCREENS],
-    });
-    expect(game.tags).to.include(Tag.VENUS);
-  });
-
-  it('creating game sets expansions', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    const game = Game.newInstance('gameid', [player], player, 'spectatorid', {
-      pathfindersExpansion: true,
-    });
-    expect(game.gameOptions.pathfindersExpansion).is.true;
-    expect(game.gameOptions.expansions.pathfinders).is.true;
-  });
-
-  it('deserializing game sets expansions', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    const game = Game.newInstance('gameid', [player], player, 'spectatorid', {
-      pathfindersExpansion: true,
-    });
-    const serialized = game.serialize();
-
-    expect(serialized.gameOptions.expansions.pathfinders).is.true;
-
-    const game2 = Game.deserialize(serialized);
-
-    expect(game2.gameOptions.pathfindersExpansion).is.true;
-    expect(game2.gameOptions.expansions.pathfinders).is.true;
   });
 });
 

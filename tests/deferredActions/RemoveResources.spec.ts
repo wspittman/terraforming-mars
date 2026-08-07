@@ -1,7 +1,6 @@
 import { expect } from 'chai';
 import { Resource } from '../../src/common/Resource';
 import { ProtectedHabitats } from '../../src/server/cards/base/ProtectedHabitats';
-import { BotanicalExperience } from '../../src/server/cards/pathfinders/BotanicalExperience';
 import { RemoveResources } from '../../src/server/deferredActions/RemoveResources';
 import { testGame } from '../TestGame';
 import { TestPlayer } from '../TestPlayer';
@@ -56,15 +55,5 @@ describe('RemoveResources', () => {
       .execute();
     expect(removed).eq(2);
     expect(target.steel).eq(3);
-  });
-
-  it('Botanical Experience', () => {
-    target.plants = 5;
-    target.playedCards.push(new BotanicalExperience());
-    new RemoveResources(target, player, Resource.PLANTS, 4)
-      .andThen(andThen)
-      .execute();
-    expect(removed).eq(2);
-    expect(target.plants).eq(3);
   });
 });

@@ -1,12 +1,11 @@
-import {expect} from 'chai';
-import {Urbanist} from '../../../src/server/awards/terraCimmeria/Urbanist';
-import {testGame} from '../../TestGame';
-import {addCity, addGreenery, churn, maxOutOceans} from '../../TestingUtils';
-import {SpaceType} from '../../../src/common/boards/SpaceType';
-import {Capital} from '../../../src/server/cards/base/Capital';
-import {SelectSpace} from '../../../src/server/inputs/SelectSpace';
-import {RedCity} from '../../../src/server/cards/pathfinders/RedCity';
-import {cast} from '../../../src/common/utils/utils';
+import { expect } from 'chai';
+import { SpaceType } from '../../../src/common/boards/SpaceType';
+import { cast } from '../../../src/common/utils/utils';
+import { Urbanist } from '../../../src/server/awards/terraCimmeria/Urbanist';
+import { Capital } from '../../../src/server/cards/base/Capital';
+import { SelectSpace } from '../../../src/server/inputs/SelectSpace';
+import { testGame } from '../../TestGame';
+import { addCity, addGreenery, churn, maxOutOceans } from '../../TestingUtils';
 
 describe('Urbanist', () => {
   const award = new Urbanist();
@@ -48,24 +47,10 @@ describe('Urbanist', () => {
     expect(capital.getVictoryPoints(player)).to.eq(1);
     expect(award.getScore(player)).eq(1);
 
-    const greeneries = game.board.getAdjacentSpaces(citySpace).filter((space) => space.tile === undefined);
+    const greeneries = game.board
+      .getAdjacentSpaces(citySpace)
+      .filter((space) => space.tile === undefined);
     addGreenery(player, greeneries[0].id);
     expect(award.getScore(player)).eq(2);
-  });
-
-
-  it('Score with Red City', () => {
-    const [/* game */, player] = testGame(2);
-    const redCity = new RedCity();
-    const selectSpace = cast(churn(redCity.play(player), player), SelectSpace);
-    player.playedCards.push(redCity);
-    const citySpace = selectSpace.spaces[0];
-
-    expect(award.getScore(player)).eq(0);
-
-    selectSpace.cb(citySpace);
-
-    expect(redCity.getVictoryPoints(player)).to.eq(3);
-    expect(award.getScore(player)).eq(3);
   });
 });

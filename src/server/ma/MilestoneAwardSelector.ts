@@ -1,23 +1,25 @@
-import {awardManifest} from '../awards/Awards';
-import {BoardName} from '../../common/boards/BoardName';
-import {GameOptions} from '../game/GameOptions';
-import {milestoneManifest} from '../milestones/Milestones';
-import {RandomMAOptionType} from '../../common/ma/RandomMAOptionType';
-import {inplaceShuffle} from '../utils/shuffle';
-import {UnseededRandom} from '../../common/utils/Random';
-import {MilestoneName, milestoneNames} from '../../common/ma/MilestoneName';
-import {AwardName, awardNames} from '../../common/ma/AwardName';
-import {synergies} from './MilestoneAwardSynergies';
-import {isCompatible, MAManifest} from './MAManifest';
-import {intersection} from '../../common/utils/utils';
+import { BoardName } from '../../common/boards/BoardName';
+import { AwardName, awardNames } from '../../common/ma/AwardName';
+import { MilestoneName, milestoneNames } from '../../common/ma/MilestoneName';
+import { RandomMAOptionType } from '../../common/ma/RandomMAOptionType';
+import { UnseededRandom } from '../../common/utils/Random';
+import { intersection } from '../../common/utils/utils';
+import { awardManifest } from '../awards/Awards';
+import { GameOptions } from '../game/GameOptions';
+import { milestoneManifest } from '../milestones/Milestones';
+import { inplaceShuffle } from '../utils/shuffle';
+import { isCompatible, MAManifest } from './MAManifest';
+import { synergies } from './MilestoneAwardSynergies';
 
 type DrawnMilestonesAndAwards = {
-  milestones: Array<MilestoneName>,
-  awards: Array<AwardName>
-}
+  milestones: Array<MilestoneName>;
+  awards: Array<AwardName>;
+};
 
 // Compute max synergy of a given set of milestones and awards. Exported for testing.
-export function maximumSynergy(names: ReadonlyArray<MilestoneName | AwardName>) : number {
+export function maximumSynergy(
+  names: ReadonlyArray<MilestoneName | AwardName>,
+): number {
   let max = 0;
   for (let i = 0; i < names.length - 1; i++) {
     for (let j = i + 1; j < names.length; j++) {
@@ -29,14 +31,14 @@ export function maximumSynergy(names: ReadonlyArray<MilestoneName | AwardName>) 
 }
 
 type Constraints = {
-    // No pairing may have a synergy greater than this.
-    maxSynergyAllowed: number;
-    // Sum of all the synergies may be no greater than this.
-    totalSynergyAllowed: number;
-    // 3) Limited a number of pair with synergy at |highThreshold| or above to |numberOfHighAllowed| or below.
-    numberOfHighAllowed: number;
-    highThreshold: number;
-  }
+  // No pairing may have a synergy greater than this.
+  maxSynergyAllowed: number;
+  // Sum of all the synergies may be no greater than this.
+  totalSynergyAllowed: number;
+  // 3) Limited a number of pair with synergy at |highThreshold| or above to |numberOfHighAllowed| or below.
+  numberOfHighAllowed: number;
+  highThreshold: number;
+};
 
 export const LIMITED_SYNERGY: Constraints = {
   maxSynergyAllowed: 6,
@@ -52,13 +54,18 @@ const UNLIMITED_SYNERGY: Constraints = {
   highThreshold: 100,
 };
 
-export function chooseMilestonesAndAwards(gameOptions: GameOptions): DrawnMilestonesAndAwards {
+export function chooseMilestonesAndAwards(
+  gameOptions: GameOptions,
+): DrawnMilestonesAndAwards {
   let drawnMilestonesAndAwards: DrawnMilestonesAndAwards = {
     milestones: [],
     awards: [],
   };
 
-  function push(milestones: ReadonlyArray<MilestoneName>, awards: ReadonlyArray<AwardName>) {
+  function push(
+    milestones: ReadonlyArray<MilestoneName>,
+    awards: ReadonlyArray<AwardName>,
+  ) {
     drawnMilestonesAndAwards.milestones.push(...milestones);
     drawnMilestonesAndAwards.awards.push(...awards);
   }
@@ -74,21 +81,31 @@ export function chooseMilestonesAndAwards(gameOptions: GameOptions): DrawnMilest
     case BoardName.ELYSIUM:
     case BoardName.UTOPIA_PLANITIA:
     case BoardName.ARABIA_TERRA:
-    case BoardName.AMAZONIS:
-    case BoardName.TERRA_CIMMERIA:
-    case BoardName.TERRA_CIMMERIA_NOVA:
     case BoardName.VASTITAS_BOREALIS:
     case BoardName.VASTITAS_BOREALIS_NOVA:
-      push(milestoneManifest.boards[boardName], awardManifest.boards[gameOptions.boardName]);
+      push(
+        milestoneManifest.boards[boardName],
+        awardManifest.boards[gameOptions.boardName],
+      );
       break;
     default:
-      return getRandomMilestonesAndAwards(gameOptions, requiredQty, LIMITED_SYNERGY);
+      return getRandomMilestonesAndAwards(
+        gameOptions,
+        requiredQty,
+        LIMITED_SYNERGY,
+      );
     }
     if (gameOptions.venusNextExtension) {
-      push(milestoneManifest.expansions['venus'], awardManifest.expansions['venus']);
+      push(
+        milestoneManifest.expansions['venus'],
+        awardManifest.expansions['venus'],
+      );
     }
     if (gameOptions.aresExtension) {
-      push(milestoneManifest.expansions['ares'], awardManifest.expansions['ares']);
+      push(
+        milestoneManifest.expansions['ares'],
+        awardManifest.expansions['ares'],
+      );
     }
     if (gameOptions.moonExpansion) {
       // One MA will reward moon tags, the other will reward moon tiles.
@@ -101,10 +118,18 @@ export function chooseMilestonesAndAwards(gameOptions: GameOptions): DrawnMilest
     break;
 
   case RandomMAOptionType.LIMITED:
-    drawnMilestonesAndAwards = getRandomMilestonesAndAwards(gameOptions, requiredQty, LIMITED_SYNERGY);
+    drawnMilestonesAndAwards = getRandomMilestonesAndAwards(
+      gameOptions,
+      requiredQty,
+      LIMITED_SYNERGY,
+    );
     break;
   case RandomMAOptionType.UNLIMITED:
-    drawnMilestonesAndAwards = getRandomMilestonesAndAwards(gameOptions, requiredQty, UNLIMITED_SYNERGY);
+    drawnMilestonesAndAwards = getRandomMilestonesAndAwards(
+      gameOptions,
+      requiredQty,
+      UNLIMITED_SYNERGY,
+    );
     break;
   default:
     throw new Error('Unknown milestone/award type: ' + gameOptions.randomMA);
@@ -120,8 +145,13 @@ export function chooseMilestonesAndAwards(gameOptions: GameOptions): DrawnMilest
  *
  * exported for tests
  */
-export function getCandidates(gameOptions: GameOptions): [Array<MilestoneName>, Array<AwardName>] {
-  function include<T extends string>(name: T, manifest: MAManifest<T, any>): boolean {
+export function getCandidates(
+  gameOptions: GameOptions,
+): [Array<MilestoneName>, Array<AwardName>] {
+  function include<T extends string>(
+    name: T,
+    manifest: MAManifest<T, any>,
+  ): boolean {
     // Never include deprecated MAs in random candidates.  They generally have "more official" versions that will be
     // considered for inclusion.
     if (manifest.all[name].deprecated) {
@@ -136,10 +166,18 @@ export function getCandidates(gameOptions: GameOptions): [Array<MilestoneName>, 
       // TODO(kberg): Exclude Geologist if the board has no volcanic spaces
     } else {
       // The game boards this MA appears in, if any.
-      const boards = Object.values(BoardName).filter((boardName) => manifest.boards[boardName].includes(name));
+      const boards = Object.values(BoardName).filter((boardName) =>
+        manifest.boards[boardName].includes(name),
+      );
 
       // Always include the milestones and awards from the official boards
-      if (intersection(boards, [BoardName.THARSIS, BoardName.ELYSIUM, BoardName.HELLAS]).length > 0) {
+      if (
+        intersection(boards, [
+          BoardName.THARSIS,
+          BoardName.ELYSIUM,
+          BoardName.HELLAS,
+        ]).length > 0
+      ) {
         return true;
       }
       // Conditionally include milestones and awards from unofficial boards.
@@ -159,8 +197,12 @@ export function getCandidates(gameOptions: GameOptions): [Array<MilestoneName>, 
     return true;
   }
 
-  const candidateMilestones = milestoneNames.filter((name) => include(name, milestoneManifest));
-  const candidateAwards = awardNames.filter((name) => include(name, awardManifest));
+  const candidateMilestones = milestoneNames.filter((name) =>
+    include(name, milestoneManifest),
+  );
+  const candidateAwards = awardNames.filter((name) =>
+    include(name, awardManifest),
+  );
 
   return [candidateMilestones, candidateAwards];
 }
@@ -170,17 +212,23 @@ export function getCandidates(gameOptions: GameOptions): [Array<MilestoneName>, 
 // 1) No pair with synergy above |maxSynergyAllowed|.
 // 2) Total synergy is |totalSynergyAllowed| or below.
 // 3) Limited a number of pair with synergy at |highThreshold| or above to |numberOfHighAllowed| or below.
-function getRandomMilestonesAndAwards(gameOptions: GameOptions,
+function getRandomMilestonesAndAwards(
+  gameOptions: GameOptions,
   numberMARequested: number,
   constraints: Constraints,
-  attempt: number = 1): DrawnMilestonesAndAwards {
+  attempt: number = 1,
+): DrawnMilestonesAndAwards {
   // 5 is a fine number of attempts. A sample of 100,000 runs showed that this algorithm
   // didn't get past 3.
   // https://github.com/terraforming-mars/terraforming-mars/pull/1637#issuecomment-711411034
   // 2025-11-30: raised to 6.
   const maxAttempts = 6;
   if (attempt > maxAttempts) {
-    throw new Error('No limited synergy milestones and awards set was generated after ' + maxAttempts + ' attempts. Please try again.');
+    throw new Error(
+      'No limited synergy milestones and awards set was generated after ' +
+        maxAttempts +
+        ' attempts. Please try again.',
+    );
   }
 
   const [candidateMilestones, candidateAwards] = getCandidates(gameOptions);
@@ -191,27 +239,46 @@ function getRandomMilestonesAndAwards(gameOptions: GameOptions,
   const accum = new Accumulator(constraints);
 
   // Keep adding milestones or awards until there are as many as requested
-  while (accum.milestones.length + accum.awards.length < numberMARequested * 2) {
+  while (
+    accum.milestones.length + accum.awards.length <
+    numberMARequested * 2
+  ) {
     // If there is enough award, add a milestone. And vice versa. If still need both, flip a coin to decide which to add.
-    if (accum.awards.length === numberMARequested || (accum.milestones.length !== numberMARequested && Math.round(Math.random()))) {
+    if (
+      accum.awards.length === numberMARequested ||
+      (accum.milestones.length !== numberMARequested &&
+        Math.round(Math.random()))
+    ) {
       const newMilestone = candidateMilestones.splice(0, 1)[0];
       // If not enough milestone are left to satisfy the constraints, restart the function with a recursive call.
       if (newMilestone === undefined) {
-        return getRandomMilestonesAndAwards(gameOptions, numberMARequested, constraints, attempt+1);
+        return getRandomMilestonesAndAwards(
+          gameOptions,
+          numberMARequested,
+          constraints,
+          attempt + 1,
+        );
       }
       accum.add(newMilestone, true);
     } else {
       const newAward = candidateAwards.splice(0, 1)[0];
       // If not enough awards are left to satisfy the constraints, restart the function with a recursive call.
       if (newAward === undefined) {
-        return getRandomMilestonesAndAwards(gameOptions, numberMARequested, constraints, attempt+1);
+        return getRandomMilestonesAndAwards(
+          gameOptions,
+          numberMARequested,
+          constraints,
+          attempt + 1,
+        );
       }
       accum.add(newAward, false);
     }
   }
 
   if (!verifySynergyRules(accum.milestones, accum.awards, constraints)) {
-    throw new Error('The randomized milestones and awards set does not satisfy the given synergy rules.');
+    throw new Error(
+      'The randomized milestones and awards set does not satisfy the given synergy rules.',
+    );
   }
 
   return {
@@ -227,7 +294,8 @@ function getRandomMilestonesAndAwards(gameOptions: GameOptions,
 export function verifySynergyRules(
   milestones: ReadonlyArray<MilestoneName>,
   awards: ReadonlyArray<AwardName>,
-  constraints: Constraints): boolean {
+  constraints: Constraints,
+): boolean {
   let max = 0;
   let totalSynergy = 0;
   let numberOfHigh = 0;
@@ -243,9 +311,11 @@ export function verifySynergyRules(
       }
     }
   }
-  return max <= constraints.maxSynergyAllowed &&
-      totalSynergy <= constraints.totalSynergyAllowed &&
-      numberOfHigh <= constraints.numberOfHighAllowed;
+  return (
+    max <= constraints.maxSynergyAllowed &&
+    totalSynergy <= constraints.totalSynergyAllowed &&
+    numberOfHigh <= constraints.numberOfHighAllowed
+  );
 }
 
 class Accumulator {
@@ -255,8 +325,7 @@ class Accumulator {
   private accumulatedHighCount = 0;
   private accumulatedTotalSynergy = 0;
 
-  constructor(private constraints: Constraints) {
-  }
+  constructor(private constraints: Constraints) {}
 
   // Conditionally add a milestone or award when it doesn't
   // violate synergy constraints.
@@ -282,9 +351,11 @@ class Accumulator {
       max = Math.max(synergy, max);
     });
     // Check whether the addition violates any rule.
-    if (max <= this.constraints.maxSynergyAllowed &&
-        highCount <= this.constraints.numberOfHighAllowed &&
-        totalSynergy <= this.constraints.totalSynergyAllowed) {
+    if (
+      max <= this.constraints.maxSynergyAllowed &&
+      highCount <= this.constraints.numberOfHighAllowed &&
+      totalSynergy <= this.constraints.totalSynergyAllowed
+    ) {
       if (milestone) {
         this.milestones.push(candidate as MilestoneName);
       } else {

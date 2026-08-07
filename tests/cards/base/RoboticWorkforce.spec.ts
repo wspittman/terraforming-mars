@@ -1,3 +1,4 @@
+import { MiningGuild } from '@/server/cards/corporation/MiningGuild';
 import { fail } from 'assert';
 import { expect } from 'chai';
 import { ALL_RESOURCES, Resource } from '../../../src/common/Resource';
@@ -20,7 +21,6 @@ import { NoctisFarming } from '../../../src/server/cards/base/NoctisFarming';
 import { RoboticWorkforce } from '../../../src/server/cards/base/RoboticWorkforce';
 import { SolarWindPower } from '../../../src/server/cards/base/SolarWindPower';
 import { isICorporationCard } from '../../../src/server/cards/corporation/ICorporationCard';
-import { UtopiaInvest } from '../../../src/server/cards/turmoil/UtopiaInvest';
 import { SelectCard } from '../../../src/server/inputs/SelectCard';
 import { SelectSpace } from '../../../src/server/inputs/SelectSpace';
 import { testGame } from '../../TestGame';
@@ -97,7 +97,7 @@ describe('RoboticWorkforce', () => {
   });
 
   it('Should play with corporation cards', () => {
-    const corporationCard = new UtopiaInvest();
+    const corporationCard = new MiningGuild();
     player.playedCards.push(corporationCard);
 
     cast(card.play(player), undefined);
@@ -109,7 +109,7 @@ describe('RoboticWorkforce', () => {
     cast(player.popWaitingFor(), SelectCard).cb([corporationCard]);
 
     expect(player.production.steel).to.eq(1);
-    expect(player.production.titanium).to.eq(1);
+    expect(player.production.titanium).to.eq(0);
   });
 
   it('Should not work with Solar Wind Power (no building tag, but has production)', () => {

@@ -30,13 +30,6 @@ export const awardNames = [
   'Full Moon',
   'Lunar Magnate',
 
-  // Amazonis Planitia
-  // NB: the fifth award for Amazonis Plantia is Promoter, also part of Arabia Terra.
-  'Curator',
-  'A. Engineer',
-  'Tourist',
-  'A. Zoologist',
-
   // Arabia Terra
   'Cosmic Settler',
   'Botanist',
@@ -87,12 +80,11 @@ export const awardNames = [
   // 'Zoologist', // Most animal and microbe resources. Currently Zoologist2
 ] as const;
 
-export type AwardName = typeof awardNames[number];
+export type AwardName = (typeof awardNames)[number];
 
 export const AWARD_RENAMES = new Map<string, AwardName>([
   // When renaming an award add the old name here (like the example below), and add a TODO (like the example below)
   // And remember to add a test in spec.ts.
-
   // TODO(yournamehere): remove after 2026-04-05
   // ['EdgeLord', 'Excavator'],
 ]);

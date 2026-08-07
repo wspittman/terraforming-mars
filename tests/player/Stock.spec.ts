@@ -1,9 +1,8 @@
-import {expect} from 'chai';
-import {Resource} from '../../src/common/Resource';
-import {Player} from '../../src/server/Player';
-import {formatMessage, testGame} from '../TestingUtils';
-import {Units} from '../../src/common/Units';
-import {GlobalEventName} from '../../src/common/turmoil/globalEvents/GlobalEventName';
+import { expect } from 'chai';
+import { Resource } from '../../src/common/Resource';
+import { Units } from '../../src/common/Units';
+import { Player } from '../../src/server/Player';
+import { formatMessage, testGame } from '../TestingUtils';
 
 describe('Stock', () => {
   it('has units', () => {
@@ -44,7 +43,6 @@ describe('Stock', () => {
     expect(stock.has(units)).is.true;
   });
 
-
   it('adjust', () => {
     const player = new Player('blue', 'blue', false, 0, 'p-blue');
 
@@ -64,7 +62,7 @@ describe('Stock', () => {
     player.energy = 16;
     player.heat = 15;
 
-    player.stock.adjust(Units.of({megacredits: 10}));
+    player.stock.adjust(Units.of({ megacredits: 10 }));
     expect(player.stock.asUnits()).deep.eq({
       megacredits: 30,
       steel: 19,
@@ -74,7 +72,7 @@ describe('Stock', () => {
       heat: 15,
     });
 
-    player.stock.adjust(Units.of({steel: 10}));
+    player.stock.adjust(Units.of({ steel: 10 }));
     expect(player.stock.asUnits()).deep.eq({
       megacredits: 30,
       steel: 29,
@@ -84,7 +82,7 @@ describe('Stock', () => {
       heat: 15,
     });
 
-    player.stock.adjust(Units.of({titanium: 10}));
+    player.stock.adjust(Units.of({ titanium: 10 }));
     expect(player.stock.asUnits()).deep.eq({
       megacredits: 30,
       steel: 29,
@@ -94,7 +92,7 @@ describe('Stock', () => {
       heat: 15,
     });
 
-    player.stock.adjust(Units.of({plants: 10}));
+    player.stock.adjust(Units.of({ plants: 10 }));
     expect(player.stock.asUnits()).deep.eq({
       megacredits: 30,
       steel: 29,
@@ -104,7 +102,7 @@ describe('Stock', () => {
       heat: 15,
     });
 
-    player.stock.adjust(Units.of({energy: 10}));
+    player.stock.adjust(Units.of({ energy: 10 }));
     expect(player.stock.asUnits()).deep.eq({
       megacredits: 30,
       steel: 29,
@@ -114,7 +112,7 @@ describe('Stock', () => {
       heat: 15,
     });
 
-    player.stock.adjust(Units.of({heat: 10}));
+    player.stock.adjust(Units.of({ heat: 10 }));
     expect(player.stock.asUnits()).deep.eq({
       megacredits: 30,
       steel: 29,
@@ -144,7 +142,7 @@ describe('Stock', () => {
     player.energy = 16;
     player.heat = 15;
 
-    player.stock.deductUnits(Units.of({megacredits: 10}));
+    player.stock.deductUnits(Units.of({ megacredits: 10 }));
     expect(player.stock.asUnits()).deep.eq({
       megacredits: 10,
       steel: 19,
@@ -154,7 +152,7 @@ describe('Stock', () => {
       heat: 15,
     });
 
-    player.stock.deductUnits(Units.of({steel: 10}));
+    player.stock.deductUnits(Units.of({ steel: 10 }));
     expect(player.stock.asUnits()).deep.eq({
       megacredits: 10,
       steel: 9,
@@ -164,7 +162,7 @@ describe('Stock', () => {
       heat: 15,
     });
 
-    player.stock.deductUnits(Units.of({titanium: 10}));
+    player.stock.deductUnits(Units.of({ titanium: 10 }));
     expect(player.stock.asUnits()).deep.eq({
       megacredits: 10,
       steel: 9,
@@ -174,7 +172,7 @@ describe('Stock', () => {
       heat: 15,
     });
 
-    player.stock.deductUnits(Units.of({plants: 10}));
+    player.stock.deductUnits(Units.of({ plants: 10 }));
     expect(player.stock.asUnits()).deep.eq({
       megacredits: 10,
       steel: 9,
@@ -184,7 +182,7 @@ describe('Stock', () => {
       heat: 15,
     });
 
-    player.stock.deductUnits(Units.of({energy: 10}));
+    player.stock.deductUnits(Units.of({ energy: 10 }));
     expect(player.stock.asUnits()).deep.eq({
       megacredits: 10,
       steel: 9,
@@ -194,7 +192,7 @@ describe('Stock', () => {
       heat: 15,
     });
 
-    player.stock.deductUnits(Units.of({heat: 10}));
+    player.stock.deductUnits(Units.of({ heat: 10 }));
     expect(player.stock.asUnits()).deep.eq({
       megacredits: 10,
       steel: 9,
@@ -206,7 +204,7 @@ describe('Stock', () => {
   });
 
   it('adds resources', () => {
-    const [/* game */, player] = testGame(1);
+    const [, /* game */ player] = testGame(1);
     player.megaCredits = 10;
     // adds any positive amount
     player.stock.add(Resource.MEGACREDITS, 12);
@@ -231,10 +229,10 @@ describe('Stock', () => {
     const log = game.gameLog;
     log.length = 0; // Empty it out.
 
-    player.stock.add(Resource.MEGACREDITS, 12, {log: false});
+    player.stock.add(Resource.MEGACREDITS, 12, { log: false });
     expect(log).is.empty;
 
-    player.stock.add(Resource.MEGACREDITS, 12, {log: true});
+    player.stock.add(Resource.MEGACREDITS, 12, { log: true });
     const logEntry = log[0];
     expect(formatMessage(logEntry)).eq('blue gained 12 M€');
   });
@@ -243,25 +241,18 @@ describe('Stock', () => {
     const [game, player, player2] = testGame(2);
 
     player.megaCredits = 5;
-    player.stock.add(Resource.MEGACREDITS, -5, {log: true, from: {player: player2}});
+    player.stock.add(Resource.MEGACREDITS, -5, {
+      log: true,
+      from: { player: player2 },
+    });
 
     const log = game.gameLog;
     const logEntry = log[log.length - 1];
     expect(formatMessage(logEntry)).eq('blue lost 5 M€ because of red');
   });
 
-  it('add logging from global event', () => {
-    const [game, player] = testGame(1);
-
-    player.stock.add(Resource.MEGACREDITS, 12, {log: true, from: {globalEvent: GlobalEventName.ASTEROID_MINING}});
-
-    const log = game.gameLog;
-    const logEntry = log[log.length - 1];
-    expect(formatMessage(logEntry)).eq('blue gained 12 M€ because of Asteroid Mining');
-  });
-
   it('addResource logs error when deducting too much', () => {
-    const [/* game */, player] = testGame(1);
+    const [, /* game */ player] = testGame(1);
 
     player.megaCredits = 10;
     const warn = console.warn;
@@ -273,22 +264,23 @@ describe('Stock', () => {
     console.warn = warn;
 
     expect(consoleLog).has.length(1);
-    expect(consoleLog[0][0]).eq('Illegal state: Adjusting -12 megacredits when player has 10');
-    expect(JSON.parse(consoleLog[0][1])).deep.eq(
-      {
-        'gameId': 'game-id',
-        'lastSaveId': 0,
-        'logAge': 7,
-        'currentPlayer': 'p-player1-id',
-        'metadata': {
-          'player': {
-            'color': 'blue',
-            'id': 'p-player1-id',
-            'name': 'player1',
-          },
-          'resource': 'megacredits',
-          'amount': -12,
+    expect(consoleLog[0][0]).eq(
+      'Illegal state: Adjusting -12 megacredits when player has 10',
+    );
+    expect(JSON.parse(consoleLog[0][1])).deep.eq({
+      gameId: 'game-id',
+      lastSaveId: 0,
+      logAge: 7,
+      currentPlayer: 'p-player1-id',
+      metadata: {
+        player: {
+          color: 'blue',
+          id: 'p-player1-id',
+          name: 'player1',
         },
-      });
+        resource: 'megacredits',
+        amount: -12,
+      },
+    });
   });
 });

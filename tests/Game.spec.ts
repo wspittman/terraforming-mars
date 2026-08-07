@@ -1,7 +1,6 @@
 import { expect } from 'chai';
 import { BoardName } from '../src/common/boards/BoardName';
 import { SpaceBonus } from '../src/common/boards/SpaceBonus';
-import { CardName } from '../src/common/cards/CardName';
 import * as constants from '../src/common/constants';
 import { GlobalParameter } from '../src/common/GlobalParameter';
 import { RandomMAOptionType } from '../src/common/ma/RandomMAOptionType';
@@ -845,35 +844,6 @@ describe('Game', () => {
     expect(
       actions2.options.some((option) => option.title === 'Claim a milestone'),
     ).is.false;
-  });
-
-  it('specifically-requested corps override expansion corps', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    const player2 = TestPlayer.RED.newPlayer();
-    const corpsFromTurmoil = [
-      CardName.LAKEFRONT_RESORTS,
-      CardName.PRISTAR,
-      CardName.TERRALABS_RESEARCH,
-      CardName.UTOPIA_INVEST,
-    ];
-    const gameOptions = {
-      customCorporationsList: corpsFromTurmoil,
-      turmoilExtension: false,
-    };
-    Game.newInstance(
-      'gameid',
-      [player, player2],
-      player,
-      'spectatorid',
-      gameOptions,
-    );
-
-    const corpsAssignedToPlayers = [
-      ...player.dealtCorporationCards,
-      ...player2.dealtCorporationCards,
-    ].map(toName);
-
-    expect(corpsAssignedToPlayers).has.members(corpsFromTurmoil);
   });
 
   it('fails when the same id appears in two players', () => {

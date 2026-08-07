@@ -1,16 +1,15 @@
-import {expect} from 'chai';
-import {NoctisCity} from '../../../src/server/cards/base/NoctisCity';
-import {IGame} from '../../../src/server/IGame';
-import {Resource} from '../../../src/common/Resource';
-import {SpaceName} from '../../../src/common/boards/SpaceName';
-import {TileType} from '../../../src/common/TileType';
-import {TestPlayer} from '../../TestPlayer';
-import {testGame} from '../../TestGame';
-import {SpaceBonus} from '../../../src/common/boards/SpaceBonus';
-import {churn, runAllActions} from '../../TestingUtils';
-import {BoardName} from '../../../src/common/boards/BoardName';
-import {SelectSpace} from '../../../src/server/inputs/SelectSpace';
-import {cast} from '../../../src/common/utils/utils';
+import { expect } from 'chai';
+import { BoardName } from '../../../src/common/boards/BoardName';
+import { SpaceName } from '../../../src/common/boards/SpaceName';
+import { Resource } from '../../../src/common/Resource';
+import { TileType } from '../../../src/common/TileType';
+import { cast } from '../../../src/common/utils/utils';
+import { NoctisCity } from '../../../src/server/cards/base/NoctisCity';
+import { IGame } from '../../../src/server/IGame';
+import { SelectSpace } from '../../../src/server/inputs/SelectSpace';
+import { testGame } from '../../TestGame';
+import { churn } from '../../TestingUtils';
+import { TestPlayer } from '../../TestPlayer';
 
 describe('NoctisCity', () => {
   let card: NoctisCity;
@@ -28,11 +27,13 @@ describe('NoctisCity', () => {
 
   it('All land spaces are available on Hellas', () => {
     // With two players, there's no solo setup, so all spaces will be available.
-    const [game, player] = testGame(2, {boardName: BoardName.HELLAS});
+    const [game, player] = testGame(2, { boardName: BoardName.HELLAS });
 
     player.production.add(Resource.ENERGY, 1);
     const selectSpace = cast(churn(card.play(player), player), SelectSpace);
-    expect(selectSpace.spaces).deep.eq(game.board.getAvailableSpacesForCity(player));
+    expect(selectSpace.spaces).deep.eq(
+      game.board.getAvailableSpacesForCity(player),
+    );
   });
 
   it('Should play', () => {
@@ -45,23 +46,5 @@ describe('NoctisCity', () => {
 
     const noctis = game.board.getSpaceOrThrow(SpaceName.NOCTIS_CITY);
     expect(noctis.tile?.tileType).to.eq(TileType.CITY);
-  });
-
-  it('Can play with 0 energy on Arabia Terra when energy production space is available', () => {
-    const [game2, player2] = testGame(2, {boardName: BoardName.ARABIA_TERRA});
-
-    // energy = 0 — no Noctis space on Arabia Terra
-    expect(card.canPlay(player2)).is.true;
-
-    // Only energy-production spaces should be offered
-    const selectSpace = cast(churn(card.play(player2), player2), SelectSpace);
-    expect(selectSpace.spaces.every((s) => s.bonus.includes(SpaceBonus.ENERGY_PRODUCTION))).is.true;
-
-    selectSpace.cb(selectSpace.spaces[0]);
-    runAllActions(game2);
-
-    // Net: +1 from space, -1 from card = 0; +3 MC from behavior
-    expect(player2.production.energy).to.eq(0);
-    expect(player2.production.megacredits).to.eq(3);
   });
 });

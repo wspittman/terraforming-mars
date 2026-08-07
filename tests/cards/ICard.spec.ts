@@ -4,7 +4,6 @@ import { MicroMills } from '../../src/server/cards/base/MicroMills';
 import { Tardigrades } from '../../src/server/cards/base/Tardigrades';
 import { EcoLine } from '../../src/server/cards/corporation/EcoLine';
 import { MercurianAlloys } from '../../src/server/cards/promo/MercurianAlloys';
-import { SeptumTribus } from '../../src/server/cards/turmoil/SeptumTribus';
 
 describe('ICard', () => {
   const runs = [
@@ -18,11 +17,6 @@ describe('ICard', () => {
       description: 'blue card with passive effect',
       card: new MercurianAlloys(),
       expected: false,
-    },
-    {
-      description: 'corporation with active effect',
-      card: new SeptumTribus(),
-      expected: true,
     },
     {
       description: 'corporation with passive effect',

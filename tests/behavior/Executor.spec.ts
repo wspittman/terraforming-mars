@@ -29,7 +29,6 @@ import { SelectResource } from '../../src/server/inputs/SelectResource';
 import { SelectResources } from '../../src/server/inputs/SelectResources';
 import { SelectSpace } from '../../src/server/inputs/SelectSpace';
 import { IPlayer } from '../../src/server/IPlayer';
-import { AsteroidMining } from '../../src/server/turmoil/globalEvents/AsteroidMining';
 import { testGame } from '../TestGame';
 import {
   fakeCard,
@@ -1014,45 +1013,6 @@ describe('Executor', () => {
     );
 
     expect(player.megaCredits).eq(10);
-  });
-
-  it('lose logs what actually changed', () => {
-    player.stock.override({ megacredits: 2 });
-    player.production.override({ energy: 0 });
-    game.gameLog.length = 0;
-
-    executor.execute(
-      { lose: { stock: { megacredits: 8 } } },
-      player,
-      new AsteroidMining(),
-    );
-    executor.execute(
-      { lose: { production: { energy: 1 } } },
-      player,
-      new AsteroidMining(),
-    );
-
-    // 8 was asked for but only 2 was there, and the energy production line is absent
-    // entirely because nothing changed.
-    expect(game.gameLog.map(formatMessage)).deep.eq([
-      'blue lost 2 M€ because of Asteroid Mining',
-    ]);
-  });
-
-  it('global events are attributed in the log', () => {
-    const globalEvent = new AsteroidMining();
-
-    game.gameLog.length = 0;
-    executor.execute(
-      { stock: { steel: 2 }, production: { megacredits: 1 } },
-      player,
-      globalEvent,
-    );
-
-    expect(game.gameLog.map(formatMessage)).deep.eq([
-      'blue gained 1 M€ production because of Asteroid Mining',
-      'blue gained 2 steel because of Asteroid Mining',
-    ]);
   });
 
   it('cards are not attributed in the log', () => {

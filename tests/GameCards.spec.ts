@@ -35,8 +35,6 @@ describe('GameCards', () => {
 
     const cards = new GameCards(gameOptions);
     expect(cards.getProjectCards()).to.have.length(208);
-    expect(cards.getPreludeCards()).to.be.empty;
-    expect(cards.getCeoCards()).to.be.empty;
   });
 
   it('correctly removes banned cards', () => {
@@ -59,15 +57,6 @@ describe('GameCards', () => {
     expect(names).to.not.contain(CardName.VENUSIAN_INSECTS);
   });
 
-  it('should not include the included cards in the preludes', () => {
-    const gameOptions: GameOptions = {
-      ...DEFAULT_GAME_OPTIONS,
-      corporateEra: true,
-      includedCards: [CardName.VENUSIAN_INSECTS],
-    };
-    const names = new GameCards(gameOptions).getPreludeCards().map(toName);
-    expect(names).to.not.contain(CardName.VENUSIAN_INSECTS);
-  });
 
   it('should not include the included cards in the corporation cards', () => {
     const gameOptions: GameOptions = {

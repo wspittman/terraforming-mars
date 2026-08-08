@@ -27,8 +27,6 @@ export const milestoneNames = [
   'Networker',
 
   // The Moon
-  'One Giant Step',
-  'Lunarchitect',
 
   // Arabia Terra
   'Economizer',

@@ -4,7 +4,6 @@ import {Color} from '../../common/Color';
 import {IGame} from '../IGame';
 import {ICard} from '../cards/ICard';
 import {isIProjectCard} from '../cards/IProjectCard';
-import {isICloneTagCard} from '../cards/pathfinders/ICloneTagCard';
 import {IPlayer} from '../IPlayer';
 import {PlayCardMetadata} from '../inputs/SelectCardToPlay';
 import {IColony} from '../colonies/IColony';
@@ -49,7 +48,6 @@ export function cardsToModel(
       calculatedCost,
       bonusResource: isIProjectCard(card) ? card.bonusResource : undefined,
       discount: discount,
-      cloneTag: isICloneTagCard(card) ? card.cloneTag : undefined,
     };
     if (isIStandardProjectCard(card)) {
       model.standardProjectCanPayWith = card.canPayWith(player);

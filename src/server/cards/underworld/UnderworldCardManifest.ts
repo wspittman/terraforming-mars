@@ -8,7 +8,6 @@ export const UNDERWORLD_CARD_MANIFEST = new ModuleManifest({
 
   corporationCards: {},
 
-  preludeCards: {},
 
   standardProjects: {},
 

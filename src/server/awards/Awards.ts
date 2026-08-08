@@ -1,8 +1,6 @@
 import { BoardName } from '../../common/boards/BoardName';
 import { AwardName } from '../../common/ma/AwardName';
 import { MAManifest } from '../ma/MAManifest';
-import { FullMoon } from '../moon/FullMoon';
-import { LunarMagnate } from '../moon/LunarMagnate';
 import { Botanist } from './arabiaTerra/Botanist';
 import { CosmicSettler } from './arabiaTerra/CosmicSettler';
 import { AManufacturer } from './arabiaTerra/Manufacturer';
@@ -33,7 +31,6 @@ import { Founder } from './modular/Founder';
 import { Highlander } from './modular/Highlander';
 import { Incorporator } from './modular/Incorporator';
 import { Investor } from './modular/Investor';
-import { Landscaper } from './modular/Landscaper';
 import { Manufacturer } from './modular/Manufacturer';
 import { Metropolist } from './modular/Metropolist';
 import { Mogul } from './modular/Mogul';
@@ -83,15 +80,12 @@ export const awardManifest: MAManifest<AwardName, IAward> = {
     'Excentric': { Factory: Excentric, random: 'both' },
     'Forecaster': { Factory: Forecaster, random: 'both' },
     'Founder': { Factory: Founder, random: 'modular' },
-    'Full Moon': { Factory: FullMoon, compatibility: 'moon' },
     'Highlander': { Factory: Highlander, random: 'modular' },
     'Incorporator': { Factory: Incorporator, random: 'both' },
     'Industrialist': { Factory: Industrialist, random: 'both' },
     'Investor': { Factory: Investor, random: 'modular' },
     'Kingpin': { Factory: Kingpin, compatibility: 'underworld' },
     'Landlord': { Factory: Landlord, random: 'both' },
-    'Landscaper': { Factory: Landscaper, random: 'modular' },
-    'Lunar Magnate': { Factory: LunarMagnate, compatibility: 'moon' },
     'Magnate': { Factory: Magnate, random: 'both' },
     'Manufacturer': { Factory: Manufacturer, random: 'modular' },
     'Metropolist': { Factory: Metropolist, random: 'modular' },
@@ -163,7 +157,6 @@ export const awardManifest: MAManifest<AwardName, IAward> = {
     ],
     [BoardName.VASTITAS_BOREALIS_NOVA]: [
       'Traveller',
-      'Landscaper',
       'Highlander',
       'Promoter',
       'Blacksmith',
@@ -173,7 +166,6 @@ export const awardManifest: MAManifest<AwardName, IAward> = {
   expansions: {
     venus: ['Venuphile'],
     ares: ['Entrepreneur', 'Rugged'],
-    moon: ['Full Moon', 'Lunar Magnate'],
     underworld: ['Kingpin', 'Excavator'],
   },
   create: (name: string): IAward | undefined => {

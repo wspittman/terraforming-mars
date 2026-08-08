@@ -9,7 +9,6 @@ import {IGlobalEvent} from '../turmoil/globalEvents/IGlobalEvent';
 import {IClientGlobalEvent} from '../../common/turmoil/IClientGlobalEvent';
 import {ClientCard} from '../../common/cards/ClientCard';
 import {isICorporationCard} from '../cards/corporation/ICorporationCard';
-import {isPreludeCard} from '../cards/prelude/IPreludeCard';
 import {ColonyMetadata} from '../../common/colonies/ColonyMetadata';
 import {Units} from '../../common/Units';
 import {ALL_COLONIES_TILES, getColonyModule} from '../colonies/ColonyManifest';
@@ -50,8 +49,6 @@ class CardProcessor {
   private static processManifest(manifest: ModuleManifest) {
     CardProcessor.processDeck(manifest.module, manifest.projectCards);
     CardProcessor.processDeck(manifest.module, manifest.corporationCards);
-    CardProcessor.processDeck(manifest.module, manifest.preludeCards);
-    CardProcessor.processDeck(manifest.module, manifest.ceoCards);
     CardProcessor.processDeck(manifest.module, manifest.standardActions);
     CardProcessor.processDeck(manifest.module, manifest.standardProjects);
   }
@@ -77,9 +74,6 @@ class CardProcessor {
 
     let startingMegaCredits = undefined;
     let cardCost = undefined;
-    if (isPreludeCard(card)) {
-      startingMegaCredits = card.startingMegaCredits;
-    }
     if (isICorporationCard(card)) {
       startingMegaCredits = card.startingMegaCredits;
       cardCost = card.cardCost;

@@ -3,7 +3,6 @@ import {CardType} from '../../common/cards/CardType';
 import {Resource} from '../../common/Resource';
 import {Tag} from '../../common/cards/Tag';
 import {SpaceId} from '../../common/Types';
-import {NamedMoonSpace} from '../../common/moon/NamedMoonSpaces';
 import {TileType} from '../../common/TileType';
 import {Countable, CountableUnits} from './Countable';
 import {PlacementType} from '../boards/PlacementType';
@@ -155,19 +154,6 @@ export type Behavior = {
     },
   },
 
-  moon?: {
-    /** Places a habitat tile and also raises the habitat rate */
-    habitatTile?: PlaceMoonTile,
-    /** Places a mine tile and also raises the mining rate */
-    mineTile?: PlaceMoonTile,
-    /** Places a road tile and also raises the logistic rate */
-    roadTile?: PlaceMoonTile,
-    /** Places a special tile on the Moon. */
-    tile?: PlaceMoonTile & {type: TileType},
-    habitatRate?: number,
-    miningRate?: number,
-    logisticRate?: number,
-  },
 
   underworld?: {
     identify?: number | {count: number, claim?: number},
@@ -186,9 +172,6 @@ export type Behavior = {
   log?: string,
 }
 
-export interface PlaceMoonTile {
-  space?: NamedMoonSpace;
-}
 
 export interface DrawCard {
   count: Countable,

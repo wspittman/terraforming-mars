@@ -1,7 +1,6 @@
 import { expect } from 'chai';
 import { SpaceName } from '../../src/common/boards/SpaceName';
 import { SpaceType } from '../../src/common/boards/SpaceType';
-import { NamedMoonSpaces } from '../../src/common/moon/NamedMoonSpaces';
 import { TileType } from '../../src/common/TileType';
 import { SpaceId } from '../../src/common/Types';
 import { SeededRandom } from '../../src/common/utils/Random';
@@ -38,7 +37,7 @@ describe('Board', () => {
     expect(board.getSpaceOrThrow('01').spaceType).eq(SpaceType.COLONY);
     expect(board.getSpaceOrThrow('01').id).eq('01');
     expect(
-      () => board.getSpaceOrThrow(NamedMoonSpaces.LUNA_TRADE_STATION).id,
+      () => board.getSpaceOrThrow('m01').id,
     ).to.throw(Error, /Can't find space with id m01/);
   });
 

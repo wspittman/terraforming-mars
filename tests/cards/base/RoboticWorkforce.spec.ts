@@ -2,7 +2,6 @@ import { MiningGuild } from '@/server/cards/corporation/MiningGuild';
 import { fail } from 'assert';
 import { expect } from 'chai';
 import { ALL_RESOURCES, Resource } from '../../../src/common/Resource';
-import { TileType } from '../../../src/common/TileType';
 import { Units } from '../../../src/common/Units';
 import { CardName } from '../../../src/common/cards/CardName';
 import { Tag } from '../../../src/common/cards/Tag';
@@ -41,7 +40,7 @@ describe('RoboticWorkforce', () => {
 
   beforeEach(() => {
     card = new RoboticWorkforce();
-    [game, player, player2] = testGame(2, { moonExpansion: true });
+    [game, player, player2] = testGame(2, {});
   });
 
   it('Cannot play if no building cards to copy', () => {
@@ -157,7 +156,6 @@ describe('RoboticWorkforce', () => {
     ALL_MODULE_MANIFESTS.forEach((manifest) => {
       const cards: CardManifest<ICard> = {
         ...manifest.projectCards,
-        ...manifest.preludeCards,
         ...manifest.corporationCards,
       };
       for (const [cardName, factory] of CardManifest.entries(cards)) {
@@ -177,9 +175,6 @@ describe('RoboticWorkforce', () => {
     });
 
     const testCard = function(card: ICard) {
-      if (card.name === CardName.LUNAR_MINE_URBANIZATION) {
-        console.log('hello');
-      }
       let include = false;
       if (
         (card.tags.includes(Tag.BUILDING) || card.tags.includes(Tag.WILD)) &&
@@ -190,7 +185,6 @@ describe('RoboticWorkforce', () => {
           turmoilExtension: true,
           aresExtension: true,
           aresHazards: false,
-          moonExpansion: true,
           underworldExpansion: true,
         });
 
@@ -211,10 +205,6 @@ describe('RoboticWorkforce', () => {
           heat: 2,
         });
 
-        // Set Moon rates.
-        game.moonData!.miningRate = 3;
-        game.moonData!.habitatRate = 3;
-        game.moonData!.logisticRate = 3;
 
         addCity(player, '17');
         addCity(player, '19');
@@ -234,11 +224,6 @@ describe('RoboticWorkforce', () => {
             tags: [Tag.WILD, Tag.WILD, Tag.WILD, Tag.WILD, Tag.WILD],
           }),
         );
-
-        if (card.name === CardName.LUNAR_MINE_URBANIZATION) {
-          game.moonData!.moon.spaces[4].tile = { tileType: TileType.MOON_MINE };
-          game.moonData!.moon.spaces[4].player = player;
-        }
 
         player.game.board.getAvailableSpacesOnLand(player)[0].excavator =
           player;

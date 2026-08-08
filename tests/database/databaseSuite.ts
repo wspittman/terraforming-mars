@@ -265,7 +265,6 @@ export function describeDatabaseSuite<T extends ITestDatabase>(dtor: DatabaseTes
 
       const actual = await db.getGame(game.id);
       expect(actual.gameLog[actual.gameLog.length -1].message).eq('databaseSuite.getGame test');
-      expect(actual.gameOptions.underworldExpansion).eq(true);
       expect(stripUndefined(actual)).deep.eq(stripUndefined(expected));
     });
 

@@ -5,14 +5,6 @@
         <Card :card="card"/>
       </div>
 
-      <div v-for="card in playerView.dealtPreludeCards" :key="card.name" class="cardbox">
-        <Card :card="card"/>
-      </div>
-
-      <div v-for="card in playerView.dealtCeoCards" :key="card.name" class="cardbox">
-        <Card :card="card"/>
-      </div>
-
       <div v-for="card in playerView.dealtProjectCards" :key="card.name" class="cardbox">
         <Card :card="card"/>
       </div>
@@ -30,16 +22,6 @@
         <div class="cardbox">
           <Card :card="playerView.pickedCorporationCard[0]"/>
         </div>
-        <template v-if="game.gameOptions.expansions.prelude">
-          <div v-for="card in playerView.preludeCardsInHand" :key="card.name" class="cardbox">
-            <Card :card="card"/>
-          </div>
-        </template>
-        <template v-if="game.gameOptions.expansions.ceo">
-          <div v-for="card in playerView.ceoCardsInHand" :key="card.name" class="cardbox">
-          <Card :card="card"/>
-          </div>
-        </template>
       </div>
       <div>
         <div v-for="card in playerView.cardsInHand" :key="card.name" class="cardbox">

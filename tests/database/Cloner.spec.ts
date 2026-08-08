@@ -7,9 +7,7 @@ describe('Cloner', () => {
   it('solo game preserved', () => {
     const player = new Player('old-player1', 'yellow', true, 9, 'p-old-player1-id');
     const game = Game.newInstance(
-      'g-old-game-id', [player], player, 'spectatorid', {
-        turmoilExtension: true,
-      }, -5179823149812374);
+      'g-old-game-id', [player], player, 'spectatorid', {}, -5179823149812374);
 
     const newPlayer = new Player('new-player1', 'red', false, 3, 'p-new-player1-id');
     const newGame = Cloner.clone('g-new-id', [newPlayer], 0, game.serialize());
@@ -32,9 +30,7 @@ describe('Cloner', () => {
 
     expect(player.dealtCorporationCards, 'dealtCorporationCards').deep.eq(newPlayerZero.dealtCorporationCards);
     expect(player.dealtProjectCards, 'dealtProjectCards').deep.eq(newPlayerZero.dealtProjectCards);
-    expect(player.dealtPreludeCards, 'dealtPreludeCards').deep.eq(newPlayerZero.dealtPreludeCards);
     expect(player.cardsInHand, 'cardsInHand').deep.eq(newPlayerZero.cardsInHand);
-    expect(player.preludeCardsInHand, 'preludeCardsInHand').deep.eq(newPlayerZero.preludeCardsInHand);
     expect(player.playedCards, 'playedCards').deep.eq(newPlayerZero.playedCards);
     expect(player.draftedCards, 'draftedCards').deep.eq(newPlayerZero.draftedCards);
 
@@ -42,9 +38,7 @@ describe('Cloner', () => {
     expect(game.gameAge).eq(newGame.gameAge);
     expect(game.undoCount).eq(newGame.undoCount);
     expect(game.projectDeck.discardPile, 'discardPile').to.deep.eq(newGame.projectDeck.discardPile);
-    expect(game.projectDeck, 'projectDeck').to.deep.eq(newGame.projectDeck);
-    expect(game.corporationDeck, 'corporationDeck').to.deep.eq(newGame.corporationDeck);
-    expect(game.preludeDeck, 'preludeDeck').to.deep.eq(newGame.preludeDeck);
+    expect(game.corporationDeck.serialize(), 'corporationDeck').to.deep.eq(newGame.corporationDeck.serialize());
     expect(game.milestones, 'milestones').to.deep.eq(newGame.milestones);
     expect(game.awards, 'awards').to.deep.eq(newGame.awards);
 

@@ -27,8 +27,6 @@ export const awardNames = [
   'Entrepreneur',
 
   // The Moon
-  'Full Moon',
-  'Lunar Magnate',
 
   // Arabia Terra
   'Cosmic Settler',
@@ -53,7 +51,6 @@ export const awardNames = [
 
   // Vastitas Borealis Nova
   'Traveller', // And modular
-  'Landscaper',
   'Highlander',
   'Manufacturer',
   'Blacksmith',

@@ -1,10 +1,8 @@
 import * as utils from '../../common/utils/utils'; // Since there's already a sum variable.
 import {Units} from '../../common/Units';
-import {TileType} from '../../common/TileType';
 import {ICard} from '../cards/ICard';
 import {IPlayer} from '../IPlayer';
 import {Countable, CountableUnits} from './Countable';
-import {MoonExpansion} from '../moon/MoonExpansion';
 import {CardResource} from '../../common/CardResource';
 import {Space} from '../boards/Space';
 import {once} from './Lazy';
@@ -62,13 +60,6 @@ export class Counter {
     const cardSpace = board.getSpaceByTileCard(cardName);
     if (cardSpace !== undefined) {
       return board.getAdjacentSpaces(cardSpace);
-    }
-    if (game.moonData) {
-      const board = game.moonData.moon;
-      const moonSpace = board.getSpaceByTileCard(cardName);
-      if (moonSpace !== undefined) {
-        return board.getAdjacentSpaces(moonSpace);
-      }
     }
 
     return [];
@@ -180,29 +171,6 @@ export class Counter {
       });
     }
 
-    if (countable.moon !== undefined) {
-      const moon = countable.moon;
-      MoonExpansion.ifMoon(game, (moonData) => {
-        if (moon.habitatRate) {
-          sum += moonData.habitatRate;
-        }
-        if (moon.miningRate) {
-          sum += moonData.miningRate;
-        }
-        if (moon.logisticRate) {
-          sum += moonData.logisticRate;
-        }
-      });
-      if (moon.habitat) {
-        sum += maybeAdjacentSpaces(MoonExpansion.spaces(game, TileType.MOON_HABITAT, {surfaceOnly: true})).length;
-      }
-      if (moon.mine) {
-        sum += maybeAdjacentSpaces(MoonExpansion.spaces(game, TileType.MOON_MINE, {surfaceOnly: true})).length;
-      }
-      if (moon.road) {
-        sum += maybeAdjacentSpaces(MoonExpansion.spaces(game, TileType.MOON_ROAD, {surfaceOnly: true})).length;
-      }
-    }
 
     if (countable.underworld !== undefined) {
       const underworld = countable.underworld;

@@ -114,13 +114,6 @@ export default defineComponent({
     tags(): Array<Tag> {
       const type = this.cardType;
       const tags = [...this.cardInstance.tags || []];
-      tags.forEach((tag, idx) => {
-        // Clone are changed on card implementations but that's not passed down directly through the
-        // model, however, it sends down the `cloneTag` field. So this function does the substitution.
-        if (tag === Tag.CLONE && this.card.cloneTag !== undefined) {
-          tags[idx] = this.card.cloneTag;
-        }
-      });
       if (type === CardType.EVENT) {
         tags.push(Tag.EVENT);
       }

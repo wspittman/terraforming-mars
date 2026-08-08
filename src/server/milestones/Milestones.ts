@@ -1,8 +1,6 @@
 import { BoardName } from '../../common/boards/BoardName';
 import { MilestoneName } from '../../common/ma/MilestoneName';
 import { MAManifest } from '../ma/MAManifest';
-import { Lunarchitect } from '../moon/Lunarchitect';
-import { OneGiantStep } from '../moon/OneGiantStep';
 import { Agronomist } from './Agronomist';
 import { Economizer } from './arabiaTerra/Economizer';
 import { LandSpecialist } from './arabiaTerra/LandSpecialist';
@@ -102,13 +100,11 @@ export const milestoneManifest: MAManifest<MilestoneName, IMilestone> = {
       compatibility: 'turmoil',
       random: 'modular',
     },
-    'Lunarchitect': { Factory: Lunarchitect, compatibility: 'moon' },
     'Martian': { Factory: Martian, compatibility: 'pathfinders' },
     'Mayor': { Factory: Mayor, random: 'both' },
     'Merchant': { Factory: Merchant, random: 'modular' },
     'Metallurgist': { Factory: Metallurgist, random: 'modular' },
     'Networker': { Factory: Networker, compatibility: 'ares' },
-    'One Giant Step': { Factory: OneGiantStep, compatibility: 'moon' },
     'Philantropist': { Factory: Philantropist, random: 'modular' },
     'Pioneer': { Factory: Pioneer, compatibility: 'colonies' },
     'Pioneer4': {
@@ -203,7 +199,6 @@ export const milestoneManifest: MAManifest<MilestoneName, IMilestone> = {
   expansions: {
     venus: ['Hoverlord'],
     ares: ['Networker', 'Purifier'],
-    moon: ['One Giant Step', 'Lunarchitect'],
     underworld: ['Risktaker', 'Tunneler'],
   },
   create: (name: string): IMilestone | undefined => {

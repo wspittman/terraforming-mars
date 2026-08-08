@@ -15,15 +15,11 @@ import { SelectCard } from './SelectCard';
 type Inputs = {
   corp: PlayerInput | undefined;
   project: PlayerInput | undefined;
-  prelude: PlayerInput | undefined;
-  ceo: PlayerInput | undefined;
 };
 export class SelectInitialCards extends OptionsInput<undefined> {
   public readonly inputs: Inputs = {
     corp: undefined,
     project: undefined,
-    prelude: undefined,
-    ceo: undefined,
   };
 
   private push(name: keyof Inputs, input: PlayerInput) {
@@ -36,7 +32,6 @@ export class SelectInitialCards extends OptionsInput<undefined> {
     cb: (corporation: ICorporationCard) => undefined,
   ) {
     super('initialCards', '', []);
-    const game = player.game;
     let corporation: ICorporationCard;
     this.title = ' ';
     this.buttonLabel = 'Start';
@@ -56,42 +51,6 @@ export class SelectInitialCards extends OptionsInput<undefined> {
         return undefined;
       }),
     );
-
-    if (game.gameOptions.preludeExtension) {
-      this.push(
-        'prelude',
-        new SelectCard(
-          titles.SELECT_PRELUDE_TITLE,
-          undefined,
-          player.dealtPreludeCards,
-          { min: 2, max: 2 },
-        ).andThen((preludeCards) => {
-          if (preludeCards.length !== 2) {
-            throw new InputError('Only select 2 preludes');
-          }
-          player.preludeCardsInHand.push(...preludeCards);
-          return undefined;
-        }),
-      );
-    }
-
-    if (game.gameOptions.ceoExtension) {
-      this.push(
-        'ceo',
-        new SelectCard(
-          titles.SELECT_CEO_TITLE,
-          undefined,
-          player.dealtCeoCards,
-          { min: 1, max: 1 },
-        ).andThen((ceoCards) => {
-          if (ceoCards.length !== 1) {
-            throw new InputError('Only select 1 CEO');
-          }
-          player.ceoCardsInHand.add(ceoCards[0]);
-          return undefined;
-        }),
-      );
-    }
 
     this.push(
       'project',
@@ -126,7 +85,6 @@ export class SelectInitialCards extends OptionsInput<undefined> {
       player.cardsInHand.length * cardCost > corporation.startingMegaCredits
     ) {
       player.cardsInHand = [];
-      player.preludeCardsInHand = [];
       throw new InputError('Too many cards selected');
     }
 
@@ -139,18 +97,6 @@ export class SelectInitialCards extends OptionsInput<undefined> {
     for (const card of player.dealtCorporationCards) {
       if (card.name !== corporation.name) {
         game.corporationDeck.discard(card);
-      }
-    }
-
-    for (const card of player.dealtPreludeCards) {
-      if (player.preludeCardsInHand.includes(card) === false) {
-        game.preludeDeck.discard(card);
-      }
-    }
-
-    for (const card of player.dealtCeoCards) {
-      if (player.ceoCardsInHand.has(card) === false) {
-        game.ceoDeck.discard(card);
       }
     }
   }

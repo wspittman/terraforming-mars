@@ -47,3 +47,55 @@
 - Updated legacy settings restore to migrate only Corporate Era and ignore obsolete expansion fields.
 - Updated route and client tests for the reduced transport contract.
 - Next: phase 4b2 expansion player-input contracts and their remaining client domains.
+
+## 2026-08-08 — Phase 4b2
+
+- Removed all expansion-only player-input components and registrations from the client input factory.
+- Narrowed the factory's accepted model type to the Base/Corporate Era input variants while retaining server-side expansion contracts until their engines are removed in phase 4c.
+- Deleted the Delta Project client domain, which existed solely to render its removed player input.
+- Removed the focused expansion input component tests and their factory cases; retained factory coverage now enumerates only supported inputs.
+- Next: phase 4b3 expansion fields in shared game/player models.
+
+## 2026-08-08 — Phase 4b3
+
+- Reduced `GameModel`, `GameOptionsModel`, `PublicPlayerModel`, `PlayerViewModel`, `SpaceModel`, and `VictoryPointsBreakdown` to Base/Corporate Era data.
+- Replaced the client game-options expansion map with a single `corporateEra` value.
+- Updated `ServerModel` to omit expansion game, player, space, setup-card, and scoring fields while leaving save compatibility and engine state for phase 4c.
+- Removed stale Aridor colony selection, Underworld board-token rendering, allied-party overview rendering, and expansion-only tag counts.
+- Updated shared client fixtures and focused tag/input tests to use the reduced contracts.
+- Passed full lint, the production build, the server build, and all server/client tests; screenshot capture remains unavailable because the environment has no browser executable.
+- Next: phase 4c server expansion engines, setup hooks, and serialization.
+
+## 2026-08-08 — Phase 4c1
+
+- Split phase 4c into serialization removal followed by engine/setup removal after an all-at-once deletion exposed the breadth of core coupling.
+- Reduced serialized game options to Base/Corporate Era settings and stopped saving expansion decks, boards, global parameters, subsystem data, and flags.
+- Stopped saving expansion-specific player cards, colony/trade state, Turmoil state, Underworld state, Delta Project state, and fan-card counters.
+- Deserialization now supplies safe default runtime options and empty Prelude/CEO decks instead of restoring expansion state.
+- Removed obsolete Moon migration tests and the saved-game Turmoil inspection tool; updated serialization and cloning coverage for the reduced persistence contract.
+- Next: phase 4c2 expansion engines and setup hooks.
+
+## 2026-08-08 — Phase 4c2a
+
+- Enforced Base/Corporate Era options inside `Game.newInstance`, including for direct server/test callers that bypass the create-game API.
+- Disabled Ares, Colonies, Turmoil, Underworld, Moon, Pathfinders, Delta Project, Prelude, and CEO initialization for all production and ordinary direct callers.
+- Added a temporary test-only setup bypass so the retained expansion-engine tests remain usable until their implementations are deleted in 4c2b.
+- Added a regression test that enables legacy flags and verifies no expansion state or setup cards are created.
+- Next: phase 4c2b deletion of the now-unreachable expansion engine implementations.
+
+## 2026-08-08 — Phase 4c2b1
+
+- Deleted the Prelude and CEO card base classes, manifests, deck implementations, setup dealing, initial-selection branches, draft phases, and action-phase hooks.
+- Removed Prelude/CEO card creation and serialization paths, module-manifest slots, player/game state, and export-tool processing.
+- Removed the Delta Project card implementation because it depended on the deleted Prelude base class; its remaining subsystem will be deleted with the later expansion-engine slice.
+- Simplified focused game, drafting, card-registry, and serialization tests to the Base/Corporate Era selection shape.
+- Full lint, production build, and automated test suites pass (1,671 server and 304 client tests).
+- Next: phase 4c2b2 removal of the remaining board and global-parameter expansion engines.
+
+## 2026-08-08 — Phase 4c2b2a
+
+- Deleted the Moon board, global-track engine, placement actions, milestones/awards, requirements, behavior DSL branches, scoring, and focused tests.
+- Deleted the Pathfinders track engine, rewards/deferred actions, clone-tag serialization/model support, scoring, and card hooks.
+- Simplified shared Mars tile scoring, project-card reserve payments, Turmoil Reds handling, and milestone/award selection after removing the two engines.
+- Full lint, production build, and automated test suites pass (1,659 server and 304 client tests).
+- Next: phase 4c2b2b removal of Ares, Colonies, Turmoil, Underworld, Venus, and Delta engines.

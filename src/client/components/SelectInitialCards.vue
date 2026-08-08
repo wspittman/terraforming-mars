@@ -5,14 +5,6 @@
       ref="confirmation"
       @accept="confirmSelection" />
     <SelectCard :playerView="playerView" :playerinput="corpCardOption" :showtitle="true" :onsave="noop" @cardschanged="corporationChanged" />
-    <div v-if="playerCanChooseAridor" class="player_home_colony_cont">
-      <div v-i18n>These are the colony tiles Aridor may choose from:</div>
-      <div class="discarded-colonies-for-aridor">
-        <div class="player_home_colony small_colony" v-for="colonyName in playerView.game.discardedColonies" :key="colonyName">
-          <Colony :colony="getColony(colonyName)" :active="getColony(colonyName).isActive"/>
-        </div>
-      </div>
-    </div>
     <SelectCard v-if="hasPrelude" :playerView="playerView" :playerinput="preludeCardOption" :onsave="noop" :showtitle="true" @cardschanged="preludesChanged" />
     <SelectCard v-if="hasCeo" :playerView="playerView" :playerinput="ceoCardOption" :onsave="noop" :showtitle="true" @cardschanged="ceosChanged" />
     <SelectCard :playerView="playerView" :playerinput="projectCardOption" :onsave="noop" :showtitle="true" @cardschanged="cardsChanged" />
@@ -44,9 +36,6 @@ import {getPreferences, Preferences, PreferencesManager} from '@/client/utils/Pr
 import {Tag} from '@/common/cards/Tag';
 import {SelectInitialCardsResponse} from '@/common/inputs/InputResponse';
 import {CardType} from '@/common/cards/CardType';
-import Colony from '@/client/components/colonies/Colony.vue';
-import {ColonyName} from '@/common/colonies/ColonyName';
-import {ColonyModel, simpleColonyModel} from '@/common/models/ColonyModel';
 import * as titles from '@/common/inputs/SelectInitialCards';
 import {sum} from '@/common/utils/utils';
 
@@ -98,7 +87,6 @@ export default defineComponent({
     AppButton,
     SelectCard,
     ConfirmDialog,
-    Colony,
   },
   data(): DataModel {
     return {
@@ -317,16 +305,10 @@ export default defineComponent({
     confirmSelection() {
       this.saveData();
     },
-    getColony(colonyName: ColonyName): ColonyModel {
-      return simpleColonyModel(colonyName);
-    },
   },
   computed: {
     typedRefs(): Refs {
       return this.$refs as Refs;
-    },
-    playerCanChooseAridor() {
-      return this.playerView.dealtCorporationCards.some((card) => card.name === CardName.ARIDOR);
     },
     hasPrelude() {
       return hasOption(this.playerinput.options, titles.SELECT_PRELUDE_TITLE);

@@ -6,9 +6,7 @@ import {SerializedCard} from '../SerializedCard';
 import {CardType} from '../../common/cards/CardType';
 import {Tag} from '../../common/cards/Tag';
 import {ICorporationCard, isICorporationCard} from './corporation/ICorporationCard';
-import {IPreludeCard} from './prelude/IPreludeCard';
 import {IProjectCard, isIProjectCard} from './IProjectCard';
-import {ICeoCard, isCeoCard} from './ceos/ICeoCard';
 
 const NO_TAGS = {
   [Tag.BUILDING]: 0,
@@ -113,17 +111,11 @@ export class PlayedCards {
     return this.filter(isICorporationCard).map((card) => <ICorporationCard> card);
   }
 
-  preludes(): ReadonlyArray<IPreludeCard> {
-    return this.filter((card) => card.type === CardType.PRELUDE).map((card) => <IPreludeCard> card);
-  }
 
   projects(): ReadonlyArray<IProjectCard> {
     return this.filter(isIProjectCard).map((card) => <IProjectCard> card);
   }
 
-  ceos(): ReadonlyArray<ICeoCard> {
-    return this.filter(isCeoCard).map((card) => <ICeoCard> card);
-  }
 
   /**
    * Determines whether the specified callback function returns true for any element of an array.

@@ -36,7 +36,6 @@
           </div>
         </div>
         <PlayerTags :player="player" :playerView="playerView" :hideZeroTags="hideZeroTags" :isTopBar="isTopBar" />
-        <PlayerAlliedParty :player="player"/>
       </div>
 </template>
 
@@ -45,7 +44,6 @@ import {defineComponent} from 'vue';
 import {ViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import PlayerResources from '@/client/components/overview/PlayerResources.vue';
 import PlayerTags from '@/client/components/overview/PlayerTags.vue';
-import PlayerAlliedParty from '@/client/components/overview/PlayerAlliedParty.vue';
 import PlayerStatus from '@/client/components/overview/PlayerStatus.vue';
 import {playerColorClass} from '@/common/utils/utils';
 import {vueRoot} from '@/client/components/vueRoot';
@@ -93,7 +91,6 @@ export default defineComponent({
     AppButton,
     PlayerResources,
     PlayerTags,
-    PlayerAlliedParty,
     PlayerStatus,
   },
   computed: {

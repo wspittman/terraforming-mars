@@ -221,6 +221,12 @@ describe('Player', () => {
     const json = player.serialize();
     expect(json.pickedCorporationCard).eq('Saturn Systems');
   });
+  it('does not serialize expansion state', () => {
+    const player = new Player('blue', 'blue', false, 0, 'p-blue');
+    const json = player.serialize();
+    expect(json).not.have.property('alliedParty');
+    expect(json).not.have.property('underworldData');
+  });
   it('serialization test', () => {
     const json: SerializedPlayer = {
       id: 'p-blue',
@@ -253,37 +259,17 @@ describe('Player', () => {
       ],
       pendingInitialActions: [],
       dealtCorporationCards: [CardName.THARSIS_REPUBLIC],
-      dealtCeoCards: [CardName.KAREN],
       dealtProjectCards: [CardName.FLOATER_LEASING, CardName.BUTTERFLY_EFFECT],
-      dealtPreludeCards: [
-        CardName.MOHOLE_EXCAVATION,
-        CardName.LAVA_TUBE_SETTLEMENT,
-      ],
       cardsInHand: [CardName.EARTH_ELEVATOR, CardName.DUST_SEALS],
-      preludeCardsInHand: [
-        CardName.METAL_RICH_ASTEROID,
-        CardName.PSYCHROPHILES,
-      ],
-      ceoCardsInHand: [],
       playedCards: [], // TODO(kberg): these are SerializedCard.
       draftedCards: [CardName.FISH, CardName.EXTREME_COLD_FUNGUS],
       needsToDraft: false,
       cardCost: 3,
-      cardDiscount: 7,
-      fleetSize: 99,
-      tradesThisGeneration: 100,
-      colonyTradeOffset: 101,
-      colonyTradeDiscount: 102,
-      colonyVictoryPoints: 104,
-      turmoilPolicyActionUsed: false,
-      politicalAgendasActionUsedCount: 0,
-      hasTurmoilScienceTagBonus: false,
       preservationProgram: false,
       oceanBonus: 86,
       scienceTagCount: 97,
       plantsNeededForGreenery: 5,
       removingPlayers: [],
-      warmongerCards: 0,
       removedFromPlayCards: [],
       name: 'p-blue',
       color: 'purple' as Color,
@@ -297,32 +283,20 @@ describe('Player', () => {
         afterFirstAction: false,
         lastStoppedAt: 0,
       } as SerializedTimer,
-      totalDelegatesPlaced: 0,
       victoryPointsByGeneration: [],
-      underworldData: { corruption: 0, activeBonus: undefined, tokens: [] },
-      alliedParty: {
-        agenda: { bonusId: 'gb01', policyId: 'gp01' },
-        partyName: PartyName.GREENS,
-      },
       draftHand: [],
       globalParameterSteps: {
         [GlobalParameter.OCEANS]: 0,
         [GlobalParameter.OXYGEN]: 0,
         [GlobalParameter.TEMPERATURE]: 0,
-        [GlobalParameter.VENUS]: 0,
-        [GlobalParameter.MOON_HABITAT_RATE]: 0,
-        [GlobalParameter.MOON_MINING_RATE]: 0,
-        [GlobalParameter.MOON_LOGISTIC_RATE]: 0,
       },
       standardProjectsThisGeneration: [],
       jovianTagCount: 0,
-      withinDeflectionZone: false,
     };
 
     const newPlayer = Player.deserialize(json);
 
     expect(newPlayer.color).eq('purple');
-    expect(newPlayer.colonies.usedTradeFleets).eq(100);
   });
 
   it('addResourceTo', () => {

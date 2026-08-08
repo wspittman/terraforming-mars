@@ -1,11 +1,8 @@
 import {expect} from 'chai';
 import {ConvertPlants} from '../../../../src/server/cards/base/standardActions/ConvertPlants';
-import {Phase} from '../../../../src/common/Phase';
 import {setOxygenLevel} from '../../../TestingUtils';
 import {TestPlayer} from '../../../TestPlayer';
 import {Game} from '../../../../src/server/Game';
-import {PoliticalAgendas} from '../../../../src/server/turmoil/PoliticalAgendas';
-import {Reds} from '../../../../src/server/turmoil/parties/Reds';
 import {MAX_OXYGEN_LEVEL} from '../../../../src/common/constants';
 
 describe('ConvertPlants', () => {
@@ -16,7 +13,7 @@ describe('ConvertPlants', () => {
     card = new ConvertPlants();
     player = TestPlayer.BLUE.newPlayer();
     const player2 = TestPlayer.RED.newPlayer();
-    Game.newInstance('gameid', [player, player2], player, 'spectatorid', {turmoilExtension: true});
+    Game.newInstance('gameid', [player, player2], player, 'spectatorid');
   });
 
   it('Can not act without plants', () => {
@@ -25,17 +22,6 @@ describe('ConvertPlants', () => {
     expect(card.canAct(player)).eq(false);
   });
 
-  it('Can not act with reds', () => {
-    player.plants = 8;
-    player.game.phase = Phase.ACTION;
-    player.game.turmoil!.rulingParty = new Reds();
-    PoliticalAgendas.setNextAgenda(player.game.turmoil!, player.game);
-    expect(card.canAct(player)).eq(false);
-    player.megaCredits = 2;
-    expect(card.canAct(player)).eq(false);
-    player.megaCredits = 3;
-    expect(card.canAct(player)).eq(true);
-  });
 
   it('Should play', () => {
     player.plants = 8;

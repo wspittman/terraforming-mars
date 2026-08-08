@@ -1,7 +1,6 @@
 import {Payment} from '../../common/inputs/Payment';
 import {IProjectCard} from '../cards/IProjectCard';
 import {Units} from '../../common/Units';
-import {MoonExpansion} from '../moon/MoonExpansion';
 import {CardAction, IPlayer} from '../IPlayer';
 import {CardName} from '../../common/cards/CardName';
 import {Message} from '../../common/logs/Message';
@@ -24,7 +23,7 @@ export class SelectProjectCardToPlay extends SelectCardToPlay<IProjectCard> {
           card.name,
           {
             reserveUnits: card.reserveUnits ?
-              MoonExpansion.adjustedReserveCosts(player, card) :
+              card.reserveUnits :
               Units.EMPTY,
           },
         ];

@@ -7,11 +7,6 @@ import {CitiesRequirement} from './CitiesRequirement';
 import {ColoniesRequirement} from './ColoniesRequirement';
 import {FloatersRequirement} from './FloatersRequirement';
 import {GreeneriesRequirement} from './GreeneriesRequirement';
-import {HabitatRateRequirement} from './HabitatRateRequirement';
-import {HabitatTilesRequirement} from './HabitatTilesRequirement';
-import {LogisticRateRequirement} from './LogisticRateRequirement';
-import {MiningRateRequirement} from './MiningRateRequirement';
-import {MiningTilesRequirement} from './MiningTilesRequirement';
 import {OceanRequirement} from './OceanRequirement';
 import {OxygenRequirement} from './OxygenRequirement';
 import {PartyLeadersRequirement} from './PartyLeadersRequirement';
@@ -19,7 +14,6 @@ import {PartyRequirement} from './PartyRequirement';
 import {ProductionRequirement} from './ProductionRequirement';
 import {RemovedPlantsRequirement} from './RemovedPlantsRequirement';
 import {ResourceTypeRequirement} from './ResourceTypeRequirement';
-import {RoadTilesRequirement} from './RoadTilesRequirement';
 import {TRRequirement} from './TRRequirement';
 import {TagCardRequirement} from './TagCardRequirement';
 import {TemperatureRequirement} from './TemperatureRequirement';
@@ -97,18 +91,6 @@ export class CardRequirements {
       return new PartyRequirement(descriptor.party);
     } else if (descriptor.plantsRemoved !== undefined) {
       return new RemovedPlantsRequirement();
-    } else if (descriptor.habitatRate !== undefined) {
-      return new HabitatRateRequirement({...descriptor, count: descriptor.habitatRate});
-    } else if (descriptor.miningRate !== undefined) {
-      return new MiningRateRequirement({...descriptor, count: descriptor.miningRate});
-    } else if (descriptor.logisticRate !== undefined) {
-      return new LogisticRateRequirement({...descriptor, count: descriptor.logisticRate});
-    } else if (descriptor.habitatTiles !== undefined) {
-      return new HabitatTilesRequirement({...descriptor, count: descriptor.habitatTiles});
-    } else if (descriptor.miningTiles !== undefined) {
-      return new MiningTilesRequirement({...descriptor, count: descriptor.miningTiles});
-    } else if (descriptor.roadTiles !== undefined) {
-      return new RoadTilesRequirement({...descriptor, count: descriptor.roadTiles});
     } else if (descriptor.corruption !== undefined) {
       return new CorruptionRequirement({...descriptor, count: descriptor.corruption});
     } else if (descriptor.undergroundTokens !== undefined) {

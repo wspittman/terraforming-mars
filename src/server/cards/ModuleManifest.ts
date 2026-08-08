@@ -7,8 +7,6 @@ import {IProjectCard} from './IProjectCard';
 import {ICard} from './ICard';
 import {IStandardProjectCard} from './IStandardProjectCard';
 import {IStandardActionCard} from './IStandardActionCard';
-import {IPreludeCard} from './prelude/IPreludeCard';
-import {ICeoCard} from './ceos/ICeoCard';
 import {IGlobalEvent} from '../turmoil/globalEvents/IGlobalEvent';
 
 export type CardManifest<T extends ICard> = Partial<Record<CardName, CardFactorySpec<T>>>;
@@ -55,8 +53,6 @@ export class ModuleManifest {
   projectCards : CardManifest<IProjectCard>;
   cardsToRemove: ReadonlySet<CardName>;
   corporationCards : CardManifest<ICorporationCard>;
-  preludeCards : CardManifest<IPreludeCard>;
-  ceoCards: CardManifest<ICeoCard>;
   standardProjects : CardManifest<IStandardProjectCard>;
   standardActions : CardManifest<IStandardActionCard>;
   globalEvents: GlobalEventManifest;
@@ -65,8 +61,6 @@ export class ModuleManifest {
     projectCards?: CardManifest<IProjectCard>,
     cardsToRemove?: Array<CardName>,
     corporationCards?: CardManifest<ICorporationCard>,
-    ceoCards?: CardManifest<ICeoCard>,
-    preludeCards?: CardManifest<IPreludeCard>,
     standardProjects?: CardManifest<IStandardProjectCard>,
     standardActions?: CardManifest<IStandardActionCard>,
     globalEvents?: GlobalEventManifest,
@@ -75,8 +69,6 @@ export class ModuleManifest {
     this.projectCards = arg.projectCards || {};
     this.cardsToRemove = new Set(arg.cardsToRemove || []);
     this.corporationCards = arg.corporationCards || {};
-    this.preludeCards = arg.preludeCards || {};
-    this.ceoCards = arg.ceoCards || {};
     this.standardProjects = arg.standardProjects || {};
     this.standardActions = arg.standardActions || {};
     this.globalEvents = arg.globalEvents || {};

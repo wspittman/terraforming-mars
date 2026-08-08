@@ -38,3 +38,12 @@
 - Removed their remaining setup and end-game mounts, scoring columns, contribution data, and global chart datasets.
 - Added regression assertions that setup and end-game views do not mount Moon or Pathfinders components.
 - Next: phase 4b shared expansion models and player-input contracts.
+
+## 2026-08-07 — Phase 4b1
+
+- Replaced the new-game expansion map with a single Corporate Era flag.
+- Removed all expansion-specific options, lists, completion requirements, and Prelude/CEO fields from `NewGameConfig`.
+- Removed expansion-only validation and payload serialization from the create form.
+- Updated legacy settings restore to migrate only Corporate Era and ignore obsolete expansion fields.
+- Updated route and client tests for the reduced transport contract.
+- Next: phase 4b2 expansion player-input contracts and their remaining client domains.

@@ -127,7 +127,7 @@ export class ApiCreateGame extends Handler {
 
           const expansions = {
             ...DEFAULT_EXPANSIONS,
-            corpera: gameReq.expansions.corpera,
+            corpera: gameReq.corporateEra,
           };
 
           const gameOptions: GameOptions = {
@@ -178,7 +178,7 @@ export class ApiCreateGame extends Handler {
             startingPreludes: 0,
             starWarsExpansion: expansions.starwars,
             turmoilExtension: expansions.turmoil,
-            twoCorpsVariant: gameReq.twoCorpsVariant,
+            twoCorpsVariant: false,
             underworldExpansion: expansions.underworld,
             deltaProjectExpansion: expansions.deltaProject,
             undoOption: gameReq.undoOption,

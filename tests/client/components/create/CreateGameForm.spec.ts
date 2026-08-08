@@ -5,7 +5,6 @@ import CreateGameForm from '@/client/components/create/CreateGameForm.vue';
 import {CreateGameSettingsStorage} from '@/client/components/create/CreateGameSettingsStorage';
 import {FakeLocalStorage} from '../FakeLocalStorage';
 import {BoardName} from '@/common/boards/BoardName';
-import {DEFAULT_EXPANSIONS} from '@/common/cards/GameModule';
 import {JSONObject} from '@/common/Types';
 import {defineComponent} from 'vue';
 
@@ -16,7 +15,7 @@ function createGameSettings(overrides: JSONObject = {}): JSONObject {
       {name: 'Alice', color: 'red', beginner: false, handicap: 0},
       {name: 'Bob', color: 'blue', beginner: false, handicap: 0},
     ],
-    expansions: DEFAULT_EXPANSIONS,
+    corporateEra: true,
     board: BoardName.HELLAS,
     draftVariant: false,
     solarPhaseOption: true,
@@ -57,7 +56,7 @@ describe('CreateGameForm', () => {
 
   it('restores the last saved game settings on load', async () => {
     new CreateGameSettingsStorage(localStorage).saveSettings(createGameSettings({
-      expansions: {...DEFAULT_EXPANSIONS, venus: true},
+      corporateEra: false,
     }));
 
     const wrapper = shallowMount(CreateGameForm, {
@@ -70,7 +69,7 @@ describe('CreateGameForm', () => {
     expect((wrapper.vm as any).players[1].name).eq('Bob');
     expect((wrapper.vm as any).board).eq(BoardName.HELLAS);
     expect((wrapper.vm as any).draftVariant).eq(false);
-    expect((wrapper.vm as any).expansions.venus).eq(true);
+    expect((wrapper.vm as any).expansions.corpera).eq(false);
     expect((wrapper.vm as any).solarPhaseOption).eq(true);
   });
 
@@ -157,6 +156,8 @@ describe('CreateGameForm', () => {
 
       const savedSettings = new CreateGameSettingsStorage(localStorage).loadSettings();
       expect(savedSettings?.board).eq(BoardName.ELYSIUM);
+      expect(savedSettings?.corporateEra).eq(true);
+      expect(savedSettings?.expansions).eq(undefined);
       expect((savedSettings?.players as Array<{name: string}>).map((player) => player.name)).deep.eq(['Alice', 'Bob']);
     } finally {
       global.fetch = originalFetch;

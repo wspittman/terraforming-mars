@@ -441,7 +441,6 @@ import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {GameId, JSONObject} from '@/common/Types';
 import {AgendaStyle} from '@/common/turmoil/Types';
 import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
-import {getCard} from '@/client/cards/ClientCardManifest';
 import {BoardNameType, NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
 import {vueRoot} from '@/client/components/vueRoot';
 import {CreateGameModel} from './CreateGameModel';
@@ -449,11 +448,9 @@ import {paths} from '@/common/app/paths';
 import {JSONProcessor} from './JSONProcessor';
 import {defaultCreateGameModel} from './defaultCreateGameModel';
 import {CreateGameSettingsStorage} from './CreateGameSettingsStorage';
-import {getColony} from '@/client/colonies/ClientColonyManifest';
 import {RULEBOOK_URLS, WIKI, WIKI_URLS} from '@/client/utils/WikiLinks';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
 
-const REVISED_COUNT_ALGORITHM = false;
 const createGameSettingsStorage = new CreateGameSettingsStorage();
 
 
@@ -842,60 +839,19 @@ export default defineComponent({
       const showOtherPlayersVP = this.showOtherPlayersVP;
       const solarPhaseOption = this.solarPhaseOption;
       const shuffleMapOption = this.shuffleMapOption;
-      const customColonies = this.customColonies;
       const customCorporations = this.customCorporations;
-      const customPreludes = this.customPreludes;
       const bannedCards = this.bannedCards;
       const includedCards = this.includedCards;
       const board = this.board;
       const seed = this.seed;
-      const politicalAgendasExtension = this.politicalAgendasExtension;
       const undoOption = this.undoOption;
       const showTimers = this.showTimers;
       const fastModeOption = this.fastModeOption;
-      const removeNegativeGlobalEventsOption = this.removeNegativeGlobalEventsOption;
       const includeFanMA = this.includeFanMA;
       const startingCorporations = this.startingCorporations;
       const soloTR = this.soloTR;
       const randomFirstPlayer = this.randomFirstPlayer;
-      const requiresVenusTrackCompletion = this.requiresVenusTrackCompletion;
-      const twoCorpsVariant = this.twoCorpsVariant;
-      const customCeos = this.customCeos;
-      const startingCeos = this.startingCeos;
-      const startingPreludes = this.startingPreludes;
       let clonedGamedId: undefined | GameId = undefined;
-
-      // Check custom colony count
-      if (customColonies.length > 0) {
-        const playersCount = players.length;
-        let neededColoniesCount = playersCount + 2;
-        if (playersCount === 1) {
-          neededColoniesCount = 4;
-        } else if (playersCount === 2) {
-          neededColoniesCount = 5;
-        }
-
-        if (customColonies.length < neededColoniesCount) {
-          window.alert(translateTextWithParams('Must select at least ${0} colonies', [neededColoniesCount.toString()]));
-          return;
-        }
-
-        let valid = true;
-        for (const colonyName of customColonies) {
-          const colony = getColony(colonyName);
-          if (colony.expansion !== undefined && !this.expansions[colony.expansion]) {
-            valid = false;
-            break;
-          }
-        }
-        if (valid === false) {
-          const confirm = window.confirm(translateText(
-            'Some of the colonies you selected need expansions you have not enabled. Using them might break your game. Press OK to continue or Cancel to change your selections.'));
-          if (confirm === false) {
-            return;
-          }
-        }
-      }
 
       if (players.length === 1 && this.expansions.corpera === false) {
         const confirm = window.confirm(translateText(
@@ -905,107 +861,15 @@ export default defineComponent({
         }
       }
 
-      // Check Prelude 2 + Pathfinders infinite energy production
-      let energyProductionBug = true;
-      if (customCorporations.length > 0 && !customCorporations.includes(CardName.THORGATE)) {
-        energyProductionBug = false;
-      }
-      if (this.bannedCards.includes(CardName.STANDARD_TECHNOLOGY)) {
-        energyProductionBug = false;
-      }
-
-      if (this.bannedCards.includes(CardName.SUITABLE_INFRASTRUCTURE)) {
-        energyProductionBug = false;
-      } else {
-        if (this.expansions.prelude2 === false && !this.includedCards.includes(CardName.SUITABLE_INFRASTRUCTURE)) {
-          energyProductionBug = false;
-        }
-      }
-
-      if (this.bannedCards.includes(CardName.HIGH_TEMP_SUPERCONDUCTORS)) {
-        energyProductionBug = false;
-      } else {
-        if (this.expansions.pathfinders === false && !this.includedCards.includes(CardName.HIGH_TEMP_SUPERCONDUCTORS)) {
-          energyProductionBug = false;
-        }
-      }
-
-      if (energyProductionBug === true) {
-        const confirm = window.confirm(translateText(
-          'It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production. Press OK to continue or Cancel to change your selections.'));
-        if (confirm === false) {
-          return;
-        }
-      }
-
       // Check custom corp count
       if (customCorporations.length > 0) {
-        let neededCorpsCount = players.length * startingCorporations;
-        if (REVISED_COUNT_ALGORITHM) {
-          if (this.twoCorpsVariant) {
-            // Add an additional 4 for the Merger prelude
-            // Everyone-Merger needs an additional 4 corps per player
-            //  NB: This will not cover the case when no custom corp list is set!
-            //  It _can_ come about if  the number of corps included in all expansions is still not enough.
-            neededCorpsCount = (players.length * startingCorporations) + (players.length * 4);
-          } else {
-            neededCorpsCount = players.length * startingCorporations;
-            // Merger Prelude alone needs 4 additional preludes
-            if (this.expansions.prelude && this.expansions.promo) {
-              neededCorpsCount += 4;
-            }
-          }
-        }
+        const neededCorpsCount = players.length * startingCorporations;
         if (customCorporations.length < neededCorpsCount) {
           window.alert(translateTextWithParams('Must select at least ${0} corporations', [neededCorpsCount.toString()]));
           return;
         }
-        let valid = true;
-        for (const corp of customCorporations) {
-          const card = getCard(corp);
-          for (const module of card?.compatibility ?? []) {
-            if (!this.expansions[module]) {
-              valid = false;
-            }
-          }
-        }
-        if (valid === false) {
-          const confirm = window.confirm(translateText(
-            'Some of the corps you selected need expansions you have not enabled. Using them might break your game. Press OK to continue or Cancel to change your selections.'));
-          if (confirm === false) {
-            return;
-          }
-        }
       } else {
         customCorporations.length = 0;
-      }
-
-      // TODO(kberg): this is a direct copy of the code right above.
-      // Check custom prelude count
-      if (customPreludes.length > 0) {
-        const requiredPreludeCount = players.length * startingPreludes;
-        if (customPreludes.length < requiredPreludeCount) {
-          window.alert(translateTextWithParams('Must select at least ${0} Preludes', [requiredPreludeCount.toString()]));
-          return;
-        }
-        let valid = true;
-        for (const prelude of customPreludes) {
-          const card = getCard(prelude);
-          for (const module of card?.compatibility ?? []) {
-            if (!this.expansions[module]) {
-              valid = false;
-            }
-          }
-        }
-        if (valid === false) {
-          const confirm = window.confirm(translateText(
-            'Some of the Preludes you selected need expansions you have not enabled. Using them might break your game. Press OK to continue or Cancel to change your selections.'));
-          if (confirm === false) {
-            return;
-          }
-        }
-      } else {
-        customPreludes.length = 0;
       }
 
       // Clone game checks
@@ -1040,41 +904,28 @@ export default defineComponent({
 
       const dataToSend: NewGameConfig = {
         players,
-        expansions: this.expansions,
+        corporateEra: this.expansions.corpera,
         draftVariant,
         showOtherPlayersVP,
         customCorporationsList: customCorporations,
-        customColoniesList: customColonies,
-        customCeos: customCeos,
-        customPreludes,
         bannedCards,
         includedCards,
         board,
         seed,
         solarPhaseOption,
-        aresExtremeVariant: this.aresExtremeVariant,
-        politicalAgendasExtension: politicalAgendasExtension,
         undoOption,
         showTimers,
         fastModeOption,
-        removeNegativeGlobalEventsOption,
         includeFanMA,
         modularMA: this.modularMA,
         startingCorporations,
         soloTR,
         clonedGamedId,
         initialDraft,
-        preludeDraftVariant: this.preludeDraftVariant ?? false,
-        ceosDraftVariant: this.ceosDraftVariant ?? false,
         randomMA,
         shuffleMapOption,
         // beginnerOption,
         randomFirstPlayer,
-        requiresVenusTrackCompletion,
-        requiresMoonTrackCompletion: this.requiresMoonTrackCompletion,
-        moonStandardProjectVariant: this.moonStandardProjectVariant,
-        moonStandardProjectVariant1: this.moonStandardProjectVariant1,
-        altVenusBoard: this.altVenusBoard,
         escapeVelocity: this.escapeVelocityMode ?
           {
             thresholdMinutes: this.escapeVelocityThreshold,
@@ -1082,9 +933,6 @@ export default defineComponent({
             penaltyPeriodMinutes: this.escapeVelocityPeriod,
             penaltyVPPerPeriod: this.escapeVelocityPenalty,
           } : undefined,
-        twoCorpsVariant,
-        startingCeos,
-        startingPreludes,
       };
       return JSON.stringify(dataToSend, undefined, 4);
     },

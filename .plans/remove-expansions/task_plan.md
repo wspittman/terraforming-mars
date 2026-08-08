@@ -22,7 +22,9 @@ Only implement the next incomplete phase in each work session, then stop for fee
    - Remove expansion-only panels, icons, filters, settings, and rendering branches no longer required after engine cleanup.
 4. **Remove expansion domain subsystems** — in progress
    - **4a. Remove disconnected Moon and Pathfinders client domains** — complete
-   - 4b. Remove shared expansion models and input contracts — pending
+   - **4b1. Remove expansion fields from the new-game transport contract** — complete
+   - 4b2. Remove expansion player-input contracts and remaining client domains — pending
+   - 4b3. Remove expansion fields from shared game/player models — pending
    - 4c. Remove server expansion engines, setup hooks, and serialization — pending
    - Consolidate the remaining Base/Corporate Era types after each boundary is removed.
 5. **Repository-wide cleanup and documentation** — pending
@@ -47,4 +49,5 @@ Only implement the next incomplete phase in each work session, then stop for fee
 | Enforcing Base-only options in `Game.newInstance` broke legacy subsystem tests | 1 | Kept the API enforcement boundary from phase 1; removed only new-game card integration so legacy deserialization/runtime cleanup remains staged for phase 4. |
 | Updated Game Setup Detail test expected Base for a Corporate Era fixture | 1 | Corrected the assertion to match the fixture, while retaining coverage of the Base/Corporate Era-only label. |
 | Initial end-game template cleanup left an extra closing tag | 1 | Removed the orphaned tag and normalized setup-view whitespace; full lint then passed. |
+| Focused create-game client tests lacked generated card/colony JSON | 1 | Run `npm run make:cards` before rerunning the focused tests. |
 

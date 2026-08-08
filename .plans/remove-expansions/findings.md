@@ -27,3 +27,9 @@
 - Moon and Pathfinders client components were disconnected from the main game views in phase 3 but remained mounted by setup and end-game views.
 - Colonies, Turmoil, Delta Project, and Underworld components still back legacy player-input/card-list contracts. Their deletion must be coordinated with shared input/model removal in phase 4b rather than leaving broken imports.
 - End-game global charts and contribution tables also contained Moon, Venus, and Pathfinders scoring branches; these were removed with the two disconnected domains.
+
+## 2026-08-07 — Phase 4b1
+
+- `NewGameConfig` still exposed every expansion-specific creation field even though the API discarded them. The transport now carries one `corporateEra` flag and only Base/Corporate Era settings.
+- The create form still has legacy internal fields for settings-file migration, but serialized requests and saved current settings no longer contain the expansion object or expansion-specific variants.
+- API construction continues to populate legacy `GameOptions` with safe defaults until shared game models and server serialization are removed in later phase 4 boundaries.

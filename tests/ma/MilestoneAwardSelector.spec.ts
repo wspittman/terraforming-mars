@@ -45,14 +45,6 @@ describe('MilestoneAwardSelector', () => {
       ],
       expected: 3,
     },
-    // Hoverlord / Venuphine have synergy 5.
-    {
-      mas: [
-        ...milestoneManifest.expansions['venus'],
-        ...awardManifest.expansions['venus'],
-      ],
-      expected: 5,
-    },
   ] as const;
   // These aren't particularly excellent tests as much as they help demonstrate
   // what the original maps, if selected in full, would have as a synergy.

@@ -42,6 +42,5 @@ describe('IndustrialCenter', () => {
     selectSpace.cb(space);
 
     expect(space.tile?.tileType).to.eq(TileType.INDUSTRIAL_CENTER);
-    expect(space.adjacency?.bonus).eq(undefined);
   });
 });

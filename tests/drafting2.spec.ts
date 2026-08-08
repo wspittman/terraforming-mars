@@ -958,5 +958,4 @@ const stored = {
   },
   'undoCount': 0,
   'unDraftedCards': [],
-  'venusScaleLevel': 0,
 };

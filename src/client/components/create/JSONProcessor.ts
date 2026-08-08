@@ -49,7 +49,6 @@ export class JSONProcessor {
       }
     }
     initializeArrayFieldWithBackup(json_constants.OLD_CUSTOM_CORPORATIONS, json_constants.CUSTOM_CORPORATIONS);
-    initializeArrayFieldWithBackup(json_constants.OLD_CUSTOM_COLONIES, json_constants.CUSTOM_COLONIES);
     initializeArrayFieldWithBackup(json_constants.OLD_BANNED_CARDS, json_constants.BANNED_CARDS);
     const ev = json.escapeVelocity as JSONObject;
     if (ev !== undefined && typeof ev === 'object') {
@@ -84,12 +83,10 @@ export class JSONProcessor {
     const ignoredFields = [
       // Instead of ignoring these fields, let them pass through to the model.
       // json_constants.CUSTOM_CORPORATIONS,
-      // json_constants.CUSTOM_COLONIES,
       // json_constants.CUSTOM_PRELUDES,
       // json_constants.BANNED_CARDS,
       // json_constants.INCLUDED_CARDS,
       json_constants.OLD_BANNED_CARDS,
-      json_constants.OLD_CUSTOM_COLONIES,
       json_constants.OLD_CUSTOM_CORPORATIONS,
       json_constants.CORPORATEERA,
       json_constants.PROMOCARDSOPTION,

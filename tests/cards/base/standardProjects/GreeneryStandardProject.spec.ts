@@ -1,16 +1,13 @@
-import {expect} from 'chai';
-import {runAllActions, setOxygenLevel} from '../../../TestingUtils';
-import {GreeneryStandardProject} from '../../../../src/server/cards/base/standardProjects/GreeneryStandardProject';
-import {TestPlayer} from '../../../TestPlayer';
-import {IGame} from '../../../../src/server/IGame';
-import {PoliticalAgendas} from '../../../../src/server/turmoil/PoliticalAgendas';
-import {Reds} from '../../../../src/server/turmoil/parties/Reds';
-import {Phase} from '../../../../src/common/Phase';
-import {MAX_OXYGEN_LEVEL} from '../../../../src/common/constants';
-import {TileType} from '../../../../src/common/TileType';
-import {testGame} from '../../../TestGame';
-import {assertPlaceTile} from '../../../assertions';
-import {Payment} from '../../../../src/common/inputs/Payment';
+import { expect } from 'chai';
+import { TileType } from '../../../../src/common/TileType';
+import { MAX_OXYGEN_LEVEL } from '../../../../src/common/constants';
+import { Payment } from '../../../../src/common/inputs/Payment';
+import { IGame } from '../../../../src/server/IGame';
+import { GreeneryStandardProject } from '../../../../src/server/cards/base/standardProjects/GreeneryStandardProject';
+import { testGame } from '../../../TestGame';
+import { TestPlayer } from '../../../TestPlayer';
+import { runAllActions, setOxygenLevel } from '../../../TestingUtils';
+import { assertPlaceTile } from '../../../assertions';
 
 describe('GreeneryStandardProject', () => {
   let card: GreeneryStandardProject;
@@ -49,19 +46,5 @@ describe('GreeneryStandardProject', () => {
     setOxygenLevel(game, MAX_OXYGEN_LEVEL);
     // Players can still place greeneries even if the oxygen level is maximized
     expect(card.canAct(player)).is.true;
-  });
-
-  it('Can not act with reds', () => {
-    [game, player] = testGame(1, {turmoilExtension: true});
-
-    player.megaCredits = card.cost;
-    player.game.phase = Phase.ACTION;
-    player.game.turmoil!.rulingParty = new Reds();
-    PoliticalAgendas.setNextAgenda(player.game.turmoil!, player.game);
-    expect(card.canAct(player)).eq(false);
-    player.megaCredits = card.cost + 2;
-    expect(card.canAct(player)).eq(false);
-    player.megaCredits = card.cost + 3;
-    expect(card.canAct(player)).eq(true);
   });
 });

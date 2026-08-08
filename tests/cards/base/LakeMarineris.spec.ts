@@ -1,11 +1,11 @@
-import {expect} from 'chai';
-import {maxOutOceans, setTemperature, testRedsCosts} from '../../TestingUtils';
-import {LakeMarineris} from '../../../src/server/cards/base/LakeMarineris';
-import {IGame} from '../../../src/server/IGame';
-import {SelectSpace} from '../../../src/server/inputs/SelectSpace';
-import {TestPlayer} from '../../TestPlayer';
-import {testGame} from '../../TestGame';
-import {cast} from '../../../src/common/utils/utils';
+import { expect } from 'chai';
+import { cast } from '../../../src/common/utils/utils';
+import { LakeMarineris } from '../../../src/server/cards/base/LakeMarineris';
+import { IGame } from '../../../src/server/IGame';
+import { SelectSpace } from '../../../src/server/inputs/SelectSpace';
+import { testGame } from '../../TestGame';
+import { setTemperature } from '../../TestingUtils';
+import { TestPlayer } from '../../TestPlayer';
 
 describe('LakeMarineris', () => {
   let card: LakeMarineris;
@@ -35,24 +35,4 @@ describe('LakeMarineris', () => {
 
     expect(card.getVictoryPoints(player)).to.eq(2);
   });
-
-  const redsRuns = [
-    {oceans: 0, expected: 6},
-    {oceans: 7, expected: 6},
-    {oceans: 8, expected: 3},
-    {oceans: 9, expected: 0},
-  ] as const;
-
-  for (const run of redsRuns) {
-    it('Works with reds ' + JSON.stringify(run), () => {
-      const card = new LakeMarineris();
-      const [game, player, player2] = testGame(2, {turmoilExtension: true});
-
-      // Card requirements.
-      setTemperature(game, 0);
-
-      maxOutOceans(player2, run.oceans);
-      testRedsCosts(() => player.canPlay(card), player, card.cost, run.expected);
-    });
-  }
 });

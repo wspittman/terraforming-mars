@@ -1,28 +1,20 @@
+import { cast } from '@/common/utils/utils';
+import { SpaceId } from '../src/common/Types';
+import { CardName } from '../src/common/cards/CardName';
+import { CardType } from '../src/common/cards/CardType';
+import { Warning } from '../src/common/cards/Warning';
 import * as constants from '../src/common/constants';
-import {expect} from 'chai';
-import {IGame} from '../src/server/IGame';
-import {Space} from '../src/server/boards/Space';
-import {Phase} from '../src/common/Phase';
-import {Turmoil} from '../src/server/turmoil/Turmoil';
-import {Message} from '../src/common/logs/Message';
-import {PolicyId} from '../src/common/turmoil/Types';
-import {Log} from '../src/common/logs/Log';
-import {Greens} from '../src/server/turmoil/parties/Greens';
-import {PoliticalAgendas} from '../src/server/turmoil/PoliticalAgendas';
-import {Reds} from '../src/server/turmoil/parties/Reds';
-import {IProjectCard} from '../src/server/cards/IProjectCard';
-import {CardName} from '../src/common/cards/CardName';
-import {CardType} from '../src/common/cards/CardType';
-import {SpaceId} from '../src/common/Types';
-import {PlayerInput} from '../src/server/PlayerInput';
-import {TestPlayer} from './TestPlayer';
-import {PartyName} from '../src/common/turmoil/PartyName';
-import {IPlayer} from '../src/server/IPlayer';
-import {CardRequirements} from '../src/server/cards/requirements/CardRequirements';
-import {Warning} from '../src/common/cards/Warning';
-import {testGame as testGameProxy} from './TestGame';
-import {LogMessage} from '../src/common/logs/LogMessage';
-import {cast} from '@/common/utils/utils';
+import { Log } from '../src/common/logs/Log';
+import { LogMessage } from '../src/common/logs/LogMessage';
+import { Message } from '../src/common/logs/Message';
+import { IGame } from '../src/server/IGame';
+import { IPlayer } from '../src/server/IPlayer';
+import { PlayerInput } from '../src/server/PlayerInput';
+import { Space } from '../src/server/boards/Space';
+import { IProjectCard } from '../src/server/cards/IProjectCard';
+import { CardRequirements } from '../src/server/cards/requirements/CardRequirements';
+import { testGame as testGameProxy } from './TestGame';
+import { TestPlayer } from './TestPlayer';
 
 /**
  * Creates a new game for testing. Has some hidden behavior for testing:
@@ -55,9 +47,6 @@ export function setOxygenLevel(game: IGame, oxygenLevel: number) {
   (game as any).oxygenLevel = oxygenLevel;
 }
 
-export function setVenusScaleLevel(game: IGame, venusScaleLevel: number) {
-  (game as any).venusScaleLevel = venusScaleLevel;
-}
 
 export function addGreenery(player: IPlayer, spaceId?: SpaceId): Space {
   const space = spaceId ?
@@ -83,19 +72,6 @@ export function addCity(player: IPlayer, spaceId?: SpaceId): Space {
   return space;
 }
 
-export function setRulingParty(game: IGame, partyName: PartyName, policyId?: PolicyId) {
-  const turmoil = Turmoil.getTurmoil(game);
-  const party = turmoil.getPartyByName(partyName);
-  const resolvedPolicyId = policyId ?? party.policies[0].id;
-
-  turmoil.rulingPolicy().onPolicyEnd?.(game);
-
-  turmoil.rulingParty = party;
-  turmoil.politicalAgendasData.agendas.set(party.name, {bonusId: party.bonuses[0].id, policyId: resolvedPolicyId});
-  turmoil.rulingPolicy().onPolicyStart?.(game);
-
-  game.phase = Phase.ACTION;
-}
 
 // Just shortcuts to some often called methods
 // related to the deferred actions queue
@@ -133,35 +109,7 @@ export function formatMessage(message: Message | string): string {
  * @param initialMegacredits starting money
  * @param passingDelta additional money required to take this action when Reds are in power.. Typically a multiple of 3
  */
-export function testRedsCosts(cb: () => boolean, player: IPlayer, initialMegacredits: number, passingDelta: number) {
-  const turmoil = Turmoil.getTurmoil(player.game);
 
-  {
-    player.game.phase = Phase.ACTION;
-    turmoil.rulingParty = new Greens();
-    PoliticalAgendas.setNextAgenda(turmoil, player.game);
-    player.megaCredits = initialMegacredits;
-
-    expect(cb(), 'Greens in power').is.true;
-  }
-
-  {
-    turmoil.rulingParty = new Reds();
-    PoliticalAgendas.setNextAgenda(turmoil, player.game);
-    player.megaCredits = initialMegacredits + passingDelta - 1;
-
-    expect(cb(), 'Reds in power, cannot afford').is.false;
-  }
-
-  {
-    turmoil.rulingParty = new Reds();
-    PoliticalAgendas.setNextAgenda(turmoil, player.game);
-    player.megaCredits = initialMegacredits + passingDelta;
-    if (passingDelta > 0) {
-      expect(cb(), 'Reds in power, can afford').is.not.false;
-    }
-  }
-}
 
 class FakeCard implements IProjectCard {
   static idx = 0;

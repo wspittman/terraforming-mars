@@ -11,12 +11,10 @@ type MAManifestSpec<V> = {
   deprecated?: true;
   random?: 'modular' | 'both';
 }
-type ExpansionsWithMAs = 'venus' | 'ares' | 'underworld';
 
 export type MAManifest<K extends string, V> = {
   all: Record<K, MAManifestSpec<V>>,
   boards: Record<BoardName, ReadonlyArray<K>>,
-  expansions: Record<ExpansionsWithMAs, ReadonlyArray<K>>;
   create(name: string): V | undefined;
   createOrThrow(name: string): V;
 }

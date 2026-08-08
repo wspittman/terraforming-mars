@@ -1,8 +1,5 @@
-import {Phase} from '../../common/Phase';
 import {IPlayer} from '../IPlayer';
 import {Board} from '../boards/Board';
-import {DeltaProjectExpansion} from '../delta/DeltaProjectExpansion';
-import {Turmoil} from '../turmoil/Turmoil';
 import {VictoryPointsBreakdownBuilder} from './VictoryPointsBreakdownBuilder';
 import {FundedAward} from '../awards/FundedAward';
 import {AwardScorer} from '../awards/AwardScorer';
@@ -62,27 +59,6 @@ export function calculateVictoryPoints(player: IPlayer) {
       }
     }
   });
-
-  // Turmoil Victory Points
-  const includeTurmoilVP = player.game.gameIsOver() || player.game.phase === Phase.END;
-
-  Turmoil.ifTurmoil(player.game, (turmoil) => {
-    if (includeTurmoilVP) {
-      builder.setVictoryPoints('victoryPoints', turmoil.getVictoryPoints(player), 'Turmoil Points');
-    }
-  });
-
-  const coloniesVP = player.colonies.getVictoryPoints();
-  if (coloniesVP > 0) {
-    builder.setVictoryPoints('victoryPoints', coloniesVP, 'Colony VP');
-  }
-  DeltaProjectExpansion.calculateVictoryPoints(player, builder);
-
-  // Underworld Score Bribing
-  if (player.game.gameOptions.underworldExpansion === true) {
-    const bribe = Math.min(Math.abs(negativeVP), player.underworldData.corruption);
-    builder.setVictoryPoints('victoryPoints', bribe, 'Underworld Corruption Bribe');
-  }
 
   // Escape velocity VP penalty
   if (player.game.gameOptions.escapeVelocity !== undefined) {

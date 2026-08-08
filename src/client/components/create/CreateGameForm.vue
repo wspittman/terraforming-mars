@@ -184,20 +184,6 @@
                                 <span v-i18n>Include some cards</span>
                             </label>
 
-                            <template v-if="expansions.colonies">
-                                <input type="checkbox" v-model="showColoniesList" id="customColonies-checkbox">
-                                <label for="customColonies-checkbox">
-                                    <span v-i18n>Custom Colonies list</span>
-                                  <span v-if="customColonies.length">&nbsp;({{ customColonies.length }})</span>
-                                </label>
-                            </template>
-
-                            <template v-if="expansions.turmoil">
-                                <input type="checkbox" v-model="removeNegativeGlobalEventsOption" id="removeNegativeEvent-checkbox">
-                                <label for="removeNegativeEvent-checkbox">
-                                    <span v-i18n>Remove negative Global Events</span>&nbsp;<a :href="wikiUrls.removeNegativeGlobalEvents" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                                </label>
-                            </template>
 
                         </div>
 
@@ -379,15 +365,6 @@
                 @close="showPreludesList = false"
             />
 
-            <ColoniesFilter
-                ref="coloniesFilter"
-                v-show="showColoniesList"
-                v-if="showColoniesList"
-                @colonies-list-changed="updateCustomColonies"
-                :expansions="expansions"
-                :selected="customColonies"
-                @close="showColoniesList = false"
-            />
 
             <CeosFilter
                 ref="ceosFilter"
@@ -432,14 +409,11 @@ import CeosFilter from '@/client/components/create/CeosFilter.vue';
 import CorporationsFilter from '@/client/components/create/CorporationsFilter.vue';
 import PreludesFilter from '@/client/components/create/PreludesFilter.vue';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
-import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
-import {ColonyName} from '@/common/colonies/ColonyName';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {playerColorClass} from '@/common/utils/utils';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {GameId, JSONObject} from '@/common/Types';
-import {AgendaStyle} from '@/common/turmoil/Types';
 import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
 import {BoardNameType, NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
 import {vueRoot} from '@/client/components/vueRoot';
@@ -478,7 +452,6 @@ export default defineComponent({
     AppButton,
     CardsFilter,
     CeosFilter,
-    ColoniesFilter,
     CorporationsFilter,
     PreludesFilter,
     PreferencesIcon,
@@ -486,11 +459,6 @@ export default defineComponent({
   watch: {
     'expansions.venus': function(value: boolean) {
       this.solarPhaseOption = value;
-    },
-    'expansions.turmoil': function(value: boolean) {
-      if (value === false) {
-        this.politicalAgendasExtension = 'Standard';
-      }
     },
     initialDraft(value: boolean) {
       if (value === true && this.preludeDraftVariant === undefined) {
@@ -673,9 +641,6 @@ export default defineComponent({
     updateIncludedCards(includedCards: Array<CardName>) {
       this.includedCards = includedCards;
     },
-    updateCustomColonies(customColonies: Array<ColonyName>) {
-      this.customColonies = customColonies;
-    },
     updateCustomCeos(customCeos: Array<CardName>) {
       this.customCeos = customCeos;
     },
@@ -699,26 +664,6 @@ export default defineComponent({
         return RandomMAOptionType.UNLIMITED;
       } else {
         return RandomMAOptionType.NONE;
-      }
-    },
-    isPoliticalAgendasExtensionEnabled(): Boolean {
-      return this.politicalAgendasExtension !== 'Standard';
-    },
-    politicalAgendasExtensionToggle() {
-      if (this.politicalAgendasExtension === 'Standard') {
-        this.politicalAgendasExtension = 'Random';
-      } else {
-        this.politicalAgendasExtension = 'Standard';
-      }
-    },
-    getPoliticalAgendasExtensionAgendaStyle(type: 'random' | 'chairman'): AgendaStyle {
-      if (type === 'random') {
-        return 'Random';
-      } else if (type === 'chairman') {
-        return 'Chairman';
-      } else {
-        console.warn('AgendaStyle not found');
-        return 'Standard';
       }
     },
     isBeginnerToggleEnabled(): Boolean {

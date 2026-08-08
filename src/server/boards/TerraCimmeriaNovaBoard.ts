@@ -3,9 +3,6 @@ import {BoardBuilder} from './BoardBuilder';
 import {Random} from '../../common/utils/Random';
 import {GameOptions} from '../game/GameOptions';
 import {MarsBoard} from './MarsBoard';
-import {Space} from './Space';
-import {CanAffordOptions, IPlayer} from '../IPlayer';
-import {TERRA_CIMMERIA_COLONY_COST} from '../../common/constants';
 
 export class TerraCimmeriaNovaBoard extends MarsBoard {
   public static newInstance(gameOptions: GameOptions, rng: Random): TerraCimmeriaNovaBoard {
@@ -38,29 +35,7 @@ export class TerraCimmeriaNovaBoard extends MarsBoard {
 
     const spaces = builder.build();
 
-    // Remove colony bonuses when colonies is not in the game.
-    if (gameOptions.coloniesExtension !== true) {
-      spaces.forEach((space) => space.bonus = space.bonus.filter((bonus) => bonus !== COLONY));
-    }
+    spaces.forEach((space) => space.bonus = space.bonus.filter((bonus) => bonus !== COLONY));
     return new TerraCimmeriaNovaBoard(spaces);
-  }
-
-  public override spaceCosts(space: Space) {
-    const costs = super.spaceCosts(space);
-    if (space.bonus.includes(SpaceBonus.COLONY)) {
-      costs.megacredits = TERRA_CIMMERIA_COLONY_COST;
-    }
-    return costs;
-  }
-
-  public override getAvailableSpacesOnLand(player: IPlayer, canAffordOptions?: CanAffordOptions) {
-    return super.getAvailableSpacesOnLand(player, canAffordOptions).filter((space) => {
-      if (space.bonus.includes(SpaceBonus.COLONY)) {
-        if (player.colonies.getPlayableColonies().length === 0) {
-          return false;
-        }
-      }
-      return true;
-    });
   }
 }

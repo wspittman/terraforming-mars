@@ -25,15 +25,18 @@ Only implement the next incomplete phase in each work session, then stop for fee
    - **4b1. Remove expansion fields from the new-game transport contract** — complete
    - **4b2. Remove expansion player-input views and the Delta Project client domain** — complete
    - **4b3. Remove expansion fields from shared game/player models** — complete
-   - 4c. Remove server expansion engines, setup hooks, and serialization — in progress
+   - **4c. Remove server expansion engines, setup hooks, and serialization** — complete
      - **4c1. Remove expansion state from game/player serialization** — complete
-     - 4c2. Remove expansion engines and setup hooks — in progress
+     - **4c2. Remove expansion engines and setup hooks** — complete
        - **4c2a. Remove expansion setup and enforce Base/Corporate Era runtime options** — complete
-       - 4c2b. Delete unreachable expansion engine implementations — in progress
+       - **4c2b. Delete unreachable expansion engine implementations** — complete
          - **4c2b1. Remove Prelude and CEO engine/deck abstractions** — complete
-         - 4c2b2. Remove remaining board and global-parameter expansion engines — in progress
+         - **4c2b2. Remove remaining board and global-parameter expansion engines** — complete
            - **4c2b2a. Remove Moon and Pathfinders engines** — complete
-           - 4c2b2b. Remove Ares, Colonies, Turmoil, Underworld, Venus, and Delta engines — pending
+           - **4c2b2b. Remove Ares, Colonies, Turmoil, Underworld, Venus, and Delta engines** — complete
+             - **4c2b2b1. Remove the Delta Project engine** — complete
+             - **4c2b2b2. Remove Venus and Ares global-parameter engines** — complete
+             - **4c2b2b3. Remove Colonies, Turmoil, and Underworld engines** — complete
    - Consolidate the remaining Base/Corporate Era types after each boundary is removed.
 5. **Repository-wide cleanup and documentation** — pending
    - Remove dead assets, scripts, dependencies, fixtures, and residual terminology; update README/AGENTS documentation where appropriate.
@@ -75,3 +78,7 @@ Only implement the next incomplete phase in each work session, then stop for fee
 | Automated Moon cleanup removed too much of the Robotic Workforce test harness | 1 | Restored the generic card-play/deferred-action portion while leaving only Moon-specific setup removed. |
 | Moon/Pathfinders deletion exposed their remaining core imports and type branches | 1 | Removed each integration point compile-first rather than restoring engine shims. |
 | Clone-tag cleanup removed a `Tag` import still used by Aridor serialization | 1 | Restored the shared import while keeping the Pathfinders `cloneTag` field removed. |
+| Delta engine server build lacked generated settings JSON | 1 | Regenerate static JSON before repeating verification. |
+| Delta engine full test run lacked generated CSS | 1 | Run `npm run make:css` before repeating the complete suite. |
+| Delta engine client tests lacked generated card/domain JSON | 1 | Run `npm run make:cards` before repeating the client suite. |
+| Venus/Ares cleanup left formatting errors and an empty callback | 1 | Run the repository fixer, then remove the now-empty Ares callback explicitly. |

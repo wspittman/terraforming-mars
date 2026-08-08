@@ -4,14 +4,12 @@ import {Card} from '../Card';
 import {CardType} from '../../../common/cards/CardType';
 import {TileType} from '../../../common/TileType';
 import {CardName} from '../../../common/cards/CardName';
-import {AdjacencyBonus} from '../../ares/AdjacencyBonus';
 import {CardRenderer} from '../render/CardRenderer';
 
 export class NuclearZone extends Card implements IProjectCard {
   constructor(
     name = CardName.NUCLEAR_ZONE,
     cost = 10,
-    adjacencyBonus: AdjacencyBonus | undefined = undefined,
     metadata = {
       cardNumber: '097',
       renderData: CardRenderer.builder((b) => {
@@ -30,7 +28,6 @@ export class NuclearZone extends Card implements IProjectCard {
         tile: {
           type: TileType.NUCLEAR_ZONE,
           on: 'land',
-          adjacencyBonus: adjacencyBonus,
         },
       },
       metadata,

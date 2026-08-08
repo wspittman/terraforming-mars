@@ -5,7 +5,6 @@ import {DeferredAction} from './DeferredAction';
 import {Priority} from './Priority';
 import {PlacementType} from '../boards/PlacementType';
 import {Tile} from '../Tile';
-import {AdjacencyBonus} from '../ares/AdjacencyBonus';
 import {Message} from '../../common/logs/Message';
 
 export class PlaceTile extends DeferredAction<Space> {
@@ -15,7 +14,6 @@ export class PlaceTile extends DeferredAction<Space> {
       tile: Tile,
       on: PlacementType | (() => ReadonlyArray<Space>),
       title: string | Message,
-      adjacencyBonus?: AdjacencyBonus;
     }) {
     super(player, Priority.DEFAULT);
   }
@@ -36,7 +34,6 @@ export class PlaceTile extends DeferredAction<Space> {
           tile.covers = space.tile;
         }
         game.addTile(this.player, space, tile);
-        space.adjacency = this.options.adjacencyBonus;
         this.cb(space);
         return undefined;
       });

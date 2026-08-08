@@ -1,4 +1,3 @@
-import {PartyName} from '../turmoil/PartyName';
 import {Tag} from './Tag';
 import {Resource} from '../Resource';
 import {RequirementType} from './RequirementType';
@@ -9,7 +8,6 @@ import {RequirementType} from './RequirementType';
 // type GlobalRequirement = {oxygen: number} | {temperature: number};
 // type TileRequirement = {greeneries: number} | {cities: number, nextTo?: boolean, text?: string} | {oceans: number};
 // type ProductionRequirement = {production: Resource, count: number};
-// type VenusRequirement = {venus: number} | {floaters: number};
 // type ColoniesRequirement = {colonies: number};
 // type TurmoilRequirement = {party: PartyName} | {chairman: {}} | {partyLeader: number};
 // type MoonRequirement = {habitatTiles: number} | {miningTiles: number} | {roadTiles: number} | {habitatRate: number} | {miningRate: number} | {logisticRate: number};
@@ -20,7 +18,6 @@ import {RequirementType} from './RequirementType';
 //     GlobalRequirement |
 //     TileRequirement |
 //     ProductionRequirement |
-//     VenusRequirement |
 //     ColoniesRequirement |
 //     TurmoilRequirement |
 //     MoonRequirement |
@@ -39,21 +36,10 @@ export type CardRequirementDescriptor = {
   tr?: number,
 
   // Venus
-  venus?: number,
   floaters?: number,
 
   // Colonies
-  colonies?: number,
 
-  // Turmoil
-  party?: PartyName,
-  chairman?: {},
-  partyLeader?: number,
-
-
-  // Underworld
-  undergroundTokens?: number,
-  corruption?: number,
 
   // Adjectives
   count?: number,
@@ -72,34 +58,20 @@ export function requirementType(descriptor: CardRequirementDescriptor): Requirem
     return RequirementType.OXYGEN;
   } else if (descriptor.temperature !== undefined) {
     return RequirementType.TEMPERATURE;
-  } else if (descriptor.venus !== undefined) {
-    return RequirementType.VENUS;
   } else if (descriptor.tr !== undefined) {
     return RequirementType.TR;
-  } else if (descriptor.chairman !== undefined) {
-    return RequirementType.CHAIRMAN;
   } else if (descriptor.resourceTypes !== undefined) {
     return RequirementType.RESOURCE_TYPES;
   } else if (descriptor.greeneries !== undefined) {
     return RequirementType.GREENERIES;
   } else if (descriptor.cities !== undefined) {
     return RequirementType.CITIES;
-  } else if (descriptor.colonies !== undefined) {
-    return RequirementType.COLONIES;
   } else if (descriptor.floaters !== undefined) {
     return RequirementType.FLOATERS;
-  } else if (descriptor.partyLeader !== undefined) {
-    return RequirementType.PARTY_LEADERS;
   } else if (descriptor.production !== undefined) {
     return RequirementType.PRODUCTION;
-  } else if (descriptor.party !== undefined) {
-    return RequirementType.PARTY;
   } else if (descriptor.plantsRemoved !== undefined) {
     return RequirementType.REMOVED_PLANTS;
-  } else if (descriptor.undergroundTokens !== undefined) {
-    return RequirementType.UNDERGROUND_TOKENS;
-  } else if (descriptor.corruption !== undefined) {
-    return RequirementType.CORRUPTION;
   } else {
     throw new Error('Unknown requirement: ' + JSON.stringify(descriptor));
   }

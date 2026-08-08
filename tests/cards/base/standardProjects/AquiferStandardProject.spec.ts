@@ -1,12 +1,11 @@
-import {expect} from 'chai';
-import {runAllActions, testRedsCosts} from '../../../TestingUtils';
-import {AquiferStandardProject} from '../../../../src/server/cards/base/standardProjects/AquiferStandardProject';
-import {maxOutOceans} from '../../../TestingUtils';
-import {TestPlayer} from '../../../TestPlayer';
-import {IGame} from '../../../../src/server/IGame';
-import {testGame} from '../../../TestGame';
-import {assertPlaceOcean} from '../../../assertions';
-import {Payment} from '../../../../src/common/inputs/Payment';
+import { expect } from 'chai';
+import { Payment } from '../../../../src/common/inputs/Payment';
+import { AquiferStandardProject } from '../../../../src/server/cards/base/standardProjects/AquiferStandardProject';
+import { IGame } from '../../../../src/server/IGame';
+import { assertPlaceOcean } from '../../../assertions';
+import { testGame } from '../../../TestGame';
+import { maxOutOceans, runAllActions } from '../../../TestingUtils';
+import { TestPlayer } from '../../../TestPlayer';
 
 describe('AquiferStandardProject', () => {
   let card: AquiferStandardProject;
@@ -54,12 +53,5 @@ describe('AquiferStandardProject', () => {
     expect(game.board.getOceanSpaces()).has.length(9);
     expect(player.terraformRating).eq(23);
     expect(player.megaCredits).eq(0);
-  });
-
-  it('Test reds', () => {
-    [game, player] = testGame(1, {turmoilExtension: true});
-    testRedsCosts(() => card.canAct(player), player, card.cost, 3);
-    maxOutOceans(player);
-    testRedsCosts(() => card.canAct(player), player, card.cost, 0);
   });
 });

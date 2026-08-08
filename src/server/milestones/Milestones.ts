@@ -5,7 +5,6 @@ import { Agronomist } from './Agronomist';
 import { Economizer } from './arabiaTerra/Economizer';
 import { LandSpecialist } from './arabiaTerra/LandSpecialist';
 import { Martian } from './arabiaTerra/Martian';
-import { Pioneer } from './arabiaTerra/Pioneer';
 import { Architect } from './Architect';
 import { Briber } from './Briber';
 import { Builder } from './Builder';
@@ -16,7 +15,6 @@ import { Ecologist } from './Ecologist';
 import { Energizer } from './Energizer';
 import { Gardener } from './Gardener';
 import { Generalist } from './Generalist';
-import { Hoverlord } from './Hoverlord';
 import { IMilestone } from './IMilestone';
 import { Coastguard, Irrigator } from './Irrigator';
 import { Legend } from './Legend';
@@ -30,10 +28,8 @@ import { Geologist } from './modular/Geologist';
 import { Hydrologist } from './modular/Hydrologist';
 import { Landshaper } from './modular/Landshaper';
 import { Legend4 } from './modular/Legend4';
-import { Lobbyist } from './modular/Lobbyist';
 import { Merchant } from './modular/Merchant';
 import { Philantropist } from './modular/Philantropist';
-import { Planetologist } from './modular/Planetologist';
 import { Producer } from './modular/Producer';
 import { Researcher } from './modular/Researcher';
 import { Sponsor } from './modular/Sponsor';
@@ -43,10 +39,8 @@ import { Terran5 } from './modular/Terran5';
 import { Thawer } from './modular/Thawer';
 import { Trader } from './modular/Trader';
 import { Tycoon10 } from './modular/Tycoon10';
-import { Networker } from './Networker';
 import { Planner } from './Planner';
 import { PolarExplorer } from './PolarExplorer';
-import { Purifier } from './Purifier';
 import { RimSettler } from './RimSettler';
 import { Smith } from './Smith';
 import { Specialist } from './Specialist';
@@ -58,10 +52,7 @@ import { Spacefarer } from './terraCimmeria/Spacefarer';
 import { Spacefarer4 } from './terraCimmeria/Spacefarer4';
 import { TerraPioneer } from './terraCimmeria/TerraPioneer';
 import { Terraformer } from './Terraformer';
-import { Tradesman } from './Tradesman';
 import { Tycoon } from './Tycoon';
-import { Risktaker } from './underworld/Risktaker';
-import { Tunneler } from './underworld/Tunneler';
 import { VElectrician } from './VElectrician';
 import { VSpacefarer } from './VSpacefarer';
 
@@ -88,42 +79,22 @@ export const milestoneManifest: MAManifest<MilestoneName, IMilestone> = {
     'Gardener': { Factory: Gardener, random: 'both' },
     'Generalist': { Factory: Generalist, random: 'both' },
     'Geologist': { Factory: Geologist, random: 'modular' },
-    'Hoverlord': { Factory: Hoverlord, compatibility: 'venus' },
     'Hydrologist': { Factory: Hydrologist, random: 'modular' },
     'Irrigator': { Factory: Irrigator, deprecated: true },
     'Land Specialist': { Factory: LandSpecialist },
     'Landshaper': { Factory: Landshaper, random: 'modular' },
     'Legend': { Factory: Legend },
     'Legend4': { Factory: Legend4, random: 'modular' },
-    'Lobbyist': {
-      Factory: Lobbyist,
-      compatibility: 'turmoil',
-      random: 'modular',
-    },
     'Martian': { Factory: Martian, compatibility: 'pathfinders' },
     'Mayor': { Factory: Mayor, random: 'both' },
     'Merchant': { Factory: Merchant, random: 'modular' },
     'Metallurgist': { Factory: Metallurgist, random: 'modular' },
-    'Networker': { Factory: Networker, compatibility: 'ares' },
     'Philantropist': { Factory: Philantropist, random: 'modular' },
-    'Pioneer': { Factory: Pioneer, compatibility: 'colonies' },
-    'Pioneer4': {
-      Factory: Pioneer,
-      compatibility: 'colonies',
-      random: 'modular',
-    },
-    'Planetologist': {
-      Factory: Planetologist,
-      compatibility: 'venus',
-      random: 'modular',
-    },
     'Planner': { Factory: Planner, random: 'both' },
     'Polar Explorer': { Factory: PolarExplorer },
     'Producer': { Factory: Producer, random: 'modular' },
-    'Purifier': { Factory: Purifier, compatibility: 'ares' },
     'Researcher': { Factory: Researcher, random: 'modular' },
     'Rim Settler': { Factory: RimSettler, random: 'both' },
-    'Risktaker': { Factory: Risktaker, compatibility: 'underworld' },
     'Smith': { Factory: Smith },
     'Spacefarer': { Factory: Spacefarer },
     'Spacefarer4': { Factory: Spacefarer4, random: 'modular' },
@@ -138,8 +109,6 @@ export const milestoneManifest: MAManifest<MilestoneName, IMilestone> = {
     'Terran5': { Factory: Terran5, random: 'modular' },
     'Thawer': { Factory: Thawer, random: 'modular' },
     'Trader': { Factory: Trader, random: 'modular' },
-    'Tradesman': { Factory: Tradesman },
-    'Tunneler': { Factory: Tunneler, compatibility: 'underworld' },
     'Tycoon': { Factory: Tycoon },
     'Tycoon10': { Factory: Tycoon10, random: 'modular' },
     'V. Electrician': { Factory: VElectrician },
@@ -169,21 +138,17 @@ export const milestoneManifest: MAManifest<MilestoneName, IMilestone> = {
     ],
     [BoardName.ARABIA_TERRA]: [
       'Economizer',
-      'Pioneer',
       'Land Specialist',
       'Martian',
     ],
     [BoardName.VASTITAS_BOREALIS]: [
       'V. Electrician',
       'Smith',
-      'Tradesman',
       'Irrigator',
       'Capitalist',
     ],
     [BoardName.UTOPIA_PLANITIA]: [
       'Land Specialist',
-      'Pioneer',
-      'Tradesman',
       'Smith',
       'Researcher',
     ],
@@ -195,11 +160,6 @@ export const milestoneManifest: MAManifest<MilestoneName, IMilestone> = {
       'Farmer',
     ],
     [BoardName.HOLLANDIA]: [],
-  },
-  expansions: {
-    venus: ['Hoverlord'],
-    ares: ['Networker', 'Purifier'],
-    underworld: ['Risktaker', 'Tunneler'],
   },
   create: (name: string): IMilestone | undefined => {
     try {

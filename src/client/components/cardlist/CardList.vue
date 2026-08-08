@@ -136,21 +136,6 @@
         </div>
       </section>
 
-      <section v-show="visibleGlobalEvents.length > 0" class="card-list-cards-list">
-        <h2 v-i18n>Global Events</h2>
-        <div class="cardbox" v-for="globalEventName in visibleGlobalEvents" :key="globalEventName" v-memo="[globalEventName]">
-          <GlobalEvent :globalEventName="globalEventName" type="distant"/>
-        </div>
-      </section>
-
-      <section v-show="visibleColonyNames.length > 0">
-        <h2 v-i18n>Colonies</h2>
-        <div class="player_home_colony_cont">
-          <div class="player_home_colony" v-for="colonyName in visibleColonyNames" :key="colonyName" v-memo="[colonyName, showMetadata]">
-            <Colony :colony="colonyModel(colonyName)"/>
-          </div>
-        </div>
-      </section>
 
       <section v-show="visibleMilestoneNames.length > 0">
         <h2 v-i18n>Milestones</h2>
@@ -174,14 +159,6 @@
         </div>
       </section>
 
-      <section v-show="visibleAgendaIds.length > 0">
-        <h2 v-i18n>Agendas</h2>
-        <div class="player_home_colony_cont">
-          <div class="player_home_colony" v-for="id in visibleAgendaIds" :key="id" v-memo="[id]">
-            <TurmoilAgendaContainer :agendaId="id" />
-          </div>
-        </div>
-      </section>
 
       <div class="free-floating-preferences-icon">
         <div v-show="scrolled" class="sidebar_item card-list-scroll-top" title="Scroll to top" @click="scrollToTop()">
@@ -197,17 +174,11 @@
 import {defineComponent} from 'vue';
 import {CardType} from '@/common/cards/CardType';
 import {CardName} from '@/common/cards/CardName';
-import {getEnumStringValues, partition, toName} from '@/common/utils/utils';
+import {getEnumStringValues, toName} from '@/common/utils/utils';
 import {getPreferences} from '@/client/utils/PreferencesManager';
-import {GlobalEventName} from '@/common/turmoil/globalEvents/GlobalEventName';
-import {allGlobalEventNames, getGlobalEvent} from '@/client/turmoil/ClientGlobalEventManifest';
 import {byType, getCard, getCardOrThrow, getCards} from '@/client/cards/ClientCardManifest';
-import {COMMUNITY_COLONY_NAMES, OFFICIAL_COLONY_NAMES, PATHFINDERS_COLONY_NAMES} from '@/common/colonies/AllColonies';
-import {ColonyModel} from '@/common/models/ColonyModel';
-import {ColonyName} from '@/common/colonies/ColonyName';
 import {GameModule, GAME_MODULES} from '@/common/cards/GameModule';
 import {Tag} from '@/common/cards/Tag';
-import {getColony} from '@/client/colonies/ClientColonyManifest';
 import {ClientCard} from '@/common/cards/ClientCard';
 import {translateText} from '@/client/directives/i18n';
 import {MilestoneName, milestoneNames} from '@/common/ma/MilestoneName';
@@ -216,14 +187,10 @@ import {ClaimedMilestoneModel} from '@/common/models/ClaimedMilestoneModel';
 import {FundedAwardModel} from '@/common/models/FundedAwardModel';
 import {TypeOption, CardListModel, hashToModel, modelToHash, ResourceOption, TagOption} from '@/client/components/cardlist/CardListModel';
 import {getAward, getMilestone} from '@/client/MilestoneAwardManifest';
-import {BonusId, BONUS_IDS, PolicyId, POLICY_IDS, agendaIdDescription} from '@/common/turmoil/Types';
 import Card from '@/client/components/card/Card.vue';
-import Colony from '@/client/components/colonies/Colony.vue';
-import GlobalEvent from '@/client/components/turmoil/GlobalEvent.vue';
 import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
 import Milestone from '@/client/components/Milestone.vue';
 import Award from '@/client/components/Award.vue';
-import TurmoilAgendaContainer from '@/client/components/cardlist/TurmoilAgendaContainer.vue';
 import {CardResource} from '@/common/CardResource';
 import {cardResourceCSS} from '../common/cardResources';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
@@ -238,11 +205,8 @@ export default defineComponent({
   name: 'CardList',
   components: {
     Card,
-    GlobalEvent,
-    Colony,
     Milestone,
     Award,
-    TurmoilAgendaContainer,
     PreferencesIcon,
   },
   data() {
@@ -278,11 +242,8 @@ export default defineComponent({
         CardType.CORPORATION,
         CardType.STANDARD_PROJECT,
         CardType.CEO,
-        'colonyTiles',
-        'globalEvents',
         'milestones',
         'awards',
-        'agendas',
       ];
     },
     allTags(): Array<TagOption> {
@@ -303,13 +264,6 @@ export default defineComponent({
     allAwardNames(): ReadonlyArray<AwardName> {
       return [...awardNames].sort();
     },
-    allAgendaIds(): ReadonlyArray<PolicyId | BonusId> {
-      const ids = (POLICY_IDS as ReadonlyArray<PolicyId | BonusId>).concat(BONUS_IDS);
-      const [official, expansion] = partition(ids, (id) => id.endsWith('01'));
-      official.sort(); // This puts matching party content together.
-      expansion.sort();
-      return [...official, ...expansion];
-    },
     cardResourceCSS(): typeof cardResourceCSS {
       return cardResourceCSS;
     },
@@ -328,18 +282,6 @@ export default defineComponent({
     visibleStandardProjectCards(): Array<CardName> {
       return this.getAllStandardProjectCards().filter((c) => this.showCard(c));
     },
-    visibleGlobalEvents(): Array<GlobalEventName> {
-      if (!this.types.globalEvents) {
-        return [];
-      }
-      return this.getAllGlobalEvents().filter((e) => this.showGlobalEvent(e));
-    },
-    visibleColonyNames(): Array<ColonyName> {
-      if (!this.types.colonyTiles) {
-        return [];
-      }
-      return this.getAllColonyNames().filter((c) => this.showColony(c));
-    },
     visibleMilestoneNames(): Array<MilestoneName> {
       if (!this.types.milestones) {
         return [];
@@ -351,15 +293,6 @@ export default defineComponent({
         return [];
       }
       return this.allAwardNames.filter((a) => this.showAward(a));
-    },
-    visibleAgendaIds(): Array<PolicyId | BonusId> {
-      if (!this.types.agendas) {
-        return [];
-      }
-      return this.allAgendaIds.filter((id) => this.include(id, 'agenda'));
-    },
-    agendaIdDescription(): typeof agendaIdDescription {
-      return agendaIdDescription;
     },
   },
   methods: {
@@ -421,17 +354,7 @@ export default defineComponent({
       const names = getCards(byType(CardType.CEO)).map(toName);
       return this.sort(names);
     },
-    getAllGlobalEvents() {
-      if (this.sortOrder === 'a') {
-        return this.sort(Array.from(allGlobalEventNames()));
-      } else {
-        return Array.from(allGlobalEventNames());
-      }
-    },
-    getAllColonyNames() {
-      return OFFICIAL_COLONY_NAMES.concat(COMMUNITY_COLONY_NAMES).concat(PATHFINDERS_COLONY_NAMES);
-    },
-    include(name: string, type: 'card' | 'globalEvent' | 'colony' | 'ma' | 'agenda') {
+    include(name: string, type: 'card' | 'ma') {
       const normalized = this.filterText.toLocaleUpperCase();
       if (normalized.length === 0) {
         return true;
@@ -506,20 +429,6 @@ export default defineComponent({
       }
       return this.expansions[card.module] === true;
     },
-    showGlobalEvent(name: GlobalEventName): boolean {
-      if (!this.include(name, 'globalEvent')) {
-        return false;
-      }
-      const globalEvent = getGlobalEvent(name);
-      return globalEvent !== undefined && this.expansions[globalEvent.module] === true;
-    },
-    showColony(name: ColonyName): boolean {
-      if (!this.include(name, 'colony')) {
-        return false;
-      }
-      const colony = getColony(name);
-      return colony !== undefined && this.expansions[colony.module ?? 'base'] === true;
-    },
     showMilestone(name: MilestoneName): boolean {
       if (!this.include(name, 'ma')) {
         return false;
@@ -531,15 +440,6 @@ export default defineComponent({
         return false;
       }
       return this.expansions[getAward(name).requirements ?? 'base'] === true;
-    },
-    colonyModel(colonyName: ColonyName): ColonyModel {
-      return {
-        colonies: this.showMetadata ? ['red', 'blue'] : [],
-        isActive: this.showMetadata,
-        name: colonyName,
-        trackPosition: 3,
-        visitor: undefined,
-      };
     },
     milestoneModel(name: MilestoneName): ClaimedMilestoneModel {
       return {name, playerName: undefined, color: undefined, scores: []};

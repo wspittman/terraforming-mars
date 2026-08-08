@@ -2,26 +2,19 @@ import {RequirementType} from '../../../common/cards/RequirementType';
 import {Tag} from '../../../common/cards/Tag';
 import {IPlayer} from '../../IPlayer';
 import {CardRequirement} from './CardRequirement';
-import {ChairmanRequirement} from './ChairmanRequirement';
 import {CitiesRequirement} from './CitiesRequirement';
-import {ColoniesRequirement} from './ColoniesRequirement';
 import {FloatersRequirement} from './FloatersRequirement';
 import {GreeneriesRequirement} from './GreeneriesRequirement';
 import {OceanRequirement} from './OceanRequirement';
 import {OxygenRequirement} from './OxygenRequirement';
-import {PartyLeadersRequirement} from './PartyLeadersRequirement';
-import {PartyRequirement} from './PartyRequirement';
 import {ProductionRequirement} from './ProductionRequirement';
 import {RemovedPlantsRequirement} from './RemovedPlantsRequirement';
 import {ResourceTypeRequirement} from './ResourceTypeRequirement';
 import {TRRequirement} from './TRRequirement';
 import {TagCardRequirement} from './TagCardRequirement';
 import {TemperatureRequirement} from './TemperatureRequirement';
-import {VenusRequirement} from './VenusRequirement';
 import {CardRequirementDescriptor} from '../../../common/cards/CardRequirementDescriptor';
-import {CorruptionRequirement} from './CorruptionRequirement';
 import {IProjectCard} from '../IProjectCard';
-import {UndergroundTokenRequirement} from './UndergroundTokenRequirement';
 
 export class CardRequirements {
   constructor(public requirements: Array<CardRequirement>) {}
@@ -67,34 +60,20 @@ export class CardRequirements {
       return new OxygenRequirement({...descriptor, count: descriptor.oxygen});
     } else if (descriptor.temperature !== undefined) {
       return new TemperatureRequirement({...descriptor, count: descriptor.temperature});
-    } else if (descriptor.venus !== undefined) {
-      return new VenusRequirement({...descriptor, count: descriptor.venus});
     } else if (descriptor.tr !== undefined) {
       return new TRRequirement({...descriptor, count: descriptor.tr});
-    } else if (descriptor.chairman !== undefined) {
-      return new ChairmanRequirement();
     } else if (descriptor.resourceTypes !== undefined) {
       return new ResourceTypeRequirement({...descriptor, count: descriptor.resourceTypes});
     } else if (descriptor.greeneries !== undefined) {
       return new GreeneriesRequirement({...descriptor, count: descriptor.greeneries});
     } else if (descriptor.cities !== undefined) {
       return new CitiesRequirement({...descriptor, count: descriptor.cities});
-    } else if (descriptor.colonies !== undefined) {
-      return new ColoniesRequirement({...descriptor, count: descriptor.colonies, all: descriptor.all});
     } else if (descriptor.floaters !== undefined) {
       return new FloatersRequirement({...descriptor, count: descriptor.floaters});
-    } else if (descriptor.partyLeader !== undefined) {
-      return new PartyLeadersRequirement(descriptor);
     } else if (descriptor.production !== undefined) {
       return new ProductionRequirement(descriptor.production, descriptor);
-    } else if (descriptor.party !== undefined) {
-      return new PartyRequirement(descriptor.party);
     } else if (descriptor.plantsRemoved !== undefined) {
       return new RemovedPlantsRequirement();
-    } else if (descriptor.corruption !== undefined) {
-      return new CorruptionRequirement({...descriptor, count: descriptor.corruption});
-    } else if (descriptor.undergroundTokens !== undefined) {
-      return new UndergroundTokenRequirement({...descriptor, count: descriptor.undergroundTokens});
     } else {
       throw new Error('Unknown requirement: ' + JSON.stringify(descriptor));
     }

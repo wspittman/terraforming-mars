@@ -21,21 +21,6 @@ describe('GameCards', () => {
     expect(new GameCards(gameOptions).getProjectCards().length).to.eq(137);
   });
 
-  it('ignores legacy expansion options', () => {
-    const gameOptions: GameOptions = {
-      ...DEFAULT_GAME_OPTIONS,
-      corporateEra: true,
-      preludeExtension: true,
-      venusNextExtension: true,
-      coloniesExtension: true,
-      turmoilExtension: true,
-      communityCardsOption: true,
-      aresExtension: true,
-    };
-
-    const cards = new GameCards(gameOptions);
-    expect(cards.getProjectCards()).to.have.length(208);
-  });
 
   it('correctly removes banned cards', () => {
     const gameOptions: GameOptions = {

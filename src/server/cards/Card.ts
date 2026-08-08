@@ -2,7 +2,6 @@ import {CardMetadata} from '../../common/cards/CardMetadata';
 import {CardName} from '../../common/cards/CardName';
 import {CardType} from '../../common/cards/CardType';
 import {CardDiscount, GlobalParameterRequirementBonus} from '../../common/cards/Types';
-import {AdjacencyBonus} from '../ares/AdjacencyBonus';
 import {CardResource} from '../../common/CardResource';
 import {Tag} from '../../common/cards/Tag';
 import {CanAffordOptions, IPlayer} from '../IPlayer';
@@ -42,8 +41,6 @@ const CARD_TYPES_WITHOUT_COST: ReadonlyArray<CardType> = [
 
 /* Properties that are the same internally and externally */
 type SharedProperties = {
-  /** Prefer setting adjacencyBonus inside behavior.tile instead. */
-  adjacencyBonus?: AdjacencyBonus;
   action?: Behavior | undefined;
   behavior?: Behavior | undefined;
   cardCost?: number;
@@ -169,9 +166,6 @@ export abstract class Card implements ICard {
     this.properties = internal;
   }
 
-  public get adjacencyBonus() {
-    return this.properties.adjacencyBonus;
-  }
   public get behavior() {
     return this.properties.behavior;
   }
@@ -441,16 +435,11 @@ function populateCount(requirement: CardRequirementDescriptor): CardRequirementD
     requirement.oceans ??
     requirement.oxygen ??
     requirement.temperature ??
-    requirement.venus ??
     requirement.tr ??
     requirement.resourceTypes ??
     requirement.greeneries ??
     requirement.cities ??
-    requirement.colonies ??
-    requirement.floaters ??
-    requirement.partyLeader ??
-    requirement.corruption ??
-    requirement.undergroundTokens;
+    requirement.floaters;
 
   return requirement;
 }

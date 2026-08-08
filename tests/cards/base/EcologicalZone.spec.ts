@@ -41,6 +41,5 @@ describe('EcologicalZone', () => {
     card.onCardPlayed(player, card);
     expect(card.resourceCount).to.eq(2);
     expect(card.getVictoryPoints(player)).to.eq(1);
-    expect(adjacentSpace.adjacency?.bonus).eq(undefined);
   });
 });

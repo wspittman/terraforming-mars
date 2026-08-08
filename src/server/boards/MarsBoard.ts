@@ -4,7 +4,6 @@ import {CanAffordOptions, IPlayer} from '../IPlayer';
 import {Board} from './Board';
 import {Space} from './Space';
 import {PlacementType} from './PlacementType';
-import {AresHandler} from '../ares/AresHandler';
 import {CardName} from '../../common/cards/CardName';
 import {SpaceId} from '../../common/Types';
 import {oneWayDifference} from '../../common/utils/utils';
@@ -103,7 +102,7 @@ export class MarsBoard extends Board {
     if (player.tableau.has(CardName.KINGDOM_OF_TAURARO)) {
       const spacesNextToMySpaces = spacesOnLand.filter(
         (space) => this.getAdjacentSpaces(space).some(
-          (adj) => (adj.tile !== undefined && adj.player === player || adj.excavator?.id === player.id)));
+          (adj) => adj.tile !== undefined && adj.player === player));
 
       return (spacesNextToMySpaces.length > 0) ? spacesNextToMySpaces : spacesOnLand;
     }
@@ -265,7 +264,7 @@ export class MarsBoard extends Board {
         return false;
       }
       return (space.spaceType === SpaceType.LAND || space.spaceType === SpaceType.COVE || space.spaceType === SpaceType.DEFLECTION_ZONE) &&
-        (space.tile === undefined || AresHandler.hasHazardTile(space)) &&
+        space.tile === undefined &&
         space.player === undefined;
     });
   }
@@ -276,10 +275,6 @@ export class MarsBoard extends Board {
       return true;
     }
 
-    // A hazard protected by the Desperate Measures action can't be covered.
-    if (AresHandler.hasHazardTile(space) && space.tile.protectedHazard !== true) {
-      return true;
-    }
     if (space.tile.tileType === TileType.OCEAN && OCEAN_UPGRADE_TILES.has(newTile.tileType)) {
       return true;
     }

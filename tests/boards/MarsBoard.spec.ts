@@ -3,7 +3,6 @@ import { TileType } from '../../src/common/TileType';
 import { SpaceBonus } from '../../src/common/boards/SpaceBonus';
 import { SpaceType } from '../../src/common/boards/SpaceType';
 import * as constants from '../../src/common/constants';
-import { PartyName } from '../../src/common/turmoil/PartyName';
 import { SeededRandom } from '../../src/common/utils/Random';
 import { toID } from '../../src/common/utils/utils';
 import { IGame } from '../../src/server/IGame';
@@ -16,7 +15,7 @@ import {
 } from '../../src/server/game/GameOptions';
 import { testGame } from '../TestGame';
 import { TestPlayer } from '../TestPlayer';
-import { maxOutOceans, setRulingParty, setTemperature } from '../TestingUtils';
+import { maxOutOceans, setTemperature } from '../TestingUtils';
 
 describe('MarsBoard', () => {
   let board: MarsBoard;
@@ -195,13 +194,6 @@ describe('MarsBoard', () => {
       expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.true;
     });
 
-    it('COLONY bonus requires Terra Cimmeria colony cost', () => {
-      space.bonus = [SpaceBonus.COLONY];
-      player.megaCredits = constants.TERRA_CIMMERIA_COLONY_COST - 1;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.false;
-      player.megaCredits = constants.TERRA_CIMMERIA_COLONY_COST;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.true;
-    });
 
     it('Sums multiple unaffordable bonuses', () => {
       space.bonus = [SpaceBonus.OCEAN, SpaceBonus.TEMPERATURE];
@@ -211,31 +203,6 @@ describe('MarsBoard', () => {
       player.megaCredits =
         constants.VASTITAS_BOREALIS_BONUS_TEMPERATURE_COST - 1;
       expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.false;
-    });
-
-    it('Reds tax adds to OCEAN cost', () => {
-      [game, player] = testGame(1, { turmoilExtension: true });
-      setRulingParty(game, PartyName.REDS);
-      space = game.board.getSpaceOrThrow('15');
-      space.bonus = [SpaceBonus.OCEAN];
-
-      const redsCost =
-        constants.HELLAS_BONUS_OCEAN_COST + constants.REDS_RULING_POLICY_COST;
-      player.megaCredits = redsCost - 1;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.false;
-      player.megaCredits = redsCost;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.true;
-    });
-
-    it('Reds tax not applied when global parameter is maxed', () => {
-      [game, player] = testGame(1, { turmoilExtension: true });
-      setRulingParty(game, PartyName.REDS);
-      space = game.board.getSpaceOrThrow('15');
-      space.bonus = [SpaceBonus.TEMPERATURE];
-      setTemperature(game, constants.MAX_TEMPERATURE);
-
-      player.megaCredits = 0;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.true;
     });
   });
 });

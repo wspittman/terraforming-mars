@@ -54,6 +54,5 @@ describe('LavaFlows', () => {
     expect(space.tile!.tileType).to.eq(TileType.LAVA_FLOWS);
     expect(space.player).to.eq(player);
     expect(game.getTemperature()).to.eq(-26);
-    expect(space.adjacency?.bonus).eq(undefined);
   });
 });

@@ -1,8 +1,6 @@
 import {CardName} from '@/common/cards/CardName';
-import {ColonyName} from '@/common/colonies/ColonyName';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {GameId} from '@/common/Types';
-import {AgendaStyle} from '@/common/turmoil/Types';
 import {BoardNameType, NewPlayerModel} from '@/common/game/NewGameConfig';
 import {Expansion} from '@/common/cards/GameModule';
 
@@ -16,7 +14,6 @@ export type CreateGameModel = {
   ceosDraftVariant: boolean | undefined;
   clonedGameId: GameId | undefined;
   customCeos: Array<CardName>;
-  customColonies: Array<ColonyName>;
   customCorporations: Array<CardName>;
   customPreludes: Array<CardName>;
   draftVariant: boolean;
@@ -36,7 +33,6 @@ export type CreateGameModel = {
   moonStandardProjectVariant1: boolean;
   players: Array<NewPlayerModel>;
   playersCount: number;
-  politicalAgendasExtension: AgendaStyle;
   preludeDraftVariant: boolean | undefined;
   randomFirstPlayer: boolean;
   randomMA: RandomMAOptionType;

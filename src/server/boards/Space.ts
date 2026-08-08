@@ -1,10 +1,8 @@
 import {SpaceBonus} from '../../common/boards/SpaceBonus';
 import {SpaceType} from '../../common/boards/SpaceType';
 import {Tile} from '../Tile';
-import {AdjacencyBonus} from '../ares/AdjacencyBonus';
 import {SpaceId} from '../../common/Types';
 import {IPlayer} from '../IPlayer';
-import {UndergroundResourceToken} from '../../common/underworld/UndergroundResourceToken';
 
 export type Space = {
   /** The unique ID of this space*/
@@ -26,13 +24,8 @@ export type Space = {
   player?: IPlayer;
   /** The bonuses granted to a player for placing a tile on this space. */
   bonus: Array<SpaceBonus>;
-  /** The bonuses granted to players when placing tiles NEXT TO this space. */
-  adjacency?: AdjacencyBonus,
-
   /** Optional underworld expansion resource token. */
-  undergroundResources?: UndergroundResourceToken;
   /** Optional underworld player who excavated at this space. */
-  excavator?: IPlayer;
 
   /** This tile's co-owner. Used for The Moon's Hostile Takeover card. */
   coOwner?: IPlayer;

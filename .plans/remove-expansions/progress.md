@@ -99,3 +99,27 @@
 - Simplified shared Mars tile scoring, project-card reserve payments, Turmoil Reds handling, and milestone/award selection after removing the two engines.
 - Full lint, production build, and automated test suites pass (1,659 server and 304 client tests).
 - Next: phase 4c2b2b removal of Ares, Colonies, Turmoil, Underworld, Venus, and Delta engines.
+
+## 2026-08-08 — Phase 4c2b2b1
+
+- Split the final six-engine boundary into smaller coherent slices after inventory showed it still crossed about 200 retained integration files.
+- Deleted the Delta Project advancement engine, server player input, shared response/model contracts, player runtime state, empty card manifest, and victory-point hook.
+- Passed server and test TypeScript builds, the complete lint suite, and all automated tests (1,659 server and 304 client tests).
+- Next: phase 4c2b2b2 Venus and Ares global-parameter engines.
+
+## 2026-08-08 — Phase 4c2b2b2
+
+- Deleted the Ares hazard/setup/adjacency engine, global-parameter input, behavior hooks, board state, placement costs, and expansion milestones/awards.
+- Deleted the Venus global track, alternate-track deferred rewards, requirements, card support, MarsBot track, and expansion milestones/award.
+- Removed Ares/Venus cross-expansion effects from retained Colonies, Turmoil, and Underworld code without restoring compatibility shims.
+- Simplified retained Base card tile placement and Mining Guild handling to their Base/Corporate Era behavior and updated focused tests accordingly.
+- Passed the production build, server/test TypeScript builds, the complete lint suite, and all automated tests (1,638 server and 304 client tests); webpack emitted only its existing bundle-size warnings.
+- Next: phase 4c2b2b3 Colonies, Turmoil, and Underworld engines.
+
+## 2026-08-08 — Phase 4c2b2b3
+
+- Deleted the Colonies trading engine, Turmoil political engine, Underworld excavation engine, their common contracts, deferred actions, player inputs, requirements, client components, and focused tests.
+- Removed their hooks from game/player state, behavior execution, boards, cards, logs, milestone/award scoring, API setup, and generated-card tooling.
+- Removed the temporary expansion test bypass and normalized all direct game construction to Base/Corporate Era behavior.
+- Full lint, production build, and automated suites pass (1,525 server and 296 client tests); webpack reports only its existing bundle-size warnings.
+- Next: phase 5 repository-wide dead asset, script, dependency, fixture, and terminology cleanup.

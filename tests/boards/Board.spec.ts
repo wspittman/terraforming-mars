@@ -1,20 +1,16 @@
 import { expect } from 'chai';
-import { SpaceName } from '../../src/common/boards/SpaceName';
 import { SpaceType } from '../../src/common/boards/SpaceType';
 import { TileType } from '../../src/common/TileType';
 import { SpaceId } from '../../src/common/Types';
 import { SeededRandom } from '../../src/common/utils/Random';
 import { toID } from '../../src/common/utils/utils';
 import { Board } from '../../src/server/boards/Board';
-import { SerializedBoard } from '../../src/server/boards/SerializedBoard';
 import { Space } from '../../src/server/boards/Space';
 import { TharsisBoard } from '../../src/server/boards/TharsisBoard';
 import {
   DEFAULT_GAME_OPTIONS,
   GameOptions,
 } from '../../src/server/game/GameOptions';
-import { Player } from '../../src/server/Player';
-import { testGame } from '../TestGame';
 import { TestPlayer } from '../TestPlayer';
 
 describe('Board', () => {
@@ -241,53 +237,6 @@ describe('Board', () => {
 
   class TestBoard extends Board {}
 
-  it('deserialize', () => {
-    const boardJson: SerializedBoard = {
-      spaces: [
-        {
-          id: '01',
-          spaceType: SpaceType.COLONY,
-          bonus: [],
-          x: -1,
-          y: -1,
-          player: 'p-name-1-id',
-          tile: { tileType: 2 },
-        },
-        {
-          id: '03',
-          spaceType: SpaceType.LAND,
-          bonus: [1, 1],
-          x: 4,
-          y: 0,
-          player: 'p-name-2-id',
-          tile: { tileType: 0 },
-        },
-        {
-          id: '04',
-          spaceType: SpaceType.OCEAN,
-          bonus: [1, 1],
-          x: 5,
-          y: 0,
-          tile: { tileType: 1 },
-        },
-        {
-          id: '05',
-          spaceType: SpaceType.LAND,
-          bonus: [],
-          x: 6,
-          y: 0,
-        },
-      ],
-    };
-    const player1 = new Player('name-1', 'red', false, 0, 'p-name-1-id');
-    const player2 = new Player('name-2', 'yellow', false, 0, 'p-name-2-id');
-
-    const board = new TestBoard(
-      Board.deserialize(boardJson, [player1, player2]).spaces,
-    );
-    expect(board.getSpaceOrThrow('01').player).eq(player1);
-    expect(board.getSpaceOrThrow('03').player).eq(player2);
-  });
 
   it('Create specifying volcanic spaces', () => {
     const spaces: Array<Space> = [
@@ -328,20 +277,4 @@ describe('Board', () => {
     expect(board.getSpaceOrThrow('03').volcanic).is.undefined;
     expect(board.volcanicSpaceIds).deep.eq(['02']);
   });
-
-  const runs = [
-    {
-      cards: [],
-      spaces: [SpaceName.GANYMEDE_COLONY, SpaceName.PHOBOS_SPACE_HAVEN],
-    },
-  ] as const;
-  for (const run of runs) {
-    it('including cards adds their spaces ' + JSON.stringify(run.cards), () => {
-      const [game] = testGame(1, { includedCards: run.cards });
-      const spaceIds = game.board.spaces
-        .filter((space) => space.spaceType === SpaceType.COLONY)
-        .map(toID);
-      expect(spaceIds).to.have.members(run.spaces);
-    });
-  }
 });

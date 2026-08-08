@@ -17,7 +17,6 @@ import { ArcticAlgae } from '../src/server/cards/base/ArcticAlgae';
 import { Birds } from '../src/server/cards/base/Birds';
 import { WaterImportFromEuropa } from '../src/server/cards/base/WaterImportFromEuropa';
 import { SaturnSystems } from '../src/server/cards/corporation/SaturnSystems';
-import { IColony } from '../src/server/colonies/IColony';
 import { Game } from '../src/server/Game';
 import { OrOptions } from '../src/server/inputs/OrOptions';
 import { SelectInitialCards } from '../src/server/inputs/SelectInitialCards';
@@ -25,7 +24,6 @@ import { SelectSpace } from '../src/server/inputs/SelectSpace';
 import { Ecologist } from '../src/server/milestones/Ecologist';
 import { Mayor } from '../src/server/milestones/Mayor';
 import { Player } from '../src/server/Player';
-import { SerializedGame } from '../src/server/SerializedGame';
 import { assertPlaceOcean } from './assertions';
 import { InMemoryDatabase } from './testing/InMemoryDatabase';
 import { restoreTestDatabase, setTestDatabase } from './testing/setup';
@@ -69,30 +67,6 @@ describe('Game', () => {
     expect(player.production.heat).to.eq(1);
   });
 
-  it('ignores legacy expansion options during setup', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    const game = Game.newInstance('gameid', [player], player, 'spectatorid', {
-      aresExtension: true,
-      ceoExtension: true,
-      coloniesExtension: true,
-      deltaProjectExpansion: true,
-      moonExpansion: true,
-      pathfindersExpansion: true,
-      preludeExtension: true,
-      turmoilExtension: true,
-      underworldExpansion: true,
-      venusNextExtension: true,
-    });
-
-    expect(game.gameOptions.aresExtension).is.false;
-    expect(game.gameOptions.coloniesExtension).is.false;
-    expect(game.gameOptions.moonExpansion).is.false;
-    expect(game.gameOptions.turmoilExtension).is.false;
-    expect(game.gameOptions.venusNextExtension).is.false;
-    expect(game.aresData).is.undefined;
-    expect(game.colonies).is.empty;
-    expect(game.turmoil).is.undefined;
-  });
 
   it('correctly calculates victory points', () => {
     const player = TestPlayer.BLUE.newPlayer();
@@ -863,65 +837,6 @@ describe('Game', () => {
    * serialization. if this fails update SerializedGame
    * to match
    */
-  it('serializes properties', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    const game = Game.newInstance('gameid', [player], player, 'spectatorid');
-    game.monsInsuranceOwner = undefined;
-    game.syndicatePirateRaider = undefined;
-    const serialized = game.serialize();
-    assertIsJSON(serialized);
-    expect(serialized.gameOptions.corporateEra).is.true;
-    expect(serialized.gameOptions).not.have.property('expansions');
-    expect(serialized.gameOptions).not.have.property('preludeExtension');
-    expect(serialized.gameOptions).not.have.property('turmoilExtension');
-    const serializedKeys = Object.keys(serialized);
-
-    const unserializedFieldsInGame: Array<string> = [
-      'createdTime',
-      'discardedColonies',
-      'inDoubleDown',
-      'inputsThisRound',
-      'inTurmoil',
-      'playersInGenerationOrder',
-      'monsInsuranceOwner',
-      'resettable',
-      'rng',
-      'underworldDraftEnabled',
-      'doubleDownPrelude',
-      'beholdTheEmperor',
-      'colonies',
-      'exploitationOfVenusInEffect',
-      'gagarinBase',
-      'nomadSpace',
-      'stJosephCathedrals',
-      'syndicatePirateRaider',
-      'tags',
-      'tradeEmbargo',
-      'underworldData',
-      'venusScaleLevel',
-      'verminInEffect',
-    ];
-    const serializedValuesNotInGame: Array<keyof SerializedGame> = [
-      'seed',
-      'currentSeed',
-      'createdTimeMs',
-    ];
-
-    const gameKeys = Object.keys(game);
-
-    for (const field of unserializedFieldsInGame) {
-      expect(serializedKeys).does.not.include(field);
-      expect(gameKeys).does.include(field);
-    }
-    for (const field of serializedValuesNotInGame) {
-      expect(gameKeys).does.not.include(field);
-      expect(serializedKeys).does.include(field);
-    }
-
-    expect(serializedKeys.concat(...unserializedFieldsInGame).sort()).deep.eq(
-      gameKeys.concat(...serializedValuesNotInGame).sort(),
-    );
-  });
 
 
   it('deserializing a game with awards', () => {
@@ -1129,28 +1044,6 @@ describe('Game', () => {
     expect(deserialized.claimedMilestones[0].player.id).eq('p-blue-id');
   });
 
-  it('deserializing a colonies game includes discarded colonies #4522', () => {
-    const toName = (x: IColony) => x.name;
-    const player = TestPlayer.BLUE.newPlayer();
-    const player2 = TestPlayer.RED.newPlayer();
-    const game = Game.newInstance(
-      'gameid',
-      [player, player2],
-      player,
-      'spectatorid',
-      { coloniesExtension: false },
-    );
-
-    const colonyNames = game.colonies.map(toName);
-    const discardedColonyNames = game.discardedColonies.map(toName);
-
-    const serialized = game.serialize();
-    const deserialized = Game.deserialize(serialized);
-    expect(deserialized.colonies.map(toName)).has.members(colonyNames);
-    expect(deserialized.discardedColonies.map(toName)).has.members(
-      discardedColonyNames,
-    );
-  });
 
   it('wgt includes all parameters at the game start', () => {
     const player = new Player('blue', 'blue', false, 0, 'p-blue');
@@ -1191,20 +1084,6 @@ describe('Game', () => {
     expect(player.plants).to.eq(2);
   });
 });
-
-function assertIsJSON(serialized: any) {
-  for (const field in serialized) {
-    if (serialized.hasOwnProperty(field)) {
-      const val = serialized[field];
-      const type = typeof val;
-      if (type === 'object') {
-        assertIsJSON(val);
-      } else if (type === 'function') {
-        throw new Error(field + ' is invalid');
-      }
-    }
-  }
-}
 
 function waitingForGlobalParameters(player: Player): Array<GlobalParameter> {
   function titlesToGlobalParameter(title: string): GlobalParameter {

@@ -95,18 +95,6 @@ export function chooseMilestonesAndAwards(
         LIMITED_SYNERGY,
       );
     }
-    if (gameOptions.venusNextExtension) {
-      push(
-        milestoneManifest.expansions['venus'],
-        awardManifest.expansions['venus'],
-      );
-    }
-    if (gameOptions.aresExtension) {
-      push(
-        milestoneManifest.expansions['ares'],
-        awardManifest.expansions['ares'],
-      );
-    }
     break;
 
   case RandomMAOptionType.LIMITED:

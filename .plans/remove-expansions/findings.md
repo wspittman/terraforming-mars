@@ -69,3 +69,39 @@
 
 - Moon and Pathfinders share global-parameter, behavior-executor, card-serialization, scoring, and board hooks, making them a coherent engine-removal slice.
 - Their remaining implementations are isolated under `src/server/moon`, `src/server/pathfinders`, and matching common/card support directories; retained core references can be removed compile-first without touching Ares, Colonies, Turmoil, Underworld, or Venus behavior yet.
+
+## 2026-08-08 — Phase 4c2b2b inventory
+
+- The final engine slice contains 88 directly expansion-scoped files plus integration branches in about 200 retained server/common/test files.
+- The isolated implementations cover Ares hazards, Colonies trading, Turmoil politics, Underworld excavation, Venus deferred bonuses, and Delta Project input/state.
+- Client Colonies, Turmoil, and Underworld components are already disconnected from the reduced player/game model and can be deleted with their server domains in this slice.
+
+## 2026-08-08 — Phase 4c2b2b1
+
+- Delta Project persistence and setup had already been removed, leaving only its player-input transport, per-player runtime model, advancement engine, and victory-point hook.
+- No retained tests directly exercised that unreachable engine, so deleting the complete vertical slice required no replacement compatibility behavior.
+
+## 2026-08-08 — Phase 4c2b2b2 inventory
+
+- Ares has five isolated engine files plus board-space, tile-placement, behavior, input, and scoring hooks in retained core files.
+- Venus has one deferred-action implementation and a requirement/global-parameter path; its remaining MarsBot board is expansion-specific and can be removed with the Venus track.
+- Base cards still import Ares adjacency types for optional upgraded-tile bonuses. Those optional fields and callbacks can be removed without changing their Base/Corporate Era behavior.
+
+## 2026-08-08 — Phase 4c2b2b2
+
+- Removing Ares adjacency support simplifies ordinary land availability and placement costs to the existing board-specific costs; Base placement bonuses and ocean adjacency income are unchanged.
+- The Ares-specific Entrepreneur/Rugged awards and Networker/Purifier milestones, plus the Venus-specific Venuphile award and Hoverlord/Planetologist milestones, had to be removed with their engine dependencies.
+- Colonies, Turmoil, and Underworld contained cross-expansion Ares/Venus effects. Those individual effects were removed while retaining the three domains for the next phase.
+- Expansion option fields, tile enum values, renderer assets, and other dead terminology remain repository-cleanup work after the last runtime domains are removed.
+
+## 2026-08-08 — Phase 4c2b2b3 inventory
+
+- The last runtime slice contains 65 directly scoped Colonies, Turmoil, and Underworld files plus integration hooks across roughly 220 retained source/test files.
+- All three client component domains are already disconnected from the reduced public game/player models and can be deleted with their shared/server contracts.
+- This boundary also removes the temporary legacy expansion setup bypass after the final expansion engine tests disappear.
+
+## 2026-08-08 — Phase 4c2b2b3
+
+- Colonies, Turmoil, and Underworld no longer have shared models, runtime engines, player inputs, behavior branches, board state, scoring hooks, or client presentation domains.
+- The static card-data exporter now emits only cards, milestones, and awards; the removed colony and global-event catalogs no longer require generated JSON.
+- With the final expansion engines gone, `Game.newInstance` no longer exposes the temporary test-only normalization bypass. Expansion option and enum terminology that does not activate runtime behavior remains phase 5 cleanup.

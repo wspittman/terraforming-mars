@@ -2,16 +2,12 @@ import '@/server/init';
 import fs from 'fs';
 
 import {ALL_MODULE_MANIFESTS} from '../cards/AllManifests';
-import {CardManifest, GlobalEventManifest, ModuleManifest} from '../cards/ModuleManifest';
+import {CardManifest, ModuleManifest} from '../cards/ModuleManifest';
 import {ICard, isIActionCard} from '../cards/ICard';
 import {Expansion, GameModule} from '../../common/cards/GameModule';
-import {IGlobalEvent} from '../turmoil/globalEvents/IGlobalEvent';
-import {IClientGlobalEvent} from '../../common/turmoil/IClientGlobalEvent';
 import {ClientCard} from '../../common/cards/ClientCard';
 import {isICorporationCard} from '../cards/corporation/ICorporationCard';
-import {ColonyMetadata} from '../../common/colonies/ColonyMetadata';
 import {Units} from '../../common/Units';
-import {ALL_COLONIES_TILES, getColonyModule} from '../colonies/ColonyManifest';
 import {milestoneManifest} from '../milestones/Milestones';
 import {awardManifest} from '../awards/Awards';
 import {awardNames} from '../../common/ma/AwardName';
@@ -112,60 +108,6 @@ class CardProcessor {
   }
 }
 
-class GlobalEventProcessor {
-  public static json: Array<IClientGlobalEvent> = [];
-  public static makeJson() {
-    ALL_MODULE_MANIFESTS.forEach(this.processManifest);
-  }
-
-  private static processManifest(manifest: ModuleManifest) {
-    for (const cf of GlobalEventManifest.values(manifest.globalEvents)) {
-      GlobalEventProcessor.processGlobalEvent(manifest.module, new cf.Factory());
-    }
-  }
-
-  private static processGlobalEvent(module: GameModule, globalEvent: IGlobalEvent) {
-    const event: IClientGlobalEvent = {
-      module: module,
-      name: globalEvent.name,
-      description: globalEvent.description,
-      revealedDelegate: globalEvent.revealedDelegate,
-      currentDelegate: globalEvent.currentDelegate,
-      renderData: globalEvent.renderData,
-    };
-
-    GlobalEventProcessor.json.push(event);
-  }
-}
-
-class ColoniesProcessor {
-  public static json: Array<ColonyMetadata> = [];
-  public static makeJson() {
-    ALL_COLONIES_TILES.forEach((entry) => {
-      const colony = new entry.Factory();
-      ColoniesProcessor.processColony(colony.metadata);
-    });
-  }
-
-  private static processColony(metadata: ColonyMetadata) {
-    // This seems extraneous but it prevents extra fields from creeping
-    // into the JSON. Could do some other form, but this works and matches
-    // the patterns above.
-    const clientMetadata: ColonyMetadata = {
-      module: getColonyModule(metadata.name),
-      name: metadata.name,
-      cardResource: metadata.cardResource,
-      build: metadata.build,
-      trade: metadata.trade,
-      colony: metadata.colony,
-      shouldIncreaseTrack: metadata.shouldIncreaseTrack,
-      expansion: metadata.expansion,
-    };
-
-    ColoniesProcessor.json.push(clientMetadata);
-  }
-}
-
 class MilestoneProcessor {
   public static json: Array<ClientMilestone> = [];
   public static makeJson() {
@@ -198,13 +140,9 @@ if (!fs.existsSync('src/genfiles')) {
 
 globalInitialize();
 CardProcessor.makeJson();
-GlobalEventProcessor.makeJson();
-ColoniesProcessor.makeJson();
 MilestoneProcessor.makeJson();
 AwardProcessor.makeJson();
 
 fs.writeFileSync('src/genfiles/cards.json', JSON.stringify(CardProcessor.json, null, 2));
-fs.writeFileSync('src/genfiles/events.json', JSON.stringify(GlobalEventProcessor.json, null, 2));
-fs.writeFileSync('src/genfiles/colonies.json', JSON.stringify(ColoniesProcessor.json, null, 2));
 fs.writeFileSync('src/genfiles/milestones.json', JSON.stringify(MilestoneProcessor.json, null, 2));
 fs.writeFileSync('src/genfiles/awards.json', JSON.stringify(AwardProcessor.json, null, 2));

@@ -1,13 +1,11 @@
-import {expect} from 'chai';
-import {TharsisRepublic} from '../../../src/server/cards/corporation/TharsisRepublic';
-import {IGame} from '../../../src/server/IGame';
-import {SpaceType} from '../../../src/common/boards/SpaceType';
-import {TileType} from '../../../src/common/TileType';
-import {addCity, runAllActions} from '../../TestingUtils';
-import {TestPlayer} from '../../TestPlayer';
-import {SelectSpace} from '../../../src/server/inputs/SelectSpace';
-import {testGame} from '../../TestGame';
-import {cast} from '../../../src/common/utils/utils';
+import { expect } from 'chai';
+import { cast } from '../../../src/common/utils/utils';
+import { TharsisRepublic } from '../../../src/server/cards/corporation/TharsisRepublic';
+import { IGame } from '../../../src/server/IGame';
+import { SelectSpace } from '../../../src/server/inputs/SelectSpace';
+import { testGame } from '../../TestGame';
+import { addCity, runAllActions } from '../../TestingUtils';
+import { TestPlayer } from '../../TestPlayer';
 
 describe('TharsisRepublic', () => {
   let card: TharsisRepublic;
@@ -50,13 +48,6 @@ describe('TharsisRepublic', () => {
     expect(player.production.megacredits).to.eq(1);
   });
 
-  it('Does not give MC production for own city off Mars', () => {
-    game.addTile(player, game.board.spaces.find((space) => space.spaceType === SpaceType.COLONY)!, {
-      tileType: TileType.CITY,
-    });
-    runAllActions(game);
-    expect(player.production.megacredits).to.eq(0);
-  });
 
   it('Gives 2 M€ production in solo mode', () => {
     [game, player] = testGame(1);

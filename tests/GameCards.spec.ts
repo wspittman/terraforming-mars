@@ -1,9 +1,6 @@
 import { expect } from 'chai';
 import { CardName } from '../src/common/cards/CardName';
 import { toName } from '../src/common/utils/utils';
-import { COMMUNITY_CARD_MANIFEST } from '../src/server/cards/community/CommunityCardManifest';
-import { CardManifest } from '../src/server/cards/ModuleManifest';
-import { newPrelude } from '../src/server/createCard';
 import {
   DEFAULT_GAME_OPTIONS,
   GameOptions,
@@ -24,35 +21,22 @@ describe('GameCards', () => {
     expect(new GameCards(gameOptions).getProjectCards().length).to.eq(137);
   });
 
-  it('excludes expansion-specific preludes if those expansions are not selected ', () => {
-    const gameOptions: GameOptions = {
-      ...DEFAULT_GAME_OPTIONS,
-      corporateEra: true,
-      communityCardsOption: true,
-      aresExtension: false,
-    };
-
-    const preludeDeck = new GameCards(gameOptions).getPreludeCards();
-
-    const communityPreludes = CardManifest.keys(
-      COMMUNITY_CARD_MANIFEST.preludeCards,
-    );
-    communityPreludes.forEach((preludeName) => {
-      const preludeCard = newPrelude(preludeName)!;
-      expect(preludeDeck.includes(preludeCard)).is.not.true;
-    });
-  });
-
-  it('correctly removes the Merger prelude card if twoCorpsVariant is being used ', () => {
+  it('ignores legacy expansion options', () => {
     const gameOptions: GameOptions = {
       ...DEFAULT_GAME_OPTIONS,
       corporateEra: true,
       preludeExtension: true,
-      twoCorpsVariant: true,
+      venusNextExtension: true,
+      coloniesExtension: true,
+      turmoilExtension: true,
+      communityCardsOption: true,
+      aresExtension: true,
     };
 
-    const preludeDeck = new GameCards(gameOptions).getPreludeCards();
-    expect(preludeDeck).to.not.contain(CardName.MERGER);
+    const cards = new GameCards(gameOptions);
+    expect(cards.getProjectCards()).to.have.length(208);
+    expect(cards.getPreludeCards()).to.be.empty;
+    expect(cards.getCeoCards()).to.be.empty;
   });
 
   it('correctly removes banned cards', () => {

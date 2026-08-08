@@ -1,12 +1,9 @@
 import {BoardName} from '../boards/BoardName';
 import {RandomBoardOption} from '../boards/RandomBoardOption';
 import {CardName} from '../cards/CardName';
-import {ColonyName} from '../colonies/ColonyName';
 import {Color} from '../Color';
 import {RandomMAOptionType} from '../ma/RandomMAOptionType';
-import {AgendaStyle} from '../turmoil/Types';
 import {GameId} from '../Types';
-import {Expansion} from '../cards/GameModule';
 
 export type BoardNameType = BoardName | RandomBoardOption;
 
@@ -34,7 +31,7 @@ export type EscapeVelocityOptions = {
  */
 export interface NewGameConfig {
   players: Array<NewPlayerModel>;
-  expansions: Record<Expansion, boolean>,
+  corporateEra: boolean;
   board: BoardNameType;
   seed: number;
   randomFirstPlayer: boolean;
@@ -48,19 +45,12 @@ export interface NewGameConfig {
   fastModeOption: boolean;
   showOtherPlayersVP: boolean;
 
-  // Extensions
-  // aresHazards: boolean;
-  aresExtremeVariant: boolean;
-  politicalAgendasExtension: AgendaStyle;
   solarPhaseOption: boolean;
-  removeNegativeGlobalEventsOption: boolean;
   modularMA: boolean;
 
   // Variants
   draftVariant: boolean;
   initialDraft: boolean; // initialDraftVariant: boolean;
-  preludeDraftVariant: boolean;
-  ceosDraftVariant: boolean;
   startingCorporations: number;
   shuffleMapOption: boolean;
   randomMA: RandomMAOptionType;
@@ -69,16 +59,5 @@ export interface NewGameConfig {
   customCorporationsList: Array<CardName>;
   bannedCards: Array<CardName>;
   includedCards: Array<CardName>;
-  customColoniesList: Array<ColonyName>;
-  customPreludes: Array<CardName>;
-  requiresMoonTrackCompletion: boolean; // Moon must be completed to end the game
-  requiresVenusTrackCompletion: boolean; // Venus must be completed to end the game
-  moonStandardProjectVariant: boolean;
-  moonStandardProjectVariant1: boolean;
-  altVenusBoard: boolean;
   escapeVelocity: EscapeVelocityOptions | undefined;
-  twoCorpsVariant: boolean;
-  customCeos: Array<CardName>;
-  startingCeos: number;
-  startingPreludes: number;
 }

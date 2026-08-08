@@ -14,5 +14,7 @@ describe('GameEnd', () => {
       },
     });
     expect(wrapper.exists()).to.be.true;
+    expect(wrapper.findComponent({name: 'MoonBoard'}).exists()).to.be.false;
+    expect(wrapper.findComponent({name: 'PlanetaryTracks'}).exists()).to.be.false;
   });
 });

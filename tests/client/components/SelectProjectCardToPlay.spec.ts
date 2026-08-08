@@ -172,80 +172,6 @@ describe('SelectProjectCardToPlay', () => {
     );
   });
 
-  it('Paying for Soil Enrichment without microbes', async () => {
-    const wrapper = setupCardForPurchase(
-      CardName.SOIL_ENRICHMENT,
-      6,
-      { megacredits: 6 },
-      {},
-    );
-
-    const tester = new PaymentTester(wrapper);
-    await tester.nextTick();
-    tester.expectPayment({ megacredits: 6 });
-
-    await tester.clickSave();
-    expect(saveResponse.payment).deep.eq(Payment.of({ megacredits: 6 }));
-  });
-
-  it('Paying for Soil Enrichment with Psychophriles', async () => {
-    // Soil Enrichment reserves 1 microbe for itself, so only 2 microbes available.
-    // Greedy: uses both available microbes (=4 MC), MC fills remaining 2.
-    const wrapper = setupCardForPurchase(
-      CardName.SOIL_ENRICHMENT,
-      6,
-      { megacredits: 5 },
-      { microbes: 3 },
-    );
-
-    const tester = new PaymentTester(wrapper);
-    await tester.nextTick();
-    tester.expectPayment({ microbes: 2, megacredits: 2 });
-
-    await tester.clickSave();
-    expect(saveResponse.payment).deep.eq(
-      Payment.of({ microbes: 2, megacredits: 2 }),
-    );
-
-    await tester.clickMax('microbes');
-    tester.expectPayment({ microbes: 2, megacredits: 2 });
-
-    await tester.clickSave();
-    expect(saveResponse.payment).deep.eq(
-      Payment.of({ microbes: 2, megacredits: 2 }),
-    );
-  });
-
-  it('Paying for Soil Enrichment with Psychophriles while another card has microbes', async () => {
-    // Tardigrades provides a spare microbe, so all 3 microbes from Psychrophiles are available.
-    // Greedy: uses all 3 microbes (=6 MC), MC=0.
-    const tableau: Array<Partial<CardModel>> = [
-      { name: CardName.PSYCHROPHILES, resources: 3 },
-      { name: CardName.TARDIGRADES, resources: 1 },
-    ];
-    const wrapper = setupCardForPurchase(
-      CardName.SOIL_ENRICHMENT,
-      6,
-      { megacredits: 4, tableau: tableau as Array<CardModel> },
-      { microbes: 3 },
-    );
-
-    const tester = new PaymentTester(wrapper);
-    await tester.nextTick();
-
-    await tester.clickSave();
-    expect(saveResponse.payment).deep.eq(
-      Payment.of({ microbes: 3, megacredits: 0 }),
-    );
-
-    await tester.clickMax('microbes');
-
-    await tester.clickSave();
-    expect(saveResponse.payment).deep.eq(
-      Payment.of({ microbes: 3, megacredits: 0 }),
-    );
-  });
-
   it('Paying for other card with Psychophriles uses all microbes', async () => {
     // Greedy: uses all 3 microbes (=6 MC), MC fills remaining 4.
     const wrapper = setupCardForPurchase(
@@ -272,10 +198,10 @@ describe('SelectProjectCardToPlay', () => {
   });
 
   it('using steel', async () => {
-    // Rego Plastics will cost 10. Player has 7M€ and 4 steels (rate 2).
+    // NUCLEAR_POWER will cost 10. Player has 7M€ and 4 steels (rate 2).
     // Greedy: uses all 4 steel (=8 MC), MC fills remaining 2.
     const wrapper = setupCardForPurchase(
-      CardName.REGO_PLASTICS,
+      CardName.NUCLEAR_POWER,
       10,
       { steel: 4, megacredits: 7, steelValue: 2 },
       { paymentOptions: { steel: true } },
@@ -480,7 +406,7 @@ describe('SelectProjectCardToPlay', () => {
     // Clicking + once gives 6 steel (=12 MC). delta=2 >= rate=2, so handleSave()
     // must set a warning and NOT call onsave.
     const wrapper = setupCardForPurchase(
-      CardName.REGO_PLASTICS,
+      CardName.NUCLEAR_POWER,
       10,
       { steel: 6, megacredits: 0, steelValue: 2 },
       { paymentOptions: { steel: true } },

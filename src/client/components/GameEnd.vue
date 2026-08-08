@@ -62,10 +62,6 @@
                           <th><div class="m-and-a tooltip tooltip-top" :data-tooltip="$t('Awards points')">A</div></th>
                           <th><div class="table-forest-tile"></div></th>
                           <th><div class="table-city-tile"></div></th>
-                          <th v-if="game.moon !== undefined"><div class="table-moon-road-tile"></div></th>
-                          <th v-if="game.moon !== undefined"><div class="table-moon-colony-tile"></div></th>
-                          <th v-if="game.moon !== undefined"><div class="table-moon-mine-tile"></div></th>
-                          <th v-if="game.pathfinders !== undefined"><div class="table-planetary-track"></div></th>
                           <th><div class="vp">VP</div></th>
                           <th v-if="game.gameOptions.escapeVelocity" class="clock-icon tooltip tooltip-top" :data-tooltip="$t('Escape Velocity penalty')">&#x23F3;</th>
                           <th class="game-end-total"><div class="game-end-total-column">Total</div></th>
@@ -87,10 +83,6 @@
                           <td>{{ p.victoryPointsBreakdown.awards }}</td>
                           <td>{{ p.victoryPointsBreakdown.greenery }}</td>
                           <td>{{ p.victoryPointsBreakdown.city }}</td>
-                          <td v-if="game.moon !== undefined">{{ p.victoryPointsBreakdown.moonRoads }}</td>
-                          <td v-if="game.moon !== undefined">{{ p.victoryPointsBreakdown.moonHabitats }}</td>
-                          <td v-if="game.moon !== undefined">{{ p.victoryPointsBreakdown.moonMines }}</td>
-                          <td v-if="game.pathfinders !== undefined"> {{ p.victoryPointsBreakdown.planetaryTracks}}</td>
                           <td>{{ p.victoryPointsBreakdown.victoryPoints }}</td>
                           <td v-if="game.gameOptions.escapeVelocity">{{ p.victoryPointsBreakdown.escapeVelocity }}</td>
                           <td class="game-end-total">{{ p.victoryPointsBreakdown.total }}</td>
@@ -137,12 +129,6 @@
                           <div class="game-end-column-text">{{translateAwardDetails(v)}}</div>
                         </div>
                       </div>
-                      <div v-for="v in p.victoryPointsBreakdown.detailsPlanetaryTracks" :key="v.tag">
-                        <div class="game-end-column-row">
-                          <div class="game-end-column-vp">{{v.points}}</div>
-                          <div class="game-end-column-text" v-i18n>Most tags on the {{v.tag}} track</div>
-                        </div>
-                      </div>
                   </div>
               </div>
           </div>
@@ -155,10 +141,6 @@
                           <th><div class="tile temperature-tile"></div></th>
                           <th><div class="tile oxygen-tile"></div></th>
                           <th><div class="tile ocean-tile"></div></th>
-                          <th v-if="game.gameOptions.expansions.venus"><div class="tile venus-tile"></div></th>
-                          <th v-if="game.gameOptions.expansions.moon"><div class="table-moon-colony-tile"></div></th>
-                          <th v-if="game.gameOptions.expansions.moon"><div class="table-moon-road-tile"></div></th>
-                          <th v-if="game.gameOptions.expansions.moon"><div class="table-moon-mine-tile"></div></th>
                           <th><div class="game-end-total-column">Total</div></th>
                       </tr>
                   </thead>
@@ -168,10 +150,6 @@
                           <td>{{ data.temp }}</td>
                           <td>{{ data.oxygen }}</td>
                           <td>{{ data.oceans }}</td>
-                          <td v-if="game.gameOptions.expansions.venus">{{ data.venus }}</td>
-                          <td v-if="game.gameOptions.expansions.moon">{{ data.moonHabitat }}</td>
-                          <td v-if="game.gameOptions.expansions.moon">{{ data.moonLogistic }}</td>
-                          <td v-if="game.gameOptions.expansions.moon">{{ data.moonMining }}</td>
                           <td class="game-end-total">{{ data.total }}</td>
                       </tr>
                   </tbody>
@@ -189,18 +167,10 @@
               <h2 v-i18n>Final situation on the board</h2>
               <Board
                   :spaces="game.spaces"
-                  :expansions="game.gameOptions.expansions"
-                  :venusScaleLevel="game.venusScaleLevel"
-                  :altVenusBoard="game.gameOptions.altVenusBoard"
                   :boardName ="game.gameOptions.boardName"
                   :oceans_count="game.oceans"
                   :oxygen_level="game.oxygenLevel"
                   :temperature="game.temperature"/>
-            <MoonBoard v-if="game.moon !== undefined" :model="game.moon"/>
-            <div v-if="game.gameOptions.expansions.pathfinders">
-              <PlanetaryTracks :tracks="game.pathfinders" :gameOptions="game.gameOptions"/>
-            </div>
-            <DeltaProjectBoard v-if="game.gameOptions.expansions.deltaProject" :players="players"/>
           </div>
           <div class="game_end_block--log game-end-column">
             <LogPanel :color="color" :viewModel="viewModel"/>
@@ -222,9 +192,6 @@ import {paths} from '@/common/app/paths';
 import {GameModel} from '@/common/models/GameModel';
 import {PlayerViewModel, PublicPlayerModel, ViewModel} from '@/common/models/PlayerModel';
 import Board from '@/client/components/Board.vue';
-import MoonBoard from '@/client/components/moon/MoonBoard.vue';
-import PlanetaryTracks from '@/client/components/pathfinders/PlanetaryTracks.vue';
-import DeltaProjectBoard from '@/client/components/delta/DeltaProjectBoard.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import VictoryPointChart, {DataSet} from '@/client/components/gameend/VictoryPointChart.vue';
@@ -346,26 +313,14 @@ export default defineComponent({
       dataset.push({label: $t('Temperature'), color: 'red', data: getValues(GlobalParameter.TEMPERATURE, -30, 8)});
       dataset.push({label: $t('Oxygen'), color: 'green', data: getValues(GlobalParameter.OXYGEN, 0, 14)});
       dataset.push({label: $t('Oceans'), color: 'blue', data: getValues(GlobalParameter.OCEANS, 0, 9)});
-      if (this.game.gameOptions.expansions.venus === true) {
-        dataset.push({label: $t('Venus'), color: 'yellow', data: getValues(GlobalParameter.VENUS, 0, 30)});
-      }
-      if (this.game.gameOptions.expansions.moon === true) {
-        dataset.push({label: $t('L. Habitat'), color: 'orange', data: getValues(GlobalParameter.MOON_HABITAT_RATE, 0, 8)});
-        dataset.push({label: $t('L. Mining'), color: 'pink', data: getValues(GlobalParameter.MOON_MINING_RATE, 0, 8)});
-        dataset.push({label: $t('L. Logistic'), color: 'purple', data: getValues(GlobalParameter.MOON_LOGISTIC_RATE, 0, 8)});
-      }
       return dataset;
     },
-    playerContributionsData(): Array<{player: string, color: Color, temp: number, oxygen: number, oceans: number, venus?: number, moonHabitat?: number, moonMining?: number, moonLogistic?: number, total: number}> {
+    playerContributionsData(): Array<{player: string, color: Color, temp: number, oxygen: number, oceans: number, total: number}> {
       return this.players.map((player) => {
         const steps = player.globalParameterSteps || {};
         const temp = steps[GlobalParameter.TEMPERATURE] || 0;
         const oxygen = steps[GlobalParameter.OXYGEN] || 0;
         const oceans = steps[GlobalParameter.OCEANS] || 0;
-        const venus = steps[GlobalParameter.VENUS] || 0;
-        const moonHabitat = steps[GlobalParameter.MOON_HABITAT_RATE] || 0;
-        const moonMining = steps[GlobalParameter.MOON_MINING_RATE] || 0;
-        const moonLogistic = steps[GlobalParameter.MOON_LOGISTIC_RATE] || 0;
 
         return {
           player: player.name,
@@ -373,11 +328,7 @@ export default defineComponent({
           temp,
           oxygen,
           oceans,
-          venus,
-          moonHabitat,
-          moonMining,
-          moonLogistic: moonLogistic,
-          total: temp + oxygen + oceans + venus + moonHabitat + moonMining + moonLogistic,
+          total: temp + oxygen + oceans,
         };
       });
     },
@@ -391,9 +342,6 @@ export default defineComponent({
     Board,
     LogPanel,
     AppButton,
-    MoonBoard,
-    PlanetaryTracks,
-    DeltaProjectBoard,
     VictoryPointChart,
   },
   mounted() {

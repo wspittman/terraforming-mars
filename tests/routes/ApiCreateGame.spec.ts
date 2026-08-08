@@ -62,23 +62,7 @@ describe('ApiCreateGame', () => {
             first: true,
           },
         ],
-        expansions: {
-          corpera: true,
-          promo: false,
-          venus: false,
-          colonies: false,
-          prelude: false,
-          prelude2: false,
-          turmoil: false,
-          community: false,
-          ares: false,
-          moon: false,
-          pathfinders: false,
-          ceo: false,
-          starwars: false,
-          underworld: false,
-          deltaProject: false,
-        },
+        corporateEra: true,
         board: RandomBoardOption.OFFICIAL,
         seed: 0,
         randomFirstPlayer: false,
@@ -87,15 +71,10 @@ describe('ApiCreateGame', () => {
         showTimers: false,
         fastModeOption: false,
         showOtherPlayersVP: false,
-        aresExtremeVariant: false,
-        politicalAgendasExtension: 'Standard',
         solarPhaseOption: false,
-        removeNegativeGlobalEventsOption: false,
         modularMA: false,
         draftVariant: false,
         initialDraft: false,
-        preludeDraftVariant: false,
-        ceosDraftVariant: false,
         startingCorporations: 0,
         shuffleMapOption: false,
         randomMA: RandomMAOptionType.NONE,
@@ -104,18 +83,7 @@ describe('ApiCreateGame', () => {
         customCorporationsList: [],
         bannedCards: [],
         includedCards: [],
-        customColoniesList: [],
-        customPreludes: [],
-        requiresMoonTrackCompletion: false,
-        requiresVenusTrackCompletion: false,
-        moonStandardProjectVariant: false,
-        moonStandardProjectVariant1: false,
-        altVenusBoard: false,
         escapeVelocity: undefined,
-        twoCorpsVariant: false,
-        customCeos: [],
-        startingCeos: 0,
-        startingPreludes: 0,
       };
       req.emitter.emit('data', JSON.stringify(newGameConfig));
       req.emitter.emit('end');
@@ -129,6 +97,10 @@ describe('ApiCreateGame', () => {
     const game = await scaffolding.ctx.gameLoader.getGame(model.id);
     expect(game).is.not.undefined;
     expect(game!.players[0].name).eq('Robot');
+    expect(game!.gameOptions.corporateEra).is.true;
+    expect(game!.gameOptions.venusNextExtension).is.false;
+    expect(game!.gameOptions.expansions.venus).is.false;
+    expect(game!.gameOptions.altVenusBoard).is.false;
   });
 
   it('red rover solo game', async () => {

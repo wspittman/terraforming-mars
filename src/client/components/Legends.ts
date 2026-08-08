@@ -7,7 +7,7 @@ export type Key = {
   secondRowX?: number;
 };
 
-export const LEGENDS = {
+export const LEGENDS: Record<BoardName, Array<Key>> = {
   [BoardName.THARSIS]: [],
   [BoardName.HELLAS]: [],
   [BoardName.ELYSIUM]: [],
@@ -16,4 +16,4 @@ export const LEGENDS = {
   [BoardName.VASTITAS_BOREALIS_NOVA]: [],
   [BoardName.VASTITAS_BOREALIS]: [],
   [BoardName.HOLLANDIA]: [],
-} satisfies Record<BoardName, Array<Key>>;
+};

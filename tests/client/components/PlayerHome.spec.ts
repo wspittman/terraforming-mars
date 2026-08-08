@@ -33,5 +33,7 @@ describe('PlayerHome', () => {
       },
     });
     expect(wrapper.exists()).to.be.true;
+    expect(wrapper.findComponent({name: 'Colony'}).exists()).to.be.false;
+    expect(wrapper.findComponent({name: 'UndergroundTokens'}).exists()).to.be.false;
   });
 });

@@ -1,12 +1,12 @@
-import {expect} from 'chai';
-import {CardRenderer} from '../../../src/server/cards/render/CardRenderer';
-import {CardRenderItem} from '../../../src/server/cards/render/CardRenderItem';
-import {CardRenderItemType} from '../../../src/common/cards/render/CardRenderItemType';
-import {Size} from '../../../src/common/cards/render/Size';
-import {AltSecondaryTag} from '../../../src/common/cards/render/AltSecondaryTag';
-import {CardResource} from '../../../src/common/CardResource';
-import {Tag} from '../../../src/common/cards/Tag';
-import {cast} from '../../../src/common/utils/utils';
+import { expect } from 'chai';
+import { CardResource } from '../../../src/common/CardResource';
+import { AltSecondaryTag } from '../../../src/common/cards/render/AltSecondaryTag';
+import { CardRenderItemType } from '../../../src/common/cards/render/CardRenderItemType';
+import { Size } from '../../../src/common/cards/render/Size';
+import { Tag } from '../../../src/common/cards/Tag';
+import { cast } from '../../../src/common/utils/utils';
+import { CardRenderer } from '../../../src/server/cards/render/CardRenderer';
+import { CardRenderItem } from '../../../src/server/cards/render/CardRenderItem';
 
 describe('CardRenderer', () => {
   describe('temperature', () => {
@@ -175,31 +175,12 @@ describe('CardRenderer', () => {
     expect(item.amount).to.equal(-1);
   });
   describe('colonies', () => {
-    it('success', () => {
-      const renderer = CardRenderer.builder((b) => b.colonies(2));
-      const item = cast(renderer.rows[0][0], CardRenderItem);
-      expect(item.type).to.equal(CardRenderItemType.COLONIES);
-      expect(item.amount).to.equal(2);
-    });
-    it('size - s', () => {
-      const renderer = CardRenderer.builder((b) => b.colonies(1, {size: Size.SMALL}));
-      const item = cast(renderer.rows[0][0], CardRenderItem);
-      expect(item.type).to.equal(CardRenderItemType.COLONIES);
-      expect(item.size).to.equal(Size.SMALL);
-      expect(item.amount).to.equal(1);
-    });
   });
   it('tradeDiscount: success', () => {
     const renderer = CardRenderer.builder((b) => b.tradeDiscount(2));
     const item = cast(renderer.rows[0][0], CardRenderItem);
     expect(item.type).to.equal(CardRenderItemType.TRADE_DISCOUNT);
     expect(item.amount).to.equal(-2);
-  });
-  it('colonyTile: success', () => {
-    const renderer = CardRenderer.builder((b) => b.colonyTile());
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.COLONY_TILE);
-    expect(item.amount).to.equal(-1);
   });
   it('influence: success', () => {
     const renderer = CardRenderer.builder((b) => b.influence());

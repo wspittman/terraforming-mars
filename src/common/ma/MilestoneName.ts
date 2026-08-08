@@ -21,16 +21,13 @@ export const milestoneNames = [
   'Rim Settler',
 
   // Venus
-  'Hoverlord',
 
   // Ares
-  'Networker',
 
   // The Moon
 
   // Arabia Terra
   'Economizer',
-  'Pioneer',
   'Land Specialist',
   'Martian',
 
@@ -49,7 +46,6 @@ export const milestoneNames = [
   // Vastitas Borealis
   'V. Electrician',
   'Smith',
-  'Tradesman',
   'Irrigator',
   'Capitalist',
 
@@ -61,11 +57,8 @@ export const milestoneNames = [
   'Farmer', // And modular
 
   // Underworld
-  'Tunneler',
-  'Risktaker',
 
   // Ares Extreme
-  'Purifier',
 
   // Modular
   'Briber',
@@ -75,12 +68,9 @@ export const milestoneNames = [
   'Hydrologist',
   'Landshaper',
   'Legend4',
-  'Lobbyist',
   'Merchant',
   'Metallurgist', // Same as Smith
   'Philantropist',
-  'Pioneer4',
-  'Planetologist',
   'Producer',
   'Researcher',
   'Spacefarer4',

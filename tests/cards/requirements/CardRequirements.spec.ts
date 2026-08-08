@@ -3,13 +3,11 @@ import { CardRequirementDescriptor } from '../../../src/common/cards/CardRequire
 import { Tag } from '../../../src/common/cards/Tag';
 import { Resource } from '../../../src/common/Resource';
 import { TileType } from '../../../src/common/TileType';
-import { PartyName } from '../../../src/common/turmoil/PartyName';
 import { OneOrArray } from '../../../src/common/utils/types';
 import { asArray } from '../../../src/common/utils/utils';
 import { AdaptationTechnology } from '../../../src/server/cards/base/AdaptationTechnology';
 import { Ants } from '../../../src/server/cards/base/Ants';
 import { CardRequirements } from '../../../src/server/cards/requirements/CardRequirements';
-import { Ceres } from '../../../src/server/colonies/Ceres';
 import { IPlayer } from '../../../src/server/IPlayer';
 import { testGame } from '../../TestGame';
 import {
@@ -17,7 +15,6 @@ import {
   fakeCard,
   setOxygenLevel,
   setTemperature,
-  setVenusScaleLevel,
 } from '../../TestingUtils';
 import { TestPlayer } from '../../TestPlayer';
 
@@ -75,16 +72,6 @@ describe('CardRequirements', () => {
     expect(satisfies(requirements, player)).eq(true);
   });
 
-  it('satisfies properly for venus', () => {
-    const requirements = { venus: 8 };
-    expect(satisfies(requirements, player)).eq(false);
-    setVenusScaleLevel(player.game, 8);
-    expect(satisfies(requirements, player)).eq(true);
-    setVenusScaleLevel(player.game, 7);
-    expect(satisfies(requirements, player)).eq(false);
-    player.playCard(adaptationTechnology);
-    expect(satisfies(requirements, player)).eq(true);
-  });
 
   it('satisfies properly for tr', () => {
     const requirements = { tr: 25 };
@@ -97,12 +84,6 @@ describe('CardRequirements', () => {
     expect(satisfies(requirements, player)).eq(false);
   });
 
-  it('satisfies properly for chairman', () => {
-    const requirements = { chairman: true };
-    expect(satisfies(requirements, player)).eq(false);
-    player.game.turmoil!.chairman = player;
-    expect(satisfies(requirements, player)).eq(true);
-  });
 
   it('satisfies properly for resourceTypes', () => {
     const requirements = { resourceTypes: 3, max: true };
@@ -146,24 +127,6 @@ describe('CardRequirements', () => {
     expect(satisfies(requirements, player)).eq(true);
   });
 
-  it('satisfies properly for colonies', () => {
-    const requirements = { colonies: 1 };
-    const colony = new Ceres();
-    player.game.colonies.push(colony);
-    expect(satisfies(requirements, player)).eq(false);
-    colony.colonies.push(player2.id);
-    expect(satisfies(requirements, player)).eq(false);
-    colony.colonies.push(player.id);
-    expect(satisfies(requirements, player)).eq(true);
-  });
-
-  it('satisfies properly for partyLeaders', () => {
-    const requirements = { partyLeader: 1 };
-    expect(satisfies(requirements, player)).eq(false);
-    const greens = player.game.turmoil!.getPartyByName(PartyName.GREENS);
-    greens.partyLeader = player;
-    expect(satisfies(requirements, player)).eq(true);
-  });
 
   it('satisfies properly for same tags', () => {
     const requirements = { tag: Tag.MICROBE, count: 2 };
@@ -221,21 +184,6 @@ describe('CardRequirements', () => {
     expect(satisfies(requirements, player)).eq(true);
   });
 
-  it('satisfies properly for party', () => {
-    const requirements = { party: PartyName.MARS };
-    expect(satisfies(requirements, player)).eq(false);
-    player.game.turmoil!.sendDelegateToParty(
-      player,
-      PartyName.MARS,
-      player.game,
-    );
-    player.game.turmoil!.sendDelegateToParty(
-      player,
-      PartyName.MARS,
-      player.game,
-    );
-    expect(satisfies(requirements, player)).eq(true);
-  });
 
   it('throws errors when out of range', () => {
     expect(() => compile({ temperature: -32 })).to.throw();
@@ -245,7 +193,5 @@ describe('CardRequirements', () => {
     expect(() => compile({ oxygen: 15 })).to.throw();
     expect(() => compile({ oceans: -1 })).to.throw();
     expect(() => compile({ oceans: 10 })).to.throw();
-    expect(() => compile({ venus: -1 })).to.throw();
-    expect(() => compile({ venus: 31 })).to.throw();
   });
 });

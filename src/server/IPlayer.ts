@@ -18,16 +18,11 @@ import {Units} from '../common/Units';
 import {GlobalParameter} from '../common/GlobalParameter';
 import {InputResponse} from '../common/inputs/InputResponse';
 import {Tags} from './player/Tags';
-import {Colonies} from './player/Colonies';
 import {Production} from './player/Production';
 import {VictoryPointsBreakdown} from '../common/game/VictoryPointsBreakdown';
 import {Color} from '../common/Color';
 import {OrOptions} from './inputs/OrOptions';
 import {Stock} from './player/Stock';
-import {UnderworldPlayerData} from '../common/underworld/UnderworldPlayerData';
-import {DeltaProjectPlayerModel} from '../common/models/DeltaProjectPlayerModel';
-import {AlliedParty} from '../common/turmoil/Types';
-import {IParty} from './turmoil/parties/IParty';
 import {Message} from '../common/logs/Message';
 import {DiscordId} from './server/auth/discord';
 import {PlayedCards} from './cards/PlayedCards';
@@ -68,7 +63,6 @@ export interface IPlayer {
 
   readonly game: IGame;
   tags: Tags;
-  colonies: Colonies;
   readonly production: Production;
   readonly stock: Stock;
   readonly terraformRating: number;
@@ -119,7 +113,6 @@ export interface IPlayer {
   timer: Timer;
 
   // Turmoil
-  turmoilPolicyActionUsed: boolean;
   politicalAgendasActionUsedCount: number;
 
   /** Lakefront Resorts increases ocean adjacency to 3 MC  */
@@ -127,7 +120,6 @@ export interface IPlayer {
 
   // Custom cards
   // PoliticalAgendas Scientists P41
-  hasTurmoilScienceTagBonus: boolean;
   // Ecoline
   plantsNeededForGreenery: number;
   // Lawsuit
@@ -170,11 +162,7 @@ export interface IPlayer {
   // Stats
   actionsTakenThisGame: number;
   victoryPointsByGeneration: Array<number>;
-  totalDelegatesPlaced: number;
 
-  underworldData: UnderworldPlayerData;
-  deltaProjectData?: DeltaProjectPlayerModel;
-  readonly alliedParty?: AlliedParty;
 
   tearDown(): void;
 
@@ -246,7 +234,6 @@ export interface IPlayer {
    *
    * If Colonies is not in this game, this returns 0.
    */
-  getColoniesCount(): number;
   /**
    * Count the number of cards in the player's event pile.
    */
@@ -354,7 +341,6 @@ export interface IPlayer {
 
   /** Shorthand for deferring evaluating a PlayerInput */
   defer(input: PlayerInput | undefined | void | (() => PlayerInput | undefined | void), priority?: Priority): void;
-  setAlliedParty(party: IParty): void;
 }
 
 export function isIPlayer(object: any): object is IPlayer {

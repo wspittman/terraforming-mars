@@ -1,11 +1,11 @@
-import {expect} from 'chai';
-import {JSONProcessor} from '@/client/components/create/JSONProcessor';
-import {defaultCreateGameModel} from '@/client/components/create/defaultCreateGameModel';
-import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
-import {BoardName} from '@/common/boards/BoardName';
-import {JSONObject} from '@/common/Types';
-import {CreateGameModel} from '@/client/components/create/CreateGameModel';
-import {CardName} from '@/common/cards/CardName';
+import { CreateGameModel } from '@/client/components/create/CreateGameModel';
+import { defaultCreateGameModel } from '@/client/components/create/defaultCreateGameModel';
+import { JSONProcessor } from '@/client/components/create/JSONProcessor';
+import { BoardName } from '@/common/boards/BoardName';
+import { CardName } from '@/common/cards/CardName';
+import { RandomMAOptionType } from '@/common/ma/RandomMAOptionType';
+import { JSONObject } from '@/common/Types';
+import { expect } from 'chai';
 
 type Case = {
   description: string,
@@ -44,7 +44,6 @@ const TEMPLATE_INPUT = {
   draftVariant: true,
   showOtherPlayersVP: false,
   customCorporationsList: [],
-  customColoniesList: [],
   customPreludes: [],
   bannedCards: [],
   includedCards: [],
@@ -52,7 +51,6 @@ const TEMPLATE_INPUT = {
   seed: 0.40189423667985547,
   solarPhaseOption: false,
   aresExtremeVariant: false,
-  politicalAgendasExtension: 'Standard',
   undoOption: false,
   showTimers: true,
   fastModeOption: false,
@@ -123,7 +121,6 @@ const TEMPLATE_EXPECTED: CreateGameModel = {
   showCeosList: false,
   clonedGameId: undefined,
   showIncludedCards: false,
-  customColonies: [],
   customCorporations: [],
   customPreludes: [],
   bannedCards: [],
@@ -134,7 +131,6 @@ const TEMPLATE_EXPECTED: CreateGameModel = {
   solarPhaseOption: false,
   shuffleMapOption: false,
   aresExtremeVariant: false,
-  politicalAgendasExtension: 'Standard',
   undoOption: false,
   showTimers: true,
   fastModeOption: false,

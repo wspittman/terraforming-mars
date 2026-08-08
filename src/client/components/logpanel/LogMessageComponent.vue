@@ -7,17 +7,8 @@
         <span v-if="data.type === undefined || data.value === undefined"></span>
         <span v-else-if="data.type === LogMessageDataType.PLAYER" class="log-player" :class="'player_bg_color_' + data.value"> {{ getPlayerName(data.value) }} </span>
         <span v-else-if="data.type === LogMessageDataType.CARD" v-html="cardToHtml(data)"></span>
-        <span v-else-if="data.type === LogMessageDataType.GLOBAL_EVENT" class="log-card background-color-global-event" v-i18n>
-          {{data.value}}
-        </span>
         <span v-else-if="data.type === LogMessageDataType.TILE_TYPE" v-i18n>
           {{tileTypeToString[data.value]}}
-        </span>
-        <span v-else-if="data.type === LogMessageDataType.COLONY" class="log-card background-color-colony" v-i18n>
-          {{data.value}}
-        </span>
-        <span v-else-if="data.type === LogMessageDataType.UNDERGROUND_TOKEN" class="log-excavation-token" v-i18n>
-          {{undergroundResourceTokenDescription[data.value]}}
         </span>
         <span v-else-if="data.type === LogMessageDataType.SPACE" class="log-space-id" @click.prevent="$emit('spaceClicked', data.value)">
             <svg width="20" height="14" viewBox="0 0 28 37">
@@ -48,7 +39,6 @@ import {ViewModel} from '@/common/models/PlayerModel';
 import {tileTypeToString} from '@/common/TileType';
 import {Log} from '@/common/logs/Log';
 import {getCard} from '@/client/cards/ClientCardManifest';
-import {undergroundResourceTokenDescription} from '@/common/underworld/UndergroundResourceToken';
 import {isMoonSpace, getSpaceName} from '@/common/boards/spaces';
 import {range} from '@/common/utils/utils';
 
@@ -155,9 +145,6 @@ export default defineComponent({
     },
     isMoonSpace(): typeof isMoonSpace {
       return isMoonSpace;
-    },
-    undergroundResourceTokenDescription(): typeof undergroundResourceTokenDescription {
-      return undergroundResourceTokenDescription;
     },
     tileTypeToString(): typeof tileTypeToString {
       return tileTypeToString;

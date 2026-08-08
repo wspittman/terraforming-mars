@@ -14,7 +14,6 @@ import { Contractor } from './Contractor';
 import { Cultivator } from './Cultivator';
 import { DesertSettler } from './DesertSettler';
 import { Edgedancer } from './Edgedancer';
-import { Entrepreneur } from './Entrepreneur';
 import { EstateDealer } from './EstateDealer';
 import { Excentric } from './Excentric';
 import { Forecaster } from './Forecaster';
@@ -34,21 +33,15 @@ import { Investor } from './modular/Investor';
 import { Manufacturer } from './modular/Manufacturer';
 import { Metropolist } from './modular/Metropolist';
 import { Mogul } from './modular/Mogul';
-import { Politician } from './modular/Politician';
 import { Suburbian } from './modular/Suburbian';
 import { Traveller } from './modular/Traveller';
 import { Naturalist } from './Naturalist';
-import { Rugged } from './Rugged';
 import { Scientist } from './Scientist';
 import { SpaceBaron } from './SpaceBaron';
 import { Biologist } from './terraCimmeria/Biologist';
-import { TPolitician } from './terraCimmeria/TPolitician';
 import { Urbanist } from './terraCimmeria/Urbanist';
 import { Warmonger } from './terraCimmeria/Warmonger';
 import { Thermalist } from './Thermalist';
-import { Excavator } from './underworld/Excavator';
-import { Kingpin } from './underworld/Kingpin';
-import { Venuphile } from './Venuphile';
 import { Visionary } from './Visionary';
 import { Voyager } from './Voyager';
 
@@ -74,9 +67,7 @@ export const awardManifest: MAManifest<AwardName, IAward> = {
     'Desert Settler': { Factory: DesertSettler },
     'Edgedancer': { Factory: Edgedancer },
     'Electrician': { Factory: Electrician, random: 'modular' },
-    'Entrepreneur': { Factory: Entrepreneur, compatibility: 'ares' },
     'Estate Dealer': { Factory: EstateDealer, random: 'both' },
-    'Excavator': { Factory: Excavator, compatibility: 'underworld' },
     'Excentric': { Factory: Excentric, random: 'both' },
     'Forecaster': { Factory: Forecaster, random: 'both' },
     'Founder': { Factory: Founder, random: 'modular' },
@@ -84,7 +75,6 @@ export const awardManifest: MAManifest<AwardName, IAward> = {
     'Incorporator': { Factory: Incorporator, random: 'both' },
     'Industrialist': { Factory: Industrialist, random: 'both' },
     'Investor': { Factory: Investor, random: 'modular' },
-    'Kingpin': { Factory: Kingpin, compatibility: 'underworld' },
     'Landlord': { Factory: Landlord, random: 'both' },
     'Magnate': { Factory: Magnate, random: 'both' },
     'Manufacturer': { Factory: Manufacturer, random: 'modular' },
@@ -92,21 +82,13 @@ export const awardManifest: MAManifest<AwardName, IAward> = {
     'Miner': { Factory: Miner, random: 'both' },
     'Mogul': { Factory: Mogul, random: 'modular' },
     'Naturalist': { Factory: Naturalist },
-    'Politician': {
-      Factory: Politician,
-      compatibility: 'turmoil',
-      random: 'modular',
-    },
     'Promoter': { Factory: Promoter, random: 'both' },
-    'Rugged': { Factory: Rugged, compatibility: 'ares' },
     'Scientist': { Factory: Scientist, random: 'both' },
     'Space Baron': { Factory: SpaceBaron, random: 'both' },
     'Suburbian': { Factory: Suburbian, random: 'modular' },
-    'T. Politician': { Factory: TPolitician, compatibility: 'turmoil' },
     'Thermalist': { Factory: Thermalist, random: 'both' },
     'Traveller': { Factory: Traveller, random: 'modular' },
     'Urbanist': { Factory: Urbanist },
-    'Venuphile': { Factory: Venuphile, compatibility: 'venus' },
     'Visionary': { Factory: Visionary, random: 'both' },
     'Voyager': { Factory: Voyager },
     'Warmonger': { Factory: Warmonger },
@@ -162,11 +144,6 @@ export const awardManifest: MAManifest<AwardName, IAward> = {
       'Blacksmith',
     ],
     [BoardName.HOLLANDIA]: [],
-  },
-  expansions: {
-    venus: ['Venuphile'],
-    ares: ['Entrepreneur', 'Rugged'],
-    underworld: ['Kingpin', 'Excavator'],
   },
   create: (name: string): IAward | undefined => {
     try {

@@ -27,11 +27,6 @@ export class TagCardRequirement extends InequalityRequirement {
         tagCount += p.tags.count(this.tag, 'raw');
       });
     }
-    // PoliticalAgendas Scientists P4 hook
-    if (this.tag === Tag.SCIENCE && player.hasTurmoilScienceTagBonus) {
-      tagCount += 1;
-    }
-
     return tagCount;
   }
 }

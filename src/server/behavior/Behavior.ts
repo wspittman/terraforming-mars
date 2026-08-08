@@ -6,9 +6,7 @@ import {SpaceId} from '../../common/Types';
 import {TileType} from '../../common/TileType';
 import {Countable, CountableUnits} from './Countable';
 import {PlacementType} from '../boards/PlacementType';
-import {AdjacencyBonus} from '../ares/AdjacencyBonus';
 import {Units} from '../../common/Units';
-import {NoAttributes} from './NoAttributes';
 
 type ValueOf<Obj> = Obj[keyof Obj];
 type OneOnly<Obj, Key extends keyof Obj> = { [key in Exclude<keyof Obj, Key>]: null } & Pick<Obj, Key>;
@@ -25,8 +23,6 @@ export type Spend = Units & {
     type: CardResource,
   },
 
-  /** corruption from your personal supply. */
-  corruption: number,
 
   /** discard project cards from your hand */
   cards: number,
@@ -89,7 +85,6 @@ export type Behavior = {
   global?: {
     temperature?: -2 | -1 | 1 | 2 | 3;
     oxygen?: 2 | 1 | -1 | -2;
-    venus?: 3 | 2 | 1 | -1;
   },
 
   city?: {
@@ -108,7 +103,6 @@ export type Behavior = {
   tile?: {
     type: TileType,
     on: PlacementType,
-    adjacencyBonus?: AdjacencyBonus,
     title?: string,
   },
 
@@ -131,36 +125,7 @@ export type Behavior = {
   // spendResourcesHere: number,
   // spendResource: {type: CardResource, count: number},
   // tile: {type: TileType, space?: SpaceId, spaceType?: SpaceType};
-  colonies?: {
-    buildColony?: {
-      allowDuplicates?: boolean,
-    },
 
-    /** Add this many trade fleets to your armada. */
-    addTradeFleet?: number,
-
-    /** When trading increase the colony track this many steps. */
-    tradeDiscount?: number,
-
-    /** When trading increase the colony track this many steps. */
-    tradeOffset?: number,
-  }
-
-  turmoil?: {
-    influenceBonus?: 1,
-    sendDelegates?: {
-      count: Countable,
-      manyParties?: boolean,
-    },
-  },
-
-
-  underworld?: {
-    identify?: number | {count: number, claim?: number},
-    excavate?: number | {count: Countable, ignorePlacementRestrictions?: boolean},
-    corruption?: Countable,
-    markThisGeneration?: NoAttributes,
-  },
 
   /**
    * Log a message using a parameterized string replacement. This is not a normal template.

@@ -1,12 +1,12 @@
-import {mount, shallowMount} from '@vue/test-utils';
-import {globalConfig} from '../getLocalVue';
-import {expect} from 'chai';
 import CreateGameForm from '@/client/components/create/CreateGameForm.vue';
-import {CreateGameSettingsStorage} from '@/client/components/create/CreateGameSettingsStorage';
-import {FakeLocalStorage} from '../FakeLocalStorage';
-import {BoardName} from '@/common/boards/BoardName';
-import {JSONObject} from '@/common/Types';
-import {defineComponent} from 'vue';
+import { CreateGameSettingsStorage } from '@/client/components/create/CreateGameSettingsStorage';
+import { BoardName } from '@/common/boards/BoardName';
+import { JSONObject } from '@/common/Types';
+import { mount, shallowMount } from '@vue/test-utils';
+import { expect } from 'chai';
+import { defineComponent } from 'vue';
+import { FakeLocalStorage } from '../FakeLocalStorage';
+import { globalConfig } from '../getLocalVue';
 
 // Minimal serialized Create Game payload used by settings restore tests.
 function createGameSettings(overrides: JSONObject = {}): JSONObject {
@@ -42,17 +42,6 @@ describe('CreateGameForm', () => {
     expect(wrapper.exists()).to.be.true;
   });
 
-  it('only offers Base and Corporate Era', () => {
-    const wrapper = shallowMount(CreateGameForm, {
-      ...globalConfig,
-    });
-
-    expect(wrapper.find('#corporateEra-checkbox').exists()).to.be.true;
-    expect(wrapper.find('#prelude-checkbox').exists()).to.be.false;
-    expect(wrapper.find('#venusNext-checkbox').exists()).to.be.false;
-    expect(wrapper.find('#colonies-checkbox').exists()).to.be.false;
-    expect(wrapper.find('#turmoil-checkbox').exists()).to.be.false;
-  });
 
   it('restores the last saved game settings on load', async () => {
     new CreateGameSettingsStorage(localStorage).saveSettings(createGameSettings({

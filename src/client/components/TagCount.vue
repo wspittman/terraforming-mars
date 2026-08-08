@@ -1,7 +1,6 @@
 <template>
   <div :class="outerClass">
-    <UndergroundToken v-if="claimedToken !== undefined" :token="claimedToken" location="tag-count"/>
-    <Tag v-else :tag="(tag as CardTag)" :size="size" :type="type"/>
+    <Tag :tag="(tag as CardTag)" :size="size" :type="type"/>
     <span :class="innerClass">{{ count }}</span>
   </div>
 </template>
@@ -10,11 +9,8 @@
 
 import {defineComponent, PropType} from 'vue';
 import Tag from '@/client/components/Tag.vue';
-import UndergroundToken from '@/client/components/underworld/UndergroundToken.vue';
 import {Tag as CardTag} from '@/common/cards/Tag';
 import {SpecialTags} from '@/client/cards/SpecialTags';
-import {TemporaryBonusToken} from '@/common/underworld/UndergroundResourceToken';
-import {ClaimedToken} from '@/common/underworld/UnderworldPlayerData';
 
 // Display-only tags used in PlayerTags for overview counts.
 type DisplayTag = 'vp' | 'tr' | 'handicap' | 'cards' | 'escape';
@@ -25,11 +21,6 @@ export default defineComponent({
     tag: {
       type: String as () => CardTag | SpecialTags | DisplayTag,
       required: true,
-    },
-    undergroundToken: {
-      type: String as () => TemporaryBonusToken | undefined,
-      required: false,
-      default: undefined,
     },
     count: {
       type: [Number, String] as PropType<number | string>,
@@ -50,7 +41,6 @@ export default defineComponent({
   },
   components: {
     Tag,
-    UndergroundToken,
   },
   computed: {
     outerClass(): string {
@@ -68,13 +58,6 @@ export default defineComponent({
 
       return classes.join(' ');
     },
-    claimedToken(): ClaimedToken | undefined {
-      if (this.undergroundToken === undefined) {
-        return undefined;
-      }
-      return {token: this.undergroundToken, shelter: false, active: true};
-    },
-
   },
 });
 </script>

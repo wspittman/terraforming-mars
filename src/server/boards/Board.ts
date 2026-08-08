@@ -5,9 +5,7 @@ import {SpaceType} from '../../common/boards/SpaceType';
 import {BASE_OCEAN_TILES, CITY_TILES, GREENERY_TILES, HAZARD_TILES, OCEAN_TILES, TileType} from '../../common/TileType';
 import {SerializedBoard, SerializedSpace} from './SerializedBoard';
 import {CardName} from '../../common/cards/CardName';
-import {AresHandler} from '../ares/AresHandler';
 import {Units} from '../../common/Units';
-import {hazardSeverity} from '../../common/AresTileType';
 import {TR_SOURCES, TRSource} from '../../common/cards/TRSource';
 import {sum} from '../../common/utils/utils';
 
@@ -144,7 +142,7 @@ export abstract class Board {
     return {megacredits: 0, production: 0, tr: {}};
   }
 
-  private computeAdditionalCosts(space: Space, aresExtension: boolean, multiplier: number | undefined): SpaceCosts {
+  private computeAdditionalCosts(space: Space, multiplier: number | undefined): SpaceCosts {
     const costs: SpaceCosts = this.spaceCosts(space);
     if (multiplier !== undefined) {
       costs.megacredits *= multiplier;
@@ -156,57 +154,15 @@ export abstract class Board {
       }
     }
 
-    if (aresExtension === false) {
-      return costs;
-    }
-
-    switch (hazardSeverity(space.tile?.tileType)) {
-    case 'mild':
-      costs.megacredits += 8;
-      costs.tr.tr = (costs.tr.tr ?? 0) + 1;
-      break;
-    case 'severe':
-      costs.megacredits += 16;
-      costs.tr.tr = (costs.tr.tr ?? 0) + 2;
-      break;
-    }
-
-    for (const adjacentSpace of this.getAdjacentSpaces(space)) {
-      switch (hazardSeverity(adjacentSpace.tile?.tileType)) {
-      case 'mild':
-        costs.production += 1;
-        break;
-      case 'severe':
-        costs.production += 2;
-        break;
-      }
-      if (adjacentSpace.adjacency !== undefined) {
-        const adjacency = adjacentSpace.adjacency;
-        costs.megacredits += adjacency.cost ?? 0;
-        // TODO(kberg): offset costs with heat and MC bonuses.
-        // for (const bonus of adjacency.bonus) {
-        //   case (bonus) {
-        //     switch SpaceBonus.MEGACREDITS:
-        //       costs.stock.megacredits--;
-        //     switch SpaceBonus.MEGACREDITS:
-        //       costs.stock.megacredits--;
-        //   }
-        // }
-      }
-    }
     return costs;
   }
 
   public canAfford(player: IPlayer, space: Space, canAffordOptions?: CanAffordOptions) {
-    const additionalCosts = this.computeAdditionalCosts(space, player.game.gameOptions.aresExtension, canAffordOptions?.bonusMultiplier);
+    const additionalCosts = this.computeAdditionalCosts(space, canAffordOptions?.bonusMultiplier);
     if (additionalCosts.megacredits > 0) {
       const plan: CanAffordOptions = canAffordOptions !== undefined ? {...canAffordOptions} : {cost: 0, tr: {}};
       plan.cost += additionalCosts.megacredits;
       plan.tr = additionalCosts.tr;
-
-      if (space.undergroundResources === 'place6mc') {
-        plan.cost -= 6;
-      }
 
       const afford = player.canAfford(plan);
       if (afford === false) {
@@ -233,9 +189,7 @@ export abstract class Board {
         return false;
       }
 
-      const playableSpace = space.tile === undefined || (AresHandler.hasHazardTile(space) && space.tile?.protectedHazard !== true);
-
-      if (!playableSpace) {
+      if (space.tile !== undefined) {
         return false;
       }
 
@@ -306,14 +260,6 @@ export abstract class Board {
     return Board.ownedBy(player)(space);
   }
 
-  public getHazards(): ReadonlyArray<Space> {
-    return this.spaces.filter(AresHandler.hasHazardTile);
-  }
-
-  public getUnprotectedHazards(): ReadonlyArray<Space> {
-    return this.getHazards().filter((space) => space.tile?.protectedHazard !== true);
-  }
-
   /** Hazard tiles don't really count as tiles. */
   public static hasRealTile(space: Space) {
     return space.tile !== undefined && HAZARD_TILES.has(space.tile.tileType) === false;
@@ -328,16 +274,9 @@ export abstract class Board {
           tile: space.tile,
           player: space.player?.id,
           bonus: space.bonus,
-          adjacency: space.adjacency,
           x: space.x,
           y: space.y,
         };
-        if (space.undergroundResources !== undefined) {
-          serialized.undergroundResources = space.undergroundResources;
-        }
-        if (space.excavator !== undefined) {
-          serialized.excavator = space.excavator.id;
-        }
         if (space.coOwner !== undefined) {
           serialized.coOwner = space.coOwner.id;
         }
@@ -355,7 +294,6 @@ export abstract class Board {
 
   public static deserializeSpace(serialized: SerializedSpace, players: ReadonlyArray<IPlayer>): Space {
     const player = this.findPlayer(players, serialized.player);
-    const excavator = this.findPlayer(players, serialized.excavator);
     const coOwner = this.findPlayer(players, serialized.coOwner);
     const space: Space = {
       id: serialized.id,
@@ -370,15 +308,6 @@ export abstract class Board {
     }
     if (player !== undefined) {
       space.player = player;
-    }
-    if (serialized.adjacency !== undefined) {
-      space.adjacency = serialized.adjacency;
-    }
-    if (serialized.undergroundResources !== undefined) {
-      space.undergroundResources = serialized.undergroundResources;
-    }
-    if (excavator !== undefined) {
-      space.excavator = excavator;
     }
     if (coOwner !== undefined) {
       space.coOwner = coOwner;

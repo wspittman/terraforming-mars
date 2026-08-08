@@ -1,6 +1,4 @@
 import { expect } from 'chai';
-import { SpaceName } from '../../src/common/boards/SpaceName';
-import { CardName } from '../../src/common/cards/CardName';
 import { Tag } from '../../src/common/cards/Tag';
 import { TileType } from '../../src/common/TileType';
 import { Units } from '../../src/common/Units';
@@ -8,15 +6,11 @@ import { Counter } from '../../src/server/behavior/Counter';
 import { IceAsteroid } from '../../src/server/cards/base/IceAsteroid';
 import { ImportedHydrogen } from '../../src/server/cards/base/ImportedHydrogen';
 import { Virus } from '../../src/server/cards/base/Virus';
-import { IProjectCard } from '../../src/server/cards/IProjectCard';
-import { ProxyCard } from '../../src/server/cards/ProxyCard';
 import { IGame } from '../../src/server/IGame';
-import { Turmoil } from '../../src/server/turmoil/Turmoil';
 import { testGame } from '../TestGame';
 import { addCity, addGreenery, fakeCard, maxOutOceans } from '../TestingUtils';
 import { TestPlayer } from '../TestPlayer';
 
-const GLOBAL_EVENT_PROXY = new ProxyCard(CardName.GLOBAL_EVENT_PROXY);
 
 describe('Counter', () => {
   let game: IGame;
@@ -104,54 +98,6 @@ describe('Counter', () => {
     expect(counter.count({ tag: [Tag.VENUS, Tag.PLANT] })).eq(1);
   });
 
-  it('count cities', () => {
-    const counter = new Counter(player, fakeCard());
-
-    function count() {
-      return {
-        '': counter.count({ cities: {} }),
-        'onmars': counter.count({ cities: { where: 'onmars' } }),
-        'offmars': counter.count({ cities: { where: 'offmars' } }),
-        'everywhere': counter.count({ cities: { where: 'everywhere' } }),
-      };
-    }
-    expect(count()).deep.eq({ '': 0, 'onmars': 0, 'offmars': 0, 'everywhere': 0 });
-
-    addCity(player, SpaceName.GANYMEDE_COLONY);
-
-    expect(count()).deep.eq({ '': 1, 'onmars': 0, 'offmars': 1, 'everywhere': 1 });
-
-    addCity(player);
-
-    expect(count()).deep.eq({ '': 2, 'onmars': 1, 'offmars': 1, 'everywhere': 2 });
-
-    // Even if added by another player
-    addCity(player2);
-
-    expect(count()).deep.eq({ '': 3, 'onmars': 2, 'offmars': 1, 'everywhere': 3 });
-  });
-
-  it('count cities that you own', () => {
-    const count = (player: TestPlayer) =>
-      new Counter(player, fakeCard()).count({ cities: {}, all: false });
-
-    addCity(player, SpaceName.GANYMEDE_COLONY);
-
-    expect(count(player)).eq(1);
-    expect(count(player2)).eq(0);
-
-    const landSpace = game.board.getAvailableSpacesForCity(player)[0];
-    game.addCity(player, landSpace);
-
-    expect(count(player)).eq(2);
-    expect(count(player2)).eq(0);
-
-    const landSpace2 = game.board.getAvailableSpacesForCity(player2)[0];
-    game.addCity(player2, landSpace2);
-
-    expect(count(player)).eq(2);
-    expect(count(player2)).eq(1);
-  });
 
   it('count greeneries', () => {
     const counter = new Counter(player, fakeCard());
@@ -284,161 +230,5 @@ describe('Counter', () => {
     expect(counter.count({ eventsPlayed: true })).eq(1);
     expect(counter.count({ eventsPlayed: true, all: true })).eq(3);
     expect(counter.count({ eventsPlayed: true, each: 2 })).eq(2);
-  });
-});
-
-describe('Counter for Underworld', () => {
-  let game: IGame;
-  let player: TestPlayer;
-  let player2: TestPlayer;
-  let fake: IProjectCard;
-
-  beforeEach(() => {
-    [game, player, player2] = testGame(3, { underworldExpansion: true });
-    fake = fakeCard();
-  });
-
-  it('corruption', () => {
-    const counter = new Counter(player, fake);
-    expect(counter.count({ underworld: { corruption: {} } })).eq(0);
-
-    player.underworldData.corruption = 3;
-
-    expect(counter.count({ underworld: { corruption: {} } })).eq(3);
-    expect(counter.count({ underworld: { corruption: {} }, all: true })).eq(3);
-
-    player2.underworldData.corruption = 5;
-
-    expect(counter.count({ underworld: { corruption: {} } })).eq(3);
-    expect(counter.count({ underworld: { corruption: {} }, all: true })).eq(8);
-  });
-
-  it('excavationMarkers', () => {
-    const counter = new Counter(player, fake);
-    expect(counter.count({ underworld: { excavationMarkers: {} } })).eq(0);
-
-    game.board.getSpaceOrThrow(SpaceName.NOCTIS_CITY).excavator = player;
-
-    expect(counter.count({ underworld: { excavationMarkers: {} } })).eq(1);
-    expect(
-      counter.count({ underworld: { excavationMarkers: {} }, all: true }),
-    ).eq(1);
-
-    game.board.getSpaceOrThrow('09').excavator = player2;
-
-    expect(counter.count({ underworld: { excavationMarkers: {} } })).eq(1);
-    expect(
-      counter.count({ underworld: { excavationMarkers: {} }, all: true }),
-    ).eq(2);
-  });
-});
-
-describe('Counter for Turmoil', () => {
-  let game: IGame;
-  let player: TestPlayer;
-  let turmoil: Turmoil;
-
-  beforeEach(() => {
-    [game, player] = testGame(2, { turmoilExtension: true });
-    turmoil = Turmoil.getTurmoil(game);
-  });
-
-  it('influence', () => {
-    const counter = new Counter(player, GLOBAL_EVENT_PROXY);
-    expect(counter.count({ turmoil: { influence: {} } })).eq(0);
-
-    turmoil.chairman = player;
-    expect(counter.count({ turmoil: { influence: {} } })).eq(1);
-
-    turmoil.dominantParty.partyLeader = player;
-    expect(counter.count({ turmoil: { influence: {} } })).eq(2);
-
-    game.turmoil!.addInfluenceBonus(player, 3);
-    expect(counter.count({ turmoil: { influence: {} } })).eq(5);
-  });
-
-  it('partyLeaders', () => {
-    const counter = new Counter(player, GLOBAL_EVENT_PROXY);
-    expect(counter.count({ turmoil: { partyLeaders: {} } })).eq(0);
-
-    turmoil.parties[0].partyLeader = player;
-    expect(counter.count({ turmoil: { partyLeaders: {} } })).eq(1);
-
-    turmoil.parties[1].partyLeader = player;
-    expect(counter.count({ turmoil: { partyLeaders: {} } })).eq(2);
-
-    // Chariman is not a party leader.
-    turmoil.chairman = player;
-    expect(counter.count({ turmoil: { partyLeaders: {} } })).eq(2);
-  });
-
-  it('max and influence', () => {
-    const counter = new Counter(player, GLOBAL_EVENT_PROXY);
-    player.tagsForTest = { earth: 7 };
-
-    turmoil.chairman = player;
-    turmoil.dominantParty.partyLeader = player;
-    expect(turmoil.getInfluence(player)).eq(2);
-
-    expect(counter.count({ tag: Tag.EARTH, turmoil: {} })).eq(7);
-    expect(counter.count({ tag: Tag.EARTH, turmoil: { max: 5 } })).eq(5);
-    expect(
-      counter.count({ tag: Tag.EARTH, turmoil: { max: 5, influence: {} } }),
-    ).eq(7);
-  });
-
-  it('influence subtracts', () => {
-    const counter = new Counter(player, GLOBAL_EVENT_PROXY);
-    player.tagsForTest = { earth: 7 };
-
-    turmoil.chairman = player;
-    turmoil.dominantParty.partyLeader = player;
-    expect(turmoil.getInfluence(player)).eq(2);
-
-    expect(
-      counter.count({
-        tag: Tag.EARTH,
-        turmoil: { max: 5, influence: { subtract: true } },
-      }),
-    ).eq(3);
-
-    // The count runs below zero. `lose` is what clamps it, not the counter.
-    turmoil.addInfluenceBonus(player, 6);
-    expect(
-      counter.count({
-        tag: Tag.EARTH,
-        turmoil: { max: 5, influence: { subtract: true } },
-      }),
-    ).eq(-3);
-  });
-
-  it('each applies after max and influence', () => {
-    const counter = new Counter(player, GLOBAL_EVENT_PROXY);
-    player.tagsForTest = { earth: 7 };
-
-    turmoil.chairman = player;
-    expect(turmoil.getInfluence(player)).eq(1);
-
-    expect(
-      counter.count({ tag: Tag.EARTH, turmoil: { max: 5, influence: {} } }),
-    ).eq(6);
-    expect(
-      counter.count({
-        tag: Tag.EARTH,
-        each: 2,
-        turmoil: { max: 5, influence: {} },
-      }),
-    ).eq(12);
-  });
-
-  it('global events do not count wild tags', () => {
-    const [, /* game */ player] = testGame(2, { turmoilExtension: true });
-    player.tagsForTest = { earth: 1, wild: 1 };
-
-    // Wild tags apply when taking an action, but not when a global event resolves.
-    expect(new Counter(player, fakeCard()).count({ tag: Tag.EARTH })).eq(2);
-    expect(
-      new Counter(player, GLOBAL_EVENT_PROXY).count({ tag: Tag.EARTH }),
-    ).eq(1);
   });
 });

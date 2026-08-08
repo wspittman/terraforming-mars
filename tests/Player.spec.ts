@@ -8,7 +8,6 @@ import { SerializedTimer } from '../src/common/SerializedTimer';
 import { Timer } from '../src/common/Timer';
 import { CardName } from '../src/common/cards/CardName';
 import { InputResponse } from '../src/common/inputs/InputResponse';
-import { PartyName } from '../src/common/turmoil/PartyName';
 import { Game } from '../src/server/Game';
 import { Player } from '../src/server/Player';
 import { SerializedPlayer } from '../src/server/SerializedPlayer';
@@ -19,14 +18,12 @@ import { LunarBeam } from '../src/server/cards/base/LunarBeam';
 import { Pets } from '../src/server/cards/base/Pets';
 import { PowerSupplyConsortium } from '../src/server/cards/base/PowerSupplyConsortium';
 import { SaturnSystems } from '../src/server/cards/corporation/SaturnSystems';
-import { OrOptions } from '../src/server/inputs/OrOptions';
 import { SelectAmount } from '../src/server/inputs/SelectAmount';
 import { SelectCard } from '../src/server/inputs/SelectCard';
 import { SelectOption } from '../src/server/inputs/SelectOption';
 import { SelectPlayer } from '../src/server/inputs/SelectPlayer';
 import { testGame } from './TestGame';
-import { TestPlayer } from './TestPlayer';
-import { runAllActions, setRulingParty } from './TestingUtils';
+import { runAllActions } from './TestingUtils';
 import { FakeClock } from './common/FakeClock';
 
 function playerWithRunningTimer(): [Player, FakeClock] {
@@ -220,12 +217,6 @@ describe('Player', () => {
     player.pickedCorporationCard = new SaturnSystems();
     const json = player.serialize();
     expect(json.pickedCorporationCard).eq('Saturn Systems');
-  });
-  it('does not serialize expansion state', () => {
-    const player = new Player('blue', 'blue', false, 0, 'p-blue');
-    const json = player.serialize();
-    expect(json).not.have.property('alliedParty');
-    expect(json).not.have.property('underworldData');
   });
   it('serialization test', () => {
     const json: SerializedPlayer = {
@@ -492,74 +483,6 @@ describe('Player', () => {
     expect(player2.globalParameterSteps[GlobalParameter.OXYGEN]).eq(2);
   });
 
-  it('Increasing venus sets globalParameterSteps', () => {
-    const [game, player, player2] = testGame(2, {
-      venusNextExtension: true,
-      solarPhaseOption: true,
-    });
-
-    game.phase = Phase.ACTION;
-    game.increaseVenusScaleLevel(player, 1);
-    expect(player.globalParameterSteps[GlobalParameter.VENUS]).eq(1);
-
-    game.increaseVenusScaleLevel(player, 2);
-    expect(player.globalParameterSteps[GlobalParameter.VENUS]).eq(3);
-
-    game.increaseVenusScaleLevel(player, -1);
-    expect(player.globalParameterSteps[GlobalParameter.VENUS]).eq(3);
-    expect(player2.globalParameterSteps[GlobalParameter.VENUS]).eq(0);
-
-    game.phase = Phase.SOLAR;
-
-    game.increaseVenusScaleLevel(player2, 2);
-    expect(player2.globalParameterSteps[GlobalParameter.VENUS]).eq(0);
-
-    game.phase = Phase.ACTION;
-
-    game.increaseVenusScaleLevel(player2, 2);
-    expect(player2.globalParameterSteps[GlobalParameter.VENUS]).eq(2);
-  });
-
-  describe('Convert Heat / Kelvinists kp03 swap', () => {
-    function findOption(
-      player: TestPlayer,
-      title: string,
-    ): SelectOption | undefined {
-      const actions = cast(player.getActions(), OrOptions);
-      const option = actions.options.find((o) => o.title === title);
-      return option === undefined ? undefined : cast(option, SelectOption);
-    }
-
-    it('kp03 ruling: 6-heat option replaces 8-heat option', () => {
-      const [game, player] = testGame(1, { turmoilExtension: true });
-      setRulingParty(game, PartyName.KELVINISTS, 'kp03');
-      player.stock.add(Resource.HEAT, 10);
-
-      expect(findOption(player, 'Convert 8 heat into temperature')).is
-        .undefined;
-      expect(
-        findOption(
-          player,
-          'Convert 6 heat into temperature (Turmoil Kelvinists)',
-        ),
-      ).is.not.undefined;
-    });
-
-    it('kp01 ruling: 8-heat option remains, 6-heat is not offered', () => {
-      const [game, player] = testGame(1, { turmoilExtension: true });
-      setRulingParty(game, PartyName.KELVINISTS, 'kp01');
-      player.stock.add(Resource.HEAT, 10);
-
-      expect(findOption(player, 'Convert 8 heat into temperature')).is.not
-        .undefined;
-      expect(
-        findOption(
-          player,
-          'Convert 6 heat into temperature (Turmoil Kelvinists)',
-        ),
-      ).is.undefined;
-    });
-  });
 
   it('run research phase', () => {
     const [game, player] = testGame(1, { skipInitialCardSelection: true });

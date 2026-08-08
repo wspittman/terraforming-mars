@@ -1,10 +1,8 @@
 import * as constants from '../../common/constants';
 import {BoardName} from '../../common/boards/BoardName';
 import {CardName} from '../../common/cards/CardName';
-import {ColonyName} from '../../common/colonies/ColonyName';
 import {GameId} from '../../common/Types';
 import {RandomMAOptionType} from '../../common/ma/RandomMAOptionType';
-import {AgendaStyle} from '../../common/turmoil/Types';
 import {Expansion} from '../../common/cards/GameModule';
 import {EscapeVelocityOptions} from '../../common/game/NewGameConfig';
 
@@ -30,7 +28,6 @@ export type GameOptions = {
   aresExtension: boolean;
   aresHazards: boolean;
   aresExtremeVariant: boolean;
-  politicalAgendasExtension: AgendaStyle;
   solarPhaseOption: boolean;
   removeNegativeGlobalEventsOption: boolean;
   moonExpansion: boolean;
@@ -58,7 +55,6 @@ export type GameOptions = {
   customCorporationsList: ReadonlyArray<CardName>;
   bannedCards: ReadonlyArray<CardName>;
   includedCards: ReadonlyArray<CardName>;
-  customColoniesList: ReadonlyArray<ColonyName>;
   customPreludes: ReadonlyArray<CardName>;
   customCeos: ReadonlyArray<CardName>;
   startingCeos: number;
@@ -90,7 +86,6 @@ export const DEFAULT_GAME_OPTIONS: GameOptions = {
   communityCardsOption: false,
   corporateEra: true,
   customCeos: [],
-  customColoniesList: [],
   customCorporationsList: [],
   customPreludes: [],
   draftVariant: false,
@@ -120,7 +115,6 @@ export const DEFAULT_GAME_OPTIONS: GameOptions = {
   moonStandardProjectVariant: false,
   moonStandardProjectVariant1: false,
   pathfindersExpansion: false,
-  politicalAgendasExtension: 'Standard',
   preludeDraftVariant: false,
   ceosDraftVariant: false,
   preludeExtension: false,

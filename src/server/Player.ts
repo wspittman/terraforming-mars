@@ -5,7 +5,7 @@ import { Tag } from '../common/cards/Tag';
 import { TRSource } from '../common/cards/TRSource';
 import { Color } from '../common/Color';
 import * as constants from '../common/constants';
-import { MILESTONE_COST, REDS_RULING_POLICY_COST } from '../common/constants';
+import { MILESTONE_COST } from '../common/constants';
 import { VictoryPointsBreakdown } from '../common/game/VictoryPointsBreakdown';
 import { GlobalParameter } from '../common/GlobalParameter';
 import { InputResponse } from '../common/inputs/InputResponse';
@@ -21,14 +21,10 @@ import {
   SpendableResource,
 } from '../common/inputs/Spendable';
 import { Message } from '../common/logs/Message';
-import { DeltaProjectPlayerModel } from '../common/models/DeltaProjectPlayerModel';
 import { Phase } from '../common/Phase';
 import { Resource } from '../common/Resource';
 import { Timer } from '../common/Timer';
-import { PartyName } from '../common/turmoil/PartyName';
-import { AlliedParty } from '../common/turmoil/Types';
 import { PlayerId } from '../common/Types';
-import { UnderworldPlayerData } from '../common/underworld/UnderworldPlayerData';
 import { Units } from '../common/Units';
 import {
   copyAndClear,
@@ -47,7 +43,6 @@ import { IActionCard, ICard, isIActionCard } from './cards/ICard';
 import { IProjectCard } from './cards/IProjectCard';
 import { IStandardProjectCard } from './cards/IStandardProjectCard';
 import { PlayedCards } from './cards/PlayedCards';
-import { ColoniesHandler } from './colonies/ColoniesHandler';
 import {
   cardsFromJSON,
   corporationCardsFromJSON,
@@ -78,19 +73,12 @@ import { LogHelper } from './LogHelper';
 import { From } from './logs/From';
 import { message } from './logs/MessageBuilder';
 import { IMilestone } from './milestones/IMilestone';
-import { Colonies } from './player/Colonies';
 import { Production } from './player/Production';
 import { Stock } from './player/Stock';
 import { Tags } from './player/Tags';
 import { PlayerInput } from './PlayerInput';
 import { SerializedPlayer } from './SerializedPlayer';
 import { DiscordId } from './server/auth/discord';
-import { IParty } from './turmoil/parties/IParty';
-import { KELVINISTS_POLICY_3 } from './turmoil/parties/Kelvinists';
-import { PartyHooks } from './turmoil/parties/PartyHooks';
-import { Turmoil } from './turmoil/Turmoil';
-import { TurmoilHandler } from './turmoil/TurmoilHandler';
-import { UnderworldExpansion } from './underworld/UnderworldExpansion';
 
 const THROW_STATE_ERRORS = Boolean(process.env.THROW_STATE_ERRORS);
 const DEFAULT_GLOBAL_PARAMETER_STEPS = {
@@ -109,11 +97,9 @@ export class Player implements IPlayer {
   protected waitingForCb?: () => void;
   public game: IGame;
   public tags: Tags;
-  public colonies: Colonies;
   public readonly production: Production;
   public readonly stock: Stock;
   public readonly opponents: ReadonlyArray<IPlayer> = [];
-  private _alliedParty: AlliedParty | undefined;
 
   // Used only during set-up
   public pickedCorporationCard?: ICorporationCard;
@@ -151,15 +137,12 @@ export class Player implements IPlayer {
   public timer: Timer = Timer.newInstance();
   public autopass = false;
 
-  // Turmoil
-  public turmoilPolicyActionUsed: boolean = false;
   public politicalAgendasActionUsedCount: number = 0;
 
   public oceanBonus: number = constants.OCEAN_BONUS;
 
   // Custom cards
   // PoliticalAgendas Scientists P41
-  public hasTurmoilScienceTagBonus: boolean = false;
   // Ecoline
   public plantsNeededForGreenery: number = 8;
   // Lawsuit
@@ -171,9 +154,6 @@ export class Player implements IPlayer {
   // cards that provide 'next card' discounts. This will clear between turns.
   public removedFromPlayCards: Array<IProjectCard> = [];
   public preservationProgram = false;
-  public underworldData: UnderworldPlayerData =
-    UnderworldExpansion.initializePlayer();
-  public deltaProjectData?: DeltaProjectPlayerModel;
   public standardProjectsThisGeneration: Set<CardName> = new Set();
   public temporaryGlobalParameterRequirementBonus = 0;
 
@@ -186,7 +166,6 @@ export class Player implements IPlayer {
   // Stats
   public actionsTakenThisGame: number = 0;
   public victoryPointsByGeneration: Array<number> = [];
-  public totalDelegatesPlaced: number = 0;
   public globalParameterSteps: Record<GlobalParameter, number> = {
     ...DEFAULT_GLOBAL_PARAMETER_STEPS,
   };
@@ -216,9 +195,6 @@ export class Player implements IPlayer {
     return this.stock.heat;
   }
 
-  public get alliedParty(): AlliedParty | undefined {
-    return this._alliedParty;
-  }
 
   public set megaCredits(megacredits: number) {
     this.stock.megacredits = megacredits;
@@ -244,20 +220,6 @@ export class Player implements IPlayer {
     this.stock.heat = heat;
   }
 
-  public setAlliedParty(p: IParty) {
-    this._alliedParty = {
-      partyName: p.name,
-      agenda: {
-        bonusId: p.bonuses[0].id,
-        policyId: p.policies[0].id,
-      },
-    };
-    const alliedPolicy = this.game.turmoil
-      ?.getPartyByName(p.name)
-      .policies.find((t) => t.id === p.policies[0].id);
-
-    alliedPolicy?.onPolicyStartForPlayer?.(this);
-  }
 
   constructor(
     public name: string,
@@ -275,7 +237,6 @@ export class Player implements IPlayer {
     // But one thing at a time.
     this.game = undefined as unknown as Game;
     this.tags = new Tags(this);
-    this.colonies = new Colonies(this);
     this.production = new Production(this);
     this.stock = new Stock(this);
   }
@@ -367,22 +328,7 @@ export class Player implements IPlayer {
       }
     };
 
-    if (PartyHooks.reds01PolicyInEffect(this)) {
-      if (!this.canAfford(REDS_RULING_POLICY_COST * steps)) {
-        // Cannot pay Reds, will not increase TR
-        return;
-      }
-      this.game
-        .defer(
-          new SelectPaymentDeferred(this, REDS_RULING_POLICY_COST * steps, {
-            title: 'Select how to pay for TR increase',
-          }),
-          Priority.COST,
-        )
-        .andThen(raiseRating);
-    } else {
-      raiseRating();
-    }
+    raiseRating();
   }
 
   public decreaseTerraformRating(
@@ -451,13 +397,11 @@ export class Player implements IPlayer {
   }
 
   public maybeBlockAttack(
-    perpetrator: IPlayer,
-    msg: Message | string,
+    _perpetrator: IPlayer,
+    _msg: Message | string,
     cb: (proceed: boolean) => PlayerInput | undefined,
   ): void {
-    this.defer(
-      UnderworldExpansion.maybeBlockAttack(this, perpetrator, msg, cb),
-    );
+    this.defer(cb(true));
   }
 
   public attack(
@@ -494,21 +438,6 @@ export class Player implements IPlayer {
 
   public resolveInsuranceInSoloGame() {}
 
-  public getColoniesCount() {
-    if (!this.game.gameOptions.coloniesExtension) {
-      return 0;
-    }
-
-    let coloniesCount = 0;
-
-    this.game.colonies.forEach((colony) => {
-      coloniesCount += colony.colonies.filter(
-        (owner) => owner === this.id,
-      ).length;
-    });
-
-    return coloniesCount;
-  }
 
   /**
    * Return the number of events played by this player.
@@ -535,16 +464,6 @@ export class Player implements IPlayer {
         parameter,
       );
     }
-
-    // PoliticalAgendas Scientists P2 hook
-    if (PartyHooks.shouldApplyPolicy(this, PartyName.SCIENTISTS, 'sp02')) {
-      requirementsBonus += 2;
-    }
-
-    requirementsBonus += UnderworldExpansion.getGlobalParameterRequirementBonus(
-      this,
-      parameter,
-    );
 
     return requirementsBonus;
   }
@@ -684,7 +603,6 @@ export class Player implements IPlayer {
     this.removingPlayers = [];
     this.standardProjectsThisGeneration.clear();
 
-    this.turmoilPolicyActionUsed = false;
     this.politicalAgendasActionUsedCount = 0;
 
     this.heat += this.energy;
@@ -759,43 +677,11 @@ export class Player implements IPlayer {
       return action;
     };
 
-    if (
-      this.game.underworldDraftEnabled &&
-      this.underworldData.corruption > 0 &&
-      cards.length >= 2 &&
-      this.game.projectDeck.size() >= 2
-    ) {
-      // Player may spend 1 corruption to discard 2 cards and draw 2 cards.
-      const options = new OrOptions();
-      options.options.push(chooseCardsToBuy());
-      options.options.push(
-        new SelectCard(
-          'Spend 1 corruption to replace 2 cards',
-          'Spend Corruption',
-          cards,
-          { min: 2, max: 2 },
-        ).andThen((discards) => {
-          this.game.projectDeck.discard(...discards);
-          UnderworldExpansion.loseCorruption(this, 1, { log: true });
-          for (const discard of discards) {
-            inplaceRemove(cards, discard);
-          }
-          // Drawing from the top to maintain seeds.
-          cards.push(...this.game.projectDeck.drawN(this.game, 2, 'top'));
-          this.setWaitingFor(chooseCardsToBuy());
-
-          return undefined;
-        }),
-      );
-      this.setWaitingFor(options);
-    } else {
-      this.setWaitingFor(chooseCardsToBuy());
-    }
+    this.setWaitingFor(chooseCardsToBuy());
   }
 
   public getCardCost(card: IProjectCard): number {
     let cost = card.cost;
-    cost -= this.colonies.cardDiscount;
 
     for (const playedCard of this.tableau) {
       cost -= playedCard.getCardDiscount?.(this, card) ?? 0;
@@ -807,14 +693,6 @@ export class Player implements IPlayer {
         cost -= removedFromPlayCard.getCardDiscount(this, card);
       }
     });
-
-    // TODO(kberg): put this in a callback.
-    if (
-      card.tags.includes(Tag.SPACE) &&
-      PartyHooks.shouldApplyPolicy(this, PartyName.UNITY, 'up04')
-    ) {
-      cost -= 2;
-    }
 
     return Math.max(cost, 0);
   }
@@ -955,7 +833,6 @@ export class Player implements IPlayer {
       this.pay(payment);
     }
 
-    ColoniesHandler.maybeActivateColonies(this.game, selectedCard);
 
     if (selectedCard.type !== CardType.PROXY) {
       this.lastCardPlayed = selectedCard.name;
@@ -1042,7 +919,6 @@ export class Player implements IPlayer {
       this.defer(effectCard.onCardPlayed?.(this, card));
     }
 
-    TurmoilHandler.applyOnCardPlayedEffect(this, card);
 
     /* A player responding to any other player's card played. */
     for (const somePlayer of this.game.playersInGenerationOrder) {
@@ -1096,7 +972,6 @@ export class Player implements IPlayer {
     );
     // Calculating this before playing the corporation card, which might change the player's hand size.
     const numberOfCardInHand = this.cardsInHand.length;
-    ColoniesHandler.maybeActivateColonies(this.game, corporationCard);
     this.defer(corporationCard.play(this));
     if (
       corporationCard.initialAction !== undefined &&
@@ -1528,20 +1403,10 @@ export class Player implements IPlayer {
     }
 
     const maxPayable = this.maxSpendable(reserveUnits);
-    const redsCost =
-      TurmoilHandler.computeTerraformRatingBump(this, options.tr) *
-      REDS_RULING_POLICY_COST;
-    if (redsCost > 0) {
-      const usableForRedsCost = this.payingAmount(maxPayable, {});
-      if (usableForRedsCost < redsCost) {
-        return Player.CANNOT_AFFORD;
-      }
-    }
-
     const usable = this.payingAmount(maxPayable, options);
 
-    const canAfford = options.cost + redsCost <= usable;
-    return { canAfford, redsCost };
+    const canAfford = options.cost <= usable;
+    return { canAfford, redsCost: 0 };
   }
 
   /**
@@ -1718,34 +1583,20 @@ export class Player implements IPlayer {
       action.options.push(convertPlants.action(this));
     }
 
-    // Convert Heat. Kelvinists kp03 swaps in a 6-heat variant in this slot.
-    if (PartyHooks.shouldApplyPolicy(this, PartyName.KELVINISTS, 'kp03')) {
-      if (KELVINISTS_POLICY_3.canAct(this)) {
-        action.options.push(KELVINISTS_POLICY_3.action(this));
-      }
-    } else {
-      const convertHeat = new ConvertHeat();
-      if (convertHeat.canAct(this)) {
-        const option = new SelectOption(
-          'Convert 8 heat into temperature',
-          'Convert heat',
-        ).andThen(() => {
-          return convertHeat.action(this);
-        });
-        if (convertHeat.warnings.size > 0) {
-          option.warnings = Array.from(convertHeat.warnings);
-          if (convertHeat.warnings.has('maxtemp')) {
-            option.eligibleForDefault = false;
-          }
+    // Convert Heat
+    const convertHeat = new ConvertHeat();
+    if (convertHeat.canAct(this)) {
+      const option = new SelectOption(
+        'Convert 8 heat into temperature',
+        'Convert heat',
+      ).andThen(() => convertHeat.action(this));
+      if (convertHeat.warnings.size > 0) {
+        option.warnings = Array.from(convertHeat.warnings);
+        if (convertHeat.warnings.has('maxtemp')) {
+          option.eligibleForDefault = false;
         }
-        action.options.push(option);
       }
-    }
-
-    // Turmoil
-    const turmoilInput = TurmoilHandler.partyAction(this);
-    if (turmoilInput !== undefined) {
-      action.options.push(turmoilInput);
+      action.options.push(option);
     }
 
     // Action cards
@@ -1759,20 +1610,6 @@ export class Player implements IPlayer {
     if (playableCards.length !== 0) {
       action.options.push(new SelectProjectCardToPlay(this, playableCards));
     }
-
-    // Trade with colonies
-    const coloniesTradeAction = this.colonies.coloniesTradeAction();
-    if (coloniesTradeAction !== undefined) {
-      action.options.push(coloniesTradeAction);
-    }
-
-    // Add delegates
-    Turmoil.ifTurmoil(this.game, (turmoil) => {
-      const input = turmoil.getSendDelegateInput(this);
-      if (input !== undefined) {
-        action.options.push(input);
-      }
-    });
 
     // End turn
     if (

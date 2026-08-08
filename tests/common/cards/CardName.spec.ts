@@ -1,9 +1,7 @@
-import {MultiSet} from 'mnemonist';
-import {fail} from 'assert';
-import {CardName} from '../../../src/common/cards/CardName';
-import {getEnumStringEntries, getEnumStringValues, intersection} from '../../../src/common/utils/utils';
-import {GlobalEventName} from '../../../src/common/turmoil/globalEvents/GlobalEventName';
-import {expect} from 'chai';
+import { fail } from 'assert';
+import { MultiSet } from 'mnemonist';
+import { CardName } from '../../../src/common/cards/CardName';
+import { getEnumStringEntries } from '../../../src/common/utils/utils';
 
 describe('CardName', () => {
   it('No duplicate card names', () => {
@@ -27,16 +25,5 @@ describe('CardName', () => {
     if (errors.length > 0) {
       fail('Duplicate card names found\n' + errors.join('\n'));
     }
-  });
-
-  it('Conflicts between cards names and global event names', () => {
-    const globalEvents = getEnumStringValues(GlobalEventName);
-    const cards = getEnumStringValues(CardName);
-    // Sad. Not empty. Yet.
-    expect(intersection(globalEvents as Array<string>, cards as Array<string>)).deep.eq([
-      'Asteroid Mining',
-      'Interplanetary Trade',
-      'Sabotage',
-    ]);
   });
 });

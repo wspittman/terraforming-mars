@@ -45,7 +45,6 @@ describe('MiningRights', () => {
     expect(titaniumSpace.player).to.eq(player);
     expect(titaniumSpace.tile?.tileType).to.eq(TileType.MINING_RIGHTS);
     expect(player.production.asUnits()).deep.eq(Units.of({titanium: 1}));
-    expect(titaniumSpace.adjacency?.bonus).eq(undefined);
   });
 
   it('Should play - steel', () => {
@@ -60,7 +59,6 @@ describe('MiningRights', () => {
     expect(steelSpace.player).to.eq(player);
     expect(steelSpace.tile?.tileType).to.eq(TileType.MINING_RIGHTS);
     expect(player.production.asUnits()).deep.eq(Units.of({steel: 1}));
-    expect(steelSpace.adjacency?.bonus).eq(undefined);
   });
 
   it('Should play when space bonus is both steel and titanium', () => {

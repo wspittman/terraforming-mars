@@ -1,9 +1,9 @@
-import {expect} from 'chai';
-import {WaterSplittingPlant} from '../../../src/server/cards/base/WaterSplittingPlant';
-import {IGame} from '../../../src/server/IGame';
-import {maxOutOceans, setOxygenLevel, testRedsCosts} from '../../TestingUtils';
-import {TestPlayer} from '../../TestPlayer';
-import {testGame} from '../../TestGame';
+import { expect } from 'chai';
+import { WaterSplittingPlant } from '../../../src/server/cards/base/WaterSplittingPlant';
+import { IGame } from '../../../src/server/IGame';
+import { testGame } from '../../TestGame';
+import { maxOutOceans } from '../../TestingUtils';
+import { TestPlayer } from '../../TestPlayer';
 
 describe('WaterSplittingPlant', () => {
   let card: WaterSplittingPlant;
@@ -38,23 +38,6 @@ describe('WaterSplittingPlant', () => {
     expect(game.getOxygenLevel()).to.eq(1);
   });
 
-  const redsRuns = [
-    {oxygen: 12, expected: 3},
-    {oxygen: 13, expected: 3},
-    {oxygen: 14, expected: 0},
-  ] as const;
 
   // canAct needs bespoke behavior, or better behavior in the execu
-  for (const run of redsRuns) {
-    it('Works with reds ' + JSON.stringify(run), () => {
-      const [game, player/* , player2 */] = testGame(2, {turmoilExtension: true});
-
-      // Card requirements
-      player.energy = 3;
-      maxOutOceans(player, 2);
-
-      setOxygenLevel(game, run.oxygen);
-      testRedsCosts(() => card.canAct(player), player, 0, run.expected);
-    });
-  }
 });

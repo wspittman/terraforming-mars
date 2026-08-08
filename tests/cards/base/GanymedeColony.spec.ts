@@ -1,7 +1,7 @@
-import {expect} from 'chai';
-import {GanymedeColony} from '../../../src/server/cards/base/GanymedeColony';
-import {testGame} from '../../TestGame';
-import {cast} from '@/common/utils/utils';
+import { cast } from '@/common/utils/utils';
+import { expect } from 'chai';
+import { GanymedeColony } from '../../../src/server/cards/base/GanymedeColony';
+import { testGame } from '../../TestGame';
 
 describe('GanymedeColony', () => {
   it('Should play', () => {

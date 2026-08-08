@@ -1,11 +1,11 @@
-import {expect} from 'chai';
-import {AsteroidStandardProject} from '../../../../src/server/cards/base/standardProjects/AsteroidStandardProject';
-import {runAllActions, setTemperature, testRedsCosts} from '../../../TestingUtils';
-import {TestPlayer} from '../../../TestPlayer';
-import {IGame} from '../../../../src/server/IGame';
-import {MAX_TEMPERATURE} from '../../../../src/common/constants';
-import {testGame} from '../../../TestGame';
-import {Payment} from '../../../../src/common/inputs/Payment';
+import { expect } from 'chai';
+import { MAX_TEMPERATURE } from '../../../../src/common/constants';
+import { Payment } from '../../../../src/common/inputs/Payment';
+import { AsteroidStandardProject } from '../../../../src/server/cards/base/standardProjects/AsteroidStandardProject';
+import { IGame } from '../../../../src/server/IGame';
+import { testGame } from '../../../TestGame';
+import { runAllActions, setTemperature } from '../../../TestingUtils';
+import { TestPlayer } from '../../../TestPlayer';
 
 describe('AsteroidStandardProject', () => {
   let card: AsteroidStandardProject;
@@ -52,12 +52,5 @@ describe('AsteroidStandardProject', () => {
     expect(game.getTemperature()).eq(MAX_TEMPERATURE);
     expect(player.terraformRating).eq(20);
     expect(player.megaCredits).eq(0);
-  });
-
-  it('Test reds', () => {
-    [game, player] = testGame(1, {turmoilExtension: true});
-    testRedsCosts(() => card.canAct(player), player, card.cost, 3);
-    setTemperature(game, 8);
-    testRedsCosts(() => card.canAct(player), player, card.cost, 0);
   });
 });

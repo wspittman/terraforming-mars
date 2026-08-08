@@ -6,7 +6,6 @@ import {Countable, CountableUnits} from './Countable';
 import {CardResource} from '../../common/CardResource';
 import {Space} from '../boards/Space';
 import {once} from './Lazy';
-import {Turmoil} from '../turmoil/Turmoil';
 import {CardName} from '../../common/cards/CardName';
 
 /**
@@ -161,44 +160,6 @@ export class Counter {
       sum += card.resourceCount;
     }
 
-    if (countable.colonies !== undefined) {
-      player.game.colonies.forEach((colony) => {
-        if (countable.all) {
-          sum += colony.colonies.length;
-        } else {
-          sum += colony.colonies.filter((colony) => colony === player.id).length;
-        }
-      });
-    }
-
-
-    if (countable.underworld !== undefined) {
-      const underworld = countable.underworld;
-      if (underworld.corruption !== undefined) {
-        if (countable.all === true) {
-          sum += utils.sum(game.players.map((p) => p.underworldData.corruption));
-        } else {
-          sum += player.underworldData.corruption;
-        }
-      }
-      if (underworld.excavationMarkers !== undefined) {
-        if (countable.all) {
-          sum += player.game.board.spaces.filter((space) => space.excavator !== undefined).length;
-        } else {
-          sum += player.game.board.spaces.filter((space) => space.excavator === player).length;
-        }
-      }
-      if (underworld.undergroundTokens !== undefined) {
-        if (countable.all) {
-          for (const p of game.players) {
-            sum += p.underworldData.tokens.length;
-          }
-        } else {
-          sum += player.underworldData.tokens.length;
-        }
-      }
-    }
-
     if (countable.eventsPlayed !== undefined) {
       if (countable.all === true) {
         sum += utils.sum(game.players.map((p) => p.getPlayedEventsCount()));
@@ -207,20 +168,6 @@ export class Counter {
       }
     }
 
-    if (countable.turmoil !== undefined) {
-      const turmoil = countable.turmoil;
-      if (turmoil.partyLeaders !== undefined) {
-        sum += Turmoil.getTurmoil(game).parties.filter((party) => party.partyLeader === player).length;
-      }
-      // Deliberately before influence: global events cap the count, then add influence.
-      if (turmoil.max !== undefined) {
-        sum = Math.min(sum, turmoil.max);
-      }
-      if (turmoil.influence !== undefined) {
-        const influence = Turmoil.getTurmoil(game).getInfluence(player);
-        sum += turmoil.influence.subtract === true ? -influence : influence;
-      }
-    }
 
     if (countable.each !== undefined) {
       sum = sum * countable.each;

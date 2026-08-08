@@ -18,6 +18,5 @@ describe('MoholeArea', () => {
 
     expect(space.tile?.tileType).to.eq(TileType.MOHOLE_AREA);
     expect(player.production.heat).to.eq(4);
-    expect(space.adjacency?.bonus).eq(undefined);
   });
 });

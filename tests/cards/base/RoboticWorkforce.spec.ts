@@ -225,13 +225,6 @@ describe('RoboticWorkforce', () => {
           }),
         );
 
-        player.game.board.getAvailableSpacesOnLand(player)[0].excavator =
-          player;
-        if (card.name === CardName.DEEPMINING) {
-          const space = player.game.board.getAvailableSpacesOnLand(player)[1];
-          space.undergroundResources = 'steel1production';
-        }
-
         if (isICorporationCard(card)) {
           player.playCorporationCard(card);
         } else if (isIProjectCard(card)) {

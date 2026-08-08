@@ -21,10 +21,8 @@ export const awardNames = [
   'Space Baron',
 
   // Venus
-  'Venuphile',
 
   // Ares
-  'Entrepreneur',
 
   // The Moon
 
@@ -37,7 +35,6 @@ export const awardNames = [
 
   // Terra Cimmeria
   'Biologist',
-  'T. Politician',
   'Urbanist',
   'Warmonger',
   // NB: the fifth award for Terra Cimmeria is Incorporator, a modular award.
@@ -56,11 +53,8 @@ export const awardNames = [
   'Blacksmith',
 
   // Underworld
-  'Kingpin',
-  'Excavator',
 
   // Ares Extreme
-  'Rugged',
 
   // Modular
   'Administrator',
@@ -72,7 +66,6 @@ export const awardNames = [
   'Investor',
   'Metropolist',
   'Mogul',
-  'Politician',
   'Suburbian', // Matches Edgedancer.
   // 'Zoologist', // Most animal and microbe resources. Currently Zoologist2
 ] as const;
@@ -83,7 +76,6 @@ export const AWARD_RENAMES = new Map<string, AwardName>([
   // When renaming an award add the old name here (like the example below), and add a TODO (like the example below)
   // And remember to add a test in spec.ts.
   // TODO(yournamehere): remove after 2026-04-05
-  // ['EdgeLord', 'Excavator'],
 ]);
 
 export function maybeRenamedAward(name: string): AwardName {

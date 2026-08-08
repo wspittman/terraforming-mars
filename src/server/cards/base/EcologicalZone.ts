@@ -8,7 +8,6 @@ import {TileType} from '../../../common/TileType';
 import {PlaceTile} from '../../../server/deferredActions/PlaceTile';
 import {Space} from '../../boards/Space';
 import {CardName} from '../../../common/cards/CardName';
-import {AdjacencyBonus} from '../../ares/AdjacencyBonus';
 import {CardMetadata} from '../../../common/cards/CardMetadata';
 import {CardRenderer} from '../render/CardRenderer';
 import {Phase} from '../../../common/Phase';
@@ -19,7 +18,6 @@ export class EcologicalZone extends Card implements IProjectCard {
   constructor(
     name = CardName.ECOLOGICAL_ZONE,
     cost = 12,
-    adjacencyBonus: AdjacencyBonus | undefined = undefined,
     metadata: CardMetadata = {
       cardNumber: '128',
       renderData: CardRenderer.builder((b) => {
@@ -39,7 +37,6 @@ export class EcologicalZone extends Card implements IProjectCard {
       tags: [Tag.ANIMAL, Tag.PLANT],
       cost,
       resourceType: CardResource.ANIMAL,
-      adjacencyBonus,
       victoryPoints: {resourcesHere: {}, per: 2},
       requirements: {greeneries: 1},
       metadata,
@@ -74,7 +71,6 @@ export class EcologicalZone extends Card implements IProjectCard {
         tile: {tileType: TileType.ECOLOGICAL_ZONE, card: this.name},
         on: () => this.getAvailableSpaces(player),
         title: 'Select space next to greenery for special tile',
-        adjacencyBonus: this.adjacencyBonus,
       }));
     return undefined;
   }

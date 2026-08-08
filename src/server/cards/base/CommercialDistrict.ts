@@ -4,14 +4,12 @@ import {Card} from '../Card';
 import {CardType} from '../../../common/cards/CardType';
 import {TileType} from '../../../common/TileType';
 import {CardName} from '../../../common/cards/CardName';
-import {AdjacencyBonus} from '../../ares/AdjacencyBonus';
 import {CardRenderer} from '../render/CardRenderer';
 import {cities} from '../render/DynamicVictoryPoints';
 
 export class CommercialDistrict extends Card implements IProjectCard {
   constructor(
     name = CardName.COMMERCIAL_DISTRICT,
-    adjacencyBonus: AdjacencyBonus | undefined = undefined,
     metadata = {
       cardNumber: '085',
       description: 'Place this tile. Decrease your energy production 1 step and increase your M€ production 4 steps.',
@@ -36,7 +34,6 @@ export class CommercialDistrict extends Card implements IProjectCard {
         tile: {
           type: TileType.COMMERCIAL_DISTRICT,
           on: 'land',
-          adjacencyBonus: adjacencyBonus,
         },
       },
 

@@ -22,7 +22,6 @@ import {Warning} from '../../common/cards/Warning';
 import {Resource} from '../../common/Resource';
 import {Units} from '../../common/Units';
 import {SerializedCard} from '../SerializedCard';
-import {UndergroundResourceToken} from '../../common/underworld/UndergroundResourceToken';
 
 /*
  * Represents a card which has an action that itself allows a player
@@ -117,7 +116,6 @@ export interface ICard {
    *        or undefined if it is the neutral player (game setup or global event.)
    * @param token the underground resource token that was revealed.
    */
-  onIdentificationByAnyPlayer?(cardOwner: IPlayer, identifyingPlayer: IPlayer | undefined, token: UndergroundResourceToken): void;
   onIdentification?: never;
 
   /**

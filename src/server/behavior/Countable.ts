@@ -27,14 +27,6 @@ export type _Countable = {
     /** Count the number of colonies this player has (or all colonies.) */
     colonies?: {},
   },
-  moon?: {
-    habitatRate?: NoAttributes,
-    miningRate?: NoAttributes,
-    logisticRate?: NoAttributes,
-    habitat?: NoAttributes,
-    mine?: NoAttributes,
-    road?: NoAttributes,
-  },
   underworld?: {
     corruption?: NoAttributes,
     excavationMarkers?: NoAttributes,

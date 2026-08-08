@@ -8,11 +8,6 @@ import {PlaceCityTile} from '../deferredActions/PlaceCityTile';
 import {PlaceGreeneryTile} from '../deferredActions/PlaceGreeneryTile';
 import {PlaceOceanTile} from '../deferredActions/PlaceOceanTile';
 import {RemoveAnyPlants} from '../deferredActions/RemoveAnyPlants';
-import {MoonExpansion} from '../moon/MoonExpansion';
-import {PlaceMoonHabitatTile} from '../moon/PlaceMoonHabitatTile';
-import {PlaceMoonMineTile} from '../moon/PlaceMoonMineTile';
-import {PlaceMoonRoadTile} from '../moon/PlaceMoonRoadTile';
-import {PlaceSpecialMoonTile} from '../moon/PlaceSpecialMoonTile';
 import {CanAffordOptions, IPlayer} from '../IPlayer';
 import {Behavior} from './Behavior';
 import {Counter, ICounter} from './Counter';
@@ -35,7 +30,7 @@ import {UnderworldExpansion} from '../underworld/UnderworldExpansion';
 import {SelectResource} from '../inputs/SelectResource';
 import {RemoveResourcesFromCard} from '../deferredActions/RemoveResourcesFromCard';
 import {isIProjectCard} from '../cards/IProjectCard';
-import {MAXIMUM_HABITAT_RATE, MAXIMUM_LOGISTIC_RATE, MAXIMUM_MINING_RATE, MAX_OCEAN_TILES, MAX_OXYGEN_LEVEL, MAX_TEMPERATURE, MAX_VENUS_SCALE} from '../../common/constants';
+import {MAX_OCEAN_TILES, MAX_OXYGEN_LEVEL, MAX_TEMPERATURE, MAX_VENUS_SCALE} from '../../common/constants';
 import {CardName} from '../../common/cards/CardName';
 import {asArray, inplaceRemove} from '../../common/utils/utils';
 import {SelectCard} from '../inputs/SelectCard';
@@ -271,34 +266,6 @@ export class Executor implements BehaviorExecutor {
       }
     }
 
-    if (behavior.moon !== undefined) {
-      const moon = behavior.moon;
-      const moonData = MoonExpansion.moonData(game);
-      if (moon.habitatTile !== undefined && moon.habitatTile.space === undefined) {
-        if (moonData.moon.getAvailableSpacesOnLand(player).length === 0) {
-          return false;
-        }
-      }
-      if (moon.mineTile !== undefined && moon.mineTile.space === undefined) {
-        if (moonData.moon.getAvailableSpacesForMine(player).length === 0) {
-          return false;
-        }
-      }
-      if (moon.roadTile !== undefined && moon.roadTile.space === undefined) {
-        if (moonData.moon.getAvailableSpacesOnLand(player).length === 0) {
-          return false;
-        }
-      }
-      if ((moon.habitatRate ?? 0) >= MAXIMUM_HABITAT_RATE) {
-        card.addWarning('maxHabitatRate');
-      }
-      if ((moon.miningRate ?? 0) >= MAXIMUM_MINING_RATE) {
-        card.addWarning('maxMiningRate');
-      }
-      if ((moon.logisticRate ?? 0) >= MAXIMUM_LOGISTIC_RATE) {
-        card.addWarning('maxLogisticRate');
-      }
-    }
 
     if (behavior.underworld !== undefined) {
       const underworld = behavior.underworld;
@@ -621,49 +588,6 @@ export class Executor implements BehaviorExecutor {
       }
     }
 
-    if (behavior.moon !== undefined) {
-      const moon = behavior.moon;
-      if (moon.habitatTile !== undefined) {
-        if (moon.habitatTile.space === undefined) {
-          player.game.defer(new PlaceMoonHabitatTile(player));
-        } else {
-          MoonExpansion.addHabitatTile(player, moon.habitatTile.space, card?.name);
-          MoonExpansion.raiseHabitatRate(player);
-        }
-      }
-      if (moon.mineTile !== undefined) {
-        if (moon.mineTile.space === undefined) {
-          player.game.defer(new PlaceMoonMineTile(player));
-        } else {
-          MoonExpansion.addMineTile(player, moon.mineTile.space, card?.name);
-          MoonExpansion.raiseMiningRate(player);
-        }
-      }
-      if (moon.roadTile !== undefined) {
-        if (moon.roadTile.space === undefined) {
-          player.game.defer(new PlaceMoonRoadTile(player));
-        } else {
-          MoonExpansion.addRoadTile(player, moon.roadTile.space, card?.name);
-          MoonExpansion.raiseLogisticRate(player);
-        }
-      }
-      if (moon.tile !== undefined) {
-        if (moon.tile.space !== undefined) {
-          MoonExpansion.addTile(player, moon.tile.space, {tileType: moon.tile.type, card: card?.name});
-        } else {
-          player.game.defer(new PlaceSpecialMoonTile(player, {tileType: moon.tile.type, card: card?.name}));
-        }
-      }
-      if (moon.habitatRate !== undefined) {
-        MoonExpansion.raiseHabitatRate(player, moon.habitatRate);
-      }
-      if (moon.miningRate !== undefined) {
-        MoonExpansion.raiseMiningRate(player, moon.miningRate);
-      }
-      if (moon.logisticRate !== undefined) {
-        MoonExpansion.raiseLogisticRate(player, moon.logisticRate);
-      }
-    }
 
     if (behavior.underworld !== undefined) {
       const underworld = behavior.underworld;
@@ -758,9 +682,6 @@ export class Executor implements BehaviorExecutor {
       venus: behavior.global?.venus,
       oceans: behavior.ocean !== undefined ? (behavior.ocean.count ?? 1) : undefined,
 
-      moonHabitat: (behavior.moon?.habitatRate ?? 0) + (behavior.moon?.habitatTile !== undefined ? 1 : 0),
-      moonMining: (behavior.moon?.miningRate ?? 0) + (behavior.moon?.mineTile !== undefined ? 1 : 0),
-      moonLogistic: (behavior.moon?.logisticRate ?? 0) + (behavior.moon?.roadTile !== undefined ? 1 : 0),
     };
     return trSource;
   }

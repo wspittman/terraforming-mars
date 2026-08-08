@@ -11,7 +11,7 @@ type MAManifestSpec<V> = {
   deprecated?: true;
   random?: 'modular' | 'both';
 }
-type ExpansionsWithMAs = 'venus' | 'ares' | 'moon' | 'underworld';
+type ExpansionsWithMAs = 'venus' | 'ares' | 'underworld';
 
 export type MAManifest<K extends string, V> = {
   all: Record<K, MAManifestSpec<V>>,

@@ -7,11 +7,10 @@ import {IPolicy} from '../Policy';
 import {SelectPaymentDeferred} from '../../deferredActions/SelectPaymentDeferred';
 import {IPlayer} from '../../IPlayer';
 import {CardName} from '../../../common/cards/CardName';
-import {MAXIMUM_HABITAT_RATE, MAXIMUM_LOGISTIC_RATE, MAXIMUM_MINING_RATE, MAX_OXYGEN_LEVEL, MAX_TEMPERATURE, MAX_VENUS_SCALE, MIN_OXYGEN_LEVEL, MIN_TEMPERATURE, MIN_VENUS_SCALE, POLITICAL_AGENDAS_MAX_ACTION_USES} from '../../../common/constants';
+import {MAX_OXYGEN_LEVEL, MAX_TEMPERATURE, MAX_VENUS_SCALE, MIN_OXYGEN_LEVEL, MIN_TEMPERATURE, MIN_VENUS_SCALE, POLITICAL_AGENDAS_MAX_ACTION_USES} from '../../../common/constants';
 import {RemoveOceanTile} from '../../deferredActions/RemoveOceanTile';
 import {OrOptions} from '../../inputs/OrOptions';
 import {SelectOption} from '../../inputs/SelectOption';
-import {MoonExpansion} from '../../moon/MoonExpansion';
 import {GlobalParameter} from '../../../common/GlobalParameter';
 import {TITLES} from '../../inputs/titles';
 
@@ -132,25 +131,8 @@ class RedsPolicy03 implements IPolicy {
     case GlobalParameter.VENUS:
       const venusScaleLevel = game.getVenusScaleLevel();
       return game.gameOptions.venusNextExtension === true && venusScaleLevel > MIN_VENUS_SCALE && venusScaleLevel !== MAX_VENUS_SCALE;
-    case GlobalParameter.MOON_HABITAT_RATE:
-      if (game.moonData) {
-        const rate = game.moonData.habitatRate;
-        return rate > 0 && rate !== MAXIMUM_HABITAT_RATE;
-      }
-      return false;
-    case GlobalParameter.MOON_LOGISTIC_RATE:
-      if (game.moonData) {
-        const rate = game.moonData.logisticRate;
-        return rate > 0 && rate !== MAXIMUM_LOGISTIC_RATE;
-      }
-      return false;
-    case GlobalParameter.MOON_MINING_RATE:
-      if (game.moonData) {
-        const rate = game.moonData.miningRate;
-        return rate > 0 && rate !== MAXIMUM_MINING_RATE;
-      }
-      return false;
     }
+    return false;
   }
 
   canAct(player: IPlayer) {
@@ -170,10 +152,8 @@ class RedsPolicy03 implements IPolicy {
       oxygenLevel === MIN_OXYGEN_LEVEL &&
       venusScaleLevel === MIN_VENUS_SCALE;
 
-    const moonData = player.game.moonData;
-    const moonParametersAtMinimum = moonData === undefined ? true : Math.max(moonData.habitatRate, moonData.logisticRate, moonData.miningRate) === 0;
 
-    if (basicParametersAtMinimum && moonParametersAtMinimum) {
+    if (basicParametersAtMinimum) {
       return false;
     }
 
@@ -220,27 +200,6 @@ class RedsPolicy03 implements IPolicy {
           orOptions.options.push(new SelectOption('Decrease Venus scale').andThen(() => {
             game.increaseVenusScaleLevel(player, -1);
             game.log('${0} decreased Venus scale level 1 step', (b) => b.player(player));
-            return undefined;
-          }));
-        }
-
-        if (this.canDecrease(game, GlobalParameter.MOON_HABITAT_RATE)) {
-          orOptions.options.push(new SelectOption('Decrease Moon habitat rate').andThen(() => {
-            MoonExpansion.lowerHabitatRate(player, 1);
-            return undefined;
-          }));
-        }
-
-        if (this.canDecrease(game, GlobalParameter.MOON_MINING_RATE)) {
-          orOptions.options.push(new SelectOption('Decrease Moon mining rate').andThen(() => {
-            MoonExpansion.lowerMiningRate(player, 1);
-            return undefined;
-          }));
-        }
-
-        if (this.canDecrease(game, GlobalParameter.MOON_LOGISTIC_RATE)) {
-          orOptions.options.push(new SelectOption('Decrease Moon logistic rate').andThen(() => {
-            MoonExpansion.lowerLogisticRate(player, 1);
             return undefined;
           }));
         }

@@ -11,7 +11,6 @@ import { Virus } from '../../src/server/cards/base/Virus';
 import { IProjectCard } from '../../src/server/cards/IProjectCard';
 import { ProxyCard } from '../../src/server/cards/ProxyCard';
 import { IGame } from '../../src/server/IGame';
-import { MoonExpansion } from '../../src/server/moon/MoonExpansion';
 import { Turmoil } from '../../src/server/turmoil/Turmoil';
 import { testGame } from '../TestGame';
 import { addCity, addGreenery, fakeCard, maxOutOceans } from '../TestingUtils';
@@ -285,127 +284,6 @@ describe('Counter', () => {
     expect(counter.count({ eventsPlayed: true })).eq(1);
     expect(counter.count({ eventsPlayed: true, all: true })).eq(3);
     expect(counter.count({ eventsPlayed: true, each: 2 })).eq(2);
-  });
-});
-
-describe('Counter for Moon', () => {
-  let game: IGame;
-  let player: TestPlayer;
-  let fake: IProjectCard;
-
-  beforeEach(() => {
-    [game, player] = testGame(3, { moonExpansion: true });
-    fake = fakeCard();
-  });
-
-  it('colony rate', () => {
-    const counter = new Counter(player, fake);
-    const moonData = MoonExpansion.moonData(game);
-    moonData.habitatRate = 3;
-
-    expect(counter.count({ moon: { habitatRate: {} } })).eq(3);
-    expect(counter.count({ moon: { habitatRate: {} }, per: 2 })).eq(1);
-    expect(counter.count({ moon: { habitatRate: {} }, each: 2 })).eq(6);
-  });
-
-  it('mining rate', () => {
-    const counter = new Counter(player, fake);
-    const moonData = MoonExpansion.moonData(game);
-    moonData.miningRate = 1;
-
-    expect(counter.count({ moon: { miningRate: {} } })).eq(1);
-    expect(counter.count({ moon: { miningRate: {} }, per: 2 })).eq(0);
-    expect(counter.count({ moon: { miningRate: {} }, each: 2 })).eq(2);
-  });
-
-  it('logistic rate', () => {
-    const counter = new Counter(player, fake);
-    const moonData = MoonExpansion.moonData(game);
-    moonData.logisticRate = 7;
-
-    expect(counter.count({ moon: { logisticRate: {} } })).eq(7);
-    expect(counter.count({ moon: { logisticRate: {} }, per: 2 })).eq(3);
-    expect(counter.count({ moon: { logisticRate: {} }, each: 2 })).eq(14);
-  });
-
-  it('colony tiles', () => {
-    const counter = new Counter(player, fake);
-
-    expect(counter.count({ moon: { habitat: {} } })).eq(0);
-    MoonExpansion.addHabitatTile(player, 'm02');
-    expect(counter.count({ moon: { habitat: {} } })).eq(1);
-    MoonExpansion.addHabitatTile(player, 'm03');
-    expect(counter.count({ moon: { habitat: {} } })).eq(2);
-    MoonExpansion.addHabitatTile(player, 'm04');
-    expect(counter.count({ moon: { habitat: {} } })).eq(3);
-    MoonExpansion.addHabitatTile(player, 'm05');
-    expect(counter.count({ moon: { habitat: {} } })).eq(4);
-    MoonExpansion.addHabitatTile(player, 'm06');
-    expect(counter.count({ moon: { habitat: {} } })).eq(5);
-  });
-
-  it('mine tiles', () => {
-    const counter = new Counter(player, fake);
-
-    expect(counter.count({ moon: { mine: {} } })).eq(0);
-    MoonExpansion.addMineTile(player, 'm02');
-    expect(counter.count({ moon: { mine: {} } })).eq(1);
-    MoonExpansion.addMineTile(player, 'm03');
-    expect(counter.count({ moon: { mine: {} } })).eq(2);
-    MoonExpansion.addMineTile(player, 'm04');
-    expect(counter.count({ moon: { mine: {} } })).eq(3);
-    MoonExpansion.addMineTile(player, 'm05');
-    expect(counter.count({ moon: { mine: {} } })).eq(4);
-    MoonExpansion.addMineTile(player, 'm06');
-    expect(counter.count({ moon: { mine: {} } })).eq(5);
-  });
-
-  it('road tiles', () => {
-    const counter = new Counter(player, fake);
-
-    expect(counter.count({ moon: { road: {} } })).eq(0);
-    MoonExpansion.addRoadTile(player, 'm02');
-    expect(counter.count({ moon: { road: {} } })).eq(1);
-    MoonExpansion.addRoadTile(player, 'm03');
-    expect(counter.count({ moon: { road: {} } })).eq(2);
-    MoonExpansion.addRoadTile(player, 'm04');
-    expect(counter.count({ moon: { road: {} } })).eq(3);
-    MoonExpansion.addRoadTile(player, 'm05');
-    expect(counter.count({ moon: { road: {} } })).eq(4);
-    MoonExpansion.addRoadTile(player, 'm06');
-    expect(counter.count({ moon: { road: {} } })).eq(5);
-  });
-
-  it('nextToThis: moon mine tiles', () => {
-    const moonData = MoonExpansion.moonData(game);
-    // Place the card's tile at a known space with room to surround it.
-    const hubSpace = moonData.moon.getSpaceOrThrow('m15');
-    hubSpace.tile = { tileType: TileType.LUNA_MINING_HUB, card: fake.name };
-    hubSpace.player = player;
-
-    const counter = new Counter(player, fake);
-    expect(counter.count({ moon: { mine: {} }, nextToThis: {}, each: 2 })).eq(
-      0,
-    );
-
-    const adjacent = moonData.moon.getAdjacentSpaces(hubSpace);
-    adjacent[0].tile = { tileType: TileType.MOON_MINE };
-    expect(counter.count({ moon: { mine: {} }, nextToThis: {}, each: 2 })).eq(
-      2,
-    );
-
-    adjacent[1].tile = { tileType: TileType.MOON_MINE };
-    expect(counter.count({ moon: { mine: {} }, nextToThis: {}, each: 2 })).eq(
-      4,
-    );
-
-    // A non-adjacent mine — should not count.
-    MoonExpansion.addMineTile(player, 'm02');
-    expect(counter.count({ moon: { mine: {} }, nextToThis: {}, each: 2 })).eq(
-      4,
-    );
-    // But plain {moon: {mine: {}}} counts all.
-    expect(counter.count({ moon: { mine: {} } })).to.be.greaterThan(2);
   });
 });
 

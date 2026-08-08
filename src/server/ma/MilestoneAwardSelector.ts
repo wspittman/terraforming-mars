@@ -107,14 +107,6 @@ export function chooseMilestonesAndAwards(
         awardManifest.expansions['ares'],
       );
     }
-    if (gameOptions.moonExpansion) {
-      // One MA will reward moon tags, the other will reward moon tiles.
-      if (Math.random() > 0.5) {
-        push(['One Giant Step'], ['Lunar Magnate']);
-      } else {
-        push(['Lunarchitect'], ['Full Moon']);
-      }
-    }
     break;
 
   case RandomMAOptionType.LIMITED:

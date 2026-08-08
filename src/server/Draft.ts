@@ -7,12 +7,10 @@ import {
 import { IGame } from './IGame';
 import { IPlayer } from './IPlayer';
 import { IProjectCard } from './cards/IProjectCard';
-import { ICeoCard } from './cards/ceos/ICeoCard';
-import { IPreludeCard } from './cards/prelude/IPreludeCard';
 import { SelectCard } from './inputs/SelectCard';
 import { message } from './logs/MessageBuilder';
 
-export type DraftType = 'none' | 'initial' | 'prelude' | 'ceos' | 'standard';
+export type DraftType = 'none' | 'initial' | 'standard';
 
 /*
  * Drafting terminology:
@@ -291,90 +289,9 @@ class InitialDraft extends Draft {
         player.dealtProjectCards = player.draftedCards;
         player.draftedCards = [];
       }
-      if (
-        this.game.gameOptions.preludeExtension &&
-          this.game.gameOptions.preludeDraftVariant
-      ) {
-        newPreludeDraft(this.game).startDraft();
-      } else if (
-        this.game.gameOptions.ceoExtension &&
-          this.game.gameOptions.ceosDraftVariant
-      ) {
-        this.game.initialDraftIteration++;
-        newCEOsDraft(this.game).startDraft();
-      } else {
-        this.game.gotoInitialResearchPhase();
-      }
+      this.game.gotoInitialResearchPhase();
       break;
     }
-  }
-}
-
-class PreludeDraft extends Draft {
-  constructor(game: IGame) {
-    super('prelude', game);
-  }
-
-  override draw(player: IPlayer) {
-    // Return a copy. Otherwise inplaceRemove on draftHand later mutates
-    // dealtPreludeCards, leaking other players' picks.
-    return [...player.dealtPreludeCards];
-  }
-
-  override cardsToKeep(_player: IPlayer): number {
-    return 1;
-  }
-
-  override passDirection(): 'after' {
-    return 'after';
-  }
-
-  override endRound() {
-    this.game.initialDraftIteration++;
-    for (const player of this.game.players) {
-      // TODO(kberg): player.draftedCards is not ideal here.
-      player.dealtPreludeCards = player.draftedCards as Array<IPreludeCard>;
-      player.draftedCards = [];
-    }
-    if (
-      this.game.gameOptions.ceoExtension &&
-      this.game.gameOptions.ceosDraftVariant
-    ) {
-      this.game.draftRound = 1;
-      newCEOsDraft(this.game).startDraft();
-    } else {
-      this.game.gotoInitialResearchPhase();
-    }
-  }
-}
-
-class CEOsDraft extends Draft {
-  constructor(game: IGame) {
-    super('ceos', game);
-  }
-
-  override draw(player: IPlayer) {
-    // Return a copy. Otherwise inplaceRemove on draftHand later mutates
-    // dealtCeoCards, leaking other players' picks.
-    return [...player.dealtCeoCards];
-  }
-
-  override cardsToKeep(_player: IPlayer): number {
-    return 1;
-  }
-
-  override passDirection(): 'after' {
-    return 'after';
-  }
-
-  override endRound() {
-    for (const player of this.game.players) {
-      // TODO(kberg): player.draftedCards is not ideal here.
-      player.dealtCeoCards = player.draftedCards as Array<ICeoCard>;
-      player.draftedCards = [];
-    }
-
-    this.game.gotoInitialResearchPhase();
   }
 }
 
@@ -384,12 +301,4 @@ export function newStandardDraft(game: IGame) {
 
 export function newInitialDraft(game: IGame) {
   return new InitialDraft(game);
-}
-
-export function newPreludeDraft(game: IGame) {
-  return new PreludeDraft(game);
-}
-
-export function newCEOsDraft(game: IGame) {
-  return new CEOsDraft(game);
 }

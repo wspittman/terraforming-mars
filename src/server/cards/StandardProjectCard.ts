@@ -4,7 +4,6 @@ import {TRSource} from '../../common/cards/TRSource';
 import {CardMetadata} from '../../common/cards/CardMetadata';
 import {CardName} from '../../common/cards/CardName';
 import {Card} from './Card';
-import {MoonExpansion} from '../moon/MoonExpansion';
 import {Units} from '../../common/Units';
 import {IStandardProjectCard} from './IStandardProjectCard';
 import {sum} from '../../common/utils/utils';
@@ -61,7 +60,7 @@ export abstract class StandardProjectCard extends Card implements IStandardProje
       tr: this.tr,
       auroraiData: true,
       spireScience: true,
-      reserveUnits: MoonExpansion.adjustedReserveCosts(player, this),
+      reserveUnits: this.reserveUnits ?? Units.EMPTY,
     };
   }
 

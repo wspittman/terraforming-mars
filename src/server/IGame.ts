@@ -21,11 +21,9 @@ import {TileType} from '../common/TileType';
 import {ICard} from './cards/ICard';
 import {Turmoil} from './turmoil/Turmoil';
 import {AresData} from '../common/ares/AresData';
-import {MoonData} from './moon/MoonData';
 import {SeededRandom} from '../common/utils/Random';
-import {PathfindersData} from './pathfinders/PathfindersData';
 import {GameOptions} from './game/GameOptions';
-import {CorporationDeck, PreludeDeck, ProjectDeck, CeoDeck} from './cards/Deck';
+import {CorporationDeck, ProjectDeck} from './cards/Deck';
 import {Tag} from '../common/cards/Tag';
 import {Tile} from './Tile';
 import {Logger} from './logs/Logger';
@@ -66,8 +64,6 @@ export interface IGame extends Logger {
   globalsPerGeneration: Array<Partial<Record<GlobalParameter, number>>>;
   phase: Phase;
   projectDeck: ProjectDeck;
-  preludeDeck: PreludeDeck;
-  ceoDeck: CeoDeck;
   corporationDeck: CorporationDeck;
   board: MarsBoard;
   activePlayer: IPlayer;
@@ -82,8 +78,6 @@ export interface IGame extends Logger {
   // True when resolving Turmoil phase. Does not need to be serialized since the turmoil phase isn't saved in between.
   inTurmoil: boolean;
   aresData: AresData | undefined;
-  moonData: MoonData | undefined;
-  pathfindersData: PathfindersData | undefined;
   underworldData: UnderworldData;
 
   // Card-specific data
@@ -194,8 +188,7 @@ export interface IGame extends Logger {
   /**
    * Add `tile` to `space` for `player`. Triggers all effects that come with placing a tile.
    *
-   * This only applies to the Mars board. See MoonExpansion.addTile for placing
-   * a tile on The Moon.
+   * This applies to the Mars board.
    */
   addTile(player: IPlayer, space: Space, tile: Tile): void;
   /**

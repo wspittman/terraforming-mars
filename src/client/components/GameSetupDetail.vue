@@ -2,7 +2,7 @@
         <div id="game-setup-detail" class="game-setup-detail-container">
           <ul>
             <li><div class="setup-item" v-i18n>Game Version:</div>
-              <div class="game-config generic" v-i18n>{{ gameOptions.expansions.corpera ? 'Corporate Era' : 'Base' }}</div>
+              <div class="game-config generic" v-i18n>{{ gameOptions.corporateEra ? 'Corporate Era' : 'Base' }}</div>
             </li>
 
             <li><div class="setup-item" v-i18n>Board:</div>
@@ -11,17 +11,12 @@
               <span v-if="gameOptions.shuffleMapOption" class="game-config generic" v-i18n>(randomized tiles)</span>
             </li>
 
-            <li><div class="setup-item" v-i18n>WGT:</div>
-              <div v-if="gameOptions.solarPhaseOption" class="game-config generic" v-i18n>On</div>
-              <div v-else class="game-config generic" v-i18n>Off</div>
-            </li>
             <li v-if="playerNumber > 1">
               <div class="setup-item" v-i18n>Milestones and Awards:</div>
 
               <div v-if="gameOptions.randomMA === RandomMAOptionType.NONE" class="game-config generic" v-i18n>Board-defined</div>
               <div v-if="gameOptions.randomMA === RandomMAOptionType.LIMITED" class="game-config generic" v-i18n>Randomized with limited synergy</div>
               <div v-if="gameOptions.randomMA === RandomMAOptionType.UNLIMITED" class="game-config generic" v-i18n>Full randomized</div>
-              <div v-if="gameOptions.randomMA !== RandomMAOptionType.NONE && gameOptions.includeFanMA" class="game-config generic" v-i18n>Include fan Milestones/Awards</div>
             </li>
 
             <li v-if="playerNumber > 1">

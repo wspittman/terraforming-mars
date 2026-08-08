@@ -10,8 +10,6 @@ import {Color} from '@/common/Color';
 import {Resource} from '@/common/Resource';
 import {Tag} from '@/common/cards/Tag';
 import {Protection} from '@/common/models/PlayerModel';
-import {DEFAULT_EXPANSIONS} from '@/common/cards/GameModule';
-import {PoliticalAgendasModel} from '@/common/models/TurmoilModel';
 import {SpectatorModel} from '@/common/models/SpectatorModel';
 
 function emptyProtection(): Record<Resource, Protection> {
@@ -45,28 +43,18 @@ export function fakeTimerModel(): TimerModel {
 
 export function fakeGameOptionsModel(overrides?: RecursivePartial<GameOptionsModel>): GameOptionsModel {
   return {
-    aresExtremeVariant: false,
-    altVenusBoard: false,
     boardName: BoardName.THARSIS,
+    corporateEra: true,
     bannedCards: [],
-    expansions: {...DEFAULT_EXPANSIONS},
     draftVariant: false,
     fastModeOption: false,
     includedCards: [],
-    includeFanMA: false,
     initialDraftVariant: false,
-    preludeDraftVariant: false,
-    ceosDraftVariant: false,
-    politicalAgendasExtension: 'Standard',
-    removeNegativeGlobalEvents: false,
     showOtherPlayersVP: false,
     showTimers: false,
     shuffleMapOption: false,
-    solarPhaseOption: false,
     soloTR: false,
     randomMA: RandomMAOptionType.NONE,
-    requiresMoonTrackCompletion: false,
-    requiresVenusTrackCompletion: false,
     twoCorpsVariant: false,
     undoOption: false,
     ...overrides,
@@ -75,10 +63,7 @@ export function fakeGameOptionsModel(overrides?: RecursivePartial<GameOptionsMod
 
 export function fakeGameModel(overrides?: RecursivePartial<GameModel>): GameModel {
   return {
-    aresData: undefined,
     awards: [],
-    colonies: [],
-    discardedColonies: [],
     deckSize: 0,
     discardPileSize: 0,
     expectedPurgeTimeMs: 0,
@@ -89,20 +74,15 @@ export function fakeGameModel(overrides?: RecursivePartial<GameModel>): GameMode
     isSoloModeWin: false,
     lastSoloGeneration: 14,
     milestones: [],
-    moon: undefined,
     oceans: 0,
     oxygenLevel: 0,
     passedPlayers: [],
-    pathfinders: undefined,
     phase: Phase.ACTION,
     spaces: [],
     step: 0,
-    tags: [],
     temperature: -30,
     isTerraformed: false,
-    turmoil: undefined,
     undoCount: 0,
-    venusScaleLevel: 0,
     ...overrides,
   } as GameModel;
 }
@@ -114,19 +94,15 @@ export function fakePublicPlayerModel(overrides?: RecursivePartial<PublicPlayerM
     actionsTakenThisGame: 0,
     availableBlueCardActionCount: 0,
     cardCost: 0,
-    cardDiscount: 0,
     cardsInHandNbr: 0,
     citiesCount: 0,
-    coloniesCount: 0,
     color: 'blue' as Color,
     energy: 0,
     energyProduction: 0,
-    fleetSize: 1,
     handicap: undefined,
     heat: 0,
     heatProduction: 0,
     id: 'p-blue-id' as any,
-    influence: 0,
     isActive: false,
     megacredits: 0,
     megacreditProduction: 0,
@@ -143,14 +119,11 @@ export function fakePublicPlayerModel(overrides?: RecursivePartial<PublicPlayerM
     steel: 0,
     steelProduction: 0,
     steelValue: 2,
-    tags: emptyTags(),
     terraformRating: 20,
     timer: fakeTimerModel(),
     titanium: 0,
     titaniumProduction: 0,
     titaniumValue: 3,
-    tradesThisGeneration: 0,
-    underworldData: {corruption: 0, excavations: [], tokens: []},
     victoryPointsBreakdown: {
       terraformRating: 20,
       milestones: 0,
@@ -180,14 +153,10 @@ export function fakePlayerViewModel(overrides?: RecursivePartial<PlayerViewModel
     autopass: false,
     cardsInHand: [],
     dealtCorporationCards: [],
-    dealtPreludeCards: [],
     dealtProjectCards: [],
-    dealtCeoCards: [],
     draftedCards: [],
     id: 'p-blue-id' as any,
-    ceoCardsInHand: [],
     pickedCorporationCard: [],
-    preludeCardsInHand: [],
     thisPlayer,
     waitingFor: undefined,
     game: fakeGameModel(),
@@ -215,33 +184,4 @@ export function fakeViewModel(overrides?: RecursivePartial<ViewModel>): ViewMode
     runId: 'run-id',
     ...overrides,
   } as ViewModel;
-}
-
-export function fakePoliticalAgendasModel(): PoliticalAgendasModel {
-  return {
-    marsFirst: {
-      bonusId: 'mb01',
-      policyId: 'mp01',
-    },
-    scientists: {
-      bonusId: 'sb01',
-      policyId: 'sp01',
-    },
-    unity: {
-      bonusId: 'ub01',
-      policyId: 'up01',
-    },
-    greens: {
-      bonusId: 'gb01',
-      policyId: 'gp01',
-    },
-    reds: {
-      bonusId: 'rb01',
-      policyId: 'rp01',
-    },
-    kelvinists: {
-      bonusId: 'kb01',
-      policyId: 'kp01',
-    },
-  };
 }

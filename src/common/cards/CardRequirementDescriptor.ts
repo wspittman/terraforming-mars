@@ -50,13 +50,6 @@ export type CardRequirementDescriptor = {
   chairman?: {},
   partyLeader?: number,
 
-  // The Moon
-  habitatTiles?: number,
-  miningTiles?: number,
-  roadTiles?: number,
-  habitatRate?: number,
-  miningRate?: number,
-  logisticRate?: number,
 
   // Underworld
   undergroundTokens?: number,
@@ -103,18 +96,6 @@ export function requirementType(descriptor: CardRequirementDescriptor): Requirem
     return RequirementType.PARTY;
   } else if (descriptor.plantsRemoved !== undefined) {
     return RequirementType.REMOVED_PLANTS;
-  } else if (descriptor.habitatRate !== undefined) {
-    return RequirementType.HABITAT_RATE;
-  } else if (descriptor.miningRate !== undefined) {
-    return RequirementType.MINING_RATE;
-  } else if (descriptor.logisticRate !== undefined) {
-    return RequirementType.LOGISTIC_RATE;
-  } else if (descriptor.habitatTiles !== undefined) {
-    return RequirementType.HABITAT_TILES;
-  } else if (descriptor.miningTiles !== undefined) {
-    return RequirementType.MINING_TILES;
-  } else if (descriptor.roadTiles !== undefined) {
-    return RequirementType.ROAD_TILES;
   } else if (descriptor.undergroundTokens !== undefined) {
     return RequirementType.UNDERGROUND_TOKENS;
   } else if (descriptor.corruption !== undefined) {

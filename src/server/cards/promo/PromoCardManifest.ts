@@ -4,7 +4,6 @@ export const PROMO_CARD_MANIFEST = new ModuleManifest({
   module: 'promo',
   projectCards: {},
 
-  preludeCards: {},
 
   cardsToRemove: [],
 

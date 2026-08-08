@@ -7,7 +7,6 @@ import {SpendableCardResource} from '../common/inputs/Spendable';
 import {ICard, IActionCard} from './cards/ICard';
 import {TRSource} from '../common/cards/TRSource';
 import {IProjectCard} from './cards/IProjectCard';
-import {IPreludeCard} from './cards/prelude/IPreludeCard';
 import {PlayerInput} from './PlayerInput';
 import {Resource} from '../common/Resource';
 import {CardResource} from '../common/CardResource';
@@ -21,7 +20,6 @@ import {InputResponse} from '../common/inputs/InputResponse';
 import {Tags} from './player/Tags';
 import {Colonies} from './player/Colonies';
 import {Production} from './player/Production';
-import {ICeoCard} from './cards/ceos/ICeoCard';
 import {VictoryPointsBreakdown} from '../common/game/VictoryPointsBreakdown';
 import {Color} from '../common/Color';
 import {OrOptions} from './inputs/OrOptions';
@@ -104,12 +102,8 @@ export interface IPlayer {
 
   // Cards
   dealtCorporationCards: Array<ICorporationCard>;
-  dealtPreludeCards: Array<IPreludeCard>;
-  dealtCeoCards: Array<ICeoCard>;
   dealtProjectCards: Array<IProjectCard>;
   cardsInHand: Array<IProjectCard>;
-  preludeCardsInHand: Array<IPreludeCard>;
-  ceoCardsInHand: Set<ICeoCard>;
   playedCards: PlayedCards;
   cardCost: number;
   // This will eventually replace playedCards.

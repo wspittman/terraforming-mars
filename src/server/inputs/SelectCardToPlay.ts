@@ -3,7 +3,6 @@ import {isPayment, Payment} from '../../common/inputs/Payment';
 import {IProjectCard} from '../cards/IProjectCard';
 import {isIStandardProjectCard, IStandardProjectCard} from '../cards/IStandardProjectCard';
 import {Units} from '../../common/Units';
-import {MoonExpansion} from '../moon/MoonExpansion';
 import {CardAction, IPlayer} from '../IPlayer';
 import {InputResponse, isSelectProjectCardToPlayResponse, SelectProjectCardToPlayResponse} from '../../common/inputs/InputResponse';
 import {CardName} from '../../common/cards/CardName';
@@ -44,7 +43,7 @@ export abstract class SelectCardToPlay<T extends IProjectCard | IStandardProject
           card.name,
           {
             reserveUnits: card.reserveUnits ?
-              MoonExpansion.adjustedReserveCosts(player, card) :
+              card.reserveUnits :
               Units.EMPTY,
             overriddenCost: (isIStandardProjectCard(card) && config?.adjustedCost) ?
               config.adjustedCost(card) :

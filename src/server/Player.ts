@@ -42,21 +42,16 @@ import { Counter } from './behavior/Counter';
 import { ConvertHeat } from './cards/base/standardActions/ConvertHeat';
 import { ConvertPlants } from './cards/base/standardActions/ConvertPlants';
 import { SellPatentsStandardProject } from './cards/base/standardProjects/SellPatentsStandardProject';
-import { ICeoCard, isCeoCard } from './cards/ceos/ICeoCard';
 import { ICorporationCard } from './cards/corporation/ICorporationCard';
 import { IActionCard, ICard, isIActionCard } from './cards/ICard';
 import { IProjectCard } from './cards/IProjectCard';
 import { IStandardProjectCard } from './cards/IStandardProjectCard';
 import { PlayedCards } from './cards/PlayedCards';
-import { IPreludeCard } from './cards/prelude/IPreludeCard';
-import { CeoExtension } from './CeoExtension';
 import { ColoniesHandler } from './colonies/ColoniesHandler';
 import {
   cardsFromJSON,
-  ceosFromJSON,
   corporationCardsFromJSON,
   newCorporationCard,
-  preludesFromJSON,
 } from './createCard';
 import { ChooseCards } from './deferredActions/ChooseCards';
 import { SimpleDeferredAction } from './deferredActions/DeferredAction';
@@ -83,14 +78,11 @@ import { LogHelper } from './LogHelper';
 import { From } from './logs/From';
 import { message } from './logs/MessageBuilder';
 import { IMilestone } from './milestones/IMilestone';
-import { MoonExpansion } from './moon/MoonExpansion';
-import { PathfindersExpansion } from './pathfinders/PathfindersExpansion';
 import { Colonies } from './player/Colonies';
 import { Production } from './player/Production';
 import { Stock } from './player/Stock';
 import { Tags } from './player/Tags';
 import { PlayerInput } from './PlayerInput';
-import { PreludesExpansion } from './preludes/PreludesExpansion';
 import { SerializedPlayer } from './SerializedPlayer';
 import { DiscordId } from './server/auth/discord';
 import { IParty } from './turmoil/parties/IParty';
@@ -148,12 +140,8 @@ export class Player implements IPlayer {
 
   // Cards
   public dealtCorporationCards: Array<ICorporationCard> = [];
-  public dealtPreludeCards: Array<IPreludeCard> = [];
-  public dealtCeoCards: Array<ICeoCard> = [];
   public dealtProjectCards: Array<IProjectCard> = [];
   public cardsInHand: Array<IProjectCard> = [];
-  public preludeCardsInHand: Array<IPreludeCard> = [];
-  public ceoCardsInHand: Set<ICeoCard> = new Set();
   public playedCards: PlayedCards = new PlayedCards();
   public draftedCards: Array<IProjectCard> = [];
   public draftHand: Array<IProjectCard> = [];
@@ -681,8 +669,7 @@ export class Player implements IPlayer {
     for (const card of this.tableau) {
       if (
         isIActionCard(card) &&
-        !this.actionsThisGeneration.has(card.name) &&
-        !isCeoCard(card)
+        !this.actionsThisGeneration.has(card.name)
       ) {
         if (card.canAct(this)) {
           result.push(card);
@@ -715,13 +702,6 @@ export class Player implements IPlayer {
 
     for (const card of this.tableau) {
       card.onProductionPhase?.(this);
-    }
-
-    // Turn off CEO OPG actions that were activated this generation
-    for (const card of this.playedCards) {
-      if (isCeoCard(card)) {
-        card.opgActionIsActive = false;
-      }
     }
   }
 
@@ -874,7 +854,7 @@ export class Player implements IPlayer {
   ) {
     const cardCost = this.getCardCost(selectedCard);
 
-    const reserved = MoonExpansion.adjustedReserveCosts(this, selectedCard);
+    const reserved = selectedCard.reserveUnits ?? Units.EMPTY;
 
     if (!this.canSpend(payment, reserved)) {
       throw new Error('You do not have that many resources to spend');
@@ -964,10 +944,6 @@ export class Player implements IPlayer {
     removeResourcesOnCard(CardName.SOYLENT_SEEDLING_SYSTEMS, payment.seeds);
     removeResourcesOnCard(CardName.AURORAI, payment.auroraiData);
     removeResourcesOnCard(CardName.KUIPER_COOPERATIVE, payment.kuiperAsteroids);
-
-    if (payment.megacredits > 0 || payment.steel > 0 || payment.titanium > 0) {
-      PathfindersExpansion.addToSolBank(this);
-    }
   }
 
   public playCard(
@@ -1011,13 +987,8 @@ export class Player implements IPlayer {
       const projectCardIndex = this.cardsInHand.findIndex(
         (card) => card.name === selectedCard.name,
       );
-      const preludeCardIndex = this.preludeCardsInHand.findIndex(
-        (card) => card.name === selectedCard.name,
-      );
       if (projectCardIndex !== -1) {
         this.cardsInHand.splice(projectCardIndex, 1);
-      } else if (preludeCardIndex !== -1) {
-        this.preludeCardsInHand.splice(preludeCardIndex, 1);
       }
     }
 
@@ -1084,8 +1055,6 @@ export class Player implements IPlayer {
         this.defer(actionFromPlayedCard);
       }
     }
-
-    PathfindersExpansion.onCardPlayed(this, card);
   }
 
   public playActionCard(): PlayerInput {
@@ -1093,25 +1062,6 @@ export class Player implements IPlayer {
       'Perform an action from a played card',
       'Take action',
       this.getPlayableActionCards(),
-      { selectBlueCardAction: true },
-    ).andThen(([card]) => {
-      this.game.log('${0} used ${1} action', (b) => b.player(this).card(card));
-      const action = card.action(this);
-      this.defer(action);
-      this.actionsThisGeneration.add(card.name);
-      return undefined;
-    });
-  }
-
-  private getPlayCeoOPGAction(): PlayerInput | undefined {
-    const cards = CeoExtension.getUsableOPGCeoCards(this);
-    if (cards.length === 0) {
-      return undefined;
-    }
-    return new SelectCard<ICeoCard & IActionCard>(
-      'Use CEO once per game action',
-      'Take action',
-      cards,
       { selectBlueCardAction: true },
     ).andThen(([card]) => {
       this.game.log('${0} used ${1} action', (b) => b.player(this).card(card));
@@ -1140,9 +1090,6 @@ export class Player implements IPlayer {
     ) {
       const diff = this.cardsInHand.length * this.cardCost;
       this.stock.deduct(Resource.MEGACREDITS, diff);
-      if (diff > 0) {
-        PathfindersExpansion.addToSolBank(this);
-      }
     }
     this.game.log('${0} played ${1}', (b) =>
       b.player(this).card(corporationCard),
@@ -1434,7 +1381,7 @@ export class Player implements IPlayer {
     return {
       cost,
       ...paymentOptionsForCard,
-      reserveUnits: MoonExpansion.adjustedReserveCosts(this, card),
+      reserveUnits: card.reserveUnits ?? Units.EMPTY,
       tr: trSource,
     };
   }
@@ -1665,52 +1612,7 @@ export class Player implements IPlayer {
     this.game.inDoubleDown = false;
 
     if (!headStartIsInEffect) {
-      // Prelude cards have to be played first
-      if (this.preludeCardsInHand.length > 0) {
-        game.phase = Phase.PRELUDES;
-
-        const selectPrelude = PreludesExpansion.selectPreludeToPlay(
-          this,
-          this.preludeCardsInHand,
-        );
-
-        this.setWaitingFor(
-          selectPrelude,
-          this.runWhenEmpty(() => {
-            this.incrementActionsTaken();
-            if (
-              this.preludeCardsInHand.length === 0 &&
-              !this.headStartIsInEffect()
-            ) {
-              game.playerIsFinishedTakingActions();
-              return;
-            }
-            this.takeAction();
-          }),
-        );
-
-        return;
-      }
-
-      if (this.ceoCardsInHand.size > 0) {
-        // The CEO phase occurs between the Prelude phase and before the Action phase.
-        // All CEO cards are played before players take their first normal actions.
-        game.phase = Phase.CEOS;
-
-        // start from the end of the list and work backwards, not sure why.
-        const playableCeoCards = Array.from(this.ceoCardsInHand)
-          .filter((card) => card.canPlay?.(this) === true)
-          .reverse();
-        for (const ceo of playableCeoCards) {
-          this.playCard(ceo);
-        }
-        // Null out ceoCardsInHand, anything left was unplayable.
-        this.ceoCardsInHand.clear();
-        this.takeAction(); // back to top
-        return;
-      } else {
-        game.phase = Phase.ACTION;
-      }
+      game.phase = Phase.ACTION;
 
       if (
         game.hasPassedThisActionPhase(this) ||
@@ -1851,11 +1753,6 @@ export class Player implements IPlayer {
       action.options.push(this.playActionCard());
     }
 
-    // CEO cards
-    const ceoOpgAction = this.getPlayCeoOPGAction();
-    if (ceoOpgAction !== undefined) {
-      action.options.push(ceoOpgAction);
-    }
 
     // Playable cards
     const playableCards = this.getPlayableCards();
@@ -2051,27 +1948,12 @@ export class Player implements IPlayer {
       pendingInitialActions: this.pendingInitialActions.map(toName),
       // Cards
       dealtCorporationCards: this.dealtCorporationCards.map(toName),
-      dealtPreludeCards: this.dealtPreludeCards.map(toName),
-      dealtCeoCards: this.dealtCeoCards.map(toName),
       dealtProjectCards: this.dealtProjectCards.map(toName),
       cardsInHand: this.cardsInHand.map(toName),
-      preludeCardsInHand: this.preludeCardsInHand.map(toName),
-      ceoCardsInHand: Array.from(this.ceoCardsInHand).map(toName),
       playedCards: this.playedCards.serialize(),
       draftedCards: this.draftedCards.map(toName),
       cardCost: this.cardCost,
       needsToDraft: this.needsToDraft,
-      cardDiscount: this.colonies.cardDiscount,
-      // Colonies
-      fleetSize: this.colonies.getFleetSize(),
-      tradesThisGeneration: this.colonies.usedTradeFleets,
-      colonyTradeOffset: this.colonies.tradeOffset,
-      colonyTradeDiscount: this.colonies.tradeDiscount,
-      colonyVictoryPoints: this.colonies.victoryPoints,
-      // Turmoil
-      turmoilPolicyActionUsed: this.turmoilPolicyActionUsed,
-      politicalAgendasActionUsedCount: this.politicalAgendasActionUsedCount,
-      hasTurmoilScienceTagBonus: this.hasTurmoilScienceTagBonus,
       oceanBonus: this.oceanBonus,
       // Custom cards
       // Leavitt Station.
@@ -2082,14 +1964,12 @@ export class Player implements IPlayer {
       plantsNeededForGreenery: this.plantsNeededForGreenery,
       // Lawsuit
       removingPlayers: this.removingPlayers,
-      warmongerCards: this.warmongerCards,
       // Playwrights
       removedFromPlayCards: this.removedFromPlayCards.map(toName),
       // Standard Technology: Underworld
       standardProjectsThisGeneration: Array.from(
         this.standardProjectsThisGeneration,
       ),
-      withinDeflectionZone: this.withinDeflectionZone,
 
       name: this.name,
       color: this.color,
@@ -2099,9 +1979,6 @@ export class Player implements IPlayer {
       // Stats
       actionsTakenThisGame: this.actionsTakenThisGame,
       victoryPointsByGeneration: this.victoryPointsByGeneration,
-      totalDelegatesPlaced: this.totalDelegatesPlaced,
-      underworldData: this.underworldData,
-      alliedParty: this._alliedParty,
       draftHand: this.draftHand.map(toName),
       autoPass: this.autopass,
       globalParameterSteps: this.globalParameterSteps,
@@ -2110,7 +1987,6 @@ export class Player implements IPlayer {
     if (this.lastCardPlayed !== undefined) {
       result.lastCardPlayed = this.lastCardPlayed;
     }
-    result.deltaProject = this.deltaProjectData;
     return result;
   }
 
@@ -2131,16 +2007,10 @@ export class Player implements IPlayer {
     player.canUsePlantsAsMegacredits = d.canUsePlantsAsMegaCredits;
     player.canUseTitaniumAsMegacredits = d.canUseTitaniumAsMegacredits;
     player.cardCost = d.cardCost;
-    player.colonies.cardDiscount = d.cardDiscount;
-    player.colonies.tradeDiscount = d.colonyTradeDiscount;
-    player.colonies.tradeOffset = d.colonyTradeOffset;
-    player.colonies.setFleetSize(d.fleetSize);
-    player.colonies.victoryPoints = d.colonyVictoryPoints;
     player.victoryPointsByGeneration = d.victoryPointsByGeneration;
     player.energy = d.energy;
     player.hasIncreasedTerraformRatingThisGeneration =
       d.hasIncreasedTerraformRatingThisGeneration;
-    player.hasTurmoilScienceTagBonus = d.hasTurmoilScienceTagBonus;
     player.heat = d.heat;
     player.lastCardPlayed = d.lastCardPlayed;
     player.standardProjectsThisGeneration = new Set(
@@ -2162,7 +2032,6 @@ export class Player implements IPlayer {
       }),
     );
     player.removingPlayers = d.removingPlayers;
-    player.warmongerCards = d.warmongerCards ?? 0;
     player.tags.extraScienceTags = d.scienceTagCount;
     player.tags.extraPlantTags = d.plantTagCount;
     player.tags.extraJovianTags = d.jovianTagCount ?? 0;
@@ -2171,10 +2040,6 @@ export class Player implements IPlayer {
     player.terraformRating = d.terraformRating;
     player.titanium = d.titanium;
     player.titaniumValue = d.titaniumValue;
-    player.totalDelegatesPlaced = d.totalDelegatesPlaced;
-    player.colonies.usedTradeFleets = d.tradesThisGeneration;
-    player.turmoilPolicyActionUsed = d.turmoilPolicyActionUsed;
-    player.politicalAgendasActionUsedCount = d.politicalAgendasActionUsedCount;
     player.user = d.user;
 
     // Rebuild removed from play cards (Playwrights, Odyssey)
@@ -2192,28 +2057,14 @@ export class Player implements IPlayer {
     player.dealtCorporationCards = corporationCardsFromJSON(
       d.dealtCorporationCards,
     );
-    player.dealtPreludeCards = preludesFromJSON(d.dealtPreludeCards);
-    player.dealtCeoCards = ceosFromJSON(d.dealtCeoCards);
     player.dealtProjectCards = cardsFromJSON(d.dealtProjectCards);
-    player.deltaProjectData = d.deltaProject;
     player.cardsInHand = cardsFromJSON(d.cardsInHand);
-    // I don't like "as IPreludeCard" but this is pretty safe.
-    player.preludeCardsInHand = cardsFromJSON(
-      d.preludeCardsInHand,
-    ) as Array<IPreludeCard>;
-    player.ceoCardsInHand = new Set(ceosFromJSON(d.ceoCardsInHand));
     player.playedCards.deserialize(d.playedCards);
     player.draftedCards = cardsFromJSON(d.draftedCards);
     player.autopass = d.autoPass ?? false;
     player.preservationProgram = d.preservationProgram ?? false;
 
     player.timer = Timer.deserialize(d.timer);
-    player.underworldData = d.underworldData;
-
-    if (d.alliedParty !== undefined) {
-      player._alliedParty = d.alliedParty;
-    }
-
     player.draftHand = cardsFromJSON(d.draftHand);
     if (d.globalParameterSteps) {
       player.globalParameterSteps = {
@@ -2221,7 +2072,6 @@ export class Player implements IPlayer {
         ...d.globalParameterSteps,
       };
     }
-    player.withinDeflectionZone = d.withinDeflectionZone ?? false;
     return player;
   }
 

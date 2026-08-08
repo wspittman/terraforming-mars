@@ -790,8 +790,6 @@ describe('drafting', () => {
         CardName.BIG_ASTEROID,
       ],
       corporationCards: [CardName.TERACTOR, CardName.SATURN_SYSTEMS],
-      preludeCards: [],
-      ceoCards: [],
     });
 
     expect(initialCardSelection(otherPlayer)).deep.eq({
@@ -811,8 +809,6 @@ describe('drafting', () => {
         CardName.UNITED_NATIONS_MARS_INITIATIVE,
         CardName.THORGATE,
       ],
-      preludeCards: [],
-      ceoCards: [],
     });
   });
 });
@@ -849,9 +845,7 @@ function initialCardSelection(player: IPlayer) {
   const selectInitialCards = cast(player.getWaitingFor(), SelectInitialCards);
   return {
     corporationCards: map(selectInitialCards.inputs.corp),
-    preludeCards: map(selectInitialCards.inputs.prelude),
     projectCards: map(selectInitialCards.inputs.project),
-    ceoCards: map(selectInitialCards.inputs.ceo),
   };
 }
 

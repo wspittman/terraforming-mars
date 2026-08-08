@@ -55,14 +55,6 @@ export class GameCards {
     this.addCustomCards(cards, this.gameOptions.customCorporationsList);
     return cards;
   }
-  public getPreludeCards() {
-    return [];
-  }
-
-  public getCeoCards() {
-    return [];
-  }
-
   /**
    * Instantiate every card in `customList` and add them to `cards` (except those that already exist in `cards`),
    */

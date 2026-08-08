@@ -38,7 +38,6 @@ import {
   runAllActions,
   setOxygenLevel,
   setTemperature,
-  setVenusScaleLevel,
 } from './TestingUtils';
 import { TestPlayer } from './TestPlayer';
 
@@ -68,6 +67,31 @@ describe('Game', () => {
     expect(player.production.plants).to.eq(1);
     expect(player.production.energy).to.eq(1);
     expect(player.production.heat).to.eq(1);
+  });
+
+  it('ignores legacy expansion options during setup', () => {
+    const player = TestPlayer.BLUE.newPlayer();
+    const game = Game.newInstance('gameid', [player], player, 'spectatorid', {
+      aresExtension: true,
+      ceoExtension: true,
+      coloniesExtension: true,
+      deltaProjectExpansion: true,
+      moonExpansion: true,
+      pathfindersExpansion: true,
+      preludeExtension: true,
+      turmoilExtension: true,
+      underworldExpansion: true,
+      venusNextExtension: true,
+    });
+
+    expect(game.gameOptions.aresExtension).is.false;
+    expect(game.gameOptions.coloniesExtension).is.false;
+    expect(game.gameOptions.moonExpansion).is.false;
+    expect(game.gameOptions.turmoilExtension).is.false;
+    expect(game.gameOptions.venusNextExtension).is.false;
+    expect(game.aresData).is.undefined;
+    expect(game.colonies).is.empty;
+    expect(game.turmoil).is.undefined;
   });
 
   it('correctly calculates victory points', () => {
@@ -223,87 +247,6 @@ describe('Game', () => {
     expect(game.getGeneration()).to.eq(2);
   });
 
-  it('Should not finish game before Venus is terraformed, if chosen', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    const player2 = TestPlayer.RED.newPlayer();
-    const game = Game.newInstance(
-      'game-venusterraform',
-      [player, player2],
-      player,
-      'spectatorid',
-      { venusNextExtension: true, requiresVenusTrackCompletion: true },
-    );
-    setTemperature(game, constants.MAX_TEMPERATURE);
-    setOxygenLevel(game, constants.MAX_OXYGEN_LEVEL);
-    // setVenusScaleLevel(game, constants.MAX_VENUS_SCALE);
-    setVenusScaleLevel(game, 6);
-    maxOutOceans(player);
-    // Skip final greenery Phase
-    player.plants = 0;
-    player2.plants = 0;
-    // Pass last turn
-    game.playerHasPassed(player);
-    game.playerHasPassed(player2);
-    game.playerIsFinishedTakingActions();
-    // Now game should be in research state
-    expect(game.phase).to.eq(Phase.RESEARCH);
-  });
-
-  it('Should finish game if Mars and Venus is terraformed, if chosen', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    const player2 = TestPlayer.RED.newPlayer();
-    const game = Game.newInstance(
-      'game-venusterraform',
-      [player, player2],
-      player,
-      'spectatorid',
-      { venusNextExtension: true, requiresVenusTrackCompletion: true },
-    );
-    setTemperature(game, constants.MAX_TEMPERATURE);
-    setOxygenLevel(game, constants.MAX_OXYGEN_LEVEL);
-    setVenusScaleLevel(game, constants.MAX_VENUS_SCALE);
-    maxOutOceans(player);
-    // Skip final greenery Phase
-    player.plants = 0;
-    player2.plants = 0;
-    // Pass last turn
-    game.playerHasPassed(player);
-    game.playerHasPassed(player2);
-
-    // Must remove waitingFor or playerIsFinishedTakingActions
-    // will pre-emptively exit -- you can't end the game
-    // if the game is waiting for a player to do something!
-    player.popWaitingFor();
-    player2.popWaitingFor();
-    game.playerIsFinishedTakingActions();
-    // Now game should be in end state
-    expect(game.phase).to.eq(Phase.END);
-  });
-
-  it('Should not finish game if Mars is not terraformed but Venus is terraformed, if chosen', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    const player2 = TestPlayer.RED.newPlayer();
-    const game = Game.newInstance(
-      'game-venusterraform',
-      [player, player2],
-      player,
-      'spectatorid',
-      { venusNextExtension: true, requiresVenusTrackCompletion: true },
-    );
-    setTemperature(game, 2);
-    setOxygenLevel(game, 2);
-    setVenusScaleLevel(game, constants.MAX_VENUS_SCALE);
-    maxOutOceans(player);
-    // Skip final greenery Phase
-    player.plants = 0;
-    player2.plants = 0;
-    // Pass last turn
-    game.playerHasPassed(player);
-    game.playerHasPassed(player2);
-    game.playerIsFinishedTakingActions();
-    // Now game should be in research state
-    expect(game.phase).to.eq(Phase.RESEARCH);
-  });
 
   it('Should finish solo game in the end of last generation', () => {
     const player = TestPlayer.BLUE.newPlayer();
@@ -925,13 +868,15 @@ describe('Game', () => {
     const game = Game.newInstance('gameid', [player], player, 'spectatorid');
     game.monsInsuranceOwner = undefined;
     game.syndicatePirateRaider = undefined;
-    game.moonData = undefined;
-    game.pathfindersData = undefined;
     const serialized = game.serialize();
     assertIsJSON(serialized);
+    expect(serialized.gameOptions.corporateEra).is.true;
+    expect(serialized.gameOptions).not.have.property('expansions');
+    expect(serialized.gameOptions).not.have.property('preludeExtension');
+    expect(serialized.gameOptions).not.have.property('turmoilExtension');
     const serializedKeys = Object.keys(serialized);
 
-    const unserializedFieldsInGame: Array<keyof Game> = [
+    const unserializedFieldsInGame: Array<string> = [
       'createdTime',
       'discardedColonies',
       'inDoubleDown',
@@ -943,6 +888,18 @@ describe('Game', () => {
       'rng',
       'underworldDraftEnabled',
       'doubleDownPrelude',
+      'beholdTheEmperor',
+      'colonies',
+      'exploitationOfVenusInEffect',
+      'gagarinBase',
+      'nomadSpace',
+      'stJosephCathedrals',
+      'syndicatePirateRaider',
+      'tags',
+      'tradeEmbargo',
+      'underworldData',
+      'venusScaleLevel',
+      'verminInEffect',
     ];
     const serializedValuesNotInGame: Array<keyof SerializedGame> = [
       'seed',
@@ -966,44 +923,6 @@ describe('Game', () => {
     );
   });
 
-  it('deserializing a game without moon data still loads', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    const game = Game.newInstance('gameid', [player], player, 'spectatorid', {
-      moonExpansion: false,
-    });
-    const serialized = game.serialize();
-    delete serialized['moonData'];
-    const deserialized = Game.deserialize(serialized);
-    expect(deserialized.moonData).is.undefined;
-  });
-
-  it('deserializing a game without pathfinders still loads', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    const game = Game.newInstance('gameid', [player], player, 'spectatorid', {
-      pathfindersExpansion: false,
-    });
-    const serialized = game.serialize();
-    (serialized.gameOptions as any).pathfindersData = undefined;
-    const deserialized = Game.deserialize(serialized);
-    expect(deserialized.pathfindersData).is.undefined;
-  });
-
-  it('deserializing a game migrates moon-logistics to moon-logistic', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    const game = Game.newInstance('gameid', [player], player, 'spectatorid', {
-      moonExpansion: true,
-    });
-    const serialized = game.serialize();
-    serialized.globalsPerGeneration = [
-      { 'moon-logistics': 3, 'moon-habitat': 1 } as any,
-      { 'moon-mining': 2 },
-    ];
-    const deserialized = Game.deserialize(serialized);
-    expect(deserialized.globalsPerGeneration).deep.eq([
-      { 'moon-logistic': 3, 'moon-habitat': 1 },
-      { 'moon-mining': 2 },
-    ]);
-  });
 
   it('deserializing a game with awards', () => {
     const player = TestPlayer.BLUE.newPlayer();
@@ -1247,38 +1166,6 @@ describe('Game', () => {
     ]);
   });
 
-  it('wgt includes all parameters at the game start, with Venus', () => {
-    const player = new Player('blue', 'blue', false, 0, 'p-blue');
-    const game = Game.newInstance('gameid', [player], player, 'spectatorid', {
-      venusNextExtension: true,
-    });
-    game.worldGovernmentTerraforming();
-    const parameters = waitingForGlobalParameters(player);
-    expect(parameters).to.have.members([
-      GlobalParameter.OXYGEN,
-      GlobalParameter.TEMPERATURE,
-      GlobalParameter.OCEANS,
-      GlobalParameter.VENUS,
-    ]);
-  });
-
-  it('wgt includes all parameters at the game start, with The Moon', () => {
-    const player = new Player('blue', 'blue', false, 0, 'p-blue');
-    const game = Game.newInstance('gameid', [player], player, 'spectatorid', {
-      venusNextExtension: false,
-      moonExpansion: true,
-    });
-    game.worldGovernmentTerraforming();
-    const parameters = waitingForGlobalParameters(player);
-    expect(parameters).to.have.members([
-      GlobalParameter.OXYGEN,
-      GlobalParameter.TEMPERATURE,
-      GlobalParameter.OCEANS,
-      GlobalParameter.MOON_MINING_RATE,
-      GlobalParameter.MOON_HABITAT_RATE,
-      GlobalParameter.MOON_LOGISTIC_RATE,
-    ]);
-  });
 
   it('Arctic Algae works during WGT', () => {
     const player = TestPlayer.BLUE.newPlayer();
@@ -1329,18 +1216,6 @@ function waitingForGlobalParameters(player: Player): Array<GlobalParameter> {
     }
     if (title.includes('oxygen')) {
       return GlobalParameter.OXYGEN;
-    }
-    if (title.includes('Venus')) {
-      return GlobalParameter.VENUS;
-    }
-    if (title.includes('habitat')) {
-      return GlobalParameter.MOON_HABITAT_RATE;
-    }
-    if (title.includes('mining')) {
-      return GlobalParameter.MOON_MINING_RATE;
-    }
-    if (title.includes('logistic')) {
-      return GlobalParameter.MOON_LOGISTIC_RATE;
     }
     throw new Error('title does not match any description: ' + title);
   }

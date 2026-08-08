@@ -12,7 +12,6 @@ import {MARS_FIRST_POLICY_2} from './parties/MarsFirst';
 import {PartyHooks} from './parties/PartyHooks';
 import {PartyName} from '../../common/turmoil/PartyName';
 import {REDS_POLICY_2} from './parties/Reds';
-import {MoonExpansion} from '../moon/MoonExpansion';
 import {TRSource} from '../../common/cards/TRSource';
 import {IPolicy, policyDescription} from './Policy';
 
@@ -134,22 +133,6 @@ export class TurmoilHandler {
       }
     }
 
-    MoonExpansion.ifMoon(player.game, (moonData) => {
-      if (tr.moonHabitat !== undefined) {
-        const availableSteps = constants.MAXIMUM_HABITAT_RATE - moonData.habitatRate;
-        total = total + Math.min(availableSteps, tr.moonHabitat);
-      }
-
-      if (tr.moonMining !== undefined) {
-        const availableSteps = constants.MAXIMUM_MINING_RATE - moonData.miningRate;
-        total = total + Math.min(availableSteps, tr.moonMining);
-      }
-
-      if (tr.moonLogistic !== undefined) {
-        const availableSteps = constants.MAXIMUM_LOGISTIC_RATE - moonData.logisticRate;
-        total = total + Math.min(availableSteps, tr.moonLogistic);
-      }
-    });
 
     total += tr.tr ?? 0;
 

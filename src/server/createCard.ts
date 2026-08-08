@@ -3,8 +3,6 @@ import {IProjectCard} from './cards/IProjectCard';
 import {CardManifest, ModuleManifest} from './cards/ModuleManifest';
 import {CardName} from '../common/cards/CardName';
 import {ICorporationCard} from './cards/corporation/ICorporationCard';
-import {IPreludeCard} from './cards/prelude/IPreludeCard';
-import {ICeoCard} from './cards/ceos/ICeoCard';
 import {ALL_MODULE_MANIFESTS} from './cards/AllManifests';
 import {resolveCardName} from '../common/cards/CardRenames';
 
@@ -24,7 +22,7 @@ function _createCard<T extends ICard>(cardName: CardName, cardManifestNames: Arr
 }
 
 export function newCard(cardName: CardName): ICard {
-  const card = _createCard(cardName, ['corporationCards', 'projectCards', 'preludeCards', 'ceoCards']);
+  const card = _createCard(cardName, ['corporationCards', 'projectCards']);
   if (card === undefined) {
     throw new Error(`Card [${cardName}] not found`);
   }
@@ -40,15 +38,7 @@ export function newCorporationCard(cardName: CardName): ICorporationCard | undef
 // TODO(kberg+dl): Find the use cases where this is used to find Prelude+CEO cards and filter them out to
 //              another function, perhaps?
 export function newProjectCard(cardName: CardName): IProjectCard | undefined {
-  return _createCard(cardName, ['projectCards', 'preludeCards', 'ceoCards']);
-}
-
-export function newPrelude(cardName: CardName): IPreludeCard | undefined {
-  return _createCard(cardName, ['preludeCards']);
-}
-
-export function newCeo(cardName: CardName): ICeoCard | undefined {
-  return _createCard(cardName, ['ceoCards']);
+  return _createCard(cardName, ['projectCards']);
 }
 
 function cfj<T extends ICard>(cards: ReadonlyArray<CardName>, resolver: (c: CardName) => T | undefined): Array<T> {
@@ -74,13 +64,5 @@ export function cardsFromJSON(cards: ReadonlyArray<CardName>): Array<IProjectCar
 
 export function corporationCardsFromJSON(cards: ReadonlyArray<CardName>): Array<ICorporationCard> {
   return cfj(cards, newCorporationCard);
-}
-
-export function ceosFromJSON(cards: ReadonlyArray<CardName>): Array<ICeoCard> {
-  return cfj(cards, newCeo);
-}
-
-export function preludesFromJSON(cards: ReadonlyArray<CardName>): Array<IPreludeCard> {
-  return cfj(cards, newPrelude);
 }
 

@@ -1,8 +1,6 @@
 import {Phase} from '../../common/Phase';
 import {IPlayer} from '../IPlayer';
 import {Board} from '../boards/Board';
-import {MoonExpansion} from '../moon/MoonExpansion';
-import {PathfindersExpansion} from '../pathfinders/PathfindersExpansion';
 import {DeltaProjectExpansion} from '../delta/DeltaProjectExpansion';
 import {Turmoil} from '../turmoil/Turmoil';
 import {VictoryPointsBreakdownBuilder} from './VictoryPointsBreakdownBuilder';
@@ -78,8 +76,6 @@ export function calculateVictoryPoints(player: IPlayer) {
   if (coloniesVP > 0) {
     builder.setVictoryPoints('victoryPoints', coloniesVP, 'Colony VP');
   }
-  MoonExpansion.calculateVictoryPoints(player, builder);
-  PathfindersExpansion.calculateVictoryPoints(player, builder);
   DeltaProjectExpansion.calculateVictoryPoints(player, builder);
 
   // Underworld Score Bribing

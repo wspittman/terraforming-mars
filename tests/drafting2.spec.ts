@@ -784,8 +784,6 @@ const stored = {
         'Helion',
         'Interplanetary Cinematics',
       ],
-      'dealtPreludeCards': [],
-      'dealtCeoCards': [],
       'dealtProjectCards': [
         'Lake Marineris',
         'Ironworks',
@@ -802,8 +800,6 @@ const stored = {
       'cardsInHand': [
         'Lake Marineris',
       ],
-      'preludeCardsInHand': [],
-      'ceoCardsInHand': [],
       'playedCards': [],
       'draftedCards': [],
       'cardCost': 3,
@@ -877,8 +873,6 @@ const stored = {
         'Thorgate',
         'PhoboLog',
       ],
-      'dealtPreludeCards': [],
-      'dealtCeoCards': [],
       'draftHand': [],
       'dealtProjectCards': [
         'Great Escarpment Consortium',
@@ -894,8 +888,6 @@ const stored = {
       ],
       'cardsInHand': [
       ],
-      'preludeCardsInHand': [],
-      'ceoCardsInHand': [],
       'playedCards': [],
       'draftedCards': [],
       'cardCost': 3,

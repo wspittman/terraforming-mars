@@ -20,7 +20,7 @@ Only implement the next incomplete phase in each work session, then stop for fee
    - Preserve legacy runtime/deserialization structures until their domain subsystems are removed in phase 4.
 3. **Remove expansion client presentation** — **complete**
    - Remove expansion-only panels, icons, filters, settings, and rendering branches no longer required after engine cleanup.
-4. **Remove expansion domain subsystems** — in progress
+4. **Remove expansion domain subsystems** — **complete**
    - **4a. Remove disconnected Moon and Pathfinders client domains** — complete
    - **4b1. Remove expansion fields from the new-game transport contract** — complete
    - **4b2. Remove expansion player-input views and the Delta Project client domain** — complete
@@ -38,9 +38,9 @@ Only implement the next incomplete phase in each work session, then stop for fee
              - **4c2b2b2. Remove Venus and Ares global-parameter engines** — complete
              - **4c2b2b3. Remove Colonies, Turmoil, and Underworld engines** — complete
    - Consolidate the remaining Base/Corporate Era types after each boundary is removed.
-5. **Repository-wide cleanup and documentation** — pending
+5. **Repository-wide cleanup and documentation** — **complete**
    - Remove dead assets, scripts, dependencies, fixtures, and residual terminology; update README/AGENTS documentation where appropriate.
-6. **Final verification** — pending
+6. **Final verification** — **complete**
    - Run full build, lint, and test; resolve all remaining Base/Corporate Era regressions.
 
 ## Key Questions
@@ -82,3 +82,10 @@ Only implement the next incomplete phase in each work session, then stop for fee
 | Delta engine full test run lacked generated CSS | 1 | Run `npm run make:css` before repeating the complete suite. |
 | Delta engine client tests lacked generated card/domain JSON | 1 | Run `npm run make:cards` before repeating the client suite. |
 | Venus/Ares cleanup left formatting errors and an empty callback | 1 | Run the repository fixer, then remove the now-empty Ares callback explicitly. |
+| Phase 5 plan patch targeted a similar finding from the wrong section | 1 | Appended the dated phase inventory directly instead. |
+| Phase 5 server build lacked generated settings JSON | 1 | Run `npm run make:json` before repeating compilation. |
+| Full build found end-game Moon selectors calling a deleted Less mixin | 1 | Remove the stale Moon result-table selectors before rebuilding. |
+| First end-game selector patch used an earlier selector as its end marker | 1 | Use the following red-arrow selector as the structural boundary instead. |
+| Combined phase 6 cleanup patch did not match spaced milestone-selector imports | 1 | Split the patch and match the file’s current formatting exactly. |
+| Full client suite expected a warning for a bad banned card omitted from the test input | 1 | Add the invalid card to both the input and expected reduced model. |
+| Focused JSON processor test expected the old hidden-filter state | 1 | Expect the banned-card filter to open when restored banned cards are present. |

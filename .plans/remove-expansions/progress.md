@@ -123,3 +123,20 @@
 - Removed the temporary expansion test bypass and normalized all direct game construction to Base/Corporate Era behavior.
 - Full lint, production build, and automated suites pass (1,525 server and 296 client tests); webpack reports only its existing bundle-size warnings.
 - Next: phase 5 repository-wide dead asset, script, dependency, fixture, and terminology cleanup.
+
+## 2026-08-08 — Phase 5
+
+- Inventoried residual expansion options, hidden creation controls, unused source modules, styles, assets, and outdated documentation.
+- Deleted unused expansion manifests, shared models, board-space configuration, standalone styles, and unreferenced image assets.
+- Removed expansion-only off-Mars board setup and documented the Base/Corporate Era-only fork in README and AGENTS.
+- Full build, lint, and automated test suites pass (1,525 server and 296 client tests); webpack reports only its existing bundle-size warnings.
+- Next: phase 6 final verification.
+
+## 2026-08-09 — Phase 6
+
+- Reduced `GameModule`, `GameOptions`, and the create-game transport to Base and Corporate Era fields.
+- Deleted hidden Prelude/CEO controls and filters, expansion settings migration, compatibility filtering, Ares board rendering, and expansion-only card-gallery/rulebook module entries.
+- Updated fixtures and tests to the reduced contracts and retained supported invalid-card settings coverage.
+- Passed full build, lint, and automated tests (1,525 server and 296 client tests); webpack reports only its existing bundle-size warnings.
+- Screenshot capture was unavailable because the environment has no Chromium, Chrome, or browser automation executable.
+- Phase 6 complete; the remove-expansions plan is complete.

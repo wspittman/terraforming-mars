@@ -45,7 +45,6 @@ export interface NewGameConfig {
   fastModeOption: boolean;
   showOtherPlayersVP: boolean;
 
-  solarPhaseOption: boolean;
   modularMA: boolean;
 
   // Variants

@@ -16,13 +16,13 @@ describe('CreateGameSettingsStorage', () => {
       players: [{name: 'Alice', color: 'red', beginner: false, handicap: 0}],
       board: 'hellas',
       clonedGamedId: 'g123',
-      solarPhaseOption: true,
+      fastModeOption: true,
     });
 
     expect(storage.loadSettings()).deep.eq({
       players: [{name: 'Alice', color: 'red', beginner: false, handicap: 0}],
       board: 'hellas',
-      solarPhaseOption: true,
+      fastModeOption: true,
     });
   });
 
@@ -46,7 +46,7 @@ describe('CreateGameSettingsStorage', () => {
     storage.saveSettings({
       players: [{name: 'Alice', color: 'red', beginner: false, handicap: 0}],
       board: 'hellas',
-      solarPhaseOption: true,
+      fastModeOption: true,
     });
 
     storage.clearSettings();

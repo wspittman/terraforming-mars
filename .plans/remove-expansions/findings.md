@@ -105,3 +105,17 @@
 - Colonies, Turmoil, and Underworld no longer have shared models, runtime engines, player inputs, behavior branches, board state, scoring hooks, or client presentation domains.
 - The static card-data exporter now emits only cards, milestones, and awards; the removed colony and global-event catalogs no longer require generated JSON.
 - With the final expansion engines gone, `Game.newInstance` no longer exposes the temporary test-only normalization bypass. Expansion option and enum terminology that does not activate runtime behavior remains phase 5 cleanup.
+
+## 2026-08-08 — Phase 5 inventory
+
+- The remaining expansion surface is dead compatibility residue rather than reachable gameplay: legacy `GameOptions` flags, hidden create-form controls, unused manifests/models, expansion-only Less modules, and their image assets.
+- `BoardBuilder` still adds off-Mars colony spaces for deleted cards by consulting the legacy expansion map. Base/Corporate Era only needs the two standard off-Mars spaces.
+- The README and repository-local `AGENTS.md` still describe the upstream expansion-rich project and should document this fork's Base/Corporate Era boundary instead.
+- Some expansion words are legitimate Base card names or generic Terraforming Mars terminology (for example Colonizer Training Camp, Miranda Resort, and colonies on Mars); cleanup must not remove those merely by name.
+
+## 2026-08-09 — Phase 6
+
+- Final verification exposed that phase 5 had removed assets and standalone modules but left the complete legacy expansion option schema, hidden creation controls, module names, compatibility filters, and Ares board rendering props in compiled code.
+- Narrowing `GameModule` to Base and Corporate Era made those stale branches compile-time errors and provided a reliable boundary for removing them instead of retaining false-valued compatibility data.
+- World Government Terraforming remains callable internally for retained behavior coverage, but it is no longer a game-creation option or automatic generation phase.
+- The final transport, runtime option, card gallery, corporation filter, settings restore, and generated metadata paths now describe only Base and Corporate Era modules.

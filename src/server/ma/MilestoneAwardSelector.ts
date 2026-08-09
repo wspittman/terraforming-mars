@@ -8,7 +8,7 @@ import { awardManifest } from '../awards/Awards';
 import { GameOptions } from '../game/GameOptions';
 import { milestoneManifest } from '../milestones/Milestones';
 import { inplaceShuffle } from '../utils/shuffle';
-import { isCompatible, MAManifest } from './MAManifest';
+import { MAManifest } from './MAManifest';
 import { synergies } from './MilestoneAwardSynergies';
 
 type DrawnMilestonesAndAwards = {
@@ -70,7 +70,7 @@ export function chooseMilestonesAndAwards(
     drawnMilestonesAndAwards.awards.push(...awards);
   }
 
-  const requiredQty = gameOptions.venusNextExtension ? 6 : 5;
+  const requiredQty = 5;
 
   switch (gameOptions.randomMA) {
   case RandomMAOptionType.NONE:
@@ -168,10 +168,6 @@ export function getCandidates(
       if (random === 'modular') {
         return false;
       }
-    }
-
-    if (!isCompatible(name, manifest, gameOptions)) {
-      return false;
     }
 
     return true;

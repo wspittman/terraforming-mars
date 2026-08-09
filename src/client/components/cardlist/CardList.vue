@@ -372,9 +372,6 @@ export default defineComponent({
       switch (expansion) {
       case 'base': return 'expansion-icon-base';
       case 'corpera': return 'expansion-icon-CE';
-      case 'colonies': return 'expansion-icon-colony';
-      case 'moon': return 'expansion-icon-themoon';
-      default: return `expansion-icon-${expansion}`;
       }
     },
     filterByTags(card: ClientCard): boolean {

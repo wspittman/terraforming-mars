@@ -43,17 +43,6 @@ function calc(params: URLSearchParams): string {
   const runs = Number(params.get('runs') || 100);
   const options = simpleGameOptions();
 
-  if (params.get('venus') === 'true') {
-    options.venusNextExtension = true;
-  }
-
-  if (params.get('ares') === 'true') {
-    options.aresExtension = true;
-  }
-
-  if (params.get('moon') === 'true') {
-    options.moonExpansion = true;
-  }
   if (params.get('fan-maps') === 'true') {
     options.includeFanMA = true;
   }
@@ -94,19 +83,13 @@ function calc(params: URLSearchParams): string {
 function simpleGameOptions(): GameOptions {
   return {
     ...DEFAULT_GAME_OPTIONS,
-    aresHazards: false,
     corporateEra: false,
     initialDraftVariant: false,
-    preludeDraftVariant: false,
     showTimers: false,
     startingCorporations: 0,
 
     // The options that can change, should be parameters.
     boardName: BoardName.THARSIS,
-    venusNextExtension: false,
-    aresExtension: false,
-    moonExpansion: false,
-    pathfindersExpansion: false,
     includeFanMA: false,
     randomMA: RandomMAOptionType.NONE,
   };

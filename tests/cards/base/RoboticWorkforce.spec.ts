@@ -182,10 +182,6 @@ describe('RoboticWorkforce', () => {
       ) {
         // Create new players, set all productions to 2
         [game, player, player2] = testGame(2, {
-          turmoilExtension: true,
-          aresExtension: true,
-          aresHazards: false,
-          underworldExpansion: true,
         });
 
         player.production.override({

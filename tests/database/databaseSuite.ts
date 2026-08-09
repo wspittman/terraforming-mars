@@ -253,7 +253,7 @@ export function describeDatabaseSuite<T extends ITestDatabase>(dtor: DatabaseTes
 
     it('getGame', async () => {
       const player = TestPlayer.BLACK.newPlayer();
-      const game = Game.newInstance('game-id-1212', [player], player, 'spectatorid', {underworldExpansion: true});
+      const game = Game.newInstance('game-id-1212', [player], player, 'spectatorid', {});
       await db.lastSaveGamePromise;
       expect(game.lastSaveId).eq(1);
 

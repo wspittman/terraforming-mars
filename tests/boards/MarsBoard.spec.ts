@@ -28,7 +28,7 @@ describe('MarsBoard', () => {
     player2 = TestPlayer.RED.newPlayer();
 
     // Rather than create a whole game around this test, I'm mocking data to make the tests pass.
-    const gameOptions: Partial<GameOptions> = { pathfindersExpansion: false };
+    const gameOptions: Partial<GameOptions> = {};
     (player as any).game = { gameOptions };
     (player2 as any).game = { gameOptions };
   });

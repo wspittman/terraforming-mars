@@ -434,7 +434,7 @@ describe('Player', () => {
   // });
 
   it('Increasing temperature sets globalParameterSteps', () => {
-    const [game, player, player2] = testGame(2, { solarPhaseOption: true });
+    const [game, player, player2] = testGame(2, {});
 
     game.phase = Phase.ACTION;
     game.increaseTemperature(player, 1);
@@ -459,7 +459,7 @@ describe('Player', () => {
   });
 
   it('Increasing oxygen sets globalParameterSteps', () => {
-    const [game, player, player2] = testGame(2, { solarPhaseOption: true });
+    const [game, player, player2] = testGame(2, {});
 
     game.phase = Phase.ACTION;
     game.increaseOxygenLevel(player, 1);

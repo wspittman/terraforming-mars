@@ -1,6 +1,5 @@
 <template>
   <div :class="klass" :title="$t(description)" data-test="tile">
-    <AdjacencyBonus v-if="aresExtension && tileType !== undefined" :tileType="tileType" />
   </div>
 </template>
 
@@ -11,7 +10,6 @@ import {SpaceType} from '@/common/boards/SpaceType';
 import {TileType, tileTypeToString} from '@/common/TileType';
 import {SpaceHighlight, SpaceModel} from '@/common/models/SpaceModel';
 import {TileView} from '@/client/components/board/TileView';
-import AdjacencyBonus from '@/client/components/AdjacencyBonus.vue';
 
 const tileTypeToCssClass: Record<TileType, string> = {
   [TileType.OCEAN]: 'ocean',
@@ -61,21 +59,6 @@ const tileTypeToCssClass: Record<TileType, string> = {
   [TileType.NEURAL_INSTANCE]: 'neural-instance',
 };
 
-const tileTypeToCssClassAresOverride = new Map<TileType, string>([
-  [TileType.COMMERCIAL_DISTRICT, 'commercial-district-ares'],
-  [TileType.DEIMOS_DOWN, 'deimos-down-ares'],
-  [TileType.ECOLOGICAL_ZONE, 'ecological-zone-ares'],
-  [TileType.GREAT_DAM, 'great-dam-ares'],
-  [TileType.INDUSTRIAL_CENTER, 'industrial-center-ares'],
-  [TileType.LAVA_FLOWS, 'lava-flows-ares'],
-  [TileType.CAPITAL, 'capital-ares'],
-  [TileType.MOHOLE_AREA, 'mohole-area-ares'],
-  [TileType.NATURAL_PRESERVE, 'natural-preserve-ares'],
-  [TileType.NUCLEAR_ZONE, 'nuclear-zone-ares'],
-  [TileType.RESTRICTED_AREA, 'restricted-area-ares'],
-  [TileType.MAGNETIC_FIELD_GENERATORS, 'magnetic-field-generators-ares'],
-]);
-
 const descriptions: Record<TileType, string> = {
   ...tileTypeToString,
   [TileType.COMMERCIAL_DISTRICT]: 'Commercial District: 1 VP per adjacent city tile',
@@ -111,9 +94,6 @@ export default defineComponent({
       type: Object as () => SpaceModel,
       required: true,
     },
-    aresExtension: {
-      type: Boolean,
-    },
     tileView: {
       type: String as () => TileView,
       default: 'show',
@@ -121,9 +101,6 @@ export default defineComponent({
   },
   data() {
     return {};
-  },
-  components: {
-    AdjacencyBonus,
   },
   computed: {
     tileType(): TileType | undefined {
@@ -148,9 +125,6 @@ export default defineComponent({
       let css = 'board-space';
       if (this.tileType !== undefined) {
         let cssClass: string | undefined = tileTypeToCssClass[this.tileType];
-        if (this.aresExtension && tileTypeToCssClassAresOverride.has(this.tileType)) {
-          cssClass = tileTypeToCssClassAresOverride.get(this.tileType);
-        }
         // Special case Crashlanding rotation
         if (this.tileType === TileType.CRASHLANDING && this.space.rotated === true) {
           cssClass += '-rotated';

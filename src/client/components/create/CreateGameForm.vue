@@ -54,27 +54,6 @@
                                 <span v-i18n>Starting Corporations</span>
                             </label>
 
-                            <template v-if="expansions.prelude">
-                              <label for="startingPreludeENum-checkbox">
-                              <div class="create-game-expansion-icon expansion-icon-prelude"></div>
-                              <input type="number" class="create-game-corporations-count" value="4" min="4" :max="8" v-model="startingPreludes" id="startingPreludeNum-checkbox">
-                                  <span v-i18n>Starting Preludes</span>
-                              </label>
-                            </template>
-
-                            <template v-if="expansions.ceo">
-                              <label for="startingCEONum-checkbox">
-                              <div class="create-game-expansion-icon expansion-icon-ceo"></div>
-                              <input type="number" class="create-game-corporations-count" value="3" min="1" :max="6" v-model="startingCeos" id="startingCEONum-checkbox">
-                                  <span v-i18n>Starting CEOs</span>
-                              </label>
-                            </template>
-
-                            <input type="checkbox" v-model="solarPhaseOption" id="WGT-checkbox">
-                            <label for="WGT-checkbox">
-                                <span v-i18n>World Government Terraforming</span>&nbsp;<a :href="wikiUrls.worldGovernmentTerraforming" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                            </label>
-
                             <template v-if="playersCount === 1">
                             <input type="checkbox" v-model="soloTR" id="soloTR-checkbox">
                             <label for="soloTR-checkbox">
@@ -128,14 +107,6 @@
                               <span v-i18n>min</span>
                             </label>
 
-                            <template v-if="expansions.prelude">
-                              <input type="checkbox" v-model="twoCorpsVariant" id="twoCorps-checkbox">
-                              <label for="twoCorps-checkbox" title="Always gain the Merger Prelude card (will be given post-draft)">
-                                    <div class="create-game-expansion-icon expansion-icon-prelude"></div>
-                                    <span v-i18n>Merger</span>&nbsp;<a :href="wikiUrls.merger" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                              </label>
-                            </template>
-
                             <input type="checkbox" v-model="shuffleMapOption" id="shuffleMap-checkbox">
                             <label for="shuffleMap-checkbox">
                                     <span v-i18n>Randomize board tiles</span>&nbsp;<a :href="wikiUrls.randomizeBoardTiles" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
@@ -157,22 +128,6 @@
                                 <span v-i18n>Custom Corporation list</span>
                                 <span v-if="customCorporations.length">&nbsp;({{ customCorporations.length }})</span>
                             </label>
-
-                            <template v-if="expansions.prelude">
-                              <input type="checkbox" v-model="showPreludesList" id="customPreludes-checkbox">
-                              <label for="customPreludes-checkbox">
-                                  <span v-i18n>Custom Preludes list</span>
-                                  <span v-if="customPreludes.length">&nbsp;({{ customPreludes.length }})</span>
-                              </label>
-                            </template>
-
-                            <template v-if="expansions.ceo">
-                            <input type="checkbox" v-model="showCeosList" id="customCeos-checkbox">
-                              <label for="customCeos-checkbox">
-                                  <span v-i18n>Custom CEOs list</span>
-                                  <span v-if="customCeos.length">&nbsp;({{ customCeos.length }})</span>
-                              </label>
-                            </template>
 
                             <input type="checkbox" v-model="showBannedCards" id="bannedCards-checkbox">
                             <label for="bannedCards-checkbox">
@@ -205,22 +160,6 @@
                                 </label>
                                 </div>
                             </div>
-                            <div class="create-game-page-column-row" v-if="initialDraft">
-                              <div v-if="expansions.prelude">
-                                <input type="checkbox" name="preludeDraft" v-model="preludeDraftVariant" id="preludeDraft-checkbox">
-                                <label for="preludeDraft-checkbox">
-                                  <span v-i18n>Prelude Draft</span>
-                                </label>
-                              </div>
-
-                              <div v-if="expansions.ceo">
-                                <input type="checkbox" name="ceosDraft" v-model="ceosDraftVariant" id="ceosDraft-checkbox">
-                                <label for="ceosDraft-checkbox">
-                                  <span v-i18n>CEO Draft</span>
-                                </label>
-                              </div>
-                            </div>
-
                             <input type="checkbox" v-model="randomFirstPlayer" id="randomFirstPlayer-checkbox">
                             <label for="randomFirstPlayer-checkbox">
                                 <span v-i18n>Random first player</span>
@@ -258,13 +197,6 @@
                               Please don't report anything unless it breaks the game.<br>
                               These are <b>always fully random</b>.
                             </div>
-                            <template v-if="expansions.venus">
-                                <input type="checkbox" v-model="requiresVenusTrackCompletion" id="requiresVenusTrackCompletion-checkbox">
-                                <label for="requiresVenusTrackCompletion-checkbox">
-                                    <span v-i18n>Mandatory Venus Terraforming</span> &nbsp;<a :href="wikiUrls.venusTerraforming" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                                </label>
-                            </template>
-
                             <template v-if="randomMA !== RandomMAOptionType.NONE">
                               <input type="checkbox" v-model="includeFanMA" id="fanMA-checkbox">
                               <label for="fanMA-checkbox">
@@ -355,27 +287,6 @@
                 @close="showCorporationList = false"
             />
 
-            <PreludesFilter
-                ref="preludesFilter"
-                v-show="showPreludesList"
-                v-if="showPreludesList"
-                @prelude-list-changed="updateCustomPreludes"
-                :expansions="expansions"
-                :selected="customPreludes"
-                @close="showPreludesList = false"
-            />
-
-
-            <CeosFilter
-                ref="ceosFilter"
-                v-show="showCeosList"
-                v-if="showCeosList"
-                @ceo-list-changed="updateCustomCeos"
-                :expansions="expansions"
-                :selected="customCeos"
-                @close="showCeosList = false"
-            />
-
             <div class="create-game--block" v-if="showBannedCards">
               <CardsFilter
                   ref="cardsFilter"
@@ -405,9 +316,7 @@ import {Color, PLAYER_COLORS} from '@/common/Color';
 import {BoardName} from '@/common/boards/BoardName';
 import {RandomBoardOption} from '@/common/boards/RandomBoardOption';
 import {CardName} from '@/common/cards/CardName';
-import CeosFilter from '@/client/components/create/CeosFilter.vue';
 import CorporationsFilter from '@/client/components/create/CorporationsFilter.vue';
-import PreludesFilter from '@/client/components/create/PreludesFilter.vue';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
@@ -435,7 +344,6 @@ type Refs = {
 };
 
 type FormModel = {
-  preludeToggled: boolean;
   uploading: boolean;
 };
 
@@ -444,41 +352,16 @@ export default defineComponent({
   data(): CreateGameModel & FormModel {
     return {
       ...defaultCreateGameModel(),
-      preludeToggled: false,
       uploading: false,
     };
   },
   components: {
     AppButton,
     CardsFilter,
-    CeosFilter,
     CorporationsFilter,
-    PreludesFilter,
     PreferencesIcon,
   },
   watch: {
-    'expansions.venus': function(value: boolean) {
-      this.solarPhaseOption = value;
-    },
-    initialDraft(value: boolean) {
-      if (value === true && this.preludeDraftVariant === undefined) {
-        this.preludeDraftVariant = true;
-      }
-      if (value === true && this.ceosDraftVariant === undefined) {
-        this.ceosDraftVariant = true;
-      }
-    },
-    'expansions.prelude': function(value: boolean) {
-      if (value === true && this.preludeDraftVariant === undefined) {
-        this.preludeDraftVariant = true;
-      }
-    },
-    'expansions.prelude2': function(value: boolean) {
-      if (value === true && this.preludeToggled === false && this.uploading === false) {
-        this.expansions.prelude = true;
-        this.preludeToggled = true;
-      }
-    },
     playersCount(value: number) {
       if (value === 1) {
         this.expansions.corpera = true;
@@ -561,7 +444,6 @@ export default defineComponent({
           if (!component.seededGame) {
             component.seed = Math.random();
           }
-          component.solarPhaseOption = Boolean(processor.solarPhaseOption);
         } finally {
           this.uploading = false;
         }
@@ -579,7 +461,6 @@ export default defineComponent({
     resetSettings() {
       createGameSettingsStorage.clearSettings();
       Object.assign(this, defaultCreateGameModel(), {
-        preludeToggled: false,
         uploading: false,
       });
       nextTick(() => {
@@ -632,17 +513,11 @@ export default defineComponent({
     updateCustomCorporations(customCorporations: Array<CardName>) {
       this.customCorporations = customCorporations;
     },
-    updateCustomPreludes(customPreludes: Array<CardName>) {
-      this.customPreludes = customPreludes;
-    },
     updateBannedCards(bannedCards: Array<CardName>) {
       this.bannedCards = bannedCards;
     },
     updateIncludedCards(includedCards: Array<CardName>) {
       this.includedCards = includedCards;
-    },
-    updateCustomCeos(customCeos: Array<CardName>) {
-      this.customCeos = customCeos;
     },
     getPlayers(): Array<NewPlayerModel> {
       return this.players.slice(0, this.playersCount);
@@ -667,25 +542,13 @@ export default defineComponent({
       }
     },
     isBeginnerToggleEnabled(): Boolean {
-      return !(this.initialDraft || this.expansions.prelude || this.expansions.venus || this.expansions.colonies || this.expansions.turmoil);
+      return !this.initialDraft;
     },
     getPlayersCountText(count: number): string {
       if (count === 1) {
         return translateText('Solo');
       }
       return count.toString();
-    },
-    deselectVenusCompletion() {
-      if (this.expansions.venus === false) {
-        this.requiresVenusTrackCompletion = false;
-      }
-    },
-    deselectMoonCompletion() {
-      if (this.expansions.moon === false) {
-        this.requiresMoonTrackCompletion = false;
-        this.moonStandardProjectVariant = false;
-        this.moonStandardProjectVariant1 = false;
-      }
     },
     getBoardColorClass(boardName: BoardName | BoardNameType): string {
       switch (boardName) {
@@ -782,7 +645,6 @@ export default defineComponent({
       const initialDraft = this.initialDraft;
       const randomMA = this.randomMA;
       const showOtherPlayersVP = this.showOtherPlayersVP;
-      const solarPhaseOption = this.solarPhaseOption;
       const shuffleMapOption = this.shuffleMapOption;
       const customCorporations = this.customCorporations;
       const bannedCards = this.bannedCards;
@@ -857,7 +719,6 @@ export default defineComponent({
         includedCards,
         board,
         seed,
-        solarPhaseOption,
         undoOption,
         showTimers,
         fastModeOption,

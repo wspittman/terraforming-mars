@@ -53,9 +53,6 @@ describe('Executor', () => {
 
   beforeEach(() => {
     [game, player, player2, player3] = testGame(3, {
-      turmoilExtension: true,
-      venusNextExtension: true,
-      underworldExpansion: true,
     });
 
     fake = fakeCard({ name: 'Fake Card' as CardName });

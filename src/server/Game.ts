@@ -218,52 +218,10 @@ export class Game implements IGame, Logger {
     spectatorId: SpectatorId,
     partialOptions: Partial<GameOptions> = {},
     seed = 0): Game {
-    if (partialOptions.expansions === undefined) {
-      partialOptions.expansions = {
-        corpera: partialOptions.corporateEra ?? false,
-        venus: partialOptions.venusNextExtension ?? false,
-        colonies: partialOptions.coloniesExtension ?? false,
-        prelude: partialOptions.preludeExtension ?? false,
-        prelude2: partialOptions.prelude2Expansion ?? false,
-        turmoil: partialOptions.turmoilExtension ?? false,
-        promo: partialOptions.promoCardsOption ?? false,
-        community: partialOptions.communityCardsOption ?? false,
-        ares: partialOptions.aresExtension ?? false,
-        moon: partialOptions.moonExpansion ?? false,
-        pathfinders: partialOptions.pathfindersExpansion ?? false,
-        ceo: partialOptions.ceoExtension ?? false,
-        starwars: partialOptions.starWarsExpansion ?? false,
-        underworld: partialOptions.underworldExpansion ?? false,
-        deltaProject: partialOptions.deltaProjectExpansion ?? false,
-      };
-    }
     const gameOptions = {...DEFAULT_GAME_OPTIONS, ...partialOptions};
-    Object.assign(gameOptions, {
-      aresExtension: false,
-      ceoExtension: false,
-      coloniesExtension: false,
-      communityCardsOption: false,
-      deltaProjectExpansion: false,
-      moonExpansion: false,
-      pathfindersExpansion: false,
-      prelude2Expansion: false,
-      preludeExtension: false,
-      promoCardsOption: false,
-      starWarsExpansion: false,
-      turmoilExtension: false,
-      underworldExpansion: false,
-      venusNextExtension: false,
-    });
-    gameOptions.expansions = {...DEFAULT_GAME_OPTIONS.expansions, corpera: gameOptions.corporateEra};
 
     if (gameOptions.clonedGamedId !== undefined) {
       throw new Error('Cloning should not come through this execution path.');
-    }
-    if (gameOptions.customPreludes !== undefined && gameOptions.customPreludes.includes(CardName.DELTA_PROJECT)) {
-      throw new Error('Delta Project cannot be included in custom preludes. It is given to all players as part of the Delta Project.');
-    }
-    if (gameOptions.bannedCards !== undefined && gameOptions.bannedCards.includes(CardName.DELTA_PROJECT)) {
-      throw new Error('Delta Project cannot be banned. It is given to all players as part of the Delta Project.');
     }
 
     const rng = new SeededRandom(seed);
@@ -337,10 +295,7 @@ export class Game implements IGame, Logger {
         });
       }
 
-      if (!player.beginner ||
-        // Bypass beginner choice if any extension is choosen
-        gameOptions.initialDraftVariant ||
-        gameOptions.moonExpansion) {
+      if (!player.beginner || gameOptions.initialDraftVariant) {
         player.dealtCorporationCards.push(...corporationDeck.drawN(game, gameOptions.startingCorporations));
         if (gameOptions.initialDraftVariant === false) {
           player.dealtProjectCards.push(...projectDeck.drawN(game, 10));
@@ -481,21 +436,7 @@ export class Game implements IGame, Logger {
   }
 
   public lastSoloGeneration(): number {
-    let lastGeneration = 14;
-    const options = this.gameOptions;
-    if (options.preludeExtension) {
-      lastGeneration -= 2;
-    }
-
-    // Only add 2 more generations when using the track completion option
-    // and not the solo TR option.
-    //
-    // isSoloModeWin backs this up.
-    if (options.moonExpansion) {
-      if (!options.soloTR && options.requiresMoonTrackCompletion) {
-        lastGeneration += 2;
-      }
-    }
+    const lastGeneration = 14;
     return lastGeneration;
   }
 
@@ -678,14 +619,6 @@ export class Game implements IGame, Logger {
       return;
     }
 
-    // solar Phase Option
-    this.phase = Phase.SOLAR;
-
-
-    if (this.gameOptions.solarPhaseOption && ! this.marsIsTerraformed()) {
-      this.gotoWorldGovernmentTerraforming();
-      return;
-    }
     this.gotoEndGeneration();
   }
 
@@ -736,10 +669,6 @@ export class Game implements IGame, Logger {
     } else {
       this.gotoResearchPhase();
     }
-  }
-
-  private gotoWorldGovernmentTerraforming() {
-    this.worldGovernmentTerraforming();
   }
 
   public worldGovernmentTerraformingInput(player: IPlayer): OrOptions {
@@ -1279,18 +1208,6 @@ export class Game implements IGame, Logger {
           // For buffer gas, show ONLY IF in solo AND 63TR mode
         case CardName.BUFFER_GAS_STANDARD_PROJECT:
           return this.isSoloMode() && gameOptions.soloTR;
-        case CardName.AIR_SCRAPPING_STANDARD_PROJECT:
-          return gameOptions.altVenusBoard === false;
-        case CardName.AIR_SCRAPPING_STANDARD_PROJECT_VARIANT:
-          return gameOptions.altVenusBoard === true;
-        case CardName.MOON_HABITAT_STANDARD_PROJECT_VARIANT_2:
-        case CardName.MOON_MINE_STANDARD_PROJECT_VARIANT_2:
-        case CardName.MOON_ROAD_STANDARD_PROJECT_VARIANT_2:
-          return gameOptions.moonStandardProjectVariant === true;
-        case CardName.MOON_HABITAT_STANDARD_PROJECT_VARIANT_1:
-        case CardName.MOON_MINE_STANDARD_PROJECT_VARIANT_1:
-        case CardName.MOON_ROAD_STANDARD_PROJECT_VARIANT_1:
-          return gameOptions.moonStandardProjectVariant1 === true;
         default:
           return true;
         }

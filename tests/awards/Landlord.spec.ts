@@ -8,7 +8,7 @@ describe('Landlord', () => {
   const award = new Landlord();
 
   it('Simple test', () => {
-    const [game, player/* , player2 */] = testGame(2, {aresExtension: true});
+    const [game, player/* , player2 */] = testGame(2, {});
     game.board = EmptyBoard.newInstance();
 
     expect(award.getScore(player)).to.eq(0);

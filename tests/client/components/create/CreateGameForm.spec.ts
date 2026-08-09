@@ -18,7 +18,6 @@ function createGameSettings(overrides: JSONObject = {}): JSONObject {
     corporateEra: true,
     board: BoardName.HELLAS,
     draftVariant: false,
-    solarPhaseOption: true,
     ...overrides,
   };
 }
@@ -59,7 +58,6 @@ describe('CreateGameForm', () => {
     expect((wrapper.vm as any).board).eq(BoardName.HELLAS);
     expect((wrapper.vm as any).draftVariant).eq(false);
     expect((wrapper.vm as any).expansions.corpera).eq(false);
-    expect((wrapper.vm as any).solarPhaseOption).eq(true);
   });
 
   it('shows warnings when restoring saved settings', async () => {
@@ -79,7 +77,7 @@ describe('CreateGameForm', () => {
     };
 
     new CreateGameSettingsStorage(localStorage).saveSettings(createGameSettings({
-      customPreludes: ['Bad Prelude Name'],
+      bannedCards: ['Bad Card Name'],
     }));
 
     (form.vm as any).restoreLastSettings();
@@ -87,7 +85,7 @@ describe('CreateGameForm', () => {
 
     expect(alerts).deep.eq([{
       title: 'Restore settings',
-      message: "Settings loaded with these warnings: \nUnknown card name 'Bad Prelude Name' in customPreludes",
+      message: "Settings loaded with these warnings: \nUnknown card name 'Bad Card Name' in bannedCards",
     }]);
   });
 

@@ -2,7 +2,6 @@
   <div v-if="space !== undefined" :class="mainClass" :data_space_id="space.id">
     <BoardSpaceTile
       :space="space"
-      :aresExtension="aresExtension"
       :tileView="tileView"
     />
     <div class="board-space-text" v-if="text" v-i18n>{{ text }}</div>
@@ -38,9 +37,6 @@ export default defineComponent({
     text: {
       type: String,
       default: '',
-    },
-    aresExtension: {
-      type: Boolean,
     },
     tileView: {
       type: String as () => TileView,

@@ -53,16 +53,6 @@ export default defineComponent({
     const initialSelected: Array<CardName> = this.selected.length > 0 ? [...this.selected] : [
       ...corpCardNames('base'),
       ...this.expansions.corpera ? corpCardNames('corpera') : [],
-      ...this.expansions.prelude ? corpCardNames('prelude') : [],
-      ...this.expansions.prelude2 ? corpCardNames('prelude2') : [],
-      ...this.expansions.venus ? corpCardNames('venus') : [],
-      ...this.expansions.colonies ? corpCardNames('colonies') : [],
-      ...this.expansions.turmoil ? corpCardNames('turmoil') : [],
-      ...this.expansions.promo ? corpCardNames('promo') : [],
-      ...this.expansions.community ? corpCardNames('community') : [],
-      ...this.expansions.moon ? corpCardNames('moon') : [],
-      ...this.expansions.pathfinders ? corpCardNames('pathfinders') : [],
-      ...this.expansions.underworld ? corpCardNames('underworld') : [],
     ];
     return {initialSelected};
   },

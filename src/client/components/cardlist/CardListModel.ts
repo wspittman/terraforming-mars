@@ -26,20 +26,6 @@ export type CardListModel = {
 const MODULE_ABBREVIATIONS = {
   base: 'b',
   corpera: 'c',
-  prelude: 'p',
-  prelude2: '2',
-  venus: 'v',
-  colonies: 'C',
-  turmoil: 't',
-  community: '*',
-  promo: 'r',
-  ares: 'a',
-  moon: 'm',
-  pathfinders: 'P',
-  ceo: 'l', // ceo abbreviation is 'l' for leader, since 'c' and 'C' are already taken
-  starwars: 'w',
-  underworld: 'u',
-  deltaProject: 'd',
 } satisfies Record<GameModule, string>;
 
 const TYPE_ABBREVIATIONS = {
@@ -86,20 +72,6 @@ export function hashToModel(windowLocationHash: string): CardListModel {
     expansions: {
       base: true,
       corpera: true,
-      prelude: true,
-      prelude2: true,
-      venus: true,
-      colonies: true,
-      turmoil: true,
-      community: true,
-      ares: true,
-      moon: true,
-      promo: true,
-      pathfinders: true,
-      ceo: true,
-      starwars: true,
-      underworld: true,
-      deltaProject: true,
     },
     types: {
       event: true,

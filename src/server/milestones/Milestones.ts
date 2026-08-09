@@ -85,7 +85,7 @@ export const milestoneManifest: MAManifest<MilestoneName, IMilestone> = {
     'Landshaper': { Factory: Landshaper, random: 'modular' },
     'Legend': { Factory: Legend },
     'Legend4': { Factory: Legend4, random: 'modular' },
-    'Martian': { Factory: Martian, compatibility: 'pathfinders' },
+    'Martian': { Factory: Martian },
     'Mayor': { Factory: Mayor, random: 'both' },
     'Merchant': { Factory: Merchant, random: 'modular' },
     'Metallurgist': { Factory: Metallurgist, random: 'modular' },

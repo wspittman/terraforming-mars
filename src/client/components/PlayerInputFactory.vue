@@ -30,16 +30,7 @@ import SelectResources from '@/client/components/SelectResources.vue';
 
 // Shared contract every input component must satisfy. `playerinput` and
 // `onsave` are narrowed to the discriminated variant whose `type` matches K.
-type RemovedExpansionInputType =
-  'aresGlobalParameters' |
-  'claimedUndergroundToken' |
-  'colony' |
-  'delegate' |
-  'deltaProject' |
-  'globalEvent' |
-  'party';
-
-type ClientPlayerInputModel = Exclude<PlayerInputModel, {type: RemovedExpansionInputType}>;
+type ClientPlayerInputModel = PlayerInputModel;
 
 type InputComponentProps<K extends ClientPlayerInputModel['type']> = {
   playerView: PlayerViewModel;

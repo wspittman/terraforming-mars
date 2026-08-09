@@ -20,9 +20,6 @@ describe('Counter', () => {
 
   beforeEach(() => {
     [game, player, player2, player3] = testGame(3, {
-      venusNextExtension: true,
-      aresExtension: true,
-      aresHazards: false,
     });
   });
 

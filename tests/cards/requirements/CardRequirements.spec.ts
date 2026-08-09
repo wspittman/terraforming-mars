@@ -34,7 +34,7 @@ describe('CardRequirements', () => {
   const adaptationTechnology = new AdaptationTechnology();
 
   beforeEach(() => {
-    [, /* game */ player, player2] = testGame(2, { turmoilExtension: true });
+    [, /* game */ player, player2] = testGame(2, {});
   });
 
   it('satisfies properly for oceans', () => {

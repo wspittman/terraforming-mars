@@ -1,5 +1,5 @@
 import * as json_constants from '@/client/components/create/json';
-import {JSONObject, JSONValue} from '../../../common/Types';
+import {JSONObject} from '../../../common/Types';
 import {CreateGameModel} from './CreateGameModel';
 import {PLAYER_COLORS} from '@/common/Color';
 import {NewPlayerModel} from '@/common/game/NewGameConfig';
@@ -7,17 +7,9 @@ import {CardName} from '@/common/cards/CardName';
 import {cast} from '@/common/utils/utils';
 import {CARD_RENAMES} from '@/common/cards/CardRenames';
 
-function safeBoolean(val: JSONValue): boolean {
-  if (typeof val === 'boolean') {
-    return val;
-  }
-  throw new Error(`${val} is not boolean`);
-}
-
 export class JSONProcessor {
   public model: CreateGameModel;
   public warnings: Array<string>;
-  public solarPhaseOption: boolean = false;
   public bannedCards: Array<CardName> = [];
   public includedCards: Array<CardName> = [];
 
@@ -76,10 +68,6 @@ export class JSONProcessor {
       this.model.expansions.corpera = corporateEra;
     }
 
-    // Capture the solar phase option since several of the other results will change
-    // it via the watch mechanism.
-    this.solarPhaseOption = safeBoolean(json.solarPhaseOption);
-
     const ignoredFields = [
       // Instead of ignoring these fields, let them pass through to the model.
       // json_constants.CUSTOM_CORPORATIONS,
@@ -89,25 +77,10 @@ export class JSONProcessor {
       json_constants.OLD_BANNED_CARDS,
       json_constants.OLD_CUSTOM_CORPORATIONS,
       json_constants.CORPORATEERA,
-      json_constants.PROMOCARDSOPTION,
-      json_constants.VENUSNEXT,
-      json_constants.COLONIES,
-      json_constants.PRELUDE,
-      json_constants.PRELUDE2EXPANSION,
-      json_constants.TURMOIL,
-      json_constants.COMMUNITYCARDSOPTION,
-      json_constants.ARESEXTENSION,
-      json_constants.MOONEXPANSION,
-      json_constants.PATHFINDERSEXPANSION,
-      json_constants.CEOEXTENSION,
-      json_constants.STARWARSEXPANSION,
-      json_constants.UNDERWORLDEXPANSION,
-      json_constants.DELTA_PROJECT_EXPANSION,
       'corporateEra',
       'expansions',
       'escapeVelocity',
       'players',
-      'solarPhaseOption',
       'constants'];
     for (const k in json) {
       if (ignoredFields.includes(k)) {
@@ -126,8 +99,6 @@ export class JSONProcessor {
     }
 
     this.validateCardNames('customCorporations', this.model.customCorporations);
-    this.validateCardNames('customPreludes', this.model.customPreludes);
-    this.validateCardNames('customCeos', this.model.customCeos);
     this.validateCardNames('bannedCards', this.bannedCards);
     this.validateCardNames('includedCards', this.includedCards);
   }

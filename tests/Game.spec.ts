@@ -842,7 +842,6 @@ describe('Game', () => {
   it('deserializing a game with awards', () => {
     const player = TestPlayer.BLUE.newPlayer();
     const game = Game.newInstance('gameid', [player], player, 'spectatorid', {
-      pathfindersExpansion: false,
     });
     const scientist = game.awards.find((award) => award.name === 'Scientist')!;
     game.fundedAwards.push({
@@ -899,7 +898,7 @@ describe('Game', () => {
       [player, player2],
       player,
       'spectatorid',
-      { pathfindersExpansion: false },
+      {},
     );
     const scientist = game.awards.find((award) => award.name === 'Scientist')!;
 
@@ -941,7 +940,7 @@ describe('Game', () => {
       [player, player2],
       player,
       'spectatorid',
-      { pathfindersExpansion: false },
+      {},
     );
     const terraformier = game.milestones.find(
       (milestone) => milestone.name === 'Terraformer',
@@ -1008,7 +1007,7 @@ describe('Game', () => {
       [player, player2],
       player,
       'spectatorid',
-      { pathfindersExpansion: false },
+      {},
     );
     const terraformier = game.milestones.find(
       (milestone) => milestone.name === 'Terraformer',
@@ -1048,7 +1047,6 @@ describe('Game', () => {
   it('wgt includes all parameters at the game start', () => {
     const player = new Player('blue', 'blue', false, 0, 'p-blue');
     const game = Game.newInstance('gameid', [player], player, 'spectatorid', {
-      venusNextExtension: false,
     });
     game.worldGovernmentTerraforming();
     const parameters = waitingForGlobalParameters(player);
@@ -1070,7 +1068,7 @@ describe('Game', () => {
       [player, player2],
       player2,
       'spectatorid',
-      { venusNextExtension: true },
+      {},
     );
     game.worldGovernmentTerraforming();
     const orOptions = cast(player2.popWaitingFor(), OrOptions);

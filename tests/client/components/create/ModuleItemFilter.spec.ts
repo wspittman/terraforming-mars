@@ -167,12 +167,6 @@ describe('ModuleItemFilter', () => {
     expect((wrapper.vm as any).icon('base')).to.eq('create-game-expansion-icon expansion-icon-base');
   });
 
-
-  it('icon maps "moon" to "themoon" suffix', () => {
-    const wrapper = mountFilter();
-    expect((wrapper.vm as any).icon('moon')).to.eq('create-game-expansion-icon expansion-icon-themoon');
-  });
-
   it('icon returns undefined when module is undefined', () => {
     const wrapper = mountFilter();
     expect((wrapper.vm as any).icon(undefined)).to.be.undefined;

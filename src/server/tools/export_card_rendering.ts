@@ -4,7 +4,7 @@ import fs from 'fs';
 import {ALL_MODULE_MANIFESTS} from '../cards/AllManifests';
 import {CardManifest, ModuleManifest} from '../cards/ModuleManifest';
 import {ICard, isIActionCard} from '../cards/ICard';
-import {Expansion, GameModule} from '../../common/cards/GameModule';
+import {GameModule} from '../../common/cards/GameModule';
 import {ClientCard} from '../../common/cards/ClientCard';
 import {isICorporationCard} from '../cards/corporation/ICorporationCard';
 import {Units} from '../../common/Units';
@@ -14,7 +14,6 @@ import {awardNames} from '../../common/ma/AwardName';
 import {milestoneNames} from '../../common/ma/MilestoneName';
 import {ClientAward, ClientMilestone} from '../../common/ma/ClientMilestoneAward';
 import {CardType} from '../../common/cards/CardType';
-import {OneOrArray} from '../../common/utils/types';
 import {globalInitialize} from '../globalInitialize';
 
 type Mutable<T> = {
@@ -51,11 +50,11 @@ class CardProcessor {
 
   private static processDeck(module: GameModule, cardManifest: CardManifest<ICard>) {
     for (const factory of CardManifest.values(cardManifest)) {
-      CardProcessor.processCard(module, new factory.Factory(), factory.compatibility);
+      CardProcessor.processCard(module, new factory.Factory());
     }
   }
 
-  private static processCard(module: GameModule, card: ICard, compatibility: undefined | OneOrArray<Expansion>) {
+  private static processCard(module: GameModule, card: ICard) {
     if (card.type === CardType.PROXY) {
       return;
     }
@@ -99,11 +98,6 @@ class CardProcessor {
       clientCard.productionBox = production;
     }
 
-    if (Array.isArray(compatibility)) {
-      clientCard.compatibility.push(...compatibility);
-    } else if (compatibility !== undefined) {
-      clientCard.compatibility.push(compatibility);
-    }
     CardProcessor.json.push(clientCard);
   }
 }
@@ -115,7 +109,7 @@ class MilestoneProcessor {
       MilestoneProcessor.json.push({
         name,
         description: milestoneManifest.createOrThrow(name).description,
-        requirements: milestoneManifest.all[name].compatibility,
+        requirements: undefined,
       });
     });
   }
@@ -128,7 +122,7 @@ class AwardProcessor {
       AwardProcessor.json.push({
         name,
         description: awardManifest.createOrThrow(name).description,
-        requirements: awardManifest.all[name].compatibility,
+        requirements: undefined,
       });
     });
   }

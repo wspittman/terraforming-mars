@@ -71,7 +71,6 @@ describe('ApiCreateGame', () => {
         showTimers: false,
         fastModeOption: false,
         showOtherPlayersVP: false,
-        solarPhaseOption: false,
         modularMA: false,
         draftVariant: false,
         initialDraft: false,
@@ -98,9 +97,6 @@ describe('ApiCreateGame', () => {
     expect(game).is.not.undefined;
     expect(game!.players[0].name).eq('Robot');
     expect(game!.gameOptions.corporateEra).is.true;
-    expect(game!.gameOptions.venusNextExtension).is.false;
-    expect(game!.gameOptions.expansions.venus).is.false;
-    expect(game!.gameOptions.altVenusBoard).is.false;
   });
 
   it('red rover solo game', async () => {

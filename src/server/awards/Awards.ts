@@ -56,11 +56,7 @@ export const awardManifest: MAManifest<AwardName, IAward> = {
     'Botanist': { Factory: Botanist, random: 'both' },
     'Celebrity': { Factory: Celebrity, random: 'both' },
     'Collector': { Factory: Collector, random: 'modular' },
-    'Constructor': {
-      Factory: Constructor,
-      compatibility: 'colonies',
-      random: 'modular',
-    },
+    'Constructor': { Factory: Constructor, random: 'modular' },
     'Contractor': { Factory: Contractor, random: 'both' },
     'Cosmic Settler': { Factory: CosmicSettler },
     'Cultivator': { Factory: Cultivator, random: 'both' },

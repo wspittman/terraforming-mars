@@ -66,12 +66,12 @@ export abstract class SelectCardToPlay<T extends IProjectCard | IStandardProject
         lunaTradeFederationTitanium: player.canUseTitaniumAsMegacredits,
         plants: player.canUsePlantsAsMegacredits,
       },
-      lunaArchivesScience: player.getSpendable('lunaArchivesScience'),
-      seeds: player.getSpendable('seeds'),
-      graphene: player.getSpendable('graphene'),
-      kuiperAsteroids: player.getSpendable('kuiperAsteroids'),
-      auroraiData: player.getSpendable('auroraiData'),
-      spireScience: player.getSpendable('spireScience'),
+      lunaArchivesScience: 0,
+      seeds: 0,
+      graphene: 0,
+      kuiperAsteroids: 0,
+      auroraiData: 0,
+      spireScience: 0,
     };
   }
 

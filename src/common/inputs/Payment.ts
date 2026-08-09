@@ -1,4 +1,4 @@
-import {DATA_VALUE, FLOATERS_VALUE, MICROBES_VALUE, GRAPHENE_VALUE, SEED_VALUE} from '../constants';
+import {FLOATERS_VALUE, MICROBES_VALUE} from '../constants';
 import {SpendableResource, SPENDABLE_RESOURCES} from './Spendable';
 
 /**
@@ -33,12 +33,6 @@ export const DEFAULT_PAYMENT_VALUES = {
 
   microbes: MICROBES_VALUE,
   floaters: FLOATERS_VALUE,
-  lunaArchivesScience: 1,
-  spireScience: 2,
-  seeds: SEED_VALUE,
-  auroraiData: DATA_VALUE,
-  graphene: GRAPHENE_VALUE,
-  kuiperAsteroids: 1,
 } satisfies Record<SpendableResource, number>;
 
 export namespace Payment {
@@ -50,28 +44,16 @@ export namespace Payment {
     plants: 0,
     microbes: 0,
     floaters: 0,
-    lunaArchivesScience: 0,
-    spireScience: 0,
-    seeds: 0,
-    auroraiData: 0,
-    graphene: 0,
-    kuiperAsteroids: 0,
   } as const;
 
   export function of(payment: Partial<Payment>) : Payment {
     return {
-      auroraiData: payment.auroraiData ?? 0,
       floaters: payment.floaters ?? 0,
       heat: payment.heat ?? 0,
-      lunaArchivesScience: payment.lunaArchivesScience ?? 0,
-      spireScience: payment.spireScience ?? 0,
       megacredits: payment.megacredits ?? 0,
       microbes: payment.microbes ?? 0,
-      seeds: payment.seeds ?? 0,
       steel: payment.steel ?? 0,
       titanium: payment.titanium ?? 0,
-      graphene: payment.graphene ?? 0,
-      kuiperAsteroids: payment.kuiperAsteroids ?? 0,
       plants: payment.plants ?? 0,
     };
   }

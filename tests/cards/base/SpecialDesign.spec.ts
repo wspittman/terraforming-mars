@@ -13,7 +13,7 @@ describe('SpecialDesign', () => {
     expect(card.getGlobalParameterRequirementBonus(player, GlobalParameter.TEMPERATURE)).to.eq(0);
     player.lastCardPlayed = card.name;
     expect(card.getGlobalParameterRequirementBonus(player, GlobalParameter.TEMPERATURE)).to.eq(2);
-    player.lastCardPlayed = CardName.MICROBIOLOGY_PATENTS;
+    player.lastCardPlayed = CardName.ALGAE;
     expect(card.getGlobalParameterRequirementBonus(player, GlobalParameter.TEMPERATURE)).to.eq(0);
   });
 });

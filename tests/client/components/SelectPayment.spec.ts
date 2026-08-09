@@ -5,8 +5,6 @@ import SelectPayment from '@/client/components/SelectPayment.vue';
 import {SelectPaymentModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {PaymentTester} from './PaymentTester';
-import {CardName} from '@/common/cards/CardName';
-import {CardModel} from '@/common/models/CardModel';
 
 describe('SelectPayment', () => {
   it('Uses heat', async () => {
@@ -63,39 +61,6 @@ describe('SelectPayment', () => {
     const tester = new PaymentTester(wrapper);
     await tester.nextTick();
     tester.expectPayment({titanium: 2, megacredits: 0});
-  });
-
-  it('Uses seeds', async () => {
-    const wrapper = setupBill(
-      14,
-      {megacredits: 6},
-      {paymentOptions: {seeds: true}, seeds: 4});
-
-    const tester = new PaymentTester(wrapper);
-    await tester.nextTick();
-    tester.expectPayment({seeds: 2, megacredits: 4});
-  });
-
-  it('Default seed value uses more than minimum when there are not enough MC', async () => {
-    const wrapper = setupBill(
-      14,
-      {megacredits: 2},
-      {paymentOptions: {seeds: true}, seeds: 4});
-
-    const tester = new PaymentTester(wrapper);
-    await tester.nextTick();
-    tester.expectPayment({seeds: 3, megacredits: 0});
-  });
-
-  it('Uses auroraiData', async () => {
-    const wrapper = setupBill(
-      14,
-      {megacredits: 6},
-      {paymentOptions: {auroraiData: true}, auroraiData: 4});
-
-    const tester = new PaymentTester(wrapper);
-    await tester.nextTick();
-    tester.expectPayment({auroraiData: 4, megacredits: 2});
   });
 
   it('initial values, multiple values', async () => {
@@ -157,62 +122,6 @@ describe('SelectPayment', () => {
     await tester.clickMax('megacredits');
     await tester.nextTick();
     tester.expectPayment({titanium: 2, heat: 0, megacredits: 5});
-  });
-
-  it('Stormcraft floaters count for heat', async () => {
-    // Must spend 10. Player has 7M€ and will use 3 of the 4 available heat units.
-    const wrapper = setupBill(
-      10,
-      {
-        heat: 2,
-        megacredits: 3,
-        tableau: [
-          {
-            name: CardName.STORMCRAFT_INCORPORATED,
-            resources: 5,
-          } as CardModel,
-          {
-            // Dirigibles is here to show that it's got floaters, but is ignored.
-            name: CardName.DIRIGIBLES,
-            resources: 3,
-          } as CardModel,
-        ]},
-      {paymentOptions: {heat: true}});
-
-    const tester = new PaymentTester(wrapper);
-    await tester.nextTick();
-
-    tester.expectIsAvailable('heat');
-    tester.expectPayment({heat: 7, megacredits: 3});
-    await tester.clickSave();
-  });
-
-  it('Max includes Stormcraft floaters', async () => {
-    // Action costs 10. Player has 10 MC, 3 heat, and 1 floaters.
-    //
-    // Initial setup will be that it selects 10MC.
-    //
-    // Then when clicking the 'max' button for heat, the algorithm will switch to 5M€ and 5 heat.
-
-    const wrapper = setupBill(
-      10,
-      {
-        heat: 3, megacredits: 10, titaniumValue: 1, steelValue: 1,
-        tableau: [
-          {
-            name: CardName.STORMCRAFT_INCORPORATED,
-            resources: 1,
-          } as CardModel,
-        ],
-      },
-      {paymentOptions: {heat: true}});
-
-    const tester = new PaymentTester(wrapper);
-    await tester.nextTick();
-    tester.expectPayment({heat: 0, megacredits: 10});
-
-    await tester.clickMax('heat');
-    tester.expectPayment({heat: 5, megacredits: 5});
   });
 
   it('Luna Trade Federation: Can use titanium by default', async () => {

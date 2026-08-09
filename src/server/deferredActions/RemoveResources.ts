@@ -2,7 +2,6 @@ import {IPlayer} from '../IPlayer';
 import {Resource} from '../../common/Resource';
 import {DeferredAction} from './DeferredAction';
 import {Priority} from './Priority';
-import {CardName} from '../../common/cards/CardName';
 
 export class RemoveResources extends DeferredAction<number> {
   constructor(
@@ -28,12 +27,7 @@ export class RemoveResources extends DeferredAction<number> {
       }
     }
 
-    let qtyLost = Math.min(this.target.stock.get(this.resource), this.count);
-
-    // Botanical Experience hook.
-    if (this.resource === Resource.PLANTS && this.target.tableau.has(CardName.BOTANICAL_EXPERIENCE)) {
-      qtyLost = Math.ceil(qtyLost / 2);
-    }
+    const qtyLost = Math.min(this.target.stock.get(this.resource), this.count);
 
     if (qtyLost === 0) {
       return undefined;

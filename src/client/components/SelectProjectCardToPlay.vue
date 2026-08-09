@@ -5,20 +5,6 @@
     <input v-if="!availableCard.isDisabled" class="hidden" type="radio" v-model="cardName" :value="availableCard.name" >
     <Card class="cardbox" :card="availableCard" />
   </label>
-  <template v-if="card !== undefined && card.additionalProjectCosts">
-    <div v-if="card.additionalProjectCosts.aeronGenomicsResources" class="card-warning"
-      v-i18n="[$t(card.name), card.additionalProjectCosts.aeronGenomicsResources, 'animals', $t(CardName.AERON_GENOMICS)]"
-    >
-      Playing ${0} consumes ${1} ${2} from ${3}
-    </div>
-    <div v-if="card.additionalProjectCosts.thinkTankResources" class="card-warning"
-      v-i18n="[$t(card.name), card.additionalProjectCosts.thinkTankResources, 'data', $t(CardName.THINK_TANK)]">
-      Playing ${0} consumes ${1} ${2} from ${3}
-    </div>
-    <div v-if="card.additionalProjectCosts.redsCost" class="card-warning" v-i18n="[$t(card.name), card.additionalProjectCosts.redsCost, $t('Reds')]">
-      Playing ${0} will cost ${1} M€ more because ${2} are in power
-    </div>
-  </template>
   <WarningsComponent v-if="card !== undefined" :warnings="card.warnings"/>
 
   <PaymentForm
@@ -78,27 +64,10 @@ export default defineComponent({
   },
   computed: {
     order(): ReadonlyArray<SpendableResource> {
-      return ([
-        'steel',
-        'titanium',
-        'heat',
-        'plants',
-        'microbes',
-        'floaters',
-        'lunaArchivesScience',
-        'seeds',
-        'graphene',
-        'kuiperAsteroids',
-        'auroraiData',
-        'spireScience',
-        'megacredits',
-      ] as const).filter(this.canUse);
+      return (['steel', 'titanium', 'heat', 'plants', 'microbes', 'floaters', 'megacredits'] as const).filter(this.canUse);
     },
     ledger(): Ledger {
       return this.buildLedger(this.order, this.reserveUnits);
-    },
-    CardName(): typeof CardName {
-      return CardName;
     },
     showPaymentSection(): boolean {
       return this.card !== undefined && this.card.isDisabled !== true;
@@ -174,78 +143,25 @@ export default defineComponent({
       this.available.plants = Math.max(thisPlayer.plants - this.reserveUnits.plants, 0);
     },
     canUseTitaniumRegularly(): boolean {
-      return this.tags.includes(Tag.SPACE) ||
-          this.playerView.thisPlayer.lastCardPlayed === CardName.LAST_RESORT_INGENUITY;
+      return this.tags.includes(Tag.SPACE);
     },
     canUse(unit: SpendableResource): boolean {
       if (this.card === undefined) {
         return false;
       }
       const canPayWith = this.card.standardProjectCanPayWith;
-      if (canPayWith !== undefined) {
-        // Standard project: use explicit payment rules from the server
-        switch (unit) {
-        case 'megacredits':
-          return true;
-        // auroraiData and spireScience are always accepted by standard projects
-        // (see StandardProjectCard.canPlayOptions.)
-        case 'auroraiData':
-        case 'spireScience':
-          return true;
-        case 'heat':
-          return this.playerinput.paymentOptions.heat === true;
-        case 'steel':
-          return canPayWith.steel === true;
-        case 'titanium':
-          return canPayWith.titanium === true ||
-              this.playerinput.paymentOptions.lunaTradeFederationTitanium === true;
-        case 'seeds':
-          return canPayWith.seeds === true;
-        case 'kuiperAsteroids':
-          return canPayWith.kuiperAsteroids === true;
-        case 'plants':
-        case 'microbes':
-        case 'floaters':
-        case 'lunaArchivesScience':
-        case 'graphene':
-          return false;
-        default: throw new Error('Unknown unit ' + unit);
-        }
-      } else {
-        // Regular project card: tag-based payment rules
-        switch (unit) {
-        case 'megacredits':
-          return true;
-        case 'heat':
-          return this.playerinput.paymentOptions.heat === true;
-        case 'steel':
-          return this.tags.includes(Tag.BUILDING) ||
-          this.playerView.thisPlayer.lastCardPlayed === CardName.LAST_RESORT_INGENUITY;
-        case 'titanium':
-          return this.canUseTitaniumRegularly() ||
-          this.playerinput.paymentOptions.lunaTradeFederationTitanium === true;
-        case 'plants':
-          return this.tags.includes(Tag.BUILDING) && this.playerinput.paymentOptions.plants === true;
-        case 'microbes':
-          return this.tags.includes(Tag.PLANT);
-        case 'floaters':
-          return this.tags.includes(Tag.VENUS);
-        case 'lunaArchivesScience':
-          return this.tags.includes(Tag.MOON);
-        case 'seeds':
-          return this.tags.includes(Tag.PLANT);
-        case 'graphene':
-          return this.tags.includes(Tag.SPACE) ||
-            this.tags.includes(Tag.CITY);
-        case 'kuiperAsteroids':
-        case 'auroraiData':
-        case 'spireScience':
-          return false;
-        default:
-          throw new Error('Unknown unit ' + unit);
-        }
+      switch (unit) {
+      case 'megacredits': return true;
+      case 'heat': return this.playerinput.paymentOptions.heat === true;
+      case 'steel': return canPayWith?.steel ?? this.tags.includes(Tag.BUILDING);
+      case 'titanium': return canPayWith?.titanium ?? this.canUseTitaniumRegularly();
+      case 'plants': return canPayWith === undefined && this.tags.includes(Tag.BUILDING) && this.playerinput.paymentOptions.plants === true;
+      case 'microbes': return canPayWith === undefined && this.tags.includes(Tag.PLANT);
+      case 'floaters': return canPayWith === undefined && this.tags.includes(Tag.VENUS);
+      default: return false;
       }
     },
+
     /** @override */
     getTitaniumResourceRate(): number {
       const titaniumValue = this.playerView.thisPlayer.titaniumValue;

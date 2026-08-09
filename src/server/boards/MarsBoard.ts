@@ -4,9 +4,7 @@ import {CanAffordOptions, IPlayer} from '../IPlayer';
 import {Board} from './Board';
 import {Space} from './Space';
 import {PlacementType} from './PlacementType';
-import {CardName} from '../../common/cards/CardName';
 import {SpaceId} from '../../common/Types';
-import {oneWayDifference} from '../../common/utils/utils';
 import {Tile} from '../Tile';
 import {SpaceBonus} from '../../common/boards/SpaceBonus';
 
@@ -92,19 +90,6 @@ export class MarsBoard extends Board {
 
   public getAvailableSpacesForCity(player: IPlayer, canAffordOptions?: CanAffordOptions, spaces?: ReadonlyArray<Space>): ReadonlyArray<Space> {
     const spacesOnLand = spaces ?? this.getAvailableSpacesOnLand(player, canAffordOptions);
-    // Gordon CEO can ignore placement restrictions for Cities+Greenery
-    if (player.tableau.has(CardName.GORDON)) {
-      return spacesOnLand;
-    }
-    // Kingdom of Tauraro can place cities next to cities, but also must place them
-    // next to tiles they own or have an excavation marker, if possible.
-    if (player.tableau.has(CardName.KINGDOM_OF_TAURARO)) {
-      const spacesNextToMySpaces = spacesOnLand.filter(
-        (space) => this.getAdjacentSpaces(space).some(
-          (adj) => adj.tile !== undefined && adj.player === player));
-
-      return (spacesNextToMySpaces.length > 0) ? spacesNextToMySpaces : spacesOnLand;
-    }
     // A city cannot be adjacent to another city
     return spacesOnLand.filter(
       (space) => this.getAdjacentSpaces(space).some((adjacentSpace) => Board.isCitySpace(adjacentSpace)) === false,
@@ -145,22 +130,11 @@ export class MarsBoard extends Board {
   }
 
   public filterSpacesAroundRedCity(spaces: ReadonlyArray<Space>): ReadonlyArray<Space> {
-    const redCity = this.getSpaceByTileCard(CardName.RED_CITY);
-    if (redCity === undefined) {
-      return spaces;
-    }
-    const adjacentSpaces = this.getAdjacentSpaces(redCity);
-    return oneWayDifference(spaces, adjacentSpaces);
+    return spaces;
   }
 
   public getAvailableSpacesForGreenery(player: IPlayer, canAffordOptions?: CanAffordOptions): ReadonlyArray<Space> {
-    let availableLandSpaces = this.getAvailableSpacesOnLand(player, canAffordOptions);
-    // Gordon CEO can ignore placement restrictions for Cities+Greenery
-    if (player.tableau.has(CardName.GORDON)) {
-      return availableLandSpaces;
-    }
-    // Spaces next to Red City are always unavialable for Greeneries.
-    availableLandSpaces = this.filterSpacesAroundRedCity(availableLandSpaces);
+    const availableLandSpaces = this.getAvailableSpacesOnLand(player, canAffordOptions);
 
     // player can place a greenery in an available land space that is next
     // to a tile the player already owns.

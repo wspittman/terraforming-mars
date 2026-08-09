@@ -36,10 +36,10 @@ describe('GameCards', () => {
     const gameOptions: GameOptions = {
       ...DEFAULT_GAME_OPTIONS,
       corporateEra: true,
-      includedCards: [CardName.VENUSIAN_INSECTS],
+      includedCards: [CardName.ALGAE],
     };
     const names = new GameCards(gameOptions).getStandardProjects().map(toName);
-    expect(names).to.not.contain(CardName.VENUSIAN_INSECTS);
+    expect(names).to.not.contain(CardName.ALGAE);
   });
 
 
@@ -47,10 +47,10 @@ describe('GameCards', () => {
     const gameOptions: GameOptions = {
       ...DEFAULT_GAME_OPTIONS,
       corporateEra: true,
-      includedCards: [CardName.VENUSIAN_INSECTS],
+      includedCards: [CardName.ALGAE],
     };
     const names = new GameCards(gameOptions).getCorporationCards().map(toName);
-    expect(names).to.not.contain(CardName.VENUSIAN_INSECTS);
+    expect(names).to.not.contain(CardName.ALGAE);
   });
 
   it('should not include corporation cards in the included cards', () => {

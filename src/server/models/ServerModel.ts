@@ -18,7 +18,6 @@ import {ClaimedMilestoneModel, MilestoneScore} from '../../common/models/Claimed
 import {FundedAwardModel, AwardScore} from '../../common/models/FundedAwardModel';
 import {SpectatorModel} from '../../common/models/SpectatorModel';
 import {GameModel} from '../../common/models/GameModel';
-import {CardName} from '../../common/cards/CardName';
 import {AwardScorer} from '../awards/AwardScorer';
 import {cardsToModel} from './ModelUtils';
 import {runId} from '../utils/server-ids';
@@ -273,15 +272,13 @@ export class Server {
 
     if (player.plantsAreProtected()) {
       protection.plants = 'on';
-    } else if (player.tableau.has(CardName.BOTANICAL_EXPERIENCE)) {
-      protection.plants = 'half';
     }
 
     return protection;
   }
 
   private static getProductionProtections(player: IPlayer) {
-    const defaultProteection = player.tableau.has(CardName.PRIVATE_SECURITY) ? 'on' : 'off';
+    const defaultProteection = 'off';
     const protection: Record<Resource, Protection> = {
       megacredits: defaultProteection,
       steel: defaultProteection,

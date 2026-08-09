@@ -283,6 +283,12 @@ export enum CardName {
   VIRUS = 'Virus',
   WARP_DRIVE = 'Warp Drive',
   WATER_IMPORT_FROM_EUROPA = 'Water Import From Europa',
+  WATER_SPLITTING_PLANT = 'Water Splitting Plant',
+  WAVE_POWER = 'Wave Power',
+  WINDMILLS = 'Windmills',
+  WORMS = 'Worms',
+  ZEPPELINS = 'Zeppelins',
+  INDUSTRIAL_CENTER = 'Industrial Center',
 
   // Corps:
   BEGINNER_CORPORATION = 'Beginner Corporation',

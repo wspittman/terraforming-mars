@@ -41,7 +41,7 @@ describe('MilestoneAwardSelector', () => {
     {
       milestones: milestoneManifest.boards[BoardName.THARSIS],
       awards: awardManifest.boards[BoardName.THARSIS],
-      expected: false,
+      expected: true,
     },
   ] as const;
   // These aren't particularly excellent tests as much as they help demonstrate

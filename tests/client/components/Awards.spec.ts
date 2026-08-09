@@ -10,7 +10,7 @@ import {AwardName} from '@/common/ma/AwardName';
 import {getAward} from '@/client/MilestoneAwardManifest';
 import {Preferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 
-const names: Array<AwardName> = ['Banker', 'Celebrity'];
+const names: Array<AwardName> = ['Banker', 'Miner', 'Landlord', 'Scientist', 'Thermalist'];
 function createAward({id = 1, funded = false}): FundedAwardModel {
   return {
     name: names[id - 1],

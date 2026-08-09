@@ -4,7 +4,6 @@ import {isIProjectCard} from '../cards/IProjectCard';
 import {IPlayer} from '../IPlayer';
 import {PlayCardMetadata} from '../inputs/SelectCardToPlay';
 import {CardName} from '../../common/cards/CardName';
-import {Tag} from '../../common/cards/Tag';
 import {asArray} from '../../common/utils/utils';
 import {isIStandardProjectCard} from '../cards/IStandardProjectCard';
 
@@ -19,15 +18,8 @@ export function cardsToModel(
   } = {},
 ): ReadonlyArray<CardModel> {
   return cards.map((card, index) => {
-    let discount = card.cardDiscount === undefined ? undefined : asArray(card.cardDiscount);
+    const discount = card.cardDiscount === undefined ? undefined : asArray(card.cardDiscount);
 
-    // Too bad this is hard-coded
-    if (card.name === CardName.CRESCENT_RESEARCH_ASSOCIATION) {
-      discount = [{tag: Tag.MOON, amount: player.tags.count(Tag.MOON)}];
-    }
-    if (card.name === CardName.MARS_DIRECT) {
-      discount = [{tag: Tag.MARS, amount: player.tags.count(Tag.MARS)}];
-    }
 
     let calculatedCost = card.cost;
     if (options.showCalculatedCost) {

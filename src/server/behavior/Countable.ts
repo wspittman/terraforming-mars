@@ -21,8 +21,6 @@ export type _Countable = {
   oceans?: NoAttributes,
   /** Count the number of resources on this card. */
   resourcesHere?: NoAttributes,
-  /** Count the number of floaters on all cards. */
-  floaters?: NoAttributes,
   colonies?: {
     /** Count the number of colonies this player has (or all colonies.) */
     colonies?: {},
@@ -83,10 +81,7 @@ export type _Countable = {
   /**
    * Divide the sum by this value. Round down.
    *
-   * For example, `{tags: Tag.MOON, per: 3}` would count all moon tags, and then divide by 3.
-   *
-   * `each` is applied before `per`, so `{tags: Tag.MOON, each: 2, per: 3}` would provide 2/3 the value
-   * of moon tags.
+   * `each` is applied before `per`.
    */
   per?: number;
 };

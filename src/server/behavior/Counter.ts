@@ -3,7 +3,6 @@ import {Units} from '../../common/Units';
 import {ICard} from '../cards/ICard';
 import {IPlayer} from '../IPlayer';
 import {Countable, CountableUnits} from './Countable';
-import {CardResource} from '../../common/CardResource';
 import {Space} from '../boards/Space';
 import {once} from './Lazy';
 import {CardName} from '../../common/cards/CardName';
@@ -115,10 +114,6 @@ export class Counter {
 
     if (countable.oceans !== undefined) {
       sum += maybeAdjacentSpaces(game.board.getOceanSpaces({upgradedOceans: true, wetlands: true})).length;
-    }
-
-    if (countable.floaters !== undefined) {
-      sum += player.getResourceCount(CardResource.FLOATER);
     }
 
     if (countable.greeneries !== undefined) {

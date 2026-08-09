@@ -168,7 +168,7 @@ describe('RoboticWorkforce', () => {
     const testCard = function(card: ICard) {
       let include = false;
       if (
-        (card.tags.includes(Tag.BUILDING) || card.tags.includes(Tag.WILD)) &&
+        card.tags.includes(Tag.BUILDING) &&
         card.play !== undefined
       ) {
         // Create new players, set all productions to 2
@@ -208,7 +208,7 @@ describe('RoboticWorkforce', () => {
         // Make sure to trigger any tag based production
         player.playedCards.push(
           fakeCard({
-            tags: [Tag.WILD, Tag.WILD, Tag.WILD, Tag.WILD, Tag.WILD],
+            tags: [Tag.BUILDING, Tag.BUILDING, Tag.BUILDING, Tag.BUILDING, Tag.BUILDING],
           }),
         );
 

@@ -58,10 +58,6 @@ export default defineComponent({
       switch (this.type) {
       case RequirementType.TEMPERATURE:
       case RequirementType.OXYGEN:
-      case RequirementType.VENUS:
-      case RequirementType.HABITAT_RATE:
-      case RequirementType.MINING_RATE:
-      case RequirementType.LOGISTIC_RATE:
         return this.count;
       }
       if (this.requirement.max) {
@@ -78,7 +74,6 @@ export default defineComponent({
     suffix(): string {
       switch (this.type) {
       case RequirementType.OXYGEN:
-      case RequirementType.VENUS:
         return '%';
       case RequirementType.TEMPERATURE:
         return '°C';
@@ -103,8 +98,6 @@ export default defineComponent({
         return ['card-global-requirement', 'card-temperature--req'];
       case RequirementType.OCEANS:
         return ['card-global-requirement', 'card-ocean--req'];
-      case RequirementType.VENUS:
-        return ['card-global-requirement', 'card-venus--req'];
       case RequirementType.TR:
         return ['card-tile', 'card-tr', 'card-tr--req'];
       case RequirementType.RESOURCE_TYPES:
@@ -113,32 +106,8 @@ export default defineComponent({
         return ['card-tile', 'greenery-tile', 'tile-size--req'];
       case RequirementType.CITIES:
         return ['card-tile', 'city-tile', 'tile-size--req'];
-      case RequirementType.COLONIES:
-        return ['card-resource-colony', 'card-resource-colony--req'];
-      case RequirementType.FLOATERS:
-        return ['card-resource-tag--S', 'tag-floater'];
-      case RequirementType.CHAIRMAN:
-        return ['card-chairman--req'];
-      case RequirementType.PARTY_LEADERS:
-        return ['card-party-leader--req'];
       case RequirementType.TAG:
         return ['card-resource-tag--S', 'tag-' + this.requirement.tag];
-      case RequirementType.HABITAT_RATE:
-        return ['card-habitat-rate', 'tile-size--req-square'];
-      case RequirementType.MINING_RATE:
-        return ['card-mining-rate', 'tile-size--req-square'];
-      case RequirementType.LOGISTIC_RATE:
-        return ['card-logistic-rate', 'tile-size--req-square'];
-      case RequirementType.HABITAT_TILES:
-        return ['card-tile-lunar-habitat', 'tile-size--req'];
-      case RequirementType.MINING_TILES:
-        return ['card-tile-lunar-mine', 'tile-size--req'];
-      case RequirementType.ROAD_TILES:
-        return ['card-tile-lunar-road', 'tile-size--req'];
-      case RequirementType.UNDERGROUND_TOKENS:
-        return ['card-underground-resources'];
-      case RequirementType.CORRUPTION:
-        return ['card-resource', 'card-resource-corruption'];
       case RequirementType.PRODUCTION:
       case RequirementType.REMOVED_PLANTS:
         break;
@@ -161,10 +130,7 @@ export default defineComponent({
       switch (this.type) {
       case RequirementType.OXYGEN:
       case RequirementType.TEMPERATURE:
-      case RequirementType.VENUS:
-      case RequirementType.PARTY:
       case RequirementType.REMOVED_PLANTS:
-      case RequirementType.UNDERGROUND_TOKENS:
         return false;
       }
       return this.count > 0 && this.count < 4;

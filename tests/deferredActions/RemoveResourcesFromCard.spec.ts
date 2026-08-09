@@ -22,7 +22,7 @@ describe('RemoveResourcesFromCard', () => {
     const [, /* game */ player] = testGame(3);
     const action = new RemoveResourcesFromCard(
       player,
-      CardResource.FLOATER,
+      CardResource.MICROBE,
       1,
       { source: 'self', blockable: false },
     ).andThen(andThen);

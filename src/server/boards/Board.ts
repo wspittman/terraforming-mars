@@ -2,7 +2,7 @@ import {Space} from './Space';
 import {CanAffordOptions, IPlayer} from '../IPlayer';
 import {PlayerId, SpaceId} from '../../common/Types';
 import {SpaceType} from '../../common/boards/SpaceType';
-import {BASE_OCEAN_TILES, CITY_TILES, GREENERY_TILES, HAZARD_TILES, OCEAN_TILES, TileType} from '../../common/TileType';
+import {CITY_TILES, GREENERY_TILES, OCEAN_TILES, TileType} from '../../common/TileType';
 import {SerializedBoard, SerializedSpace} from './SerializedBoard';
 import {CardName} from '../../common/cards/CardName';
 import {Units} from '../../common/Units';
@@ -245,7 +245,7 @@ export abstract class Board {
    * Used for benefits associated with "when a player places an ocean tile"
    */
   public static isUncoveredOceanSpace(space: Space): boolean {
-    return space.tile !== undefined && BASE_OCEAN_TILES.has(space.tile.tileType);
+    return Board.isOceanSpace(space);
   }
 
   public static isGreenerySpace(space: Space): boolean {
@@ -262,7 +262,7 @@ export abstract class Board {
 
   /** Hazard tiles don't really count as tiles. */
   public static hasRealTile(space: Space) {
-    return space.tile !== undefined && HAZARD_TILES.has(space.tile.tileType) === false;
+    return space.tile !== undefined;
   }
 
   public serialize(): SerializedBoard {
@@ -329,14 +329,6 @@ export function isSpecialTile(tileType: TileType | undefined): boolean {
   case TileType.GREENERY:
   case TileType.OCEAN:
   case TileType.CITY:
-  case TileType.MOON_HABITAT:
-  case TileType.MOON_MINE:
-  case TileType.MOON_ROAD:
-  case TileType.EROSION_MILD: // Hazard tiles are "special" but they don't count for the typical intent of what a special tile represents.
-  case TileType.EROSION_SEVERE:
-  case TileType.DUST_STORM_MILD:
-  case TileType.DUST_STORM_SEVERE:
-  case TileType.REY_SKYWALKER:
   case undefined:
     return false;
   default:

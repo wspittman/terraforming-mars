@@ -1,4 +1,3 @@
-import {OCEAN_UPGRADE_TILES, TileType} from '../../common/TileType';
 import {SpaceType} from '../../common/boards/SpaceType';
 import {CanAffordOptions, IPlayer} from '../IPlayer';
 import {Board} from './Board';
@@ -67,25 +66,8 @@ export class MarsBoard extends Board {
    * The default condition is to return those oceans used to count toward the global parameter, so
    * upgraded oceans are included, but Wetlands is not. That's why the boolean values have different defaults.
    */
-  public getOceanSpaces(include?: {upgradedOceans?: boolean, wetlands?: boolean}): ReadonlyArray<Space> {
-    const spaces = this.spaces.filter((space) => {
-      if (!Board.isOceanSpace(space)) {
-        return false;
-      }
-      if (space.tile?.tileType === undefined) {
-        return false;
-      }
-
-      const tileType = space.tile.tileType;
-      if (OCEAN_UPGRADE_TILES.has(tileType)) {
-        return include?.upgradedOceans ?? true;
-      }
-      if (tileType === TileType.WETLANDS) {
-        return include?.wetlands ?? false;
-      }
-      return true;
-    });
-    return spaces;
+  public getOceanSpaces(_include?: {upgradedOceans?: boolean, wetlands?: boolean}): ReadonlyArray<Space> {
+    return this.spaces.filter(Board.isOceanSpace);
   }
 
   public getAvailableSpacesForCity(player: IPlayer, canAffordOptions?: CanAffordOptions, spaces?: ReadonlyArray<Space>): ReadonlyArray<Space> {
@@ -207,14 +189,11 @@ export class MarsBoard extends Board {
   }
 
   // Returns true if |newTile| can cover go on |space|, particularly if |space| already has a tile.
-  public static canCover(space: Space, newTile: Tile): boolean {
+  public static canCover(space: Space, _newTile: Tile): boolean {
     if (space.tile === undefined) {
       return true;
     }
 
-    if (space.tile.tileType === TileType.OCEAN && OCEAN_UPGRADE_TILES.has(newTile.tileType)) {
-      return true;
-    }
     return false;
   }
 }

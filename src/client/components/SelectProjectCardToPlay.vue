@@ -33,7 +33,6 @@ import {SelectProjectCardToPlayModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {Tag} from '@/common/cards/Tag';
 import {Units} from '@/common/Units';
-import {CardName} from '@/common/cards/CardName';
 import {SelectProjectCardToPlayResponse} from '@/common/inputs/InputResponse';
 import WarningsComponent from '@/client/components/WarningsComponent.vue';
 import PaymentForm from '@/client/components/PaymentForm.vue';
@@ -157,7 +156,7 @@ export default defineComponent({
       case 'titanium': return canPayWith?.titanium ?? this.canUseTitaniumRegularly();
       case 'plants': return canPayWith === undefined && this.tags.includes(Tag.BUILDING) && this.playerinput.paymentOptions.plants === true;
       case 'microbes': return canPayWith === undefined && this.tags.includes(Tag.PLANT);
-      case 'floaters': return canPayWith === undefined && this.tags.includes(Tag.VENUS);
+      case 'floaters': return false;
       default: return false;
       }
     },

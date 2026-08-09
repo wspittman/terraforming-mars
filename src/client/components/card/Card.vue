@@ -172,14 +172,13 @@ export default defineComponent({
       return this.cardType === CardType.STANDARD_PROJECT || this.cardType === CardType.STANDARD_ACTION;
     },
     hasResourceType(): boolean {
-      return this.card.isSelfReplicatingRobotsCard === true || this.cardInstance.resourceType !== undefined || this.robotCard !== undefined;
+      return this.cardInstance.resourceType !== undefined;
     },
     resourceType(): CardResource {
-      if (this.robotCard !== undefined || this.card.isSelfReplicatingRobotsCard === true) {
-        return CardResource.RESOURCE_CUBE;
+      if (this.cardInstance.resourceType === undefined) {
+        throw new Error(`Card ${this.cardInstance.name} does not hold resources`);
       }
-      // This last RESOURCE_CUBE is functionally unnecessary and serves to satisfy the type contract.
-      return this.cardInstance.resourceType ?? CardResource.RESOURCE_CUBE;
+      return this.cardInstance.resourceType;
     },
     bottomPadding(): string {
       if (this.cardMetadata.victoryPoints !== undefined) {

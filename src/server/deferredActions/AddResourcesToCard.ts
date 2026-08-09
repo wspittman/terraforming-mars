@@ -42,7 +42,7 @@ export class AddResourcesToCard extends DeferredAction {
     const restrictedTag = this.options.restrictedTag;
     if (restrictedTag !== undefined) {
       cards = cards.filter((card) => {
-        return card.tags.includes(restrictedTag) || card.tags.includes(Tag.WILD);
+        return card.tags.includes(restrictedTag);
       });
     }
     if (this.options.filter !== undefined) {

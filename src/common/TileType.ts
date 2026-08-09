@@ -24,45 +24,6 @@ export enum TileType {
     GREAT_DAM, // 15
     MAGNETIC_FIELD_GENERATORS, // 16
 
-    BIOFERTILIZER_FACILITY, // 17
-    METALLIC_ASTEROID, // 18
-    SOLAR_FARM, // 19
-    OCEAN_CITY, // 20, Also used in Pathfinders
-    OCEAN_FARM, // 21
-    OCEAN_SANCTUARY, // 22
-    DUST_STORM_MILD, // 23
-    DUST_STORM_SEVERE, // 24
-    EROSION_MILD, // 25
-    EROSION_SEVERE, // 26
-    MINING_STEEL_BONUS, // 27
-    MINING_TITANIUM_BONUS, // 28
-
-    // The Moon
-    MOON_MINE, // 29
-    MOON_HABITAT, // 30
-    MOON_ROAD, // 31
-    LUNA_TRADE_STATION, // 32
-    LUNA_MINING_HUB, // 33
-    LUNA_TRAIN_STATION, // 34
-    LUNAR_MINE_URBANIZATION, // 35
-
-    // Pathfinders
-    WETLANDS, // 36
-    RED_CITY, // 37
-    MARTIAN_NATURE_WONDERS, // 38
-    CRASHLANDING, // 39
-
-    MARS_NOMADS, // 40
-    REY_SKYWALKER, // 41
-
-    // Underworld
-    MAN_MADE_VOLCANO, // 42
-
-    // Promo
-    NEW_HOLLAND, // 43
-
-    // Automa
-    NEURAL_INSTANCE, // 44
   }
 
 export const tileTypeToString: Record<TileType, string> = {
@@ -84,39 +45,8 @@ export const tileTypeToString: Record<TileType, string> = {
   [TileType.DEIMOS_DOWN]: CardName.DEIMOS_DOWN,
   [TileType.GREAT_DAM]: CardName.GREAT_DAM,
   [TileType.MAGNETIC_FIELD_GENERATORS]: CardName.MAGNETIC_FIELD_GENERATORS,
-  [TileType.BIOFERTILIZER_FACILITY]: 'Biofertilizer Facility',
-  [TileType.METALLIC_ASTEROID]: 'Metallic Asteroid',
-  [TileType.SOLAR_FARM]: 'Solar Farm',
-  [TileType.OCEAN_CITY]: 'Ocean City',
-  [TileType.OCEAN_FARM]: 'Ocean Farm',
-  [TileType.OCEAN_SANCTUARY]: 'Ocean Sanctuary',
-  [TileType.DUST_STORM_MILD]: 'Mild Dust Storm',
-  [TileType.DUST_STORM_SEVERE]: 'Severe Dust Storm',
-  [TileType.EROSION_MILD]: 'Mild Erosion',
-  [TileType.EROSION_SEVERE]: 'Severe Erosion',
-  [TileType.MINING_STEEL_BONUS]: 'Mining (Steel)',
-  [TileType.MINING_TITANIUM_BONUS]: 'Mining (Titanium)',
-  [TileType.MOON_MINE]: 'Mine',
-  [TileType.MOON_HABITAT]: 'Habitat',
-  [TileType.MOON_ROAD]: 'Road',
-  [TileType.LUNA_TRADE_STATION]: 'Luna Trade Station',
-  [TileType.LUNA_MINING_HUB]: 'Luna Mining Hub',
-  [TileType.LUNA_TRAIN_STATION]: 'Luna Train Station',
-  [TileType.LUNAR_MINE_URBANIZATION]: 'Lunar Mine Urbanization',
-  [TileType.WETLANDS]: 'Wetlands',
-  [TileType.RED_CITY]: 'Red City',
-  [TileType.MARTIAN_NATURE_WONDERS]: 'Martian Nature Wonders',
-  [TileType.CRASHLANDING]: 'Crashlanding',
-  [TileType.MARS_NOMADS]: 'Mars Nomads',
-  [TileType.REY_SKYWALKER]: 'Rey Skywalker',
-  [TileType.MAN_MADE_VOLCANO]: 'Man-made Volcano',
-  [TileType.NEW_HOLLAND]: 'New Holland',
-  [TileType.NEURAL_INSTANCE]: 'Neural Instance',
 } as const;
 
-export const HAZARD_TILES = new Set([TileType.DUST_STORM_MILD, TileType.DUST_STORM_SEVERE, TileType.EROSION_MILD, TileType.EROSION_SEVERE]);
-export const OCEAN_UPGRADE_TILES = new Set([TileType.OCEAN_CITY, TileType.OCEAN_FARM, TileType.OCEAN_SANCTUARY, TileType.NEW_HOLLAND]);
-export const CITY_TILES = new Set([TileType.CITY, TileType.CAPITAL, TileType.OCEAN_CITY, TileType.RED_CITY, TileType.NEW_HOLLAND]);
-export const OCEAN_TILES = new Set([TileType.OCEAN, TileType.OCEAN_CITY, TileType.OCEAN_FARM, TileType.OCEAN_SANCTUARY, TileType.WETLANDS, TileType.NEW_HOLLAND]);
-export const BASE_OCEAN_TILES = new Set([TileType.OCEAN, TileType.WETLANDS]);
-export const GREENERY_TILES = new Set([TileType.GREENERY, TileType.WETLANDS]);
+export const CITY_TILES = new Set([TileType.CITY, TileType.CAPITAL]);
+export const OCEAN_TILES = new Set([TileType.OCEAN]);
+export const GREENERY_TILES = new Set([TileType.GREENERY]);

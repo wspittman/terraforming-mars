@@ -15,17 +15,11 @@ const NO_TAGS = {
   [Tag.POWER]: 0,
   [Tag.EARTH]: 0,
   [Tag.JOVIAN]: 0,
-  [Tag.VENUS]: 0,
   [Tag.PLANT]: 0,
   [Tag.MICROBE]: 0,
   [Tag.ANIMAL]: 0,
   [Tag.CITY]: 0,
-  [Tag.MOON]: 0,
-  [Tag.MARS]: 0,
-  [Tag.CRIME]: 0,
-  [Tag.WILD]: 0,
   [Tag.EVENT]: 0,
-  [Tag.CLONE]: 0,
 } as const;
 
 /**

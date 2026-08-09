@@ -85,10 +85,6 @@ const DEFAULT_GLOBAL_PARAMETER_STEPS = {
   [GlobalParameter.OCEANS]: 0,
   [GlobalParameter.OXYGEN]: 0,
   [GlobalParameter.TEMPERATURE]: 0,
-  [GlobalParameter.VENUS]: 0,
-  [GlobalParameter.MOON_HABITAT_RATE]: 0,
-  [GlobalParameter.MOON_MINING_RATE]: 0,
-  [GlobalParameter.MOON_LOGISTIC_RATE]: 0,
 } as const;
 
 export class Player implements IPlayer {
@@ -528,11 +524,7 @@ export class Player implements IPlayer {
     let result = this.tableau.filter((card) => card.resourceType !== undefined);
 
     if (resource !== undefined) {
-      result = result.filter(
-        (card) =>
-          card.resourceType === resource ||
-          card.resourceType === CardResource.WARE,
-      );
+      result = result.filter((card) => card.resourceType === resource);
     }
 
     return result;
@@ -657,7 +649,7 @@ export class Player implements IPlayer {
       plants: false,
       titanium: card.tags.includes(Tag.SPACE),
       lunaTradeFederationTitanium: this.canUseTitaniumAsMegacredits,
-      floaters: card.tags.includes(Tag.VENUS),
+      floaters: false,
       microbes: card.tags.includes(Tag.PLANT),
     };
   }
@@ -788,11 +780,7 @@ export class Player implements IPlayer {
 
     // See comment above regarding
 
-    // See DeclareCloneTag for why this skips cards with clone tags.
-    if (
-      !selectedCard.tags.includes(Tag.CLONE) &&
-      cardAction !== 'double-down'
-    ) {
+    if (cardAction !== 'double-down') {
       this.onCardPlayed(selectedCard);
     }
 

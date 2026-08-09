@@ -20,9 +20,5 @@ describe('Researcher', () => {
 
     player.tagsForTest = { science: 4 };
     expect(milestone.canClaim(player)).is.true;
-
-    // Wild tag counts.
-    player.tagsForTest = { science: 3, wild: 1 };
-    expect(milestone.canClaim(player)).is.true;
   });
 });

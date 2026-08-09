@@ -29,26 +29,6 @@ describe('Counter', () => {
     expect(counter.count(8)).eq(8);
   });
 
-  it('tags, simple', () => {
-    player.tagsForTest = { building: 2, space: 3, moon: 7 };
-    const counter = new Counter(player, fakeCard());
-    expect(counter.count({ tag: Tag.BUILDING })).eq(2);
-    expect(counter.count({ tag: Tag.SPACE })).eq(3);
-
-    expect(counter.count({ tag: Tag.BUILDING, each: 3 })).eq(6);
-    expect(counter.count({ tag: Tag.MOON, per: 3 })).eq(2);
-  });
-
-  it('tags, multiple', () => {
-    player.tagsForTest = { building: 2, space: 3, moon: 7 };
-    const counter = new Counter(player, fakeCard());
-    expect(counter.count({ tag: [Tag.BUILDING, Tag.MOON] })).eq(9);
-
-    // Wild only counts once. It's really a test for tags.count, but it's useful to see here.
-    player.tagsForTest = { building: 2, space: 3, moon: 7, wild: 1 };
-    expect(counter.count({ tag: [Tag.BUILDING, Tag.MOON] })).eq(10);
-  });
-
   it('tags, all and others', () => {
     player.tagsForTest = { building: 2, space: 3, moon: 7 };
     player2.tagsForTest = { space: 4 };
@@ -78,23 +58,6 @@ describe('Counter', () => {
     counter = new Counter(player, fake);
     expect(counter.count({ tag: Tag.CITY })).eq(3);
   });
-
-  it('tags, multiple, including this', () => {
-    const fake = fakeCard({ tags: [Tag.MICROBE, Tag.PLANT] });
-    let counter = new Counter(player, fake);
-
-    expect(counter.count({ tag: [Tag.VENUS, Tag.PLANT] })).eq(1);
-    player.tagsForTest = { plant: 1 };
-    expect(counter.count({ tag: [Tag.VENUS, Tag.PLANT] })).eq(2);
-
-    // Adding it to the player's tableau doesn't double-count it.
-    player.tagsForTest = undefined;
-    player.playedCards.push(fake);
-    // New game state needs a new Counter.
-    counter = new Counter(player, fake);
-    expect(counter.count({ tag: [Tag.VENUS, Tag.PLANT] })).eq(1);
-  });
-
 
   it('count greeneries', () => {
     const counter = new Counter(player, fakeCard());

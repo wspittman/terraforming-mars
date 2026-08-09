@@ -7,16 +7,11 @@
  */
 export enum Phase {
   /**
-   * Not part of the rulebook, initial drafting includes project cards and
-   * prelude cards (maybe others ongoing?) Transitions to RESEARCH
+   * Not part of the rulebook, initial drafting includes project cards.
+   * Transitions to RESEARCH
    * but as mentioned above, only the first generation type of research.
    */
   INITIALDRAFTING = 'initial_drafting',
-
-  /** Between 1st gen research and action phases, each player plays their preludes. */
-  PRELUDES = 'preludes',
-  /** Between 1st gen research and action phases, each player plays their CEOs. */
-  CEOS = 'ceos',
 
   /**
    * The phase where a player chooses cards to keep.
@@ -35,9 +30,6 @@ export enum Phase {
   PRODUCTION = 'production',
   /** Standard rulebook Solar phase, triggers WGT, and final greeneries, but not Turmoil. */
   SOLAR = 'solar',
-  /** Does some cleanup and also executes the rulebook's turn order phase. */
-  INTERGENERATION = 'intergeneration',
-
   /** The game is over. */
   END = 'end',
 }

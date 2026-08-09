@@ -35,12 +35,6 @@ export type CardRequirementDescriptor = {
   resourceTypes?: number,
   tr?: number,
 
-  // Venus
-  floaters?: number,
-
-  // Colonies
-
-
   // Adjectives
   count?: number,
   max?: boolean,
@@ -66,8 +60,6 @@ export function requirementType(descriptor: CardRequirementDescriptor): Requirem
     return RequirementType.GREENERIES;
   } else if (descriptor.cities !== undefined) {
     return RequirementType.CITIES;
-  } else if (descriptor.floaters !== undefined) {
-    return RequirementType.FLOATERS;
   } else if (descriptor.production !== undefined) {
     return RequirementType.PRODUCTION;
   } else if (descriptor.plantsRemoved !== undefined) {

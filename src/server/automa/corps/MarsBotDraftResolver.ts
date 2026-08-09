@@ -136,7 +136,7 @@ export class MarsBotDraftResolver {
 
   /** Wild tags count for nothing here: MarsBot reads the tags printed on the card. */
   private countTags(card: IProjectCard): number {
-    return card.tags.filter((tag) => tag !== Tag.WILD).length;
+    return card.tags.length;
   }
 }
 

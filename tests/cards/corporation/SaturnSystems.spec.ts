@@ -30,7 +30,7 @@ describe('SaturnSystems', () => {
 
   it('Multiple tags', () => {
     player.playedCards.push(card);
-    player.playCard(fakeCard({tags: [Tag.JOVIAN, Tag.JOVIAN, Tag.WILD]}));
+    player.playCard(fakeCard({tags: [Tag.JOVIAN, Tag.JOVIAN, Tag.EARTH]}));
     expect(player.production.megacredits).to.eq(2);
   });
 

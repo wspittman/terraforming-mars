@@ -15,11 +15,5 @@ describe('Builder', () => {
     player.tagsForTest = {building: 8};
 
     expect(milestone.canClaim(player)).is.true;
-
-    // Wild tag counts.
-
-    player.tagsForTest = {building: 7, wild: 1};
-
-    expect(milestone.canClaim(player)).is.true;
   });
 });

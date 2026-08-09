@@ -9,7 +9,6 @@ import {computed, ComputedRef} from 'vue';
 import {TileType} from '@/common/TileType';
 
 const tileToSuffix: Partial<Record<TileType, Array<string>>> = {
-  [TileType.BIOFERTILIZER_FACILITY]: ['plant', 'microbe'],
   [TileType.CAPITAL]: ['2mc'],
   [TileType.COMMERCIAL_DISTRICT]: ['2mc'],
   [TileType.DEIMOS_DOWN]: ['asteroid', 'steel'],
@@ -18,17 +17,10 @@ const tileToSuffix: Partial<Record<TileType, Array<string>>> = {
   [TileType.INDUSTRIAL_CENTER]: ['steel'],
   [TileType.LAVA_FLOWS]: ['heat', 'heat'],
   [TileType.MAGNETIC_FIELD_GENERATORS]: ['plant', 'microbe'],
-  [TileType.METALLIC_ASTEROID]: ['titanium'],
-  [TileType.MINING_STEEL_BONUS]: ['steel'],
-  [TileType.MINING_TITANIUM_BONUS]: ['titanium'],
   [TileType.MOHOLE_AREA]: ['heat', 'heat'],
   [TileType.NATURAL_PRESERVE]: ['megacredit'],
   [TileType.NUCLEAR_ZONE]: ['lose2mc'],
-  [TileType.OCEAN_FARM]: ['plant'],
-  [TileType.OCEAN_SANCTUARY]: ['animal'],
-  [TileType.OCEAN_CITY]: ['city'],
   [TileType.RESTRICTED_AREA]: ['card'],
-  [TileType.SOLAR_FARM]: ['energy', 'energy'],
 };
 
 

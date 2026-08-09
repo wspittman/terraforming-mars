@@ -62,36 +62,6 @@ describe('MarsBoard', () => {
   //   }
   // }
 
-  it('getOceanSpaces', () => {
-    expect(board.getOceanSpaces()).is.empty;
-
-    const space1 = board.spaces[1];
-    space1.spaceType = SpaceType.OCEAN;
-    space1.tile = { tileType: TileType.OCEAN };
-
-    expect(board.getOceanSpaces()).has.length(1);
-    expect(board.getOceanSpaces({ upgradedOceans: false })).has.length(1);
-    expect(board.getOceanSpaces({ upgradedOceans: true })).has.length(1);
-
-    const space2 = board.spaces[2];
-    space2.spaceType = SpaceType.OCEAN;
-    space2.tile = { tileType: TileType.OCEAN_SANCTUARY };
-
-    expect(board.getOceanSpaces()).has.length(2);
-    expect(board.getOceanSpaces({ upgradedOceans: false })).has.length(1);
-    expect(board.getOceanSpaces({ upgradedOceans: true })).has.length(2);
-
-    const space3 = board.spaces[3];
-    space3.spaceType = SpaceType.OCEAN;
-    space3.tile = { tileType: TileType.WETLANDS };
-
-    expect(board.getOceanSpaces()).has.length(2);
-    expect(board.getOceanSpaces({ upgradedOceans: false })).has.length(1);
-    expect(board.getOceanSpaces({ upgradedOceans: true })).has.length(2);
-    expect(board.getOceanSpaces({ wetlands: true })).has.length(3);
-    expect(board.getOceanSpaces({ wetlands: false })).has.length(2);
-  });
-
   it('edges', () => {
     expect(board.getEdges().map(toID)).to.have.members([
       '03',

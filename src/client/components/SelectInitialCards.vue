@@ -25,7 +25,7 @@
 import {defineComponent} from 'vue';
 
 import AppButton from '@/client/components/common/AppButton.vue';
-import {getCard, getCardOrThrow} from '@/client/cards/ClientCardManifest';
+import {getCardOrThrow} from '@/client/cards/ClientCardManifest';
 import {CardName} from '@/common/cards/CardName';
 import * as constants from '@/common/constants';
 import {PlayerInputModel, SelectCardModel, SelectInitialCardsModel} from '@/common/models/PlayerInputModel';
@@ -33,9 +33,7 @@ import {PlayerViewModel} from '@/common/models/PlayerModel';
 import SelectCard from '@/client/components/SelectCard.vue';
 import ConfirmDialog from '@/client/components/common/ConfirmDialog.vue';
 import {getPreferences, Preferences, PreferencesManager} from '@/client/utils/PreferencesManager';
-import {Tag} from '@/common/cards/Tag';
 import {SelectInitialCardsResponse} from '@/common/inputs/InputResponse';
-import {CardType} from '@/common/cards/CardType';
 import * as titles from '@/common/inputs/SelectInitialCards';
 import {sum} from '@/common/utils/utils';
 
@@ -128,7 +126,7 @@ export default defineComponent({
       return starting;
     },
     saveIfConfirmed() {
-      const projectCards = this.selectedCards.filter((name) => getCard(name)?.type !== CardType.PRELUDE);
+      const projectCards = this.selectedCards;
       let showAlert = false;
       if (this.preferences.show_alerts && projectCards.length === 0) {
         showAlert = true;

@@ -4,8 +4,6 @@
         <div class="cards-filter-results-cont" v-if="selected.length">
             <div class="cards-filter-result" v-for="cardName in selected" :key="cardName">
                 <label>{{ cardName }}
-                  <i class="create-game-expansion-icon expansion-icon-prelude" title="This card is a prelude" v-if="isPrelude(cardName)"></i>
-                  <i class="create-game-expansion-icon expansion-icon-ceo" title="This card is a CEO" v-if="isCEO(cardName)"></i>
                   <template v-for="expansion of expansions(cardName)" :key="expansion">
                     <i :class="`create-game-expansion-icon expansion-icon-${expansion}`" :title="expansion"></i>
                   </template>
@@ -21,8 +19,6 @@
                 <div class="cards-filter-suggest-item" v-for="cardName in searchMatches" :key="cardName">
                     <a href="#" @click.prevent="addCard(cardName)">
                       {{ cardName }}
-                      <i class="create-game-expansion-icon expansion-icon-prelude" title="This card is a Prelude" v-if="isPrelude(cardName)"></i>
-                      <i class="create-game-expansion-icon expansion-icon-ceo" title="This card is a CEO" v-if="isCEO(cardName)"></i>
                       <template v-for="expansion of expansions(cardName)" :key="expansion">
                         <i :class="`create-game-expansion-icon expansion-icon-${expansion}`" :title="expansion"></i>
                       </template>
@@ -46,7 +42,6 @@ const ALL_CARDS: Array<CardName> = [
   ...getCards(byType(CardType.AUTOMATED)),
   ...getCards(byType(CardType.ACTIVE)),
   ...getCards(byType(CardType.EVENT)),
-  ...getCards(byType(CardType.CEO)),
 ].map(toName)
   .sort((a, b) => a.localeCompare(b));
 
@@ -89,12 +84,6 @@ export default defineComponent({
     },
   },
   methods: {
-    isPrelude(cardName: CardName) {
-      return getCard(cardName)?.type === CardType.PRELUDE;
-    },
-    isCEO(cardName: CardName) {
-      return getCard(cardName)?.type === CardType.CEO;
-    },
     expansions(cardName: CardName): Array<Expansion> {
       return getCard(cardName)?.compatibility ?? [];
     },

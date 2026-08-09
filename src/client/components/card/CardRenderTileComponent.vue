@@ -25,9 +25,6 @@ type Classes = {
 }
 
 const TILE_CLASSES: Record<TileType, Classes> = {
-  [TileType.BIOFERTILIZER_FACILITY]: {
-    aresTile: 'card-tile-biofertilizer-facility',
-  },
   [TileType.CAPITAL]: {
     tile: 'card-tile-capital',
     aresTile: 'card-tile-capital-ares',
@@ -56,24 +53,9 @@ const TILE_CLASSES: Record<TileType, Classes> = {
     aresTile: 'card-tile-lava-flows-ares',
     symbol: 'card-tile-symbol-lava-flows',
   },
-  [TileType.LUNA_TRADE_STATION]: {
-    symbol: 'card-tile-symbol-luna-trade-station',
-  },
-  [TileType.LUNA_MINING_HUB]: {
-    symbol: 'card-tile-symbol-luna-mining-hub',
-  },
-  [TileType.LUNA_TRAIN_STATION]: {
-    symbol: 'card-tile-symbol-luna-train-station',
-  },
-  [TileType.LUNAR_MINE_URBANIZATION]: {
-    symbol: 'card-tile-symbol-lunar-mine-urbanization',
-  },
   [TileType.MAGNETIC_FIELD_GENERATORS]: {
     aresTile: 'card-tile-magnetic-field-generators-ares',
     symbol: 'card-tile-symbol-magnetic-field-generators',
-  },
-  [TileType.METALLIC_ASTEROID]: {
-    aresTile: 'card-tile-metallic-asteroid',
   },
   [TileType.MINING_AREA]: {
     symbol: 'card-tile-symbol-mining',
@@ -81,24 +63,9 @@ const TILE_CLASSES: Record<TileType, Classes> = {
   [TileType.MINING_RIGHTS]: {
     symbol: 'card-tile-symbol-mining',
   },
-  [TileType.MINING_STEEL_BONUS]: {
-    tile: 'card-tile-mining-steel',
-  },
-  [TileType.MINING_TITANIUM_BONUS]: {
-    tile: 'card-tile-mining-titanium',
-  },
   [TileType.MOHOLE_AREA]: {
     aresTile: 'card-tile-mohole-area-ares',
     symbol: 'card-tile-symbol-mohole-area',
-  },
-  [TileType.MOON_MINE]: {
-    tile: 'card-tile-lunar-mine',
-  },
-  [TileType.MOON_HABITAT]: {
-    tile: 'card-tile-lunar-habitat',
-  },
-  [TileType.MOON_ROAD]: {
-    tile: 'card-tile-lunar-road',
   },
   [TileType.NATURAL_PRESERVE]: {
     aresTile: 'card-tile-natural-preserve-ares',
@@ -108,48 +75,13 @@ const TILE_CLASSES: Record<TileType, Classes> = {
     aresTile: 'card-tile-nuclear-zone-ares',
     symbol: 'card-tile-symbol-nuclear-zone',
   },
-  [TileType.OCEAN_CITY]: {
-    tile: 'card-tile-ocean-city',
-  },
-  [TileType.OCEAN_FARM]: {
-    tile: 'card-tile-ocean-farm',
-  },
-  [TileType.OCEAN_SANCTUARY]: {
-    tile: 'card-tile-ocean-sanctuary',
-  },
   [TileType.RESTRICTED_AREA]: {
     aresTile: 'card-tile-restricted-area-ares',
     symbol: 'card-tile-symbol-restricted-area',
   },
-  [TileType.SOLAR_FARM]: {
-    tile: 'card-tile-solar-farm',
-  },
-  [TileType.WETLANDS]: {
-    tile: 'card-tile-wetlands',
-  },
-  [TileType.CRASHLANDING]: {
-    tile: 'card-tile-crashlanding',
-  },
-  [TileType.MAN_MADE_VOLCANO]: {
-    tile: 'card-tile-man-made-volcano',
-  },
   [TileType.GREENERY]: {},
   [TileType.OCEAN]: {},
   [TileType.CITY]: {},
-  [TileType.DUST_STORM_MILD]: {},
-  [TileType.DUST_STORM_SEVERE]: {},
-  [TileType.EROSION_MILD]: {},
-  [TileType.EROSION_SEVERE]: {},
-  [TileType.RED_CITY]: {}, // This isn't shown on a card
-  [TileType.MARTIAN_NATURE_WONDERS]: {}, // This isn't shown on a card
-  [TileType.MARS_NOMADS]: {}, // This isn't shown on a card
-  [TileType.REY_SKYWALKER]: {}, // This isn't shown on a card
-  [TileType.NEW_HOLLAND]: {
-    tile: 'card-tile-new-holland',
-  },
-  [TileType.NEURAL_INSTANCE]: {
-    tile: 'card-tile-neural-instance',
-  },
 };
 
 export default defineComponent({

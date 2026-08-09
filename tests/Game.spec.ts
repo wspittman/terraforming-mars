@@ -651,7 +651,7 @@ describe('Game', () => {
 
     player.tagsForTest = { plant: 1, microbe: 1 };
     expect(ecologist.canClaim(player)).is.not.true;
-    player.tagsForTest = { plant: 1, microbe: 1, wild: 2 };
+    player.tagsForTest = { plant: 2, microbe: 2 };
     expect(ecologist.canClaim(player)).is.true;
   });
 
@@ -812,24 +812,6 @@ describe('Game', () => {
     expect(player.cardsInHand).has.length(4);
     expect(player.plants).eq(1);
     expect(player.titanium).eq(1);
-  });
-
-  it('Ocean upgrade tiles can be placed on ocean spaces without Ares or Pathfinders', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-    const game = Game.newInstance(
-      'game-ocean-upgrade',
-      [player],
-      player,
-      'spectatorid',
-    );
-    const oceanSpace = addOcean(player);
-
-    // Placing an ocean city tile on top of an existing ocean should not throw,
-    // even without Ares or Pathfinders expansion enabled.
-    expect(() => {
-      game.addTile(player, oceanSpace, { tileType: TileType.NEW_HOLLAND });
-    }).to.not.throw();
-    expect(oceanSpace.tile!.tileType).to.eq(TileType.NEW_HOLLAND);
   });
 
   /**

@@ -33,14 +33,6 @@ describe('CardRenderer', () => {
       expect(item.amount).to.equal(3);
     });
   });
-  describe('venus', () => {
-    it('success', () => {
-      const renderer = CardRenderer.builder((b) => b.venus(18));
-      const item = cast(renderer.rows[0][0], CardRenderItem);
-      expect(item.type).to.equal(CardRenderItemType.VENUS);
-      expect(item.amount).to.equal(18);
-    });
-  });
   it('plants: success', () => {
     const renderer = CardRenderer.builder((b) => b.plants(-5));
     const item = cast(renderer.rows[0][0], CardRenderItem);
@@ -162,31 +154,7 @@ describe('CardRenderer', () => {
     expect(item.resource).to.equal(CardResource.SCIENCE);
     expect(item.amount).to.equal(3);
   });
-  it('trade: success', () => {
-    const renderer = CardRenderer.builder((b) => b.trade());
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.TRADE);
-    expect(item.amount).to.equal(-1);
-  });
-  it('tradeFleet: success', () => {
-    const renderer = CardRenderer.builder((b) => b.tradeFleet());
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.TRADE_FLEET);
-    expect(item.amount).to.equal(-1);
-  });
   describe('colonies', () => {
-  });
-  it('tradeDiscount: success', () => {
-    const renderer = CardRenderer.builder((b) => b.tradeDiscount(2));
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.TRADE_DISCOUNT);
-    expect(item.amount).to.equal(-2);
-  });
-  it('influence: success', () => {
-    const renderer = CardRenderer.builder((b) => b.influence());
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.INFLUENCE);
-    expect(item.amount).to.equal(1);
   });
   it('city: success', () => {
     const renderer = CardRenderer.builder((b) => b.city());
@@ -216,62 +184,6 @@ describe('CardRenderer', () => {
       expect(item.amount).to.equal(-1);
     });
   });
-  it('delegates: success', () => {
-    const renderer = CardRenderer.builder((b) => b.delegates(2));
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.DELEGATES);
-    expect(item.amount).to.equal(2);
-  });
-  it('partyLeaders: success', () => {
-    const renderer = CardRenderer.builder((b) => b.partyLeaders(1));
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.PARTY_LEADERS);
-    expect(item.amount).to.equal(1);
-  });
-  it('chairman: success', () => {
-    const renderer = CardRenderer.builder((b) => b.chairman());
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.CHAIRMAN);
-    expect(item.amount).to.equal(-1);
-  });
-  it('wild: success', () => {
-    const renderer = CardRenderer.builder((b) => b.wild(2));
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.WILD);
-    expect(item.amount).to.equal(2);
-  });
-  it('preservation: success', () => {
-    const renderer = CardRenderer.builder((b) => b.resource(CardResource.PRESERVATION));
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.RESOURCE);
-    expect(item.resource).to.equal(CardResource.PRESERVATION);
-    expect(item.amount).to.equal(-1);
-  });
-  it('diverseTag: success', () => {
-    const renderer = CardRenderer.builder((b) => b.diverseTag());
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.DIVERSE_TAG);
-    expect(item.amount).to.equal(1);
-  });
-  it('camps: success', () => {
-    const renderer = CardRenderer.builder((b) => b.resource(CardResource.CAMP));
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.RESOURCE);
-    expect(item.resource).to.equal(CardResource.CAMP);
-    expect(item.amount).to.equal(-1);
-  });
-  it('selfReplicatingRobots: success', () => {
-    const renderer = CardRenderer.builder((b) => b.selfReplicatingRobots());
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.SELF_REPLICATING);
-    expect(item.amount).to.equal(-1);
-  });
-  it('prelude: success', () => {
-    const renderer = CardRenderer.builder((b) => b.prelude());
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.PRELUDE);
-    expect(item.amount).to.equal(-1);
-  });
   it('corporation: success', () => {
     const renderer = CardRenderer.builder((b) => b.corporation());
     const item = cast(renderer.rows[0][0], CardRenderItem);
@@ -288,19 +200,6 @@ describe('CardRenderer', () => {
     const renderer = CardRenderer.builder((b) => b.vpIcon());
     const item = cast(renderer.rows[0][0], CardRenderItem);
     expect(item.type).to.equal(CardRenderItemType.VP);
-    expect(item.amount).to.equal(-1);
-  });
-  it('community: success', () => {
-    const renderer = CardRenderer.builder((b) => b.community());
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.COMMUNITY);
-    expect(item.amount).to.equal(-1);
-  });
-  it('disease: success', () => {
-    const renderer = CardRenderer.builder((b) => b.resource(CardResource.DISEASE));
-    const item = cast(renderer.rows[0][0], CardRenderItem);
-    expect(item.type).to.equal(CardRenderItemType.RESOURCE);
-    expect(item.resource).to.equal(CardResource.DISEASE);
     expect(item.amount).to.equal(-1);
   });
   it('multiplierWhite: success', () => {

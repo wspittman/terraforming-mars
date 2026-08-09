@@ -10,7 +10,6 @@ import {Space} from '../../boards/Space';
 import {CardName} from '../../../common/cards/CardName';
 import {CardMetadata} from '../../../common/cards/CardMetadata';
 import {CardRenderer} from '../render/CardRenderer';
-import {Phase} from '../../../common/Phase';
 import {Board} from '../../boards/Board';
 import {ICard} from '../ICard';
 
@@ -61,11 +60,6 @@ export class EcologicalZone extends Card implements IProjectCard {
     }
   }
   public override bespokePlay(player: IPlayer) {
-    // Get one extra animal from EcoExperts if played during prelude while having just played EcoExperts
-    if (player.game.phase === Phase.PRELUDES && player.playedCards.last()?.name === CardName.ECOLOGY_EXPERTS) {
-      player.addResourceTo(this, {qty: 1, log: true});
-    }
-
     player.game.defer(
       new PlaceTile(player, {
         tile: {tileType: TileType.ECOLOGICAL_ZONE, card: this.name},

@@ -234,17 +234,6 @@ describe('Executor', () => {
     expect(player.megaCredits).eq(2);
   });
 
-  it('drawCard - countable', () => {
-    expect(player.cardsInHand).has.length(0);
-    player.tagsForTest = { animal: 2, wild: 1 };
-    executor.execute(
-      { drawCard: { count: { tag: Tag.ANIMAL } } },
-      player,
-      fake,
-    );
-    expect(player.cardsInHand).has.length(3);
-  });
-
   it('global parameters', () => {
     function levels(): [number, number] {
       return [game.getTemperature(), game.getOxygenLevel()];
@@ -283,20 +272,6 @@ describe('Executor', () => {
     expect(tardigrades.resourceCount).eq(5);
   });
 
-  it('add resources to specific card - countable', () => {
-    const tardigrades = new Tardigrades();
-    tardigrades.resourceCount = 2;
-    player.tagsForTest = { moon: 7 };
-    executor.execute(
-      { addResources: { tag: Tag.MOON, per: 3 } },
-      player,
-      tardigrades,
-    );
-    runAllActions(game);
-
-    expect(tardigrades.resourceCount).eq(4);
-  });
-
   it('add resources to any card - type undefined (any resource card)', () => {
     const tardigrades = new Tardigrades(); // microbes
     const livestock = new Livestock(); // animals
@@ -315,83 +290,6 @@ describe('Executor', () => {
 
     expect(tardigrades.resourceCount).eq(1);
     expect(livestock.resourceCount).eq(0);
-  });
-
-  it('add resources to any card', () => {
-    const tardigrades = new Tardigrades(); // Holds microbes
-    const ants = new Ants(); // Holds microbes
-    const regolithEathers = new RegolithEaters(); // Holds microbes
-    const livestock = new Livestock(); // Holds animals
-
-    function resourceCount() {
-      return {
-        tardigrades: tardigrades.resourceCount,
-        ants: ants.resourceCount,
-        regolithEathers: regolithEathers.resourceCount,
-        livestock: livestock.resourceCount,
-      };
-    }
-
-    player.playedCards.set(tardigrades, ants, regolithEathers, livestock);
-
-    expect(resourceCount()).deep.eq({
-      tardigrades: 0,
-      ants: 0,
-      regolithEathers: 0,
-      livestock: 0,
-    });
-
-    // No floater cards.
-    executor.execute(
-      { addResourcesToAnyCard: { count: 2, type: CardResource.FLOATER } },
-      player,
-      fake,
-    );
-    runAllActions(game);
-
-    cast(player.popWaitingFor(), undefined);
-    expect(resourceCount()).deep.eq({
-      tardigrades: 0,
-      ants: 0,
-      regolithEathers: 0,
-      livestock: 0,
-    });
-
-    // One animal card. Auto-populated.
-    executor.execute(
-      { addResourcesToAnyCard: { count: 2, type: CardResource.ANIMAL } },
-      player,
-      fake,
-    );
-    runAllActions(game);
-    cast(player.popWaitingFor(), undefined);
-
-    expect(resourceCount()).deep.eq({
-      tardigrades: 0,
-      ants: 0,
-      regolithEathers: 0,
-      livestock: 2,
-    });
-
-    // Three microbe cards. Player is asked to choose.
-    executor.execute(
-      { addResourcesToAnyCard: { count: 1, type: CardResource.MICROBE } },
-      player,
-      fake,
-    );
-    runAllActions(game);
-    const selectCard = cast(player.popWaitingFor(), SelectCard);
-
-    expect(selectCard.cards).has.members([tardigrades, ants, regolithEathers]);
-
-    selectCard.cb([ants]);
-
-    expect(resourceCount()).deep.eq({
-      tardigrades: 0,
-      ants: 1,
-      regolithEathers: 0,
-      livestock: 2,
-    });
   });
 
   it('add resources to any card - countable', () => {

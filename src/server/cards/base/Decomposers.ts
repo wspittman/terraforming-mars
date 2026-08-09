@@ -6,7 +6,6 @@ import {IPlayer} from '../../IPlayer';
 import {CardResource} from '../../../common/CardResource';
 import {CardName} from '../../../common/cards/CardName';
 import {CardRenderer} from '../render/CardRenderer';
-import {Phase} from '../../../common/Phase';
 import {ICard} from '../ICard';
 
 export class Decomposers extends Card implements IProjectCard {
@@ -44,12 +43,5 @@ export class Decomposers extends Card implements IProjectCard {
     if (tag === Tag.PLANT) {
       player.addResourceTo(this, {qty: 1, log: true});
     }
-  }
-  public override bespokePlay(player: IPlayer) {
-    // Get two extra microbes from EcoExperts if played during prelude while having just played EcoExperts
-    if (player.game.phase === Phase.PRELUDES && player.playedCards.last()?.name === CardName.ECOLOGY_EXPERTS) {
-      player.addResourceTo(this, {qty: 2, log: true});
-    }
-    return undefined;
   }
 }

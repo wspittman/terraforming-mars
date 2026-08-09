@@ -9,7 +9,7 @@ export class Tactician4 extends BaseMilestone {
       'Have 4 cards with requirements in play',
       4);
   }
-  private excludedCardTypes = [CardType.PRELUDE, CardType.EVENT];
+  private excludedCardTypes = [CardType.EVENT];
 
   public getScore(player: IPlayer): number {
     const validCards = player.playedCards.filter((card) => {

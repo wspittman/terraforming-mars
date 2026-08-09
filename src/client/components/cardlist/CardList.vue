@@ -61,9 +61,7 @@
           <span v-for="type in allTypes" :key="type">
             <input type="checkbox" :name="`${type}-cardType`" :id="`${type}-cardType-checkbox`" v-model="types[type]">
             <label :for="`${type}-cardType-checkbox`" class="expansion-button">
-                <span v-if="type === 'colonyTiles'" v-i18n>Colony Tiles</span>
-                <span v-else-if="type === 'globalEvents'" v-i18n>Global Events</span>
-                <span v-else v-i18n>{{type}}</span>
+                <span v-i18n>{{type}}</span>
             </label>
           </span>
         </div>
@@ -112,20 +110,6 @@
           <h2 v-i18n>Corporations</h2>
           <div class="cardbox" v-for="card in visibleCorporationCards" :key="card" v-memo="[card, tallCards]">
               <Card :card="{'name': card}" :autoTall="tallCards"/>
-          </div>
-          <br>
-      </section>
-      <section v-show="visiblePreludeCards.length > 0" class="card-list-cards-list">
-          <h2 v-i18n>Preludes</h2>
-          <div class="cardbox" v-for="card in visiblePreludeCards" :key="card" v-memo="[card, tallCards]">
-              <Card :card="{'name': card}" :autoTall="tallCards"/>
-          </div>
-          <br>
-      </section>
-      <section v-show="visibleCeoCards.length > 0" class="card-list-cards-list">
-          <h2 v-i18n>CEOs</h2>
-          <div class="cardbox" v-for="card in visibleCeoCards" :key="card" v-memo="[card, tallCards]">
-              <Card :card="{'name': card}" :autoTall="tallCards" />
           </div>
           <br>
       </section>
@@ -238,10 +222,8 @@ export default defineComponent({
         CardType.EVENT,
         CardType.ACTIVE,
         CardType.AUTOMATED,
-        CardType.PRELUDE,
         CardType.CORPORATION,
         CardType.STANDARD_PROJECT,
-        CardType.CEO,
         'milestones',
         'awards',
       ];
@@ -272,12 +254,6 @@ export default defineComponent({
     },
     visibleCorporationCards(): Array<CardName> {
       return this.getAllCorporationCards().filter((c) => this.showCard(c));
-    },
-    visiblePreludeCards(): Array<CardName> {
-      return this.getAllPreludeCards().filter((c) => this.showCard(c));
-    },
-    visibleCeoCards(): Array<CardName> {
-      return this.getAllCeoCards().filter((c) => this.showCard(c));
     },
     visibleStandardProjectCards(): Array<CardName> {
       return this.getAllStandardProjectCards().filter((c) => this.showCard(c));
@@ -344,14 +320,6 @@ export default defineComponent({
     },
     getAllCorporationCards() {
       const names = getCards(byType(CardType.CORPORATION)).map(toName);
-      return this.sort(names);
-    },
-    getAllPreludeCards() {
-      const names = getCards(byType(CardType.PRELUDE)).map(toName);
-      return this.sort(names);
-    },
-    getAllCeoCards() {
-      const names = getCards(byType(CardType.CEO)).map(toName);
       return this.sort(names);
     },
     include(name: string, type: 'card' | 'ma') {

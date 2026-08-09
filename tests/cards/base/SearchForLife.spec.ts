@@ -71,7 +71,7 @@ describe('SearchForLife', () => {
 
     player.megaCredits = 1;
 
-    game.projectDeck.drawPile.push(fakeCard({tags: [Tag.WILD]}));
+    game.projectDeck.drawPile.push(fakeCard({tags: [Tag.EARTH]}));
 
     card.action(player);
     runAllActions(game); // pays for card.
@@ -84,7 +84,7 @@ describe('SearchForLife', () => {
 
     player.megaCredits = 1;
 
-    game.projectDeck.drawPile.push(fakeCard({tags: [Tag.WILD, Tag.MICROBE]}));
+    game.projectDeck.drawPile.push(fakeCard({tags: [Tag.EARTH, Tag.MICROBE]}));
 
     card.action(player);
     runAllActions(game); // pays for card.

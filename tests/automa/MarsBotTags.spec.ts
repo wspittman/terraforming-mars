@@ -35,10 +35,4 @@ describe('MarsBotTags', () => {
     expect(tags.count(Tag.EVENT, 'raw')).to.eq(1);
     expect(tags.countAllTags()[Tag.EVENT]).to.eq(1);
   });
-
-  it('returns 0 for tags without a track', () => {
-    const {tags} = setup();
-    expect(tags.count(Tag.VENUS, 'raw')).to.eq(0);
-    expect(tags.count(Tag.WILD, 'raw')).to.eq(0);
-  });
 });

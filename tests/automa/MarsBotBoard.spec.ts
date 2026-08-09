@@ -45,11 +45,6 @@ describe('MarsBotBoard', () => {
     expect(board.getTrackIndexForTag(Tag.ANIMAL)).to.eq(6);
     expect(board.getTrackIndexForTag(Tag.MICROBE)).to.eq(6);
   });
-
-  it('returns undefined for unmapped tags', () => {
-    expect(board.getTrackIndexForTag(Tag.VENUS)).to.be.undefined;
-    expect(board.getTrackIndexForTag(Tag.WILD)).to.be.undefined;
-  });
 });
 
 describe('MarsBotTrack', () => {

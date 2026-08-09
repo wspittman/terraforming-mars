@@ -53,52 +53,6 @@ export function vermin() {
     vermin: true,
   };
 }
-export function colonies(points: number, target: number, any: boolean = false): CardRenderDynamicVictoryPoints {
-  const item = new CardRenderItem(CardRenderItemType.COLONIES);
-  item.size = Size.SMALL;
-  item.anyPlayer = any;
-  return {
-    item: item,
-    points: points,
-    target: target,
-  };
-}
-export function moonMiningTile(points: number, any: boolean = false): CardRenderDynamicVictoryPoints {
-  const item = new CardRenderItem(CardRenderItemType.MOON_MINE);
-  item.size = Size.SMALL;
-  item.anyPlayer = any;
-  return {
-    item: item,
-    points: points,
-    target: points,
-  };
-}
-export function moonHabitatTile(points: number): CardRenderDynamicVictoryPoints {
-  const item = new CardRenderItem(CardRenderItemType.MOON_HABITAT);
-  item.size = Size.SMALL;
-  return {
-    item: item,
-    points: points,
-    target: 1,
-  };
-}
-export function moonRoadTile(points: number, any: boolean = false): CardRenderDynamicVictoryPoints {
-  const item = new CardRenderItem(CardRenderItemType.MOON_ROAD);
-  item.size = Size.SMALL;
-  item.anyPlayer = any;
-  return {
-    item: item,
-    points: points,
-    target: 1,
-  };
-}
-export function cathedral(): CardRenderDynamicVictoryPoints {
-  return {
-    item: new CardRenderItem(CardRenderItemType.CATHEDRAL),
-    points: 1,
-    target: 1,
-  };
-}
 export function questionmark(points: number = 0, per: number = 0): CardRenderDynamicVictoryPoints {
   return {
     points: points,
@@ -110,12 +64,5 @@ export function any(points: number): CardRenderDynamicVictoryPoints {
     points: points,
     target: points,
     anyPlayer: true,
-  };
-}
-export function undergroundShelters(): CardRenderDynamicVictoryPoints {
-  return {
-    item: new CardRenderItem(CardRenderItemType.UNDERGROUND_SHELTERS),
-    target: 1,
-    points: 1,
   };
 }

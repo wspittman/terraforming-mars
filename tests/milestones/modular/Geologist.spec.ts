@@ -29,16 +29,4 @@ describe('Geologist Milestone', () => {
     game.simpleAddTile(player, adjacentVolcanicSpaces[1], {tileType: TileType.GREENERY});
     expect(milestone.getScore(player)).to.eq(3);
   });
-
-  it('Does not count hazard tiles', () => {
-    const [game, player] = testGame(2);
-    const board = game.board;
-    const volcanicSpaces = board.volcanicSpaceIds.map((id) => board.getSpaceOrThrow(id));
-
-    // Place a hazard tile on a volcanic space
-    game.simpleAddTile(player, volcanicSpaces[0], {tileType: TileType.DUST_STORM_MILD});
-    expect(milestone.getScore(player)).to.eq(0);
-    volcanicSpaces[0].tile!.tileType = TileType.GREENERY; // Convert to greenery, should now count
-    expect(milestone.getScore(player)).to.eq(1);
-  });
 });

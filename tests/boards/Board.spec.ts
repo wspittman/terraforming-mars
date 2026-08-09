@@ -211,13 +211,6 @@ describe('Board', () => {
     expectSpace(board.getNthAvailableLandSpace(2, 'top'), '09', 4, 1);
   });
 
-  it('getNthAvailableLandSpace skips hazard tiles', () => {
-    const space = board.getNthAvailableLandSpace(2, 'top');
-    expectSpace(board.getNthAvailableLandSpace(2, 'top'), '08', 3, 1);
-    space.tile = { tileType: TileType.DUST_STORM_MILD };
-    expectSpace(board.getNthAvailableLandSpace(2, 'top'), '09', 4, 1);
-  });
-
   // This happens with the Ares expansion and cards come out mid-game
   // after the board is already populated. Though, here, the high
   // card costs substitite for a heavily-populated board.

@@ -175,10 +175,6 @@ abstract class Builder<T> {
     return this._appendToRow(new CardRenderItem(CardRenderItemType.OXYGEN, amount, options));
   }
 
-  public venus(amount: number, options?: ItemOptions): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.VENUS, amount, options));
-  }
-
   public plants(amount: number, options?: ItemOptions): this {
     return this._appendToRow(new CardRenderItem(CardRenderItemType.PLANTS, amount, options));
   }
@@ -216,33 +212,6 @@ abstract class Builder<T> {
     return this._appendToRow(new CardRenderItem(CardRenderItemType.CARDS, amount, options));
   }
 
-  public trade(options?: ItemOptions): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.TRADE, -1, options));
-  }
-  public tradeFleet(options?: ItemOptions): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.TRADE_FLEET, -1, options));
-  }
-
-  public colonies(amount: number = 1, options?: ItemOptions): this {
-    const item = new CardRenderItem(CardRenderItemType.COLONIES, amount, options);
-    item.size = options?.size ?? Size.MEDIUM;
-    return this._appendToRow(item);
-  }
-
-  public tradeDiscount(amount: number): this {
-    const item = new CardRenderItem(CardRenderItemType.TRADE_DISCOUNT, amount * -1);
-    item.amountInside = true;
-    return this._appendToRow(item);
-  }
-
-  public colonyTile(options?: ItemOptions): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.COLONY_TILE, -1, options));
-  }
-
-  public influence(options?: ItemOptions): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.INFLUENCE, 1, options));
-  }
-
   public city(options?: ItemOptions) {
     const item = new CardRenderItem(CardRenderItemType.CITY, -1, options);
     item.size = options?.size ?? Size.MEDIUM;
@@ -268,47 +237,6 @@ abstract class Builder<T> {
     return this._appendToRow(item);
   }
 
-  public delegates(amount: number, options?: ItemOptions) {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.DELEGATES, amount, options));
-  }
-
-  public partyLeaders(amount: number = -1) {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.PARTY_LEADERS, amount));
-  }
-
-  public chairman(options?: ItemOptions) {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.CHAIRMAN, -1, options));
-  }
-
-  public policy() {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.POLICY));
-  }
-
-  public globalEvent() {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.GLOBAL_EVENT));
-  }
-
-  public noTags() {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.NO_TAGS, -1));
-  }
-
-  public emptyTag(count: number = 1) {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.EMPTY_TAG, count));
-  }
-
-  public wild(amount: number, options?: ItemOptions) {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.WILD, amount, options));
-  }
-
-  public one(amount: number, options?: ItemOptions) {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.ONE, amount, options));
-  }
-
-  public diverseTag(amount: number = 1) {
-    const item = new CardRenderItem(CardRenderItemType.DIVERSE_TAG, amount);
-    return this._appendToRow(item);
-  }
-
   public tag(tag: Tag, options?: number | ItemOptions) {
     const opts: ItemOptions = typeof(options) === 'number' ? {amount: options} : {...options};
     opts.tag = tag;
@@ -326,14 +254,6 @@ abstract class Builder<T> {
     return this._appendToRow(new CardRenderItem(CardRenderItemType.RESOURCE, -1, opts));
   }
 
-  public selfReplicatingRobots() {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.SELF_REPLICATING));
-  }
-
-  public prelude() {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.PRELUDE));
-  }
-
   public award() {
     return this._appendToRow(new CardRenderItem(CardRenderItemType.AWARD));
   }
@@ -346,20 +266,8 @@ abstract class Builder<T> {
     return this._appendToRow(new CardRenderItem(CardRenderItemType.CORPORATION));
   }
 
-  public firstPlayer() {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.FIRST_PLAYER));
-  }
-
-  public rulingParty() {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.RULING_PARTY));
-  }
-
   public vpIcon() {
     return this._appendToRow(new CardRenderItem(CardRenderItemType.VP));
-  }
-
-  public community() {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.COMMUNITY));
   }
 
   public multiplierWhite() {
@@ -370,110 +278,16 @@ abstract class Builder<T> {
     return this._appendToRow(description);
   }
 
-  public moonHabitat(options?: ItemOptions | undefined): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.MOON_HABITAT, 1, options));
-  }
-
-  public moonHabitatRate(options?: ItemOptions): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.MOON_HABITAT_RATE, 1, options));
-  }
-
   // TODO(kberg): Replace moon road image with JUST a road, and add an altsecondary tag to support it.
-  public moonRoad(options?: ItemOptions): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.MOON_ROAD, 1, options));
-  }
-
-  public moonLogisticRate(options?: ItemOptions): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.MOON_LOGISTIC_RATE, 1, options));
-  }
-
-  public moonMine(options?: ItemOptions): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.MOON_MINE, 1, options));
-  }
-
-  public moonMiningRate(options?: ItemOptions): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.MOON_MINING_RATE, 1, options));
-  }
-
-  public planetaryTrack(): this {
-    this._appendToRow(new CardRenderItem(CardRenderItemType.PLANETARY_TRACK, 1));
-    return this;
-  }
-
-  public cathedral(): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.CATHEDRAL, 1));
-  }
-
-  public nomads(): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.NOMADS, 1));
-  }
-
   public specialTile(options?: ItemOptions) {
     this._appendToRow(new CardRenderItem(CardRenderItemType.EMPTY_TILE_SPECIAL, 1, options));
     return this;
   }
 
-  public cityorSpecialTile(options?: ItemOptions) {
-    const item = new CardRenderItem(CardRenderItemType.CITY_OR_SPECIAL_TILE, -1, options);
+  public emptyTile(options?: ItemOptions) {
+    const item = new CardRenderItem(CardRenderItemType.EMPTY_TILE, -1, options);
     item.size = options?.size ?? Size.MEDIUM;
     return this._appendToRow(item);
-  }
-
-  // Underworld
-  public neutralDelegate(amount: number, options?: ItemOptions) {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.NEUTRAL_DELEGATE, amount, options));
-  }
-
-  public identify(count: number = 1, options?: ItemOptions) {
-    const item = new CardRenderItem(CardRenderItemType.IDENTIFY, count, options);
-    return this._appendToRow(item);
-  }
-
-  public excavate(count: number = 1, options?: ItemOptions) {
-    const item = new CardRenderItem(CardRenderItemType.EXCAVATE, count, options);
-    return this._appendToRow(item);
-  }
-
-  public claim(count: number = 1) {
-    return this.text('CLAIM').text(' ' + count.toString());
-  }
-
-  public corruption(count: number = 1, options?: ItemOptions) {
-    const item = new CardRenderItem(CardRenderItemType.CORRUPTION, count, options);
-    return this._appendToRow(item);
-  }
-
-  public undergroundResources(count: number = 1, options?: ItemOptions) {
-    const item = new CardRenderItem(CardRenderItemType.UNDERGROUND_RESOURCES, count, options);
-    return this._appendToRow(item);
-  }
-
-  public undergroundShelters() {
-    const item = new CardRenderItem(CardRenderItemType.UNDERGROUND_SHELTERS);
-    return this._appendToRow(item);
-  }
-
-  public corruptionShield() {
-    const item = new CardRenderItem(CardRenderItemType.CORRUPTION_SHIELD);
-    return this._appendToRow(item);
-  }
-
-  public geoscan() {
-    const item = new CardRenderItem(CardRenderItemType.GEOSCAN_ICON, 1, {});
-    return this._appendToRow(item);
-  }
-
-  public emptyTile(type: 'normal' | 'golden' = 'normal', options?: ItemOptions) {
-    if (type === 'normal') {
-      const normal = new CardRenderItem(CardRenderItemType.EMPTY_TILE, -1, options);
-      normal.size = options?.size ?? Size.MEDIUM;
-      this._appendToRow(normal);
-    } else if (type === 'golden') {
-      const golden = new CardRenderItem(CardRenderItemType.EMPTY_TILE_GOLDEN, -1, options);
-      golden.size = options?.size ?? Size.MEDIUM;
-      this._appendToRow(golden);
-    }
-    return this;
   }
 
   public production(pb: (builder: ProductionBoxBuilder) => void): this {
@@ -645,24 +459,8 @@ abstract class Builder<T> {
   /**
    * CEO Card Assets
    */
-  public opgArrow(): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.ARROW_OPG));
-  }
   // Reds icons used by Zan
-  public reds(): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.REDS));
-  }
-  public redsInactive(): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.REDS_DEACTIVATED));
-  }
   // Hazard tiles for Caesar
-  public hazardTile(amount: number = 1, options?: ItemOptions | undefined): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.HAZARD_TILE, amount, options));
-  }
-  public adjacencyBonus(): this {
-    this._appendToRow(new CardRenderItem(CardRenderItemType.ADJACENCY_BONUS));
-    return this;
-  }
 }
 
 class RootBuilder extends Builder<CardRenderRoot> {

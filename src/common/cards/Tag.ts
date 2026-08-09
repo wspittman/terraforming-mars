@@ -5,17 +5,11 @@ export enum Tag {
     POWER = 'power',
     EARTH = 'earth',
     JOVIAN = 'jovian',
-    VENUS = 'venus',
     PLANT = 'plant',
     MICROBE = 'microbe',
     ANIMAL = 'animal',
     CITY = 'city',
-    MOON = 'moon',
-    MARS = 'mars',
-    CRIME = 'crime',
-    WILD = 'wild',
     EVENT = 'event',
-    CLONE = 'clone',
 }
 
 export const ALL_TAGS = [
@@ -25,15 +19,9 @@ export const ALL_TAGS = [
   Tag.POWER,
   Tag.EARTH,
   Tag.JOVIAN,
-  Tag.VENUS,
-  Tag.MOON,
-  Tag.MARS,
   Tag.PLANT,
   Tag.MICROBE,
   Tag.ANIMAL,
-  Tag.CRIME,
   Tag.CITY,
-  Tag.WILD,
   Tag.EVENT,
-  Tag.CLONE,
 ] as const;

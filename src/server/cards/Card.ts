@@ -34,8 +34,6 @@ const NO_WARNINGS: ReadonlySet<Warning> = new Set();
  */
 const CARD_TYPES_WITHOUT_COST: ReadonlyArray<CardType> = [
   CardType.CORPORATION,
-  CardType.PRELUDE,
-  CardType.CEO,
   CardType.STANDARD_ACTION,
 ] as const;
 
@@ -363,8 +361,6 @@ export abstract class Card implements ICard {
       properties.metadata.victoryPoints = DynamicVictoryPoints.tag(vps.tag, each, per);
     } else if (vps.cities !== undefined) {
       properties.metadata.victoryPoints = DynamicVictoryPoints.cities(each, per, vps.all);
-    } else if (vps.colonies !== undefined) {
-      properties.metadata.victoryPoints = DynamicVictoryPoints.colonies(each, per, vps.all);
     } else {
       throw new Error('Unknown VPs defined');
     }
@@ -438,8 +434,7 @@ function populateCount(requirement: CardRequirementDescriptor): CardRequirementD
     requirement.tr ??
     requirement.resourceTypes ??
     requirement.greeneries ??
-    requirement.cities ??
-    requirement.floaters;
+    requirement.cities;
 
   return requirement;
 }

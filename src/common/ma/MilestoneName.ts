@@ -29,7 +29,6 @@ export const milestoneNames = [
   // Arabia Terra
   'Economizer',
   'Land Specialist',
-  'Martian',
 
   // Terra Cimmeria
   'T. Collector',

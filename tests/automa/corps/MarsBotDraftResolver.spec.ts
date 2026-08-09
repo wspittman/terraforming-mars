@@ -77,14 +77,6 @@ describe('MarsBotDraftResolver', () => {
       expect(resolver(reverseOrder).pickCard(hand, scienceThenBuilding)).to.eq(twoScienceCard);
     });
 
-    it('does not count a wild tag as a match', () => {
-      const wildCard = fakeCard({tags: [Tag.WILD]});
-
-      const picked = resolver().pickCard([wildCard, buildingCard], priority);
-
-      expect(picked).to.eq(buildingCard);
-    });
-
     it('treats a hand with no match as one tie across every card', () => {
       const hand = [earthCard, plantCard];
 
@@ -140,14 +132,6 @@ describe('MarsBotDraftResolver', () => {
       const picked = resolver().pickCard([earthCard, buildingAndSpaceCard, plantCard], priority);
 
       expect(picked).to.eq(buildingAndSpaceCard);
-    });
-
-    it('does not count wild tags', () => {
-      const threeWildCard = fakeCard({tags: [Tag.WILD, Tag.WILD, Tag.WILD]});
-
-      const picked = resolver().pickCard([threeWildCard, buildingCard], priority);
-
-      expect(picked).to.eq(buildingCard);
     });
   });
 

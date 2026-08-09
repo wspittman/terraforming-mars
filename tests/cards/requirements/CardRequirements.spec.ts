@@ -139,10 +139,10 @@ describe('CardRequirements', () => {
   it('satisfies properly for different tags', () => {
     const requirements = [{ tag: Tag.MICROBE }, { tag: Tag.ANIMAL }];
 
-    player.tagsForTest = { wild: 1 };
+    player.tagsForTest = { microbe: 1 };
     expect(satisfies(requirements, player)).eq(false);
 
-    player.tagsForTest = { wild: 1, microbe: 1 };
+    player.tagsForTest = { microbe: 1, animal: 1 };
     expect(satisfies(requirements, player)).eq(true);
   });
 

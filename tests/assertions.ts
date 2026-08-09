@@ -34,18 +34,6 @@ export function assertPlaceGreenery(player: IPlayer, input: PlayerInput | undefi
   return assertPlaceTile(player, input, TileType.GREENERY, idx);
 }
 
-export function assertPlaceMoonMine(player: IPlayer, input: PlayerInput | undefined, idx: number = 0) {
-  return assertPlaceTile(player, input, TileType.MOON_MINE, idx);
-}
-
-export function assertPlaceMoonHabitat(player: IPlayer, input: PlayerInput | undefined, idx: number = 0) {
-  return assertPlaceTile(player, input, TileType.MOON_HABITAT, idx);
-}
-
-export function assertPlaceMoonRoad(player: IPlayer, input: PlayerInput | undefined, idx: number = 0) {
-  return assertPlaceTile(player, input, TileType.MOON_ROAD, idx);
-}
-
 export function assertPlaceTile(player: IPlayer, input: PlayerInput | undefined, tileType: TileType, idx: number = 0): Space {
   const selectSpace = cast(input, SelectSpace);
   const space = selectSpace.spaces[idx];

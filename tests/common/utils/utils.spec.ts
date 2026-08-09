@@ -113,17 +113,11 @@ describe('utils', () => {
       'POWER',
       'EARTH',
       'JOVIAN',
-      'VENUS',
       'PLANT',
       'MICROBE',
       'ANIMAL',
       'CITY',
-      'MOON',
-      'MARS',
-      'CRIME',
-      'WILD',
       'EVENT',
-      'CLONE',
     ]);
   });
 
@@ -135,17 +129,11 @@ describe('utils', () => {
       'power',
       'earth',
       'jovian',
-      'venus',
       'plant',
       'microbe',
       'animal',
       'city',
-      'moon',
-      'mars',
-      'crime',
-      'wild',
       'event',
-      'clone',
     ]);
   });
 

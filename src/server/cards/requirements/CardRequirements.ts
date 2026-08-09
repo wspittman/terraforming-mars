@@ -3,7 +3,6 @@ import {Tag} from '../../../common/cards/Tag';
 import {IPlayer} from '../../IPlayer';
 import {CardRequirement} from './CardRequirement';
 import {CitiesRequirement} from './CitiesRequirement';
-import {FloatersRequirement} from './FloatersRequirement';
 import {GreeneriesRequirement} from './GreeneriesRequirement';
 import {OceanRequirement} from './OceanRequirement';
 import {OxygenRequirement} from './OxygenRequirement';
@@ -68,8 +67,6 @@ export class CardRequirements {
       return new GreeneriesRequirement({...descriptor, count: descriptor.greeneries});
     } else if (descriptor.cities !== undefined) {
       return new CitiesRequirement({...descriptor, count: descriptor.cities});
-    } else if (descriptor.floaters !== undefined) {
-      return new FloatersRequirement({...descriptor, count: descriptor.floaters});
     } else if (descriptor.production !== undefined) {
       return new ProductionRequirement(descriptor.production, descriptor);
     } else if (descriptor.plantsRemoved !== undefined) {

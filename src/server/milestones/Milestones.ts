@@ -4,7 +4,6 @@ import { MAManifest } from '../ma/MAManifest';
 import { Agronomist } from './Agronomist';
 import { Economizer } from './arabiaTerra/Economizer';
 import { LandSpecialist } from './arabiaTerra/LandSpecialist';
-import { Martian } from './arabiaTerra/Martian';
 import { Architect } from './Architect';
 import { Briber } from './Briber';
 import { Builder } from './Builder';
@@ -85,7 +84,6 @@ export const milestoneManifest: MAManifest<MilestoneName, IMilestone> = {
     'Landshaper': { Factory: Landshaper, random: 'modular' },
     'Legend': { Factory: Legend },
     'Legend4': { Factory: Legend4, random: 'modular' },
-    'Martian': { Factory: Martian },
     'Mayor': { Factory: Mayor, random: 'both' },
     'Merchant': { Factory: Merchant, random: 'modular' },
     'Metallurgist': { Factory: Metallurgist, random: 'modular' },

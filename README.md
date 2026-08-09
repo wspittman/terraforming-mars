@@ -1,34 +1,41 @@
-# Terraforming Mars — Solo Multiplayer Edition
+# Terraforming Mars - Solo Multiplayer Edition
 
-This is a personal fork of [terraforming-mars/terraforming-mars](https://github.com/terraforming-mars/terraforming-mars). It emulates a multiplayer game in the style of one local play group, but is operated by a single player and is intended to run only on a local machine.
+This is a personal fork of [terraforming-mars/terraforming-mars](https://github.com/terraforming-mars/terraforming-mars) intended to emulate a four-player game, in the style my group plays it, but with only a single player. It is intended to only be run locally.
 
-Only the **Base game** and optional **Corporate Era** cards are supported. Prelude, Prelude 2, Venus Next, Colonies, Turmoil, Promos, Ares, Community, The Moon, Pathfinders, CEOs, Star Wars, Underworld, and the Delta Project are intentionally not included.
+Other functionality from the upstream repo has been liberally removed. Only the **Base game** and optional **Corporate Era** cards are supported.
 
 ## Local setup
 
-The project requires Node.js 22. Install dependencies and start the development environment:
+The project requires Node.js 22.
 
 ```bash
 npm install
-npm run dev
+npm run build
+npm start
 ```
 
-The server and client can also be started separately with `npm run dev:server` and `npm run dev:client`.
-
-## Verification
+Validation
 
 ```bash
-npm run build
-npm run lint
+npm run lint:fix
 npm run test
 ```
 
-## Upstream project
+---
+
+# Upstream project
 
 Rules, development documentation, and project history are available from the [upstream repository](https://github.com/terraforming-mars/terraforming-mars) and its [wiki](https://github.com/terraforming-mars/terraforming-mars/wiki).
 
-This implementation is not affiliated with FryxGames, Asmodee Digital, or Steam. Please support the designers and publishers by purchasing the board game.
+This is an open-source online implementation of the great board game Terraforming mars. **It is not affiliated
+with FryxGames, Asmodee Digital or Steam in any way.**
+
+**Buy The Board Game**
+
+The board game is great and this repository highly recommends [purchasing it](https://www.amazon.com/Stronghold-Games-6005SG-Terraforming-Board/dp/B01GSYA4K2) for personal use.
 
 ## License
 
 GPLv3. See [LICENSE](LICENSE).
+
+Board Game Icons: http://www.kenney.nl/ (Creative Commons Zero, CC0)

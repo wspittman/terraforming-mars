@@ -24,19 +24,6 @@ export const SPENDABLE_CARD_RESOURCES = [
   'microbes',
   // Dirigibles corporation can spend its floaters for cards with Venus tags.
   'floaters',
-  // Luna Archives corporation can spend its science resources for cards with Moon tags.
-  'lunaArchivesScience',
-  // Spire corporation can spend its science resources on standrad projects.
-  'spireScience',
-  // TODO(kberg): add test for Soylent Seedling Systems + Psychophiles.
-  // Soylent Seedling Systems corporation can use its seeds to pay for cards with plant tags, or the standard greenery project.
-  'seeds',
-  // Aurorai corporation can use its data to pay for standard projects.
-  'auroraiData',
-  // Graphene is a Carbon Nanosystems resource that pays for city and space projects.
-  'graphene',
-  // Asteroids is a Kuiper Cooperative resource that pays for aquifer and asteroid standard projects.
-  'kuiperAsteroids',
 ] as const;
 
 export const SPENDABLE_RESOURCES = [...SPENDABLE_STANDARD_RESOURCES, ...SPENDABLE_CARD_RESOURCES] as const;
@@ -51,10 +38,4 @@ export type SpendableResource = SpendableStandardResource | SpendableCardResourc
 export const CARD_FOR_SPENDABLE_RESOURCE = {
   microbes: CardName.PSYCHROPHILES,
   floaters: CardName.DIRIGIBLES,
-  lunaArchivesScience: CardName.LUNA_ARCHIVES,
-  spireScience: CardName.SPIRE,
-  seeds: CardName.SOYLENT_SEEDLING_SYSTEMS,
-  auroraiData: CardName.AURORAI,
-  graphene: CardName.CARBON_NANOSYSTEMS,
-  kuiperAsteroids: CardName.KUIPER_COOPERATIVE,
 } satisfies Record<SpendableCardResource, CardName>;

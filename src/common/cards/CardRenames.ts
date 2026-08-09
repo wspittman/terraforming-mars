@@ -6,10 +6,7 @@ import {CardName} from './CardName';
 export const CARD_RENAMES = new Map<string, CardName>([
   // #2839: Fix card names to match printed English versions
   ['Thorgate', CardName.THORGATE],
-  ['Terralabs Research', CardName.TERRALABS_RESEARCH],
-  ['Astrodrill', CardName.ASTRODRILL],
   ['EcoLine', CardName.ECOLINE],
-  ['Colony', CardName.BUILD_COLONY_STANDARD_PROJECT],
 ]);
 
 export function resolveCardName(cardName: CardName): CardName {

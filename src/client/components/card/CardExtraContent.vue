@@ -23,10 +23,10 @@ export default defineComponent({
   },
   methods: {
     isMiningTileOnSteel() {
-      return this.card.name !== CardName.SPECIALIZED_SETTLEMENT && this.card.bonusResource?.includes(Resource.STEEL);
+      return this.card.bonusResource?.includes(Resource.STEEL);
     },
     isMiningTileOnTitanium() {
-      return this.card.name !== CardName.SPECIALIZED_SETTLEMENT && this.card.bonusResource?.includes(Resource.TITANIUM);
+      return this.card.bonusResource?.includes(Resource.TITANIUM);
     },
     lifeFound() {
       return this.card.name === CardName.SEARCH_FOR_LIFE && this.card.resources !== undefined && this.card.resources > 0;

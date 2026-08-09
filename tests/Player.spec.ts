@@ -192,26 +192,6 @@ describe('Player', () => {
     player.process({ type: 'option' });
     expect(player.getWaitingFor()).to.be.undefined;
   });
-  it('Omits buffer gas for non solo games', () => {
-    const player = new Player('blue', 'blue', false, 0, 'p-blue');
-    const player2 = new Player('red', 'red', false, 0, 'p-red');
-    Game.newInstance('gameid', [player, player2], player, 'spectatorid');
-    const option = player.getStandardProjectOption();
-    const bufferGas = option.cards.find(
-      (card) => card.name === CardName.BUFFER_GAS_STANDARD_PROJECT,
-    );
-    expect(bufferGas).to.be.undefined;
-  });
-  it('Omit buffer gas for solo games without 63 TR', () => {
-    const player = new Player('blue', 'blue', false, 0, 'p-blue');
-    Game.newInstance('gameid', [player], player, 'spectatorid');
-    const option = player.getStandardProjectOption();
-    const bufferGas = option.cards.find(
-      (card) => card.name === CardName.BUFFER_GAS_STANDARD_PROJECT,
-    );
-    expect(bufferGas).to.be.undefined;
-  });
-
   it('serialization test for pickedCorporationCard', () => {
     const player = new Player('blue', 'blue', false, 0, 'p-blue');
     player.pickedCorporationCard = new SaturnSystems();
@@ -245,12 +225,12 @@ describe('Player', () => {
       actionsTakenThisRound: 15,
       actionsTakenThisGame: 30,
       actionsThisGeneration: [
-        CardName.FACTORUM,
+        CardName.ALGAE,
         CardName.GHG_PRODUCING_BACTERIA,
       ],
       pendingInitialActions: [],
       dealtCorporationCards: [CardName.THARSIS_REPUBLIC],
-      dealtProjectCards: [CardName.FLOATER_LEASING, CardName.BUTTERFLY_EFFECT],
+      dealtProjectCards: [CardName.FLOATER_LEASING, CardName.FISH],
       cardsInHand: [CardName.EARTH_ELEVATOR, CardName.DUST_SEALS],
       playedCards: [], // TODO(kberg): these are SerializedCard.
       draftedCards: [CardName.FISH, CardName.EXTREME_COLD_FUNGUS],

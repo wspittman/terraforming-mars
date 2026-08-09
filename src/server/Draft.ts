@@ -1,4 +1,3 @@
-import { CardName } from '../common/cards/CardName';
 import {
   copyAndClear as copyAndEmpty,
   inplaceRemove,
@@ -230,21 +229,11 @@ class StandardDraft extends Draft {
     return this.game.projectDeck.drawN(this.game, cardsToDraw, 'bottom');
   }
 
-  private cardsToDraw(player: IPlayer): number {
-    if (player.tableau.has(CardName.MARS_MATHS)) {
-      return 5;
-    }
-
+  private cardsToDraw(_player: IPlayer): number {
     return 4;
   }
 
-  override cardsToKeep(player: IPlayer): number {
-    if (this.game.draftRound === 1) {
-      if (player.tableau.has(CardName.MARS_MATHS)) {
-        return 2;
-      }
-    }
-
+  override cardsToKeep(_player: IPlayer): number {
     return 1;
   }
 

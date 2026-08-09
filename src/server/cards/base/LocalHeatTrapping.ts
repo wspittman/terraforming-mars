@@ -41,28 +41,7 @@ export class LocalHeatTrapping extends Card implements IProjectCard {
   }
 
   public override canPlay(player: IPlayer) {
-    // This card can cost 0 or 1.
-    const cardCost = player.getCardCost(this); // Would be nice to use precalculated value.
-
-    let heat = player.heat;
-    let floaters = player.resourcesOnCard(CardName.STORMCRAFT_INCORPORATED);
-
-    // If the card costs anything, determine where that 1MC can come from. Assume it can come from MC first.
-    if (cardCost === 1 && player.megaCredits === 0) {
-      if (heat > 0) {
-        heat--;
-      } else if (floaters > 0) {
-        floaters--;
-      } else {
-        return false;
-      }
-    }
-
-    // At this point, the card cost has been assumed handled, and it's just a question of whether there's 5 heat
-    // left.
-
-    const availableHeat = heat + (floaters * 2);
-    return availableHeat >= 5;
+    return player.heat >= 5;
   }
 
   // By overriding play, the heat is not deducted automatically.

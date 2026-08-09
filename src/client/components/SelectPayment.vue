@@ -52,16 +52,7 @@ export default defineComponent({
   },
   computed: {
     order(): ReadonlyArray<keyof Payment> {
-      return ([
-        'steel',
-        'titanium',
-        'heat',
-        'seeds',
-        'auroraiData',
-        'kuiperAsteroids',
-        'spireScience',
-        'megacredits',
-      ] as const).filter(this.canUse);
+      return (['steel', 'titanium', 'heat', 'megacredits'] as const).filter(this.canUse);
     },
     ledger(): Ledger {
       return this.buildLedger(this.order, this.playerinput.reserveUnits ?? Units.EMPTY);

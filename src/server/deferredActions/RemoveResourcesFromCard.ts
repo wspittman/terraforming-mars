@@ -112,7 +112,7 @@ export class RemoveResourcesFromCard extends DeferredAction<Response> {
           for (const card of p.getCardsWithResources(resourceType)) {
             // Protected resources can't be removed, even by the owner (e.g. Pets), except for
             // Bioengineering Enclosure, whose protection only stops *other* players.
-            if (card.protectedResources === true && card.name !== CardName.BIOENGINEERING_ENCLOSURE) {
+            if (card.protectedResources === true) {
               continue;
             }
             resourceCards.push(card);

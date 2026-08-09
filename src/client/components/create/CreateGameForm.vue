@@ -21,17 +21,6 @@
                         </div>
 
                         <div class="create-game-page-column">
-                            <h4 v-i18n>Game Version</h4>
-
-                            <input type="checkbox" name="corporateEra" id="corporateEra-checkbox" v-model="expansions.corpera">
-                            <label for="corporateEra-checkbox" class="expansion-button">
-                                <div class="create-game-expansion-icon expansion-icon-CE"></div>
-                                <span v-i18n>Corporate Era</span>
-                            </label>
-                        </div>
-
-
-                        <div class="create-game-page-column">
                             <h4 v-i18n>Options</h4>
 
                             <label for="startingCorpNum-checkbox">
@@ -66,37 +55,6 @@
                                 <span v-i18n>Show timers</span>
                             </label>
 
-                            <input type="checkbox" v-model="escapeVelocityMode" id="escapevelocity-checkbox">
-                            <label for="escapevelocity-checkbox">
-                                <div class="create-game-expansion-icon expansion-icon-escape-velocity"></div>
-                                <span v-i18n>Escape Velocity</span>&nbsp;<a :href="wikiUrls.escapeVelocity" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                            </label>
-
-                            <label for="escapeThreshold-checkbox" v-show="escapeVelocityMode">
-                              <span v-i18n>After</span><span>&nbsp;</span>
-                              <input type="number" class="create-game-corporations-count" value="30" step="5" min="0" :max="180" v-model="escapeVelocityThreshold" id="escapeThreshold-checkbox">
-                              <span v-i18n>min</span>
-                            </label>
-
-                            <label for="escapeBonusSeconds-checkbox" v-show="escapeVelocityMode">
-                              <span v-i18n>Plus</span><span>&nbsp;</span>
-                              <input type="number" class="create-game-corporations-count" value="2" step="1" min="1" :max="10" v-model="escapeVelocityBonusSeconds" id="escapeBonusSeconds-checkbox">
-                              <span v-i18n>seconds per action</span>
-                            </label>
-
-                            <label for="escapePeriod-checkbox" v-show="escapeVelocityMode">
-                              <span v-i18n>Reduce</span><span>&nbsp;</span>
-                              <input type="number" class="create-game-corporations-count" value="1" min="1" :max="10" v-model="escapeVelocityPenalty" id="escapePeriod-checkbox">
-                              <span v-i18n>VP every</span><span>&nbsp;</span>
-                              <input type="number" class="create-game-corporations-count" value="2" min="1" :max="10" v-model="escapeVelocityPeriod" id="escapePeriod-checkbox">
-                              <span v-i18n>min</span>
-                            </label>
-
-                            <input type="checkbox" v-model="shuffleMapOption" id="shuffleMap-checkbox">
-                            <label for="shuffleMap-checkbox">
-                                    <span v-i18n>Randomize board tiles</span>&nbsp;<a :href="wikiUrls.randomizeBoardTiles" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                            </label>
-
                             <input type="checkbox" v-model="seededGame" id="seeded-checkbox">
                             <label for="seeded-checkbox">
                                 <span v-i18n>Set Predefined Game</span>&nbsp;<a :href="wikiUrls.setPredefinedGame" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
@@ -124,7 +82,6 @@
                                 <span v-i18n>Include some cards</span>
                             </label>
 
-
                         </div>
 
                         <div class="create-game-page-column" v-if="playersCount > 1">
@@ -150,54 +107,11 @@
                                 <span v-i18n>Random first player</span>
                             </label>
 
-                            <input type="checkbox" name="randomMAToggle" id="randomMA-checkbox" @change="randomMAToggle()">
-                            <label for="randomMA-checkbox">
-                                <span v-i18n>Random Milestones/Awards</span>&nbsp;<a :href="wikiUrls.randomMilestonesAndAwards" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                            </label>
-
-                            <div class="create-game-page-column-row" v-if="isRandomMAEnabled()">
-                                <div>
-                                <input type="radio" name="randomMAOption" v-model="randomMA" :value="getRandomMaOptionType('limited')" id="limitedRandomMA-radio">
-                                <label class="label-randomMAOption" for="limitedRandomMA-radio">
-                                    <span v-i18n>{{ getRandomMaOptionType('limited') }}</span>
-                                </label>
-                                </div>
-
-                                <div>
-                                <input type="radio" name="randomMAOption" v-model="randomMA" :value="getRandomMaOptionType('full')" id="unlimitedRandomMA-radio">
-                                <label class="label-randomMAOption" for="unlimitedRandomMA-radio">
-                                    <span v-i18n>{{ getRandomMaOptionType('full') }}</span>
-                                </label>
-                                </div>
-                                <div>
-                                  <input type="checkbox" name="modularMA" v-model="modularMA" id="modularMA-checkbox">
-                                   <label for="modularMA-checkbox">
-                                    <span v-i18n>Official Random α</span>
-                                  </label>
-                                </div>
-                            </div>
-
-                            <div v-if="modularMA">
-                              The new Milestones and Awards are still in active development.<br>
-                              Please don't report anything unless it breaks the game.<br>
-                              These are <b>always fully random</b>.
-                            </div>
-                            <template v-if="randomMA !== RandomMAOptionType.NONE">
-                              <input type="checkbox" v-model="includeFanMA" id="fanMA-checkbox">
-                              <label for="fanMA-checkbox">
-                                  <span v-i18n>Include fan Milestones/Awards</span>
-                              </label>
-                            </template>
-
                             <input type="checkbox" name="showOtherPlayersVP" v-model="showOtherPlayersVP" id="realTimeVP-checkbox">
                             <label for="realTimeVP-checkbox">
                                 <span v-i18n>Show real-time VP</span>&nbsp;<a :href="wikiUrls.showRealtimeVP" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
                             </label>
 
-                            <input type="checkbox" v-model="fastModeOption" id="fastMode-checkbox">
-                            <label for="fastMode-checkbox">
-                                <span v-i18n>Fast mode</span>&nbsp;<a :href="wikiUrls.fastMode" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                            </label>
                         </div>
 
                         <div class="create-game-players-cont">
@@ -226,10 +140,6 @@
                                                       <i class="form-icon"></i> <span v-i18n>Beginner?</span>&nbsp;<a :href="wikiUrls.beginnerCorporation" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
                                                   </label>
 
-                                                  <label class="form-label">
-                                                      <input type="number" class="form-input form-inline player-handicap" value="0" min="0" :max="10" v-model.number="newPlayer.handicap" >
-                                                      <i class="form-icon"></i><span v-i18n>TR Boost</span>&nbsp;<a :href="wikiUrls.trBoost" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                                                  </label>
                                               <!-- </template> -->
 
                                               <label class="form-radio form-inline" v-if="!randomFirstPlayer">
@@ -260,7 +170,6 @@
                     </div>
                 </div>
             </div>
-
 
             <CorporationsFilter
                 ref="corporationsFilter"
@@ -319,7 +228,6 @@ import {RULEBOOK_URLS, WIKI_URLS} from '@/client/utils/WikiLinks';
 
 const createGameSettingsStorage = new CreateGameSettingsStorage();
 
-
 type Refs = {
   file: HTMLInputElement;
   cardsFilter: InstanceType<typeof CardsFilter>;
@@ -344,13 +252,6 @@ export default defineComponent({
     CorporationsFilter,
     PreferencesIcon,
   },
-  watch: {
-    playersCount(value: number) {
-      if (value === 1) {
-        this.expansions.corpera = true;
-      }
-    },
-  },
   mounted() {
     setDocumentTitle('Create New Game');
     this.restoreLastSettings();
@@ -361,9 +262,6 @@ export default defineComponent({
     },
     typedRefs(): Refs {
       return this.$refs as Refs;
-    },
-    RandomMAOptionType(): typeof RandomMAOptionType {
-      return RandomMAOptionType;
     },
     constants(): typeof constants {
       return constants;
@@ -488,25 +386,6 @@ export default defineComponent({
     getPlayers(): Array<NewPlayerModel> {
       return this.players.slice(0, this.playersCount);
     },
-    isRandomMAEnabled(): Boolean {
-      return this.randomMA !== RandomMAOptionType.NONE;
-    },
-    randomMAToggle() {
-      if (this.randomMA === RandomMAOptionType.NONE) {
-        this.randomMA = RandomMAOptionType.LIMITED;
-      } else {
-        this.randomMA = RandomMAOptionType.NONE;
-      }
-    },
-    getRandomMaOptionType(type: 'limited' | 'full'): RandomMAOptionType {
-      if (type === 'limited') {
-        return RandomMAOptionType.LIMITED;
-      } else if (type === 'full') {
-        return RandomMAOptionType.UNLIMITED;
-      } else {
-        return RandomMAOptionType.NONE;
-      }
-    },
     isBeginnerToggleEnabled(): Boolean {
       return !this.initialDraft;
     },
@@ -572,9 +451,7 @@ export default defineComponent({
 
       const draftVariant = this.draftVariant;
       const initialDraft = this.initialDraft;
-      const randomMA = this.randomMA;
       const showOtherPlayersVP = this.showOtherPlayersVP;
-      const shuffleMapOption = this.shuffleMapOption;
       const customCorporations = this.customCorporations;
       const bannedCards = this.bannedCards;
       const includedCards = this.includedCards;
@@ -582,20 +459,10 @@ export default defineComponent({
       const seed = this.seed;
       const undoOption = this.undoOption;
       const showTimers = this.showTimers;
-      const fastModeOption = this.fastModeOption;
-      const includeFanMA = this.includeFanMA;
       const startingCorporations = this.startingCorporations;
       const soloTR = this.soloTR;
       const randomFirstPlayer = this.randomFirstPlayer;
       let clonedGamedId: undefined | GameId = undefined;
-
-      if (players.length === 1 && this.expansions.corpera === false) {
-        const confirm = window.confirm(translateText(
-          'We do not recommend playing a solo game without the Corporate Era. Press OK if you want to play without it.'));
-        if (confirm === false) {
-          return;
-        }
-      }
 
       // Check custom corp count
       if (customCorporations.length > 0) {
@@ -640,7 +507,7 @@ export default defineComponent({
 
       const dataToSend: NewGameConfig = {
         players,
-        corporateEra: this.expansions.corpera,
+        corporateEra: true,
         draftVariant,
         showOtherPlayersVP,
         customCorporationsList: customCorporations,
@@ -650,24 +517,18 @@ export default defineComponent({
         seed,
         undoOption,
         showTimers,
-        fastModeOption,
-        includeFanMA,
-        modularMA: this.modularMA,
+        fastModeOption: false,
+        includeFanMA: false,
+        modularMA: false,
         startingCorporations,
         soloTR,
         clonedGamedId,
         initialDraft,
-        randomMA,
-        shuffleMapOption,
+        randomMA: RandomMAOptionType.NONE,
+        shuffleMapOption: false,
         // beginnerOption,
         randomFirstPlayer,
-        escapeVelocity: this.escapeVelocityMode ?
-          {
-            thresholdMinutes: this.escapeVelocityThreshold,
-            bonusSectionsPerAction: this.escapeVelocityBonusSeconds,
-            penaltyPeriodMinutes: this.escapeVelocityPeriod,
-            penaltyVPPerPeriod: this.escapeVelocityPenalty,
-          } : undefined,
+        escapeVelocity: undefined,
       };
       return JSON.stringify(dataToSend, undefined, 4);
     },

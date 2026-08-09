@@ -3,7 +3,6 @@ import { defaultCreateGameModel } from '@/client/components/create/defaultCreate
 import { JSONProcessor } from '@/client/components/create/JSONProcessor';
 import { BoardName } from '@/common/boards/BoardName';
 import { CardName } from '@/common/cards/CardName';
-import { RandomMAOptionType } from '@/common/ma/RandomMAOptionType';
 import { JSONObject } from '@/common/Types';
 import { expect } from 'chai';
 
@@ -20,11 +19,11 @@ const TEMPLATE_INPUT = {
       name: 'You',
       color: 'red',
       beginner: false,
-      handicap: 0,
+      handicap: 4,
       first: false,
     },
   ],
-  expansions: {corpera: true},
+  corporateEra: false,
 
   draftVariant: true,
   showOtherPlayersVP: false,
@@ -45,8 +44,12 @@ const TEMPLATE_INPUT = {
   randomMA: 'No randomization',
   shuffleMapOption: false,
   randomFirstPlayer: true,
-  escapeVelocityMode: false,
-  escapeVelocityBonusSeconds: 2,
+  escapeVelocity: {
+    thresholdMinutes: 35,
+    bonusSectionsPerAction: 2,
+    penaltyPeriodMinutes: 2,
+    penaltyVPPerPeriod: 1,
+  },
 };
 
 const TEMPLATE_EXPECTED: CreateGameModel = {
@@ -65,8 +68,6 @@ const TEMPLATE_EXPECTED: CreateGameModel = {
   expansions: {corpera: true},
   draftVariant: true,
   initialDraft: false,
-  randomMA: 'No randomization' as RandomMAOptionType,
-  modularMA: false,
   randomFirstPlayer: true,
   showOtherPlayersVP: false,
   showCorporationList: false,
@@ -79,19 +80,11 @@ const TEMPLATE_EXPECTED: CreateGameModel = {
   board: 'tharsis' as BoardName,
   seed: 0.40189423667985547,
   seededGame: false,
-  shuffleMapOption: false,
   undoOption: false,
   showTimers: true,
-  fastModeOption: false,
   removeNegativeGlobalEventsOption: false,
-  includeFanMA: false,
   startingCorporations: 2,
   soloTR: false,
-  escapeVelocityMode: false,
-  escapeVelocityThreshold: 30,
-  escapeVelocityBonusSeconds: 2,
-  escapeVelocityPeriod: 2,
-  escapeVelocityPenalty: 1,
 };
 
 const cases: Array<Case> = [
@@ -129,26 +122,6 @@ const cases: Array<Case> = [
       "Old card name 'EcoLine' in customCorporations; use 'Ecoline'",
       "Unknown card name 'Bad Card Name' in bannedCards",
     ],
-  },
-  {
-    description: 'new escape velocity values',
-    input: {
-      ...TEMPLATE_INPUT,
-      escapeVelocity: {
-        thresholdMinutes: '35',
-        bonusSectionsPerAction: 2,
-        penaltyPeriodMinutes: 2,
-        penaltyVPPerPeriod: 1,
-      },
-    },
-    expected: {
-      ...TEMPLATE_EXPECTED,
-      escapeVelocityBonusSeconds: 2,
-      escapeVelocityMode: true,
-      escapeVelocityPenalty: 1,
-      escapeVelocityPeriod: 2,
-      escapeVelocityThreshold: 35,
-    },
   },
 ];
 

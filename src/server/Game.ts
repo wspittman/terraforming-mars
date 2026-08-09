@@ -21,27 +21,24 @@ import {IPlayer} from './IPlayer';
 import {Player} from './Player';
 import {PlayerId, GameId, SpectatorId, SpaceId} from '../common/Types';
 import {PlayerInput} from './PlayerInput';
-import {CardResource} from '../common/CardResource';
 import {Resource} from '../common/Resource';
 import {AndThen, DeferredAction, SimpleDeferredAction} from './deferredActions/DeferredAction';
 import {Priority} from './deferredActions/Priority';
 import {DeferredActionsQueue} from './deferredActions/DeferredActionsQueue';
-import {SelectPaymentDeferred} from './deferredActions/SelectPaymentDeferred';
 import {SelectInitialCards} from './inputs/SelectInitialCards';
-import {PlaceOceanTile} from './deferredActions/PlaceOceanTile';
 import {GainResourcesDeferred} from './deferredActions/GainResourcesDeferred';
+import {PlaceOceanTile} from './deferredActions/PlaceOceanTile';
 import {SerializedGame} from './SerializedGame';
 import {SpaceBonus} from '../common/boards/SpaceBonus';
 import {TileType} from '../common/TileType';
 import {RandomMAOptionType} from '../common/ma/RandomMAOptionType';
-import {GameSetup, normalizeBoardName} from './GameSetup';
+import {GameSetup} from './GameSetup';
 import {GameCards} from './GameCards';
 import {GlobalParameter} from '../common/GlobalParameter';
 import {SeededRandom, UnseededRandom} from '../common/utils/Random';
 import {chooseMilestonesAndAwards} from './ma/MilestoneAwardSelector';
 import {BoardType} from './boards/BoardType';
 import {MultiSet} from 'mnemonist';
-import {AddResourcesToCard} from './deferredActions/AddResourcesToCard';
 import {GameLoader} from './database/GameLoader';
 import {DEFAULT_GAME_OPTIONS, GameOptions} from './game/GameOptions';
 import {CorporationDeck, ProjectDeck} from './cards/Deck';
@@ -51,15 +48,13 @@ import {Tag} from '../common/cards/Tag';
 import {IGame, Score} from './IGame';
 import {MarsBoard} from './boards/MarsBoard';
 import {newInitialDraft, newStandardDraft} from './Draft';
-import {partition, sum, toID, toName} from '../common/utils/utils';
+import {sum, toID, toName} from '../common/utils/utils';
 import {OrOptions} from './inputs/OrOptions';
 import {SelectOption} from './inputs/SelectOption';
 import {SelectSpace} from './inputs/SelectSpace';
 import {maybeRenamedMilestone} from '../common/ma/MilestoneName';
 import {maybeRenamedAward} from '../common/ma/AwardName';
 import {IStandardProjectCard} from './cards/IStandardProjectCard';
-import {BoardName} from '../common/boards/BoardName';
-import {SpaceType} from '../common/boards/SpaceType';
 import {ICard} from './cards/ICard';
 import {generateGameName} from './GameName';
 
@@ -1002,12 +997,6 @@ export class Game implements IGame, Logger {
     // Part 5. Collect the bonuses
     if (this.phase !== Phase.SOLAR) {
       this.grantPlacementBonuses(player, space, coveringExistingTile, arcadianCommunityBonus);
-
-      if (this.gameOptions.boardName === BoardName.HOLLANDIA) {
-        const spaces = this.board.spaces.filter(Board.ownedBy(player));
-        const [inside, outside] = partition(spaces, ((space) => space.spaceType === SpaceType.DEFLECTION_ZONE));
-        player.withinDeflectionZone = inside.length > 0 && outside.length === 0;
-      }
     } else {
       space.player = undefined;
     }
@@ -1080,48 +1069,6 @@ export class Game implements IGame, Logger {
       break;
     case SpaceBonus.HEAT:
       player.stock.add(Resource.HEAT, count, {log: true});
-      break;
-    case SpaceBonus.OCEAN:
-      // Hellas special requirements ocean tile
-      if (this.canAddOcean()) {
-        this.defer(new SelectPaymentDeferred(player, constants.HELLAS_BONUS_OCEAN_COST, {title: 'Select how to pay for placement bonus ocean'}))
-          .andThen(() => {
-            this.defer(new PlaceOceanTile(player, {title: 'Select space for ocean from placement bonus'}));
-            return undefined;
-          });
-      }
-      break;
-    case SpaceBonus.MICROBE:
-      this.defer(new AddResourcesToCard(player, CardResource.MICROBE, {count: count}));
-      break;
-    case SpaceBonus.ANIMAL:
-      this.defer(new AddResourcesToCard(player, CardResource.ANIMAL, {count: count}));
-      break;
-    case SpaceBonus.DATA:
-      this.defer(new AddResourcesToCard(player, CardResource.DATA, {count: count}));
-      break;
-    case SpaceBonus.ENERGY_PRODUCTION:
-      player.production.add(Resource.ENERGY, count, {log: true});
-      break;
-    case SpaceBonus.SCIENCE:
-      this.defer(new AddResourcesToCard(player, CardResource.SCIENCE, {count: count}));
-      break;
-    case SpaceBonus.TEMPERATURE:
-    case SpaceBonus.TEMPERATURE_4MC:
-      if (this.getTemperature() < constants.MAX_TEMPERATURE) {
-        const cost = spaceBonus === SpaceBonus.TEMPERATURE ? constants.VASTITAS_BOREALIS_BONUS_TEMPERATURE_COST : constants.VASTITAS_BOREALIS_NOVA_BONUS_TEMPERATURE_COST;
-        this.defer(new SelectPaymentDeferred(
-          player,
-          cost,
-          {title: 'Select how to pay for placement bonus temperature'}))
-          .andThen(() => this.increaseTemperature(player, 1));
-      }
-      break;
-    case SpaceBonus.ENERGY:
-      player.stock.add(Resource.ENERGY, count, {log: true});
-      break;
-    case SpaceBonus.ASTEROID:
-      this.defer(new AddResourcesToCard(player, CardResource.ASTEROID, {count: count}));
       break;
     default:
       throw new Error('Unhandled space bonus ' + spaceBonus + '. Report this exact error, please.');
@@ -1252,7 +1199,7 @@ export class Game implements IGame, Logger {
 
   public static deserialize(d: SerializedGame): Game {
     const gameOptions: GameOptions = {...DEFAULT_GAME_OPTIONS, ...d.gameOptions};
-    gameOptions.boardName = normalizeBoardName(gameOptions.boardName);
+    gameOptions.boardName = DEFAULT_GAME_OPTIONS.boardName;
     const players = d.players.map((element) => Player.deserialize(element));
     const first = players.find((player) => player.id === d.first);
     if (first === undefined) {

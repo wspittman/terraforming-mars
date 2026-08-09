@@ -1,8 +1,5 @@
-import { BoardName } from '../../common/boards/BoardName';
-import { AwardName, awardNames } from '../../common/ma/AwardName';
-import { MilestoneName, milestoneNames } from '../../common/ma/MilestoneName';
-import { awardManifest } from '../awards/Awards';
-import { milestoneManifest } from '../milestones/Milestones';
+import {AwardName} from '../../common/ma/AwardName';
+import {MilestoneName} from '../../common/ma/MilestoneName';
 
 // Higher synergies represent similar milestones or awards. For instance, Terraformer rewards for high TR
 // and the Benefactor award is given to the player with the highest TR. Their synergy weight is 9, very high.
@@ -369,23 +366,6 @@ class SynergyMap {
 }
 
 export const synergies: SynergyMap = new SynergyMap();
-
-const VBN = [
-  ...milestoneManifest.boards[BoardName.VASTITAS_BOREALIS_NOVA],
-  ...awardManifest.boards[BoardName.VASTITAS_BOREALIS_NOVA],
-];
-milestoneNames.forEach((name) => {
-  for (const entry of VBN) {
-    synergies.set(name, entry, 5);
-  }
-  synergies.set(name, name, 1000);
-});
-awardNames.forEach((name) => {
-  for (const entry of VBN) {
-    synergies.set(name, entry, 5);
-  }
-  synergies.set(name, name, 1000);
-});
 
 for (const [a, b, weight] of synergiesData) {
   synergies.set(a, b, weight);

@@ -122,44 +122,6 @@ export const milestoneManifest: MAManifest<MilestoneName, IMilestone> = {
       'Builder',
       'Planner',
     ],
-    [BoardName.HELLAS]: [
-      'Diversifier',
-      'Tactician',
-      'Polar Explorer',
-      'Energizer',
-      'Rim Settler',
-    ],
-    [BoardName.ELYSIUM]: [
-      'Generalist',
-      'Specialist',
-      'Ecologist',
-      'Tycoon',
-      'Legend',
-    ],
-    [BoardName.ARABIA_TERRA]: [
-      'Economizer',
-      'Land Specialist',
-      'Martian',
-    ],
-    [BoardName.VASTITAS_BOREALIS]: [
-      'V. Electrician',
-      'Smith',
-      'Irrigator',
-      'Capitalist',
-    ],
-    [BoardName.UTOPIA_PLANITIA]: [
-      'Land Specialist',
-      'Smith',
-      'Researcher',
-    ],
-    [BoardName.VASTITAS_BOREALIS_NOVA]: [
-      'Agronomist',
-      'V. Spacefarer',
-      'Geologist',
-      'Engineer',
-      'Farmer',
-    ],
-    [BoardName.HOLLANDIA]: [],
   },
   create: (name: string): IMilestone | undefined => {
     try {

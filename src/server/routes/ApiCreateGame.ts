@@ -3,7 +3,6 @@ import {Handler} from './Handler';
 import {Context} from './IHandler';
 import {Database} from '../database/Database';
 import {BoardName} from '../../common/boards/BoardName';
-import {RandomBoardOption} from '../../common/boards/RandomBoardOption';
 import {Cloner} from '../database/Cloner';
 import {Game} from '../Game';
 import {GameOptions} from '../game/GameOptions';
@@ -68,22 +67,6 @@ export class ApiCreateGame extends Handler {
     this.quotaHandlers = quotaConfigs.map((config) => new QuotaHandler(config));
   }
 
-  public static boardOptions(board: RandomBoardOption | BoardName): Array<BoardName> {
-    const allBoards = Object.values(BoardName);
-
-    if (board === RandomBoardOption.ALL) {
-      return allBoards;
-    }
-    if (board === RandomBoardOption.OFFICIAL) {
-      return allBoards.filter((name) => {
-        return name === BoardName.THARSIS ||
-          name === BoardName.HELLAS ||
-          name === BoardName.ELYSIUM;
-      });
-    }
-    return [board];
-  }
-
   // TODO(kberg): much of this code can be moved outside of handler, and that
   // would be better.
   public override post(req: Request, res: Response, ctx: Context): Promise<void> {
@@ -121,12 +104,9 @@ export class ApiCreateGame extends Handler {
             }
           }
 
-          const boards = ApiCreateGame.boardOptions(gameReq.board);
-          gameReq.board = boards[Math.floor(Math.random() * boards.length)];
-
           const gameOptions: GameOptions = {
             bannedCards: gameReq.bannedCards,
-            boardName: gameReq.board,
+            boardName: BoardName.THARSIS,
             clonedGamedId: gameReq.clonedGamedId,
             corporateEra: gameReq.corporateEra,
             customCorporationsList: gameReq.customCorporationsList,

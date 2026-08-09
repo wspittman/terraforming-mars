@@ -16,7 +16,7 @@ function createGameSettings(overrides: JSONObject = {}): JSONObject {
       {name: 'Bob', color: 'blue', beginner: false, handicap: 0},
     ],
     corporateEra: true,
-    board: BoardName.HELLAS,
+    board: 'hellas',
     draftVariant: false,
     ...overrides,
   };
@@ -55,7 +55,7 @@ describe('CreateGameForm', () => {
     expect((wrapper.vm as any).playersCount).eq(2);
     expect((wrapper.vm as any).players[0].name).eq('Alice');
     expect((wrapper.vm as any).players[1].name).eq('Bob');
-    expect((wrapper.vm as any).board).eq(BoardName.HELLAS);
+    expect((wrapper.vm as any).board).eq(BoardName.THARSIS);
     expect((wrapper.vm as any).draftVariant).eq(false);
     expect((wrapper.vm as any).expansions.corpera).eq(false);
   });
@@ -98,7 +98,7 @@ describe('CreateGameForm', () => {
     });
     await wrapper.vm.$nextTick();
 
-    expect((wrapper.vm as any).board).eq(BoardName.HELLAS);
+    expect((wrapper.vm as any).board).eq(BoardName.THARSIS);
 
     (wrapper.vm as any).resetSettings();
     await wrapper.vm.$nextTick();
@@ -137,12 +137,11 @@ describe('CreateGameForm', () => {
       (wrapper.vm as any).randomFirstPlayer = false;
       (wrapper.vm as any).players[0].name = 'Alice';
       (wrapper.vm as any).players[1].name = 'Bob';
-      (wrapper.vm as any).board = BoardName.ELYSIUM;
 
       await (wrapper.vm as any).createGame();
 
       const savedSettings = new CreateGameSettingsStorage(localStorage).loadSettings();
-      expect(savedSettings?.board).eq(BoardName.ELYSIUM);
+      expect(savedSettings?.board).eq(BoardName.THARSIS);
       expect(savedSettings?.corporateEra).eq(true);
       expect(savedSettings?.expansions).eq(undefined);
       expect((savedSettings?.players as Array<{name: string}>).map((player) => player.name)).deep.eq(['Alice', 'Bob']);

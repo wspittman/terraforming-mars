@@ -11,7 +11,6 @@
     </template>
     <template v-if="tileView === 'show'">
       <div :class="playerColorCss" v-if="space.color !== undefined"></div>
-      <div v-if="space.spaceType === SpaceType.DEFLECTION_ZONE" class="board-space-type-deflection-zone"></div>
     </template>
     <div class="board-log-highlight" :data_log_highlight_id="space.id"></div>
     </div>

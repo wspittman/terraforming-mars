@@ -20,7 +20,7 @@ export type SpaceCosts = {
 };
 
 /**
- * A representation of any hex board. This is normally Mars (Tharsis, Hellas, Elysium) but can also be The Moon.
+ * A representation of any hex board. This is the Mars board, represented by Tharsis.
  *
  * It also includes additional spaces, known as Colonies, that are not adjacent to other spaces.
  */

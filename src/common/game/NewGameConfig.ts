@@ -1,11 +1,10 @@
 import {BoardName} from '../boards/BoardName';
-import {RandomBoardOption} from '../boards/RandomBoardOption';
 import {CardName} from '../cards/CardName';
 import {Color} from '../Color';
 import {RandomMAOptionType} from '../ma/RandomMAOptionType';
 import {GameId} from '../Types';
 
-export type BoardNameType = BoardName | RandomBoardOption;
+export type BoardNameType = BoardName
 
 export interface NewPlayerModel {
   name: string;

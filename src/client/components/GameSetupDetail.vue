@@ -59,13 +59,6 @@ import {translateTextWithParams} from '@/client/directives/i18n';
 
 const boardColorClass: Record<BoardName, string> = {
   [BoardName.THARSIS]: 'game-config board-tharsis map',
-  [BoardName.HELLAS]: 'game-config board-hellas map',
-  [BoardName.ELYSIUM]: 'game-config board-elysium map',
-  [BoardName.UTOPIA_PLANITIA]: 'game-config board-utopia-planitia map',
-  [BoardName.VASTITAS_BOREALIS_NOVA]: 'game-config board-vastitas_borealis_nova map',
-  [BoardName.ARABIA_TERRA]: 'game-config board-arabia_terra map',
-  [BoardName.VASTITAS_BOREALIS]: 'game-config board-vastitas_borealis map',
-  [BoardName.HOLLANDIA]: 'game-config board-hollandia map',
 };
 
 export default defineComponent({

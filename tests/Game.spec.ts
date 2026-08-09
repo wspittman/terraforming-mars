@@ -659,7 +659,7 @@ describe('Game', () => {
     const player = TestPlayer.BLUE.newPlayer();
     const player2 = TestPlayer.RED.newPlayer();
     const gameOptions = {
-      boardName: BoardName.HELLAS,
+      boardName: BoardName.THARSIS,
       randomMA: RandomMAOptionType.UNLIMITED,
     };
     const game = Game.newInstance(

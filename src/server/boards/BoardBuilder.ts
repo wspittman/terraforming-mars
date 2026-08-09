@@ -38,12 +38,6 @@ export class BoardBuilder {
     return this;
   }
 
-  cove(...bonus: Array<SpaceBonus>): this {
-    this.spaceTypes.push(SpaceType.COVE);
-    this.bonuses.push(bonus);
-    return this;
-  }
-
   land(...bonus: Array<SpaceBonus>): this {
     this.spaceTypes.push(SpaceType.LAND);
     this.bonuses.push(bonus);
@@ -60,18 +54,6 @@ export class BoardBuilder {
   lastSpaceIsVolcanic(): this {
     this.volcanicSpaces.push(this.spaceTypes.length - 1);
     return this;
-  }
-
-  restricted(): this {
-    this.spaceTypes.push(SpaceType.RESTRICTED);
-    this.bonuses.push([]);
-    return this;
-  }
-
-  deflectionZone(...bonus: Array<SpaceBonus>): this {
-    this.spaceTypes.push(SpaceType.DEFLECTION_ZONE);
-    this.bonuses.push(bonus);
-    return this.doNotShuffleLastSpace();
   }
 
   doNotShuffleLastSpace(): this {

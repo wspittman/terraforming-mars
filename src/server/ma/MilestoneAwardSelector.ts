@@ -3,7 +3,6 @@ import { AwardName, awardNames } from '../../common/ma/AwardName';
 import { MilestoneName, milestoneNames } from '../../common/ma/MilestoneName';
 import { RandomMAOptionType } from '../../common/ma/RandomMAOptionType';
 import { UnseededRandom } from '../../common/utils/Random';
-import { intersection } from '../../common/utils/utils';
 import { awardManifest } from '../awards/Awards';
 import { GameOptions } from '../game/GameOptions';
 import { milestoneManifest } from '../milestones/Milestones';
@@ -74,27 +73,10 @@ export function chooseMilestonesAndAwards(
 
   switch (gameOptions.randomMA) {
   case RandomMAOptionType.NONE:
-    const boardName = gameOptions.boardName;
-    switch (gameOptions.boardName) {
-    case BoardName.THARSIS:
-    case BoardName.HELLAS:
-    case BoardName.ELYSIUM:
-    case BoardName.UTOPIA_PLANITIA:
-    case BoardName.ARABIA_TERRA:
-    case BoardName.VASTITAS_BOREALIS:
-    case BoardName.VASTITAS_BOREALIS_NOVA:
-      push(
-        milestoneManifest.boards[boardName],
-        awardManifest.boards[gameOptions.boardName],
-      );
-      break;
-    default:
-      return getRandomMilestonesAndAwards(
-        gameOptions,
-        requiredQty,
-        LIMITED_SYNERGY,
-      );
-    }
+    push(
+      milestoneManifest.boards[gameOptions.boardName],
+      awardManifest.boards[gameOptions.boardName],
+    );
     break;
 
   case RandomMAOptionType.LIMITED:
@@ -150,14 +132,8 @@ export function getCandidates(
         manifest.boards[boardName].includes(name),
       );
 
-      // Always include the milestones and awards from the official boards
-      if (
-        intersection(boards, [
-          BoardName.THARSIS,
-          BoardName.ELYSIUM,
-          BoardName.HELLAS,
-        ]).length > 0
-      ) {
+      // Always include milestones and awards from Tharsis.
+      if (boards.includes(BoardName.THARSIS)) {
         return true;
       }
       // Conditionally include milestones and awards from unofficial boards.

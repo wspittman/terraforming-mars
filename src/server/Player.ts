@@ -161,7 +161,6 @@ export class Player implements IPlayer {
   // It's almost always 2, but certain cards can change this value (Mars Maths, Tool with the First Order)
   public availableActionsThisRound = 2;
 
-  public withinDeflectionZone = false;
 
   // Stats
   public actionsTakenThisGame: number = 0;
@@ -351,7 +350,6 @@ export class Player implements IPlayer {
 
   public plantsAreProtected(): boolean {
     return (
-      this.withinDeflectionZone ||
       this.playedCards.has(CardName.PROTECTED_HABITATS) ||
       this.playedCards.has(CardName.ASTEROID_DEFLECTION_SYSTEM)
     );

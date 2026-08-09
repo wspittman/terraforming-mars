@@ -17,12 +17,7 @@ export class Landshaper extends BaseMilestone {
     const marsCount = marsSpaces.filter(Board.ownedBy(player))
       .filter(isSpecialTileSpace).length;
 
-    const moonSpaces = player.game.moonData?.moon.spaces ?? [];
-    const moonCount = moonSpaces
-      .filter(Board.ownedBy(player))
-      .filter(isSpecialTileSpace)
-      .length;
-    if ((marsCount + moonCount) > 0) {
+    if (marsCount > 0) {
       score+=1;
     }
 

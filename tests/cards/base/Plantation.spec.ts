@@ -1,11 +1,11 @@
-import {SelectSpace} from '../../../src/server/inputs/SelectSpace';
-import {expect} from 'chai';
-import {runAllActions, setOxygenLevel, testRedsCosts} from '../../TestingUtils';
-import {Plantation} from '../../../src/server/cards/base/Plantation';
-import {IGame} from '../../../src/server/IGame';
-import {TestPlayer} from '../../TestPlayer';
-import {testGame} from '../../TestGame';
-import {cast} from '../../../src/common/utils/utils';
+import { expect } from 'chai';
+import { cast } from '../../../src/common/utils/utils';
+import { Plantation } from '../../../src/server/cards/base/Plantation';
+import { IGame } from '../../../src/server/IGame';
+import { SelectSpace } from '../../../src/server/inputs/SelectSpace';
+import { testGame } from '../../TestGame';
+import { runAllActions } from '../../TestingUtils';
+import { TestPlayer } from '../../TestPlayer';
 
 describe('Plantation', () => {
   let card: Plantation;
@@ -31,22 +31,4 @@ describe('Plantation', () => {
     action.cb(action.spaces[0]);
     expect(game.getOxygenLevel()).to.eq(1);
   });
-
-  const redsRuns = [
-    {oxygen: 12, expected: 3},
-    {oxygen: 13, expected: 3},
-    {oxygen: 14, expected: 0},
-  ] as const;
-
-  for (const run of redsRuns) {
-    it('Works with reds ' + JSON.stringify(run), () => {
-      const [game, player/* , player2 */] = testGame(2, {turmoilExtension: true});
-
-      // Card requirement
-      player.tagsForTest = {science: 2};
-
-      setOxygenLevel(game, run.oxygen);
-      testRedsCosts(() => player.canPlay(card), player, card.cost, run.expected);
-    });
-  }
 });

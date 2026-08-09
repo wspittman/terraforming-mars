@@ -4,17 +4,11 @@ import {CardName} from '../../common/cards/CardName';
 import {ICard} from '../cards/ICard';
 import {IAward} from '../awards/IAward';
 import {IMilestone} from '../milestones/IMilestone';
-import {IParty} from '../turmoil/parties/IParty';
 import {TileType} from '../../common/TileType';
 import {SpaceBonus} from '../../common/boards/SpaceBonus';
-import {IGlobalEvent} from '../turmoil/globalEvents/IGlobalEvent';
-import {GlobalEventName} from '../../common/turmoil/globalEvents/GlobalEventName';
-import {PartyName} from '../../common/turmoil/PartyName';
-import {IColony} from '../colonies/IColony';
 import {Message} from '../../common/logs/Message';
 import {Color} from '../../common/Color';
 import {LogMessageData, LogMessageDataAttrs} from '../../common/logs/LogMessageData';
-import {UndergroundResourceToken} from '../../common/underworld/UndergroundResourceToken';
 import {Space} from '../boards/Space';
 import {SpaceId} from '../../common/Types';
 import {toName} from '../../common/utils/utils';
@@ -89,18 +83,6 @@ export class MessageBuilder {
     return this;
   }
 
-  public colony(value: IColony): this {
-    this.message.data.push({type: LogMessageDataType.COLONY, value: value.name});
-    return this;
-  }
-  public party(value: IParty): this {
-    return this.partyName(value.name);
-  }
-
-  public partyName(value: PartyName): this {
-    this.message.data.push({type: LogMessageDataType.PARTY, value});
-    return this;
-  }
 
   public tileType(value: TileType): this {
     this.message.data.push({type: LogMessageDataType.TILE_TYPE, value: value});
@@ -112,19 +94,6 @@ export class MessageBuilder {
     return this;
   }
 
-  public globalEvent(value: IGlobalEvent): this {
-    return this.globalEventName(value.name);
-  }
-
-  public globalEventName(value: GlobalEventName): this {
-    this.message.data.push({type: LogMessageDataType.GLOBAL_EVENT, value: value});
-    return this;
-  }
-
-  public undergroundToken(value: UndergroundResourceToken): this {
-    this.message.data.push({type: LogMessageDataType.UNDERGROUND_TOKEN, value: value});
-    return this;
-  }
 
   public space(value: Space): this {
     this.message.data.push({type: LogMessageDataType.SPACE, value: value.id});

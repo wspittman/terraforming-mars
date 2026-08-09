@@ -24,29 +24,24 @@ import SelectInitialCards from '@/client/components/SelectInitialCards.vue';
 import SelectOption from '@/client/components/SelectOption.vue';
 import SelectPlayer from '@/client/components/SelectPlayer.vue';
 import SelectSpace from '@/client/components/SelectSpace.vue';
-import SelectDelegate from '@/client/components/SelectDelegate.vue';
-import SelectParty from '@/client/components/SelectParty.vue';
-import SelectColony from '@/client/components/SelectColony.vue';
 import SelectProductionToLose from '@/client/components/SelectProductionToLose.vue';
-import ShiftAresGlobalParameters from '@/client/components/ShiftAresGlobalParameters.vue';
-import SelectGlobalEvent from '@/client/components/SelectGlobalEvent.vue';
 import SelectResource from '@/client/components/SelectResource.vue';
 import SelectResources from '@/client/components/SelectResources.vue';
-import SelectClaimedUndergroundToken from '@/client/components/SelectClaimedUndergroundToken.vue';
-import DeltaProjectInput from '@/client/components/delta/DeltaProjectInput.vue';
 
 // Shared contract every input component must satisfy. `playerinput` and
 // `onsave` are narrowed to the discriminated variant whose `type` matches K.
-type InputComponentProps<K extends PlayerInputModel['type']> = {
+type ClientPlayerInputModel = PlayerInputModel;
+
+type InputComponentProps<K extends ClientPlayerInputModel['type']> = {
   playerView: PlayerViewModel;
-  playerinput: Extract<PlayerInputModel, {type: K}>;
+  playerinput: Extract<ClientPlayerInputModel, {type: K}>;
   onsave: (out: Extract<InputResponse, {type: K}>) => void;
   showsave: boolean;
   showtitle?: boolean;
 };
 
 type InputComponentRegistry = {
-  [K in PlayerInputModel['type']]: Component<InputComponentProps<K>>;
+  [K in ClientPlayerInputModel['type']]: Component<InputComponentProps<K>>;
 };
 
 // `satisfies` makes the type checker verify that every registered component
@@ -57,22 +52,15 @@ const inputComponents = {
   'or': OrOptions,
   'amount': SelectAmount,
   'card': SelectCard,
-  'colony': SelectColony,
-  'delegate': SelectDelegate,
-  'globalEvent': SelectGlobalEvent,
   'initialCards': SelectInitialCards,
   'option': SelectOption,
-  'party': SelectParty,
   'payment': SelectPayment,
   'player': SelectPlayer,
   'projectCard': SelectProjectCardToPlay,
   'space': SelectSpace,
   'productionToLose': SelectProductionToLose,
-  'aresGlobalParameters': ShiftAresGlobalParameters,
   'resource': SelectResource,
   'resources': SelectResources,
-  'claimedUndergroundToken': SelectClaimedUndergroundToken,
-  'deltaProject': DeltaProjectInput,
 } satisfies InputComponentRegistry;
 
 export default defineComponent({
@@ -83,7 +71,7 @@ export default defineComponent({
       required: true,
     },
     playerinput: {
-      type: Object as () => PlayerInputModel,
+      type: Object as () => ClientPlayerInputModel,
       required: true,
     },
     onsave: {

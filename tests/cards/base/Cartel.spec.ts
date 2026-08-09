@@ -1,10 +1,8 @@
-import {expect} from 'chai';
-import {Cartel} from '../../../src/server/cards/base/Cartel';
-import {ImportedHydrogen} from '../../../src/server/cards/base/ImportedHydrogen';
-import {InterstellarColonyShip} from '../../../src/server/cards/base/InterstellarColonyShip';
-import {LunarBeam} from '../../../src/server/cards/base/LunarBeam';
-import {TestPlayer} from '../../TestPlayer';
-import {testGame} from '../../TestGame';
+import { expect } from 'chai';
+import { Cartel } from '../../../src/server/cards/base/Cartel';
+import { LunarBeam } from '../../../src/server/cards/base/LunarBeam';
+import { testGame } from '../../TestGame';
+import { TestPlayer } from '../../TestPlayer';
 
 describe('Cartel', () => {
   let card: Cartel;
@@ -23,17 +21,5 @@ describe('Cartel', () => {
 
     card.play(player);
     expect(player.production.megacredits).to.eq(3);
-  });
-
-  it('Correctly counts tags', () => {
-    const cards = [
-      new ImportedHydrogen(), // event with earth tag
-      new InterstellarColonyShip(), // event with earth tag
-      new LunarBeam(), // green card with earth tag
-    ];
-
-    player.playedCards.push(...cards);
-    card.play(player);
-    expect(player.production.megacredits).to.eq(2); // events are excluded
   });
 });

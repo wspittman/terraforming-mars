@@ -301,9 +301,7 @@ export class Tags {
       if (this.count(tag, 'raw') > 0) {
         distinctCount++;
       } else if (tag === Tag.SCIENCE) {
-        if (this.player.hasTurmoilScienceTagBonus) {
-          distinctCount++;
-        } else if (this.player.tableau.has(CardName.HABITAT_MARTE)) {
+        if (this.player.tableau.has(CardName.HABITAT_MARTE)) {
           if (this.count(Tag.MARS, 'raw') > 0) {
             distinctCount++;
           }

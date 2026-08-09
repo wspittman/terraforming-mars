@@ -14,12 +14,6 @@ export class LandSpecialist extends BaseMilestone {
     const marsCount = marsSpaces.filter(Board.ownedBy(player))
       .filter(isSpecialTileSpace).length;
 
-    const moonSpaces = player.game.moonData?.moon.spaces ?? [];
-    const moonCount = moonSpaces
-      .filter(Board.ownedBy(player))
-      .filter(isSpecialTileSpace)
-      .length;
-
-    return marsCount + moonCount;
+    return marsCount;
   }
 }

@@ -1,13 +1,11 @@
 import {SerializedDeck} from './SerializedDeck';
-import {cardsFromJSON, ceosFromJSON, corporationCardsFromJSON, preludesFromJSON} from '../createCard';
+import {cardsFromJSON, corporationCardsFromJSON} from '../createCard';
 import {CardName} from '../../common/cards/CardName';
 import {Random} from '../../common/utils/Random';
 import {ICorporationCard} from './corporation/ICorporationCard';
 import {IProjectCard} from './IProjectCard';
 import {inplaceShuffle} from '../utils/shuffle';
 import {Logger} from '../logs/Logger';
-import {IPreludeCard} from './prelude/IPreludeCard';
-import {ICeoCard} from './ceos/ICeoCard';
 import {toName} from '../../common/utils/utils';
 import {Named} from '@/common/Types';
 
@@ -176,39 +174,5 @@ export class ProjectDeck extends Deck<IProjectCard> {
     const deck = cardsFromJSON(d.drawPile);
     const discarded = cardsFromJSON(d.discardPile);
     return new ProjectDeck(deck, discarded, random);
-  }
-}
-
-const INCOMPATIBLE_PRELUDES = [CardName.BY_ELECTION, CardName.THE_NEW_SPACE_RACE] as const;
-export class PreludeDeck extends Deck<IPreludeCard> {
-  public constructor(deck: Array<IPreludeCard>, discarded: Array<IPreludeCard>, random: Random) {
-    const copy = [...deck];
-    const indexes = INCOMPATIBLE_PRELUDES.map((name) => deck.findIndex((c) => c.name === name));
-    if (indexes[0] >= 0 && indexes[1] >= 0) {
-      // Remove one from the game, randomly
-      const target = random.nextInt(2);
-      const indexToRemove = indexes[target];
-      copy.splice(indexToRemove, 1);
-    }
-
-    super('prelude', copy, discarded, random);
-  }
-
-  public static deserialize(d: SerializedDeck, random: Random): Deck<IPreludeCard> {
-    const deck = preludesFromJSON(d.drawPile);
-    const discarded = preludesFromJSON(d.discardPile);
-    return new PreludeDeck(deck, discarded, random);
-  }
-}
-
-export class CeoDeck extends Deck<ICeoCard> {
-  public constructor(deck: Array<ICeoCard>, discarded: Array<ICeoCard>, random: Random) {
-    super('ceo', deck, discarded, random);
-  }
-
-  public static deserialize(d: SerializedDeck, random: Random): Deck<ICeoCard> {
-    const deck = ceosFromJSON(d.drawPile);
-    const discarded = ceosFromJSON(d.discardPile);
-    return new CeoDeck(deck, discarded, random);
   }
 }

@@ -7,12 +7,8 @@ import {GameModel} from './GameModel';
 import {PlayerId, ParticipantId} from '../Types';
 import {CardName} from '../cards/CardName';
 import {Resource} from '../Resource';
-import {PartyName} from '../turmoil/PartyName';
-import {Agenda} from '../turmoil/Types';
 import {Tag} from '../cards/Tag';
-import {UnderworldPlayerData} from '../underworld/UnderworldPlayerData';
 import {GlobalParameter} from '../GlobalParameter';
-import {DeltaProjectPlayerModel} from './DeltaProjectPlayerModel';
 
 export interface ViewModel {
   game: GameModel;
@@ -21,11 +17,6 @@ export interface ViewModel {
   thisPlayer: PublicPlayerModel | undefined;
   runId: string;
 }
-
-type AlliedPartyModel = {
-  partyName: PartyName;
-  agenda: Agenda;
-};
 
 // 'off': Resources (or production) are unprotected.
 // 'on': Resources (or production) are protected.
@@ -37,23 +28,17 @@ export type PublicPlayerModel = {
   actionsTakenThisRound: number;
   actionsThisGeneration: ReadonlyArray<CardName>;
   actionsTakenThisGame: number;
-  alliedParty?: AlliedPartyModel;
   availableBlueCardActionCount: number;
   cardCost: number;
-  cardDiscount: number;
   cardsInHandNbr: number;
   citiesCount: number;
-  coloniesCount: number;
   color: Color;
-  deltaProject?: DeltaProjectPlayerModel;
   energy: number;
   energyProduction: number;
-  fleetSize: number;
   handicap: number | undefined;
   heat: number;
   heatProduction: number;
   id: PlayerId | undefined;
-  influence: number;
   isActive: boolean;
   lastCardPlayed?: CardName;
   megacredits: number;
@@ -77,8 +62,6 @@ export type PublicPlayerModel = {
   titanium: number;
   titaniumProduction: number;
   titaniumValue: number;
-  tradesThisGeneration: number;
-  underworldData: UnderworldPlayerData,
   victoryPointsBreakdown: VictoryPointsBreakdown;
   victoryPointsByGeneration: ReadonlyArray<number>;
   globalParameterSteps: Partial<Record<GlobalParameter, number>>;
@@ -89,14 +72,10 @@ export interface PlayerViewModel extends ViewModel {
   autopass: boolean;
   cardsInHand: ReadonlyArray<CardModel>;
   dealtCorporationCards: ReadonlyArray<CardModel>;
-  dealtPreludeCards: ReadonlyArray<CardModel>;
   dealtProjectCards: ReadonlyArray<CardModel>;
-  dealtCeoCards: ReadonlyArray<CardModel>;
   draftedCards: ReadonlyArray<CardModel>;
   id: PlayerId;
-  ceoCardsInHand: ReadonlyArray<CardModel>;
   pickedCorporationCard: ReadonlyArray<CardModel>; // Why Array?
-  preludeCardsInHand: ReadonlyArray<CardModel>;
   thisPlayer: PublicPlayerModel;
   waitingFor: PlayerInputModel | undefined;
 }

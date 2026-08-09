@@ -69,9 +69,7 @@ export class GameLogs {
         return datum.value;
 
       case LogMessageDataType.CARD:
-      case LogMessageDataType.GLOBAL_EVENT:
       case LogMessageDataType.TILE_TYPE:
-      case LogMessageDataType.COLONY:
       default:
         return datum.value.toString();
       }

@@ -28,9 +28,7 @@ function createPlayers(count: number, idSuffix: string): Array<TestPlayer> {
 /**
  * Creates a new game for testing. Has some hidden behavior for testing:
  *
- * 1. If aresExtension is true, and the aresHazards is not specifically also true, disable ares hazards.
- *    Hazard placement is non-deterministic.
- * 2. If skipInitialCardSelection is true, then the game ignores initial card selection. It's still
+ * If skipInitialCardSelection is true, then the game ignores initial card selection. It's still
  *    in an intermediate state, but the game is testable.
  *
  * Players are returned in player order, so the first player returned is the first player.
@@ -40,17 +38,12 @@ function createPlayers(count: number, idSuffix: string): Array<TestPlayer> {
 export function testGame(count: number, customOptions?: Partial<TestGameOptions>, idSuffix = ''): [IGame, ...Array<TestPlayer>] {
   const players = createPlayers(count, idSuffix);
 
-  const copy = {...customOptions};
-  if (copy.aresExtension === true && copy.aresHazards === undefined) {
-    copy.aresHazards = false;
-  }
-
   const shuffle = Deck.shuffle;
   try {
     if (customOptions?.skipInitialShuffling) {
       Deck.shuffle = () => {};
     }
-    const game = Game.newInstance(`game-id${idSuffix}`, players, players[0], `spectator-id${idSuffix}`, customOptions);
+    const game = Game.newInstance(`game-id${idSuffix}`, players, players[0], `spectator-id${idSuffix}`, customOptions, 0);
     if (customOptions?.skipInitialCardSelection !== false) {
       for (const player of players) {
       /* Removes waitingFor if it is SelectInitialCards. Used when wanting it cleared out for further testing. */

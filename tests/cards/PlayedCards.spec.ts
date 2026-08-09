@@ -1,12 +1,11 @@
-import {expect} from 'chai';
-import {PlayedCards} from '../../src/server/cards/PlayedCards';
-import {MicroMills} from '../../src/server/cards/base/MicroMills';
-import {Comet} from '../../src/server/cards/base/Comet';
-import {partialize} from '../../src/common/utils/utils';
-import {AICentral} from '../../src/server/cards/base/AICentral';
-import {Tag} from '../../src/common/cards/Tag';
-import {ColonizerTrainingCamp} from '../../src/server/cards/base/ColonizerTrainingCamp';
-import {Kickstarter} from '../../src/server/cards/pathfinders/Kickstarter';
+import { expect } from 'chai';
+import { Tag } from '../../src/common/cards/Tag';
+import { partialize } from '../../src/common/utils/utils';
+import { PlayedCards } from '../../src/server/cards/PlayedCards';
+import { AICentral } from '../../src/server/cards/base/AICentral';
+import { ColonizerTrainingCamp } from '../../src/server/cards/base/ColonizerTrainingCamp';
+import { Comet } from '../../src/server/cards/base/Comet';
+import { MicroMills } from '../../src/server/cards/base/MicroMills';
 
 describe('PlayedCards', () => {
   it('Counts events', () => {
@@ -65,28 +64,10 @@ describe('PlayedCards', () => {
     const comet = new Comet();
     playedCards.push(comet);
     expect(partialize(playedCards.tags)).deep.eq({});
-    expect(partialize(playedCards.eventTags)).deep.eq({space: 1});
+    expect(partialize(playedCards.eventTags)).deep.eq({ space: 1 });
     // Removing the event doesn't change the count.
     playedCards.remove(comet);
     expect(partialize(playedCards.tags)).deep.eq({});
     expect(partialize(playedCards.eventTags)).deep.eq({});
-  });
-
-  it('Counts tags, retag', () => {
-    const playedCards = new PlayedCards();
-    expect(partialize(playedCards.tags)).deep.eq({});
-
-    const kickstarter = new Kickstarter();
-    playedCards.push(kickstarter);
-    expect(partialize(playedCards.tags)).deep.eq({
-      [Tag.CLONE]: 1,
-    });
-
-    playedCards.retagCard(kickstarter, () => {
-      kickstarter.cloneTag = Tag.CRIME;
-    });
-    expect(partialize(playedCards.tags)).deep.eq({
-      [Tag.CRIME]: 1,
-    });
   });
 });

@@ -18,7 +18,6 @@
             </div>
           </div>
         </template>
-        <CardParty v-else-if="type === RequirementType.PARTY" :party="party" size="req" />
         <template v-else>
             <div v-for="num in repeats" :key="num" :class="componentClasses"></div>
         </template>
@@ -32,8 +31,6 @@ import {defineComponent} from 'vue';
 import {CardRequirementDescriptor, requirementType} from '@/common/cards/CardRequirementDescriptor';
 import {RequirementType} from '@/common/cards/RequirementType';
 import {range} from '@/common/utils/utils';
-import CardParty from '@/client/components/card/CardParty.vue';
-import {PartyName} from '@/common/turmoil/PartyName';
 
 export default defineComponent({
   name: 'CardRequirementComponent',
@@ -49,7 +46,6 @@ export default defineComponent({
     },
   },
   components: {
-    CardParty,
   },
   computed: {
     type(): RequirementType {
@@ -148,14 +144,6 @@ export default defineComponent({
         break;
       }
       return [];
-    },
-    party(): PartyName {
-      if (this.type === RequirementType.PARTY && this.requirement.party) {
-        return this.requirement.party;
-      } else {
-        // Doesn't matter what this value is, as it is ignored.
-        return PartyName.GREENS;
-      }
     },
     productionClass(): string {
       if (this.type === RequirementType.PRODUCTION) {

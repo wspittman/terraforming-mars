@@ -2,7 +2,6 @@ import {CardMetadata} from '../../common/cards/CardMetadata';
 import {CardName} from '../../common/cards/CardName';
 import {CardType} from '../../common/cards/CardType';
 import {CardDiscount, GlobalParameterRequirementBonus} from '../../common/cards/Types';
-import {AdjacencyBonus} from '../ares/AdjacencyBonus';
 import {CardResource} from '../../common/CardResource';
 import {Tag} from '../../common/cards/Tag';
 import {CanAffordOptions, IPlayer} from '../IPlayer';
@@ -13,7 +12,6 @@ import * as DynamicVictoryPoints from './render/DynamicVictoryPoints';
 import {CardRenderItemType} from '../../common/cards/render/CardRenderItemType';
 import {CountableVictoryPoints} from '../../common/cards/CountableVictoryPoints';
 import {IProjectCard} from './IProjectCard';
-import {MoonExpansion} from '../moon/MoonExpansion';
 import {PlayerInput} from '../PlayerInput';
 import {OneOrArray} from '../../common/utils/types';
 import {TileType} from '../../common/TileType';
@@ -43,8 +41,6 @@ const CARD_TYPES_WITHOUT_COST: ReadonlyArray<CardType> = [
 
 /* Properties that are the same internally and externally */
 type SharedProperties = {
-  /** Prefer setting adjacencyBonus inside behavior.tile instead. */
-  adjacencyBonus?: AdjacencyBonus;
   action?: Behavior | undefined;
   behavior?: Behavior | undefined;
   cardCost?: number;
@@ -149,18 +145,6 @@ export abstract class Card implements ICard {
     if (external.behavior?.tile?.type !== undefined) {
       tilesBuilt.push(external.behavior?.tile.type);
     }
-    if (external.behavior?.moon?.tile?.type !== undefined) {
-      tilesBuilt.push(external.behavior.moon.tile.type);
-    }
-    if (external.behavior?.moon?.habitatTile !== undefined) {
-      tilesBuilt.push(TileType.MOON_HABITAT);
-    }
-    if (external.behavior?.moon?.mineTile !== undefined) {
-      tilesBuilt.push(TileType.MOON_MINE);
-    }
-    if (external.behavior?.moon?.roadTile !== undefined) {
-      tilesBuilt.push(TileType.MOON_ROAD);
-    }
 
     const internal: InternalProperties = {
       ...external,
@@ -182,9 +166,6 @@ export abstract class Card implements ICard {
     this.properties = internal;
   }
 
-  public get adjacencyBonus() {
-    return this.properties.adjacencyBonus;
-  }
   public get behavior() {
     return this.properties.behavior;
   }
@@ -263,7 +244,7 @@ export abstract class Card implements ICard {
   }
 
   public play(player: IPlayer): PlayerInput | undefined {
-    player.stock.deductUnits(MoonExpansion.adjustedReserveCosts(player, this));
+    player.stock.deductUnits(this.reserveUnits ?? Units.EMPTY);
     if (this.behavior !== undefined) {
       const executor = getBehaviorExecutor();
       executor.execute(this.behavior, player, this);
@@ -384,13 +365,6 @@ export abstract class Card implements ICard {
       properties.metadata.victoryPoints = DynamicVictoryPoints.cities(each, per, vps.all);
     } else if (vps.colonies !== undefined) {
       properties.metadata.victoryPoints = DynamicVictoryPoints.colonies(each, per, vps.all);
-    } else if (vps.moon !== undefined) {
-      if (vps.moon.road !== undefined) {
-        // vps.per is ignored
-        properties.metadata.victoryPoints = DynamicVictoryPoints.moonRoadTile(each, vps.all);
-      } else {
-        throw new Error('moon defined, but no valid sub-object defined');
-      }
     } else {
       throw new Error('Unknown VPs defined');
     }
@@ -400,18 +374,6 @@ export abstract class Card implements ICard {
     if (properties.tilesBuilt !== undefined) {
       if (properties.behavior?.tile?.type !== undefined) {
         throw new Error('tilesBuilt and behavior.tile.tileType both defined: ' + properties.name);
-      }
-      if (properties.behavior?.moon?.tile?.type !== undefined) {
-        throw new Error('tilesBuilt and behavior.moon.tile.tileType both defined: ' + properties.name);
-      }
-      if (properties.behavior?.moon?.habitatTile !== undefined) {
-        throw new Error('tilesBuilt and behavior.moon.habitatTile both defined: ' + properties.name);
-      }
-      if (properties.behavior?.moon?.mineTile !== undefined) {
-        throw new Error('tilesBuilt and behavior.moon.mineTile both defined: ' + properties.name);
-      }
-      if (properties.behavior?.moon?.roadTile !== undefined) {
-        throw new Error('tilesBuilt and behavior.moon.roadTile both defined: ' + properties.name);
       }
     }
   }
@@ -473,22 +435,11 @@ function populateCount(requirement: CardRequirementDescriptor): CardRequirementD
     requirement.oceans ??
     requirement.oxygen ??
     requirement.temperature ??
-    requirement.venus ??
     requirement.tr ??
     requirement.resourceTypes ??
     requirement.greeneries ??
     requirement.cities ??
-    requirement.colonies ??
-    requirement.floaters ??
-    requirement.partyLeader ??
-    requirement.habitatRate ??
-    requirement.miningRate ??
-    requirement.logisticRate ??
-    requirement.habitatTiles ??
-    requirement.miningTiles ??
-    requirement.roadTiles ??
-    requirement.corruption ??
-    requirement.undergroundTokens;
+    requirement.floaters;
 
   return requirement;
 }
@@ -507,9 +458,6 @@ export function validateBehavior(behavior: Behavior | undefined, name: CardName)
     if (spend.megacredits) {
       validate(behavior.tr === undefined, 'spend.megacredits is not yet compatible with tr');
       validate(behavior.global === undefined, 'spend.megacredits is not yet compatible with global');
-      validate(behavior.moon?.habitatRate === undefined, 'spend.megacredits is not yet compatible with moon.habitatRate');
-      validate(behavior.moon?.logisticRate === undefined, 'spend.megacredits is not yet compatible with moon.logisticRate');
-      validate(behavior.moon?.miningRate === undefined, 'spend.megacredits is not yet compatible with moon.miningRate');
     }
     // Don't spend heat with other types yet. It's probably not compatible. Check carefully.
     if (spend.heat) {

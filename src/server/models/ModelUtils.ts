@@ -1,13 +1,8 @@
 import {CardModel} from '../../common/models/CardModel';
-import {ColonyModel} from '../../common/models/ColonyModel';
-import {Color} from '../../common/Color';
-import {IGame} from '../IGame';
 import {ICard} from '../cards/ICard';
 import {isIProjectCard} from '../cards/IProjectCard';
-import {isICloneTagCard} from '../cards/pathfinders/ICloneTagCard';
 import {IPlayer} from '../IPlayer';
 import {PlayCardMetadata} from '../inputs/SelectCardToPlay';
-import {IColony} from '../colonies/IColony';
 import {CardName} from '../../common/cards/CardName';
 import {Tag} from '../../common/cards/Tag';
 import {asArray} from '../../common/utils/utils';
@@ -49,7 +44,6 @@ export function cardsToModel(
       calculatedCost,
       bonusResource: isIProjectCard(card) ? card.bonusResource : undefined,
       discount: discount,
-      cloneTag: isICloneTagCard(card) ? card.cloneTag : undefined,
     };
     if (isIStandardProjectCard(card)) {
       model.standardProjectCanPayWith = card.canPayWith(player);
@@ -84,19 +78,3 @@ export function cardsToModel(
 /**
  * No need for both isActive and showTitleOnly.
  */
-export function coloniesToModel(game: IGame, colonies: Array<IColony>, showTileOnly: boolean, isActive: boolean = true) : Array<ColonyModel> {
-  return colonies.map(
-    (colony): ColonyModel => ({
-      colonies: colony.colonies.map(
-        (playerId): Color => game.getPlayerById(playerId).color,
-      ),
-      isActive: isActive && colony.isActive && showTileOnly === false,
-      name: colony.name,
-      trackPosition: colony.trackPosition,
-      visitor:
-        colony.visitor === undefined ?
-          undefined :
-          game.getPlayerById(colony.visitor).color,
-    }),
-  );
-}

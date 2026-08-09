@@ -39,6 +39,5 @@ describe('CommercialDistrict', () => {
     adjacent[0].tile = {tileType: TileType.CITY, card: card.name};
     adjacent[0].player = player;
     expect(card.getVictoryPoints(player)).to.eq(1);
-    expect(action.spaces[0].adjacency?.bonus).eq(undefined);
   });
 });

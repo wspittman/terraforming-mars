@@ -1,10 +1,9 @@
-import {expect} from 'chai';
-import {testGame} from '../../TestGame';
-import {Birds} from '../../../src/server/cards/base/Birds';
-import {EarthOffice} from '../../../src/server/cards/base/EarthOffice';
-import {LunaGovernor} from '../../../src/server/cards/colonies/LunaGovernor';
-import {TestPlayer} from '../../TestPlayer';
-import {cast} from '@/common/utils/utils';
+import { cast } from '@/common/utils/utils';
+import { expect } from 'chai';
+import { Birds } from '../../../src/server/cards/base/Birds';
+import { EarthOffice } from '../../../src/server/cards/base/EarthOffice';
+import { testGame } from '../../TestGame';
+import { TestPlayer } from '../../TestPlayer';
 
 describe('EarthOffice', () => {
   let card: EarthOffice;
@@ -12,7 +11,7 @@ describe('EarthOffice', () => {
 
   beforeEach(() => {
     card = new EarthOffice();
-    [/* game */, player] = testGame(2);
+    [, /* game */ player] = testGame(2);
 
     cast(card.play(player), undefined);
   });
@@ -21,9 +20,4 @@ describe('EarthOffice', () => {
     expect(card.getCardDiscount(player, card)).to.eq(3);
     expect(card.getCardDiscount(player, new Birds())).to.eq(0);
   });
-
-  it('Discounts Luna Governor correctly', () => {
-    expect(card.getCardDiscount(player, new LunaGovernor())).to.eq(6);
-  });
 });
-

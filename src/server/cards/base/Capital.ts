@@ -4,7 +4,6 @@ import {Card} from '../Card';
 import {CardType} from '../../../common/cards/CardType';
 import {TileType} from '../../../common/TileType';
 import {CardName} from '../../../common/cards/CardName';
-import {AdjacencyBonus} from '../../ares/AdjacencyBonus';
 import {CardMetadata} from '../../../common/cards/CardMetadata';
 import {CardRenderer} from '../render/CardRenderer';
 import {oceans} from '../render/DynamicVictoryPoints';
@@ -12,7 +11,6 @@ import {oceans} from '../render/DynamicVictoryPoints';
 export class Capital extends Card implements IProjectCard {
   constructor(
     name = CardName.CAPITAL,
-    adjacencyBonus: AdjacencyBonus | undefined = undefined,
     metadata: CardMetadata = {
       cardNumber: '008',
       description: {
@@ -41,7 +39,6 @@ export class Capital extends Card implements IProjectCard {
           type: TileType.CAPITAL,
           on: 'city',
           title: 'Select space for special city tile',
-          adjacencyBonus: adjacencyBonus,
         },
       },
 

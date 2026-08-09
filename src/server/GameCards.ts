@@ -1,29 +1,13 @@
-import {COLONIES_CARD_MANIFEST} from './cards/colonies/ColoniesCardManifest';
-import {PRELUDE_CARD_MANIFEST} from './cards/prelude/PreludeCardManifest';
-import {PROMO_CARD_MANIFEST} from './cards/promo/PromoCardManifest';
 import {BASE_CARD_MANIFEST, CORP_ERA_CARD_MANIFEST} from './cards/StandardCardManifests';
-import {TURMOIL_CARD_MANIFEST} from './cards/turmoil/TurmoilCardManifest';
-import {VENUS_CARD_MANIFEST} from './cards/venusNext/VenusCardManifest';
-import {COMMUNITY_CARD_MANIFEST} from './cards/community/CommunityCardManifest';
-import {ARES_CARD_MANIFEST} from './cards/ares/AresCardManifest';
-import {MOON_CARD_MANIFEST} from './cards/moon/MoonCardManifest';
-import {PATHFINDERS_CARD_MANIFEST} from './cards/pathfinders/PathfindersCardManifest';
-import {CEO_CARD_MANIFEST} from './cards/ceos/CeoCardManifest';
 import {CardManifest, ModuleManifest} from './cards/ModuleManifest';
 import {CardName} from '../common/cards/CardName';
 import {ICard} from './cards/ICard';
-import {isCompatibleWith} from './cards/CardFactorySpec';
 import {GameOptions} from './game/GameOptions';
 import {ICorporationCard} from './cards/corporation/ICorporationCard';
 import {isIProjectCard, IProjectCard} from './cards/IProjectCard';
 import {IStandardProjectCard} from './cards/IStandardProjectCard';
 import {newCard} from './createCard';
 import {resolveCardName} from '../common/cards/CardRenames';
-import {IPreludeCard} from './cards/prelude/IPreludeCard';
-import {ICeoCard} from './cards/ceos/ICeoCard';
-import {PRELUDE2_CARD_MANIFEST} from './cards/prelude2/Prelude2CardManifest';
-import {STAR_WARS_CARD_MANIFEST} from './cards/starwars/StarwarsCardManifest';
-import {UNDERWORLD_CARD_MANIFEST} from './cards/underworld/UnderworldCardManifest';
 
 /**
  * Returns the cards available to a game based on its `GameOptions`.
@@ -45,33 +29,15 @@ export class GameCards {
   public constructor(gameOptions: GameOptions) {
     this.gameOptions = gameOptions;
 
-    const manifests: Array<[boolean, ModuleManifest]> = [
-      [true, BASE_CARD_MANIFEST],
-      [gameOptions.corporateEra, CORP_ERA_CARD_MANIFEST],
-      [gameOptions.preludeExtension, PRELUDE_CARD_MANIFEST],
-      [gameOptions.prelude2Expansion, PRELUDE2_CARD_MANIFEST],
-      [gameOptions.venusNextExtension, VENUS_CARD_MANIFEST],
-      [gameOptions.coloniesExtension, COLONIES_CARD_MANIFEST],
-      [gameOptions.turmoilExtension, TURMOIL_CARD_MANIFEST],
-      [gameOptions.aresExtension, ARES_CARD_MANIFEST],
-      [gameOptions.promoCardsOption, PROMO_CARD_MANIFEST],
-      [gameOptions.communityCardsOption, COMMUNITY_CARD_MANIFEST],
-      [gameOptions.moonExpansion, MOON_CARD_MANIFEST],
-      [gameOptions.pathfindersExpansion, PATHFINDERS_CARD_MANIFEST],
-      [gameOptions.ceoExtension, CEO_CARD_MANIFEST],
-      [gameOptions.starWarsExpansion, STAR_WARS_CARD_MANIFEST],
-      [gameOptions.underworldExpansion, UNDERWORLD_CARD_MANIFEST],
-    ];
-
-    this.moduleManifests = manifests
-      .filter(([option, _manifest]) => option === true)
-      .map(([_option, manifest]) => manifest);
+    this.moduleManifests = [BASE_CARD_MANIFEST];
+    if (gameOptions.corporateEra) {
+      this.moduleManifests.push(CORP_ERA_CARD_MANIFEST);
+    }
   }
 
   private instantiate<T extends ICard>(manifest: CardManifest<T>): Array<T> {
     return CardManifest.values(manifest)
       .filter((factory) => factory.instantiate !== false)
-      .filter((factory) => isCompatibleWith(factory, this.gameOptions))
       .map((factory) => new factory.Factory());
   }
 
@@ -89,30 +55,6 @@ export class GameCards {
     this.addCustomCards(cards, this.gameOptions.customCorporationsList);
     return cards;
   }
-  public getPreludeCards() {
-    let preludes = this.getCards<IPreludeCard>('preludeCards');
-    // https://github.com/terraforming-mars/terraforming-mars/issues/2833
-    // Make Valley Trust playable even when Preludes is out of the game
-    // by preparing a deck of preludes.
-    if (preludes.length === 0) {
-      preludes = this.instantiate(PRELUDE_CARD_MANIFEST.preludeCards);
-    }
-    this.addCustomCards(preludes, this.gameOptions.customPreludes);
-
-    if (this.gameOptions.twoCorpsVariant) {
-      // As each player who doesn't have Merger is dealt Merger in SelectInitialCards.ts,
-      // remove it from the deck to avoid possible conflicts (e.g. Valley Trust / New Partner)
-      preludes = preludes.filter((c) => c.name !== CardName.MERGER);
-    }
-    return preludes;
-  }
-
-  public getCeoCards() {
-    const ceos = this.getCards<ICeoCard>('ceoCards');
-    this.addCustomCards(ceos, this.gameOptions.customCeos);
-    return ceos;
-  }
-
   /**
    * Instantiate every card in `customList` and add them to `cards` (except those that already exist in `cards`),
    */

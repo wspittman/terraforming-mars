@@ -3,48 +3,31 @@ import {CardName} from '../common/cards/CardName';
 import {Color} from '../common/Color';
 import {SerializedCard} from './SerializedCard';
 import {SerializedTimer} from '../common/SerializedTimer';
-import {AlliedParty} from '../common/turmoil/Types';
 import {GlobalParameter} from '../common/GlobalParameter';
 import {DiscordId} from './server/auth/discord';
-import {UnderworldPlayerData} from '../common/underworld/UnderworldPlayerData';
-import {DeltaProjectPlayerModel} from '../common/models/DeltaProjectPlayerModel';
 
-interface DeprecatedFields {
-}
-
-export interface SerializedPlayer extends DeprecatedFields{
+export interface SerializedPlayer {
   actionsTakenThisGame: number;
   actionsTakenThisRound: number;
   availableActionsThisRound?: number;
   actionsThisGeneration: Array<CardName>;
-  alliedParty: AlliedParty | undefined;
   autoPass: boolean;
   beginner: boolean;
   canUseHeatAsMegaCredits: boolean;
   canUseTitaniumAsMegacredits: boolean;
   canUsePlantsAsMegaCredits: boolean;
   cardCost: number;
-  cardDiscount: number;
   cardsInHand: Array<CardName>;
-  ceoCardsInHand: Array<CardName>;
-  colonyTradeDiscount: number;
-  colonyTradeOffset: number;
-  colonyVictoryPoints: number;
   color: Color;
   dealtCorporationCards: Array<CardName>;
-  dealtCeoCards: Array<CardName>;
-  dealtPreludeCards: Array<CardName>;
   dealtProjectCards: Array<CardName>;
-  deltaProject?: DeltaProjectPlayerModel;
   draftedCards: Array<CardName>;
   draftHand: Array<CardName>,
   energy: number;
   energyProduction: number;
-  fleetSize: number;
-  globalParameterSteps: Record<GlobalParameter, number>;
+  globalParameterSteps: Partial<Record<GlobalParameter, number>>;
   handicap: number;
   hasIncreasedTerraformRatingThisGeneration: boolean;
-  hasTurmoilScienceTagBonus: boolean;
   heat: number;
   heatProduction: number;
   id: PlayerId;
@@ -62,8 +45,6 @@ export interface SerializedPlayer extends DeprecatedFields{
   plantsNeededForGreenery: number;
   plantTagCount: number;
   playedCards: Array<SerializedCard>;
-  politicalAgendasActionUsedCount: number;
-  preludeCardsInHand: Array<CardName>;
   preservationProgram: boolean;
   removedFromPlayCards: Array<CardName>;
   removingPlayers: Array<PlayerId>;
@@ -77,12 +58,6 @@ export interface SerializedPlayer extends DeprecatedFields{
   titanium: number;
   titaniumProduction: number;
   titaniumValue: number;
-  totalDelegatesPlaced: number;
-  tradesThisGeneration: number;
-  turmoilPolicyActionUsed: boolean;
-  underworldData: UnderworldPlayerData;
   victoryPointsByGeneration: Array<number>;
   user?: DiscordId;
-  warmongerCards: number;
-  withinDeflectionZone: boolean;
 }

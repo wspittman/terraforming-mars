@@ -67,7 +67,7 @@ The `@/` import alias maps to `./src/` (configured in tsconfig paths and webpack
 
 ### Card System
 
-Cards are the core domain object (~1000 cards across 15 modules). Each card involves:
+Cards are the core domain object. This fork retains only Base and Corporate Era cards. Each card involves:
 
 1. **Card class** (`src/server/cards/<module>/CardName.ts`) - Extends `Card`, defines cost, tags, requirements, behavior, and metadata. Simple cards are purely declarative via the `behavior` property. Complex cards override `play()`, `action()`, `canAct()`, etc.
 2. **CardName enum entry** (`src/common/cards/CardName.ts`) - Every card needs an enum value here.
@@ -75,7 +75,7 @@ Cards are the core domain object (~1000 cards across 15 modules). Each card invo
 4. **Card renderer** - Defined inline in the card's `metadata.renderData` using the `CardRenderer.builder()` DSL.
 5. **Test** (`tests/cards/<module>/CardName.spec.ts`) - Uses `testGame()` and `TestPlayer` helpers.
 
-Card types: `EVENT`, `ACTIVE` (has action), `AUTOMATED`, `PRELUDE`, `CORPORATION`, `CEO`, `STANDARD_PROJECT`, `STANDARD_ACTION`.
+Retained card types are `EVENT`, `ACTIVE` (has action), `AUTOMATED`, `CORPORATION`, `STANDARD_PROJECT`, and `STANDARD_ACTION`.
 
 See the wiki's [Adding New Cards](https://github.com/terraforming-mars/terraforming-mars/wiki/Adding-New-Cards) page for practical advice (finding a similar existing card as a template, testing at `/cards` locally) and special-case mechanics (Robotic Workforce, Celestic, resource storage/VP interactions).
 
@@ -91,12 +91,9 @@ Player choices and multi-step effects use `DeferredAction` (`src/server/deferred
 
 When a player needs to make a choice, the server returns a `PlayerInput` (e.g., `SelectSpace`, `SelectCard`, `OrOptions`). These live in `src/server/inputs/`. The client renders the appropriate UI based on the input type.
 
-### Game Modules (Expansions)
+### Game Modules
 
-Each expansion has its own directory under `src/server/cards/` and a manifest. Modules: `base`, `corpera` (Corporate Era), `promo`, `venus`, `colonies`, `prelude`, `prelude2`, `turmoil`, `community`, `ares`, `moon`, `pathfinders`, `ceo`, `starwars`, `underworld`. Cross-expansion card compatibility is declared via `compatibility` in `CardFactorySpec`.
-
-The official expansions are base, corpera, promo, venus, colonies, prelude, prelude2, turmoil. Any other expansion is a fan expansion. Even still, promo has some cards that are almost fan expansions; they're the ones from the Dutch Open,
-and are listed as such in CardName.ts
+This fork supports only the Base game and optional Corporate Era cards. Do not restore expansion flags, manifests, rules engines, UI, or assets. Base cards live in `src/server/cards/base/`; Corporate Era cards use `src/server/cards/corpera/`, and the retained corporation cards live in `src/server/cards/corporation/`.
 
 ### Board System
 

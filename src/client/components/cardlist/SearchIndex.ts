@@ -1,6 +1,4 @@
-import {allGlobalEventNames, getGlobalEventOrThrow} from '@/client/turmoil/ClientGlobalEventManifest';
 import {getCards} from '@/client/cards/ClientCardManifest';
-import {allColonyNames} from '@/client/colonies/ClientColonyManifest';
 import {CardComponent} from '@/common/cards/render/CardComponent';
 import {isIDescription} from '@/common/cards/render/ICardRenderDescription';
 import {isICardRenderCorpBoxAction, isICardRenderCorpBoxEffect, isICardRenderCorpBoxEffectAction, isICardRenderEffect, isICardRenderItem, isICardRenderProductionBox, isICardRenderRoot} from '@/common/cards/render/Types';
@@ -10,7 +8,6 @@ import {getAward, getMilestone} from '../../MilestoneAwardManifest';
 import {copyAndClear} from '@/common/utils/utils';
 import {awardNames} from '@/common/ma/AwardName';
 import {milestoneNames} from '@/common/ma/MilestoneName';
-import {agendaIdDescription, BONUS_IDS, POLICY_IDS} from '@/common/turmoil/Types';
 
 export class SearchIndex {
   private searchIndex: Map<string, Array<string>>;
@@ -42,19 +39,6 @@ export class SearchIndex {
       this.store('card', card.name);
     }
 
-    for (const colonyName of allColonyNames()) {
-      this.add(colonyName);
-      this.store('colony', colonyName);
-    }
-
-    for (const globalEventName of allGlobalEventNames()) {
-      const globalEvent = getGlobalEventOrThrow(globalEventName);
-      this.add(globalEvent.name);
-      this.add(globalEvent.description);
-      this.process(globalEvent.renderData);
-      this.store('globalEvent', globalEvent.name);
-    }
-
     for (const milestoneName of milestoneNames) {
       this.add(milestoneName);
       this.add(getMilestone(milestoneName).description);
@@ -65,15 +49,6 @@ export class SearchIndex {
       this.add(awardName);
       this.add(getAward(awardName).description);
       this.store('ma', awardName);
-    }
-
-    for (const id of BONUS_IDS) {
-      this.add(agendaIdDescription(id));
-      this.store('agenda', id);
-    }
-    for (const id of POLICY_IDS) {
-      this.add(agendaIdDescription(id));
-      this.store('agenda', id);
     }
   }
 

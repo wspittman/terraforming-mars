@@ -118,14 +118,7 @@ function icon(module: string | undefined): string | undefined {
   if (module === undefined) {
     return undefined;
   }
-  let suffix = module;
-  if (module === 'colonies') {
-    suffix = 'colony';
-  }
-  if (module === 'moon') {
-    suffix = 'themoon';
-  }
-  return `create-game-expansion-icon expansion-icon-${suffix}`;
+  return `create-game-expansion-icon expansion-icon-${module}`;
 }
 
 function showGroup(key: string) {

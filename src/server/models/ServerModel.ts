@@ -16,18 +16,12 @@ import {Phase} from '../../common/Phase';
 import {Resource} from '../../common/Resource';
 import {ClaimedMilestoneModel, MilestoneScore} from '../../common/models/ClaimedMilestoneModel';
 import {FundedAwardModel, AwardScore} from '../../common/models/FundedAwardModel';
-import {getTurmoilModel} from '../models/TurmoilModel';
 import {SpectatorModel} from '../../common/models/SpectatorModel';
 import {GameModel} from '../../common/models/GameModel';
-import {Turmoil} from '../turmoil/Turmoil';
-import {createPathfindersModel} from './PathfindersModel';
-import {MoonModel} from '../../common/models/MoonModel';
 import {CardName} from '../../common/cards/CardName';
 import {AwardScorer} from '../awards/AwardScorer';
-import {SpaceId} from '../../common/Types';
-import {cardsToModel, coloniesToModel} from './ModelUtils';
+import {cardsToModel} from './ModelUtils';
 import {runId} from '../utils/server-ids';
-import {toName} from '../../common/utils/utils';
 import {MAX_AWARDS, MAX_MILESTONES} from '../../common/constants';
 
 export class Server {
@@ -50,15 +44,10 @@ export class Server {
   }
 
   public static getGameModel(game: IGame): GameModel {
-    const turmoil = getTurmoilModel(game);
-
     return {
-      aresData: game.aresData,
       awards: this.getAwards(game),
-      colonies: coloniesToModel(game, game.colonies, false, true),
       deckSize: game.projectDeck.drawPile.length,
       discardPileSize: game.projectDeck.discardPile.length,
-      discardedColonies: game.discardedColonies.map(toName),
       expectedPurgeTimeMs: game.expectedPurgeTimeMs(),
       gameAge: game.gameAge,
       gameOptions: this.getGameOptionsAsModel(game.gameOptions),
@@ -68,21 +57,16 @@ export class Server {
       isTerraformed: game.marsIsTerraformed(),
       lastSoloGeneration: game.lastSoloGeneration(),
       milestones: this.getMilestones(game),
-      moon: this.getMoonModel(game),
       name: game.name,
       oceans: game.board.getOceanSpaces().length,
       oxygenLevel: game.getOxygenLevel(),
       passedPlayers: game.getPassedPlayers(),
-      pathfinders: createPathfindersModel(game),
       phase: game.phase,
-      spaces: this.getSpaces(game.board, game.gagarinBase, game.stJosephCathedrals, game.nomadSpace),
+      spaces: this.getSpaces(game.board),
       spectatorId: game.spectatorId,
       step: game.lastSaveId,
       temperature: game.getTemperature(),
-      tags: game.tags,
-      turmoil: turmoil,
       undoCount: game.undoCount,
-      venusScaleLevel: game.getVenusScaleLevel(),
     };
   }
 
@@ -96,17 +80,13 @@ export class Server {
 
     const rv: PlayerViewModel = {
       cardsInHand: cardsToModel(player, player.cardsInHand, {showCalculatedCost: true}),
-      ceoCardsInHand: cardsToModel(player, Array.from(player.ceoCardsInHand)),
       dealtCorporationCards: cardsToModel(player, player.dealtCorporationCards),
-      dealtPreludeCards: cardsToModel(player, player.dealtPreludeCards),
-      dealtCeoCards: cardsToModel(player, player.dealtCeoCards),
       dealtProjectCards: cardsToModel(player, player.dealtProjectCards),
       draftedCards: cardsToModel(player, player.draftedCards, {showCalculatedCost: true}),
       game: this.getGameModel(player.game),
       id: player.id,
       runId: runId,
       pickedCorporationCard: player.pickedCorporationCard ? cardsToModel(player, [player.pickedCorporationCard]) : [],
-      preludeCardsInHand: cardsToModel(player, player.preludeCardsInHand),
       thisPlayer: thisPlayer,
       waitingFor: this.getWaitingFor(player, player.getWaitingFor()),
       players: players,
@@ -215,22 +195,17 @@ export class Server {
       actionsTakenThisRound: player.actionsTakenThisRound,
       actionsTakenThisGame: player.actionsTakenThisGame,
       actionsThisGeneration: Array.from(player.actionsThisGeneration),
-      alliedParty: player.alliedParty,
       availableBlueCardActionCount: player.getPlayableActionCards().length,
       cardCost: player.cardCost,
-      cardDiscount: player.colonies.cardDiscount,
       cardsInHandNbr: player.cardsInHand.length,
       citiesCount: game.board.getCities(player).length,
-      coloniesCount: player.getColoniesCount(),
       color: player.color,
       energy: player.energy,
       energyProduction: player.production.energy,
-      fleetSize: player.colonies.getFleetSize(),
       handicap: useHandicap ? player.handicap : undefined,
       heat: player.heat,
       heatProduction: player.production.heat,
       id: game.phase === Phase.END ? player.id : undefined,
-      influence: Turmoil.ifTurmoilElse(game, (turmoil) => turmoil.getInfluence(player), () => 0),
       isActive: player.id === game.activePlayer.id,
       lastCardPlayed: player.lastCardPlayed,
       megacredits: player.megaCredits,
@@ -254,8 +229,6 @@ export class Server {
       titanium: player.titanium,
       titaniumProduction: player.production.titanium,
       titaniumValue: player.getTitaniumValue(),
-      tradesThisGeneration: player.colonies.usedTradeFleets,
-      underworldData: player.underworldData,
       victoryPointsBreakdown: {
         terraformRating: 0,
         milestones: 0,
@@ -263,17 +236,11 @@ export class Server {
         greenery: 0,
         city: 0,
         escapeVelocity: 0,
-        moonHabitats: 0,
-        moonMines: 0,
-        moonRoads: 0,
-        planetaryTracks: 0,
         victoryPoints: 0,
         total: 0,
         detailsCards: [],
         detailsMilestones: [],
         detailsAwards: [],
-        detailsPlanetaryTracks: [],
-        negativeVP: 0,
       },
       victoryPointsByGeneration: [],
       globalParameterSteps: {},
@@ -285,8 +252,6 @@ export class Server {
       model.victoryPointsByGeneration = player.victoryPointsByGeneration;
       model.globalParameterSteps = player.globalParameterSteps;
     }
-
-    model.deltaProject = player.deltaProjectData;
 
     return model;
   }
@@ -349,11 +314,7 @@ export class Server {
     return undefined;
   }
 
-  private static getSpaces(
-    board: Board,
-    gagarin: ReadonlyArray<SpaceId> = [],
-    cathedrals: ReadonlyArray<SpaceId> = [],
-    nomads: SpaceId | undefined = undefined): Array<SpaceModel> {
+  private static getSpaces(board: Board): Array<SpaceModel> {
     const noctisCitySpaceId = board.noctisCitySpaceId;
 
     return board.spaces.map((space) => {
@@ -385,86 +346,27 @@ export class Server {
       if (space.tile?.rotated === true) {
         model.rotated = true;
       }
-      const gagarinIndex = gagarin.indexOf(space.id);
-      if (gagarinIndex > -1) {
-        model.gagarin = gagarinIndex;
-      }
-      if (cathedrals.includes(space.id)) {
-        model.cathedral = true;
-      }
-      if (space.id === nomads) {
-        model.nomads = true;
-      }
-      if (space.undergroundResources !== undefined) {
-        model.undergroundResource = space.undergroundResources;
-      }
-      if (space.excavator !== undefined) {
-        model.excavator = space.excavator.color;
-      }
-      if (space.coOwner !== undefined) {
-        model.coOwner = space.coOwner.color;
-      }
-
       return model;
     });
   }
 
   public static getGameOptionsAsModel(options: GameOptions): GameOptionsModel {
     return {
-      altVenusBoard: options.altVenusBoard,
-      aresExtremeVariant: options.aresExtremeVariant,
       boardName: options.boardName,
       bannedCards: options.bannedCards,
       draftVariant: options.draftVariant,
       escapeVelocity: options.escapeVelocity,
-      expansions: {
-        corpera: options.corporateEra,
-        promo: options.promoCardsOption,
-        venus: options.venusNextExtension,
-        colonies: options.coloniesExtension,
-        prelude: options.preludeExtension,
-        prelude2: options.prelude2Expansion,
-        turmoil: options.turmoilExtension,
-        community: options.communityCardsOption,
-        ares: options.aresExtension,
-        moon: options.moonExpansion,
-        pathfinders: options.pathfindersExpansion,
-        ceo: options.ceoExtension,
-        starwars: options.starWarsExpansion,
-        underworld: options.underworldExpansion,
-        deltaProject: options.deltaProjectExpansion,
-      },
+      corporateEra: options.corporateEra,
       fastModeOption: options.fastModeOption,
       includedCards: options.includedCards,
-      includeFanMA: options.includeFanMA,
       initialDraftVariant: options.initialDraftVariant,
-      preludeDraftVariant: options.preludeDraftVariant,
-      ceosDraftVariant: options.ceosDraftVariant,
-      politicalAgendasExtension: options.politicalAgendasExtension,
-      removeNegativeGlobalEvents: options.removeNegativeGlobalEventsOption,
       showOtherPlayersVP: options.showOtherPlayersVP,
       showTimers: options.showTimers,
       shuffleMapOption: options.shuffleMapOption,
-      solarPhaseOption: options.solarPhaseOption,
       soloTR: options.soloTR,
       randomMA: options.randomMA,
-      requiresMoonTrackCompletion: options.requiresMoonTrackCompletion,
-      requiresVenusTrackCompletion: options.requiresVenusTrackCompletion,
       twoCorpsVariant: options.twoCorpsVariant,
       undoOption: options.undoOption,
     };
-  }
-
-  private static getMoonModel(game: IGame): MoonModel | undefined {
-    const moonData = game.moonData;
-    if (moonData) {
-      return {
-        logisticRate: moonData.logisticRate,
-        miningRate: moonData.miningRate,
-        habitatRate: moonData.habitatRate,
-        spaces: this.getSpaces(moonData.moon),
-      };
-    }
-    return undefined;
   }
 }

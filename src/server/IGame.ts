@@ -1,7 +1,6 @@
 import {MarsBoard} from './boards/MarsBoard';
 import {CardName} from '../common/cards/CardName';
 import {ClaimedMilestone} from './milestones/ClaimedMilestone';
-import {IColony} from './colonies/IColony';
 import {Color} from '../common/Color';
 import {FundedAward} from './awards/FundedAward';
 import {IAward} from './awards/IAward';
@@ -19,18 +18,13 @@ import {SerializedGame} from './SerializedGame';
 import {SpaceBonus} from '../common/boards/SpaceBonus';
 import {TileType} from '../common/TileType';
 import {ICard} from './cards/ICard';
-import {Turmoil} from './turmoil/Turmoil';
-import {AresData} from '../common/ares/AresData';
-import {MoonData} from './moon/MoonData';
 import {SeededRandom} from '../common/utils/Random';
-import {PathfindersData} from './pathfinders/PathfindersData';
 import {GameOptions} from './game/GameOptions';
-import {CorporationDeck, PreludeDeck, ProjectDeck, CeoDeck} from './cards/Deck';
+import {CorporationDeck, ProjectDeck} from './cards/Deck';
 import {Tag} from '../common/cards/Tag';
 import {Tile} from './Tile';
 import {Logger} from './logs/Logger';
 import {GlobalParameter} from '../common/GlobalParameter';
-import {UnderworldData} from './underworld/UnderworldData';
 import {OrOptions} from './inputs/OrOptions';
 import {IStandardProjectCard} from './cards/IStandardProjectCard';
 
@@ -66,8 +60,6 @@ export interface IGame extends Logger {
   globalsPerGeneration: Array<Partial<Record<GlobalParameter, number>>>;
   phase: Phase;
   projectDeck: ProjectDeck;
-  preludeDeck: PreludeDeck;
-  ceoDeck: CeoDeck;
   corporationDeck: CorporationDeck;
   board: MarsBoard;
   activePlayer: IPlayer;
@@ -76,15 +68,6 @@ export interface IGame extends Logger {
   fundedAwards: Array<FundedAward>;
   awards: Array<IAward>;
   // Expansion-specific data
-  colonies: Array<IColony>;
-  discardedColonies: Array<IColony>; // Not serialized
-  turmoil: Turmoil | undefined;
-  // True when resolving Turmoil phase. Does not need to be serialized since the turmoil phase isn't saved in between.
-  inTurmoil: boolean;
-  aresData: AresData | undefined;
-  moonData: MoonData | undefined;
-  pathfindersData: PathfindersData | undefined;
-  underworldData: UnderworldData;
 
   // Card-specific data
 
@@ -122,8 +105,6 @@ export interface IGame extends Logger {
 
   /** If Vermin is in play and it has 10 or more animals */
   verminInEffect: boolean;
-  /** If Exploitation of Venus is in effect */
-  exploitationOfVenusInEffect: boolean;
 
   /** The set of tags available in this game. */
   readonly tags: ReadonlyArray<Tag>;
@@ -185,8 +166,6 @@ export interface IGame extends Logger {
   temporarySolarPhase(player: IPlayer, cb: () => void): void;
   increaseOxygenLevel(player: IPlayer, increments: -2 | -1 | 1 | 2): void;
   getOxygenLevel(): number;
-  increaseVenusScaleLevel(player: IPlayer, increments: -1 | 1 | 2 | 3): number;
-  getVenusScaleLevel(): number;
   increaseTemperature(player: IPlayer, increments: -2 | -1 | 1 | 2 | 3): undefined;
   getTemperature(): number;
   getGeneration(): number;
@@ -194,8 +173,7 @@ export interface IGame extends Logger {
   /**
    * Add `tile` to `space` for `player`. Triggers all effects that come with placing a tile.
    *
-   * This only applies to the Mars board. See MoonExpansion.addTile for placing
-   * a tile on The Moon.
+   * This applies to the Mars board.
    */
   addTile(player: IPlayer, space: Space, tile: Tile): void;
   /**
@@ -266,7 +244,6 @@ export interface IGame extends Logger {
   getPlayerAfter(player: IPlayer): IPlayer;
   getPlayerBefore(player: IPlayer): IPlayer;
 
-  underworldDraftEnabled: boolean;
   getActionCount(): number;
 }
 

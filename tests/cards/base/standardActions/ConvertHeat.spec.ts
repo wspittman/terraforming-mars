@@ -1,14 +1,11 @@
-import {expect} from 'chai';
-import {ConvertHeat} from '../../../../src/server/cards/base/standardActions/ConvertHeat';
-import {Phase} from '../../../../src/common/Phase';
-import {churn, setTemperature} from '../../../TestingUtils';
-import {TestPlayer} from '../../../TestPlayer';
-import {PoliticalAgendas} from '../../../../src/server/turmoil/PoliticalAgendas';
-import {Reds} from '../../../../src/server/turmoil/parties/Reds';
-import {MAX_TEMPERATURE} from '../../../../src/common/constants';
-import {testGame} from '../../../TestGame';
-import {IGame} from '../../../../src/server/IGame';
-import {cast} from '../../../../src/common/utils/utils';
+import { expect } from 'chai';
+import { MAX_TEMPERATURE } from '../../../../src/common/constants';
+import { cast } from '../../../../src/common/utils/utils';
+import { ConvertHeat } from '../../../../src/server/cards/base/standardActions/ConvertHeat';
+import { IGame } from '../../../../src/server/IGame';
+import { testGame } from '../../../TestGame';
+import { churn, setTemperature } from '../../../TestingUtils';
+import { TestPlayer } from '../../../TestPlayer';
 
 describe('ConvertHeat', () => {
   let card: ConvertHeat;
@@ -17,7 +14,7 @@ describe('ConvertHeat', () => {
 
   beforeEach(() => {
     card = new ConvertHeat();
-    [game, player] = testGame(2, {turmoilExtension: true});
+    [game, player] = testGame(2, {});
   });
 
   it('Can not act without heat', () => {
@@ -26,17 +23,6 @@ describe('ConvertHeat', () => {
     expect(card.canAct(player)).eq(false);
   });
 
-  it('Can not act with reds', () => {
-    player.heat = 8;
-    game.phase = Phase.ACTION;
-    game.turmoil!.rulingParty = new Reds();
-    PoliticalAgendas.setNextAgenda(game.turmoil!, game);
-    expect(card.canAct(player)).eq(false);
-    player.megaCredits = 2;
-    expect(card.canAct(player)).eq(false);
-    player.megaCredits = 3;
-    expect(card.canAct(player)).eq(true);
-  });
 
   it('Should play', () => {
     player.heat = 8;

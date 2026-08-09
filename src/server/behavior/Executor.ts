@@ -2,22 +2,14 @@ import {Units} from '../../common/Units';
 import {ICard} from '../cards/ICard';
 import {TRSource} from '../../common/cards/TRSource';
 import {AddResourcesToCard} from '../deferredActions/AddResourcesToCard';
-import {BuildColony} from '../deferredActions/BuildColony';
 import {DecreaseAnyProduction} from '../deferredActions/DecreaseAnyProduction';
 import {PlaceCityTile} from '../deferredActions/PlaceCityTile';
 import {PlaceGreeneryTile} from '../deferredActions/PlaceGreeneryTile';
 import {PlaceOceanTile} from '../deferredActions/PlaceOceanTile';
 import {RemoveAnyPlants} from '../deferredActions/RemoveAnyPlants';
-import {MoonExpansion} from '../moon/MoonExpansion';
-import {PlaceMoonHabitatTile} from '../moon/PlaceMoonHabitatTile';
-import {PlaceMoonMineTile} from '../moon/PlaceMoonMineTile';
-import {PlaceMoonRoadTile} from '../moon/PlaceMoonRoadTile';
-import {PlaceSpecialMoonTile} from '../moon/PlaceSpecialMoonTile';
 import {CanAffordOptions, IPlayer} from '../IPlayer';
 import {Behavior} from './Behavior';
 import {Counter, ICounter} from './Counter';
-import {Turmoil} from '../turmoil/Turmoil';
-import {SendDelegateToArea} from '../deferredActions/SendDelegateToArea';
 import {BehaviorExecutor} from './BehaviorExecutor';
 import {PlaceTile} from '../deferredActions/PlaceTile';
 import {Resource} from '../../common/Resource';
@@ -28,19 +20,12 @@ import {Payment} from '../../common/inputs/Payment';
 import {SelectResources} from '../inputs/SelectResources';
 import {TITLES} from '../inputs/titles';
 import {message} from '../logs/MessageBuilder';
-import {IdentifySpacesDeferred} from '../underworld/IdentifySpacesDeferred';
-import {ClaimSpacesDeferred} from '../underworld/ClaimSpacesDeferred';
-import {ExcavateSpacesDeferred} from '../underworld/ExcavateSpacesDeferred';
-import {UnderworldExpansion} from '../underworld/UnderworldExpansion';
 import {SelectResource} from '../inputs/SelectResource';
 import {RemoveResourcesFromCard} from '../deferredActions/RemoveResourcesFromCard';
-import {isIProjectCard} from '../cards/IProjectCard';
-import {MAXIMUM_HABITAT_RATE, MAXIMUM_LOGISTIC_RATE, MAXIMUM_MINING_RATE, MAX_OCEAN_TILES, MAX_OXYGEN_LEVEL, MAX_TEMPERATURE, MAX_VENUS_SCALE} from '../../common/constants';
+import {MAX_OCEAN_TILES, MAX_OXYGEN_LEVEL, MAX_TEMPERATURE} from '../../common/constants';
 import {CardName} from '../../common/cards/CardName';
 import {asArray, inplaceRemove} from '../../common/utils/utils';
 import {SelectCard} from '../inputs/SelectCard';
-import {IGlobalEvent, isIGlobalEvent} from '../turmoil/globalEvents/IGlobalEvent';
-import {ProxyCard} from '../cards/ProxyCard';
 import {From} from '../logs/From';
 import {BaseStock} from '../player/StockBase';
 
@@ -93,9 +78,6 @@ export class Executor implements BehaviorExecutor {
         } else {
           card.addWarning('maxoxygen');
         }
-      }
-      if (g.venus !== undefined && game.getVenusScaleLevel() >= MAX_VENUS_SCALE) {
-        card.addWarning('maxvenus');
       }
     }
 
@@ -169,9 +151,6 @@ export class Executor implements BehaviorExecutor {
       if (spend.resourceFromAnyCard && player.getCardsWithResources(spend.resourceFromAnyCard.type).length === 0) {
         return false;
       }
-      if (spend.corruption && player.underworldData.corruption < spend.corruption) {
-        return false;
-      }
       if (spend.cards) {
         if (player.cardsInHand.filter((c) => card !== c).length < spend.cards) {
           return false;
@@ -193,11 +172,6 @@ export class Executor implements BehaviorExecutor {
       }
     }
 
-    if (behavior.colonies?.buildColony !== undefined) {
-      if (player.colonies.getPlayableColonies(behavior.colonies.buildColony.allowDuplicates).length === 0) {
-        return false;
-      }
-    }
 
     if (behavior.city !== undefined) {
       if (behavior.city.space === undefined) {
@@ -261,73 +235,11 @@ export class Executor implements BehaviorExecutor {
     //   }
     // }
 
-    if (behavior.turmoil) {
-      const turmoil = Turmoil.getTurmoil(game);
-      if (behavior.turmoil.sendDelegates) {
-        const count = ctx.count(behavior.turmoil.sendDelegates.count);
-        if (turmoil.getAvailableDelegateCount(player) < count) {
-          return false;
-        }
-      }
-    }
-
-    if (behavior.moon !== undefined) {
-      const moon = behavior.moon;
-      const moonData = MoonExpansion.moonData(game);
-      if (moon.habitatTile !== undefined && moon.habitatTile.space === undefined) {
-        if (moonData.moon.getAvailableSpacesOnLand(player).length === 0) {
-          return false;
-        }
-      }
-      if (moon.mineTile !== undefined && moon.mineTile.space === undefined) {
-        if (moonData.moon.getAvailableSpacesForMine(player).length === 0) {
-          return false;
-        }
-      }
-      if (moon.roadTile !== undefined && moon.roadTile.space === undefined) {
-        if (moonData.moon.getAvailableSpacesOnLand(player).length === 0) {
-          return false;
-        }
-      }
-      if ((moon.habitatRate ?? 0) >= MAXIMUM_HABITAT_RATE) {
-        card.addWarning('maxHabitatRate');
-      }
-      if ((moon.miningRate ?? 0) >= MAXIMUM_MINING_RATE) {
-        card.addWarning('maxMiningRate');
-      }
-      if ((moon.logisticRate ?? 0) >= MAXIMUM_LOGISTIC_RATE) {
-        card.addWarning('maxLogisticRate');
-      }
-    }
-
-    if (behavior.underworld !== undefined) {
-      const underworld = behavior.underworld;
-      if (underworld.identify !== undefined) {
-        const count = typeof(underworld.identify) === 'number' ? underworld.identify : underworld.identify.count;
-        if (UnderworldExpansion.canIdentifyN(player, count) === false) {
-          return false;
-        }
-        // Right now identifies are always more than excavates, so there's no reason to count excavates.
-      }
-
-      if (underworld.excavate !== undefined) {
-        const excavate = underworld.excavate;
-        const count = typeof(excavate) === 'number' ? excavate : ctx.count(excavate.count);
-        if (UnderworldExpansion.canExcavateN(player, count) === false) {
-          return false;
-        }
-      }
-    }
 
     return true;
   }
-
-  public execute(behavior: Behavior, player: IPlayer, inputCard: ICard | IGlobalEvent) {
-    const card = isIGlobalEvent(inputCard) ? new ProxyCard(CardName.GLOBAL_EVENT_PROXY) : inputCard;
-    const globalEvent = isIGlobalEvent(inputCard) ? inputCard : undefined;
-
-    // Only log from for global events
-    const from: From | undefined = globalEvent ? {globalEvent} : undefined;
+  public execute(behavior: Behavior, player: IPlayer, card: ICard) {
+    const from: From | undefined = undefined;
 
     const ctx = new Counter(player, card);
 
@@ -337,7 +249,7 @@ export class Executor implements BehaviorExecutor {
         .map((behavior) => {
           return new SelectOption(behavior.title)
             .andThen(() => {
-              this.execute(behavior, player, inputCard);
+              this.execute(behavior, player, card);
               return undefined;
             });
         });
@@ -357,7 +269,7 @@ export class Executor implements BehaviorExecutor {
       if (spend.megacredits) {
         player.game.defer(new SelectPaymentDeferred(player, spend.megacredits, {
           title: TITLES.payForCardAction(card.name),
-        })).andThen(() => this.execute(remainder, player, inputCard));
+        })).andThen(() => this.execute(remainder, player, card));
         // Exit early as the rest of handled by the deferred action.
         return;
       }
@@ -388,9 +300,6 @@ export class Executor implements BehaviorExecutor {
           .andThen(() => this.execute(remainder, player, card));
         // Exit early as the rest of handled by the deferred action.
         return;
-      }
-      if (spend.corruption) {
-        UnderworldExpansion.loseCorruption(player, spend.corruption);
       }
       if ((spend.cards ?? 0) > 0) {
         const count: number = spend.cards ?? 0;
@@ -493,9 +402,6 @@ export class Executor implements BehaviorExecutor {
       if (g.oxygen !== undefined) {
         player.game.increaseOxygenLevel(player, g.oxygen);
       }
-      if (g.venus !== undefined) {
-        player.game.increaseVenusScaleLevel(player, g.venus);
-      }
     }
 
     if (behavior.tr !== undefined) {
@@ -549,23 +455,6 @@ export class Executor implements BehaviorExecutor {
     if (behavior.removeAnyPlants !== undefined) {
       player.game.defer(new RemoveAnyPlants(player, behavior.removeAnyPlants));
     }
-    if (behavior.colonies !== undefined) {
-      const colonies = behavior.colonies;
-      if (colonies.buildColony !== undefined) {
-        player.game.defer(new BuildColony(player, {allowDuplicate: colonies.buildColony.allowDuplicates}));
-      }
-      if (colonies.addTradeFleet !== undefined) {
-        for (let idx = 0; idx < colonies.addTradeFleet; idx++) {
-          player.colonies.increaseFleetSize();
-        }
-      }
-      if (colonies.tradeDiscount !== undefined) {
-        player.colonies.tradeDiscount += colonies.tradeDiscount;
-      }
-      if (colonies.tradeOffset !== undefined) {
-        player.colonies.tradeOffset += colonies.tradeOffset;
-      }
-    }
 
     if (behavior.ocean !== undefined) {
       if (behavior.ocean.count === 2) {
@@ -598,107 +487,9 @@ export class Executor implements BehaviorExecutor {
         },
         on: tile.on,
         title: tile.title ?? message('Select space for ${0} tile', (b) => b.cardName(card.name)),
-        adjacencyBonus: tile.adjacencyBonus,
       }));
     }
 
-    if (behavior.turmoil) {
-      const turmoil = Turmoil.getTurmoil(player.game);
-      if (behavior.turmoil.influenceBonus === 1) {
-        turmoil.addInfluenceBonus(player);
-      }
-
-      if (behavior.turmoil.sendDelegates) {
-        const sendDelegates = behavior.turmoil.sendDelegates;
-        const count = ctx.count(sendDelegates.count);
-        if (sendDelegates.manyParties) {
-          for (let i = 0; i < count; i++) {
-            player.game.defer(new SendDelegateToArea(player, 'Select where to send delegate'));
-          }
-        } else {
-          player.game.defer(new SendDelegateToArea(player, `Select where to send ${sendDelegates.count} delegates`, {count: count}));
-        }
-      }
-    }
-
-    if (behavior.moon !== undefined) {
-      const moon = behavior.moon;
-      if (moon.habitatTile !== undefined) {
-        if (moon.habitatTile.space === undefined) {
-          player.game.defer(new PlaceMoonHabitatTile(player));
-        } else {
-          MoonExpansion.addHabitatTile(player, moon.habitatTile.space, card?.name);
-          MoonExpansion.raiseHabitatRate(player);
-        }
-      }
-      if (moon.mineTile !== undefined) {
-        if (moon.mineTile.space === undefined) {
-          player.game.defer(new PlaceMoonMineTile(player));
-        } else {
-          MoonExpansion.addMineTile(player, moon.mineTile.space, card?.name);
-          MoonExpansion.raiseMiningRate(player);
-        }
-      }
-      if (moon.roadTile !== undefined) {
-        if (moon.roadTile.space === undefined) {
-          player.game.defer(new PlaceMoonRoadTile(player));
-        } else {
-          MoonExpansion.addRoadTile(player, moon.roadTile.space, card?.name);
-          MoonExpansion.raiseLogisticRate(player);
-        }
-      }
-      if (moon.tile !== undefined) {
-        if (moon.tile.space !== undefined) {
-          MoonExpansion.addTile(player, moon.tile.space, {tileType: moon.tile.type, card: card?.name});
-        } else {
-          player.game.defer(new PlaceSpecialMoonTile(player, {tileType: moon.tile.type, card: card?.name}));
-        }
-      }
-      if (moon.habitatRate !== undefined) {
-        MoonExpansion.raiseHabitatRate(player, moon.habitatRate);
-      }
-      if (moon.miningRate !== undefined) {
-        MoonExpansion.raiseMiningRate(player, moon.miningRate);
-      }
-      if (moon.logisticRate !== undefined) {
-        MoonExpansion.raiseLogisticRate(player, moon.logisticRate);
-      }
-    }
-
-    if (behavior.underworld !== undefined) {
-      const underworld = behavior.underworld;
-      const identify = underworld.identify;
-      if (identify !== undefined) {
-        if (typeof(identify) === 'number') {
-          player.game.defer(new IdentifySpacesDeferred(player, identify));
-        } else {
-          const deferred = player.game.defer(new IdentifySpacesDeferred(player, identify.count));
-          const claim = identify.claim ?? 0;
-          if (claim > 0) {
-            deferred.andThen((spaces) => {
-              player.game.defer(new ClaimSpacesDeferred(player, ctx.count(claim), spaces));
-            });
-          }
-        }
-      }
-      if (underworld.excavate !== undefined) {
-        const excavate = underworld.excavate;
-        if (typeof(excavate) === 'number') {
-          player.game.defer(new ExcavateSpacesDeferred(player, excavate));
-        } else {
-          player.game.defer(new ExcavateSpacesDeferred(
-            player, ctx.count(excavate.count), excavate.ignorePlacementRestrictions));
-        }
-      }
-      if (underworld.corruption !== undefined) {
-        UnderworldExpansion.gainCorruption(player, ctx.count(underworld.corruption), {log: true});
-      }
-      if (underworld.markThisGeneration !== undefined) {
-        if (isIProjectCard(card)) {
-          card.generationUsed = player.game.generation;
-        }
-      }
-    }
 
     if (behavior.log !== undefined) {
       this.log(behavior.log, player, card);
@@ -723,21 +514,6 @@ export class Executor implements BehaviorExecutor {
     if (behavior?.greeneryDiscount) {
       player.plantsNeededForGreenery += behavior.greeneryDiscount;
     }
-
-    if (behavior.colonies !== undefined) {
-      const colonies = behavior.colonies;
-      if (colonies.addTradeFleet !== undefined) {
-        for (let idx = 0; idx < colonies.addTradeFleet; idx++) {
-          player.colonies.decreaseFleetSize();
-        }
-      }
-      if (colonies.tradeDiscount !== undefined) {
-        player.colonies.tradeDiscount -= colonies.tradeDiscount;
-      }
-      if (colonies.tradeOffset !== undefined) {
-        player.colonies.tradeOffset -= colonies.tradeOffset;
-      }
-    }
   }
 
   public toTRSource(behavior: Behavior, ctx: ICounter): TRSource {
@@ -755,12 +531,8 @@ export class Executor implements BehaviorExecutor {
       tr: tr,
       temperature: behavior.global?.temperature,
       oxygen: (behavior.global?.oxygen ?? 0) + (behavior.greenery !== undefined ? 1 : 0),
-      venus: behavior.global?.venus,
       oceans: behavior.ocean !== undefined ? (behavior.ocean.count ?? 1) : undefined,
 
-      moonHabitat: (behavior.moon?.habitatRate ?? 0) + (behavior.moon?.habitatTile !== undefined ? 1 : 0),
-      moonMining: (behavior.moon?.miningRate ?? 0) + (behavior.moon?.mineTile !== undefined ? 1 : 0),
-      moonLogistic: (behavior.moon?.logisticRate ?? 0) + (behavior.moon?.roadTile !== undefined ? 1 : 0),
     };
     return trSource;
   }

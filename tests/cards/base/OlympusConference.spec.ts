@@ -1,18 +1,16 @@
-import {expect} from 'chai';
-import {Bushes} from '../../../src/server/cards/base/Bushes';
-import {MarsUniversity} from '../../../src/server/cards/base/MarsUniversity';
-import {OlympusConference} from '../../../src/server/cards/base/OlympusConference';
-import {Research} from '../../../src/server/cards/base/Research';
-import {AdaptationTechnology} from '../../../src/server//cards/base/AdaptationTechnology';
-import {DeferredActionsQueue} from '../../../src/server/deferredActions/DeferredActionsQueue';
-import {IGame} from '../../../src/server/IGame';
-import {OrOptions} from '../../../src/server/inputs/OrOptions';
-import {TestPlayer} from '../../TestPlayer';
-import {runAllActions} from '../../TestingUtils';
-import {testGame} from '../../TestGame';
-import {Leavitt} from '../../../src/server/cards/community/Leavitt';
-import {HyperspaceDrivePrototype} from '../../../src/server/cards/underworld/HyperspaceDrivePrototype';
-import {cast} from '../../../src/common/utils/utils';
+import { expect } from 'chai';
+import { cast } from '../../../src/common/utils/utils';
+import { AdaptationTechnology } from '../../../src/server//cards/base/AdaptationTechnology';
+import { Bushes } from '../../../src/server/cards/base/Bushes';
+import { MarsUniversity } from '../../../src/server/cards/base/MarsUniversity';
+import { OlympusConference } from '../../../src/server/cards/base/OlympusConference';
+import { Research } from '../../../src/server/cards/base/Research';
+import { DeferredActionsQueue } from '../../../src/server/deferredActions/DeferredActionsQueue';
+import { IGame } from '../../../src/server/IGame';
+import { OrOptions } from '../../../src/server/inputs/OrOptions';
+import { testGame } from '../../TestGame';
+import { runAllActions } from '../../TestingUtils';
+import { TestPlayer } from '../../TestPlayer';
 
 describe('OlympusConference', () => {
   let card: OlympusConference;
@@ -104,11 +102,9 @@ describe('OlympusConference', () => {
     orOptions.options[1].cb();
     expect(card.resourceCount).to.eq(2);
 
-
     // Reset the state
     game.deferredActions = new DeferredActionsQueue();
     player.playedCards.set();
-
 
     // Mars University played before Olympus Conference
     player.playedCards.push(marsUniversity);
@@ -126,30 +122,5 @@ describe('OlympusConference', () => {
     game.deferredActions.pop();
     orOptions2.options[1].cb();
     expect(card.resourceCount).to.eq(2);
-  });
-
-  it('Compatible with Leavitt #6349', () => {
-    player.playedCards.push(card);
-    const leavitt = new Leavitt();
-    leavitt.addColony(player);
-
-    runAllActions(game);
-    cast(player.popWaitingFor(), undefined);
-    expect(card.resourceCount).to.eq(1);
-  });
-
-  it('Allows for resource to be added first when Hyperspace Drive Prototype is played', () => {
-    player.playedCards.push(card);
-    card.resourceCount = 0;
-    const hyperspaceDrivePrototype = new HyperspaceDrivePrototype();
-    player.playCard(hyperspaceDrivePrototype);
-    runAllActions(game);
-
-    const orOptions = cast(player.popWaitingFor(), OrOptions);
-    game.deferredActions.pop();
-    orOptions.options[0].cb();
-
-    expect(card.resourceCount).to.eq(0);
-    expect(player.cardsInHand).has.lengthOf(1);
   });
 });

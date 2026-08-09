@@ -97,15 +97,9 @@ export default defineComponent({
           content,
           {
             color: playerView.thisPlayer.color,
-            expansions: Object.entries(playerView.game.gameOptions.expansions)
-              .filter(([_k, v]) => v === true)
-              .map(([k, _v]) => k)
-              .join(', '),
+            gameVersion: playerView.game.gameOptions.corporateEra ? 'Corporate Era' : 'Base',
             step: playerView.game.step,
           });
-      }
-      if (playerView?.game?.turmoil) {
-        content['party'] = playerView.game.turmoil.ruling ?? 'None';
       }
       Object.assign(content,
         {

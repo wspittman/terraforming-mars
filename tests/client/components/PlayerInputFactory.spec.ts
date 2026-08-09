@@ -8,7 +8,6 @@ import {Units} from '@/common/Units';
 import {CardName} from '@/common/cards/CardName';
 import {SELECT_CORPORATION_TITLE, SELECT_PROJECTS_TITLE} from '@/common/inputs/SelectInitialCards';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
-import {PartyName} from '@/common/turmoil/PartyName';
 import {RecursivePartial} from '@/common/utils/utils';
 
 describe('PlayerInputFactory', () => {
@@ -88,19 +87,6 @@ describe('PlayerInputFactory', () => {
     });
   });
 
-  it('SelectParty', async () => {
-    runTest({
-      type: 'party',
-      parties: [PartyName.GREENS, PartyName.REDS],
-    });
-  });
-
-  it('SelectColony', async () => {
-    runTest({
-      type: 'colony',
-    });
-  });
-
   it('SelectProductionToLose', async () => {
     runTest({
       type: 'productionToLose',
@@ -123,9 +109,6 @@ describe('PlayerInputFactory', () => {
       id: 'p-player-id',
       dealtCorporationCards: [],
       thisPlayer: thisPlayer as PublicPlayerModel,
-      game: {
-        turmoil: {},
-      },
     };
 
     const wrapper = mount(PlayerInputFactory, {
@@ -159,9 +142,6 @@ describe('PlayerInputFactory', () => {
       id: 'p-player-id',
       dealtCorporationCards: [],
       thisPlayer: thisPlayer as PublicPlayerModel,
-      game: {
-        turmoil: {},
-      },
     };
 
     const wrapper = mount(PlayerInputFactory, {
@@ -179,22 +159,6 @@ describe('PlayerInputFactory', () => {
       },
     });
     expect((wrapper.vm as any).canSave()).to.be.true;
-  });
-
-  it('ShiftAresGlobalParameters', async () => {
-    runTest({
-      type: 'aresGlobalParameters',
-      aresData: {
-        includeHazards: false,
-        hazardData: {
-          erosionOceanCount: {threshold: 0, available: false},
-          removeDustStormsOceanCount: {threshold: 0, available: false},
-          severeErosionTemperature: {threshold: 0, available: false},
-          severeDustStormOxygen: {threshold: 0, available: false},
-        },
-        milestoneResults: [],
-      },
-    });
   });
 });
 
@@ -216,9 +180,6 @@ function runTest(playerInput: Partial<PlayerInputModel>) {
     id: 'p-player-id',
     dealtCorporationCards: [],
     thisPlayer: thisPlayer as PublicPlayerModel,
-    game: {
-      turmoil: {},
-    },
   };
 
   const component = mount(PlayerInputFactory, {

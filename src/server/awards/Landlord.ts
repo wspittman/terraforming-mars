@@ -15,11 +15,6 @@ export class Landlord implements IAward {
         // Land Claim a valid space for Landlord.
         space.tile?.tileType !== TileType.OCEAN && space.player === player).length;
 
-    const moonSpaces = player.game.moonData?.moon.spaces ?? [];
-    const moonSpaceCount = moonSpaces
-      .filter(Board.hasRealTile)
-      .filter(Board.ownedBy(player)).length;
-
-    return marsSpaceCount + moonSpaceCount;
+    return marsSpaceCount;
   }
 }

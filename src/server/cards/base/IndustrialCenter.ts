@@ -8,13 +8,11 @@ import {PlaceTile} from '../../../server/deferredActions/PlaceTile';
 import {Space} from '../../boards/Space';
 import {CardName} from '../../../common/cards/CardName';
 import {Board} from '../../boards/Board';
-import {AdjacencyBonus} from '../../ares/AdjacencyBonus';
 import {CardRenderer} from '../render/CardRenderer';
 
 export class IndustrialCenter extends ActionCard implements IProjectCard {
   constructor(
     name = CardName.INDUSTRIAL_CENTER,
-    adjacencyBonus: AdjacencyBonus | undefined = undefined,
     metadata = {
       cardNumber: '123',
       renderData: CardRenderer.builder((b) => {
@@ -30,7 +28,6 @@ export class IndustrialCenter extends ActionCard implements IProjectCard {
       name,
       tags: [Tag.BUILDING],
       cost: 4,
-      adjacencyBonus,
 
       action: {
         spend: {megacredits: 7},
@@ -53,7 +50,6 @@ export class IndustrialCenter extends ActionCard implements IProjectCard {
         tile: {tileType: TileType.INDUSTRIAL_CENTER, card: this.name},
         on: () => this.getAvailableSpaces(player),
         title: 'Select space adjacent to a city tile',
-        adjacencyBonus: this.adjacencyBonus,
       }));
     return undefined;
   }

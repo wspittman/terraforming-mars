@@ -253,7 +253,7 @@ export function describeDatabaseSuite<T extends ITestDatabase>(dtor: DatabaseTes
 
     it('getGame', async () => {
       const player = TestPlayer.BLACK.newPlayer();
-      const game = Game.newInstance('game-id-1212', [player], player, 'spectatorid', {underworldExpansion: true});
+      const game = Game.newInstance('game-id-1212', [player], player, 'spectatorid', {});
       await db.lastSaveGamePromise;
       expect(game.lastSaveId).eq(1);
 
@@ -265,7 +265,6 @@ export function describeDatabaseSuite<T extends ITestDatabase>(dtor: DatabaseTes
 
       const actual = await db.getGame(game.id);
       expect(actual.gameLog[actual.gameLog.length -1].message).eq('databaseSuite.getGame test');
-      expect(actual.gameOptions.underworldExpansion).eq(true);
       expect(stripUndefined(actual)).deep.eq(stripUndefined(expected));
     });
 

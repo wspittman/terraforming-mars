@@ -1,12 +1,12 @@
-import {expect} from 'chai';
-import {Mangrove} from '../../../src/server/cards/base/Mangrove';
-import {IGame} from '../../../src/server/IGame';
-import {TestPlayer} from '../../TestPlayer';
-import {TileType} from '../../../src/common/TileType';
-import {runAllActions, setOxygenLevel, setTemperature, testRedsCosts} from '../../TestingUtils';
-import {testGame} from '../../TestGame';
-import {assertPlaceTile} from '../../assertions';
-import {cast} from '../../../src/common/utils/utils';
+import { expect } from 'chai';
+import { TileType } from '../../../src/common/TileType';
+import { cast } from '../../../src/common/utils/utils';
+import { Mangrove } from '../../../src/server/cards/base/Mangrove';
+import { IGame } from '../../../src/server/IGame';
+import { assertPlaceTile } from '../../assertions';
+import { testGame } from '../../TestGame';
+import { runAllActions, setTemperature } from '../../TestingUtils';
+import { TestPlayer } from '../../TestPlayer';
 
 describe('Mangrove', () => {
   let card: Mangrove;
@@ -34,23 +34,4 @@ describe('Mangrove', () => {
 
     expect(card.getVictoryPoints(player)).to.eq(1);
   });
-
-
-  const redsRuns = [
-    {oxygen: 12, expected: 3},
-    {oxygen: 13, expected: 3},
-    {oxygen: 14, expected: 0},
-  ] as const;
-
-  for (const run of redsRuns) {
-    it('Works with reds ' + JSON.stringify(run), () => {
-      const [game, player/* , player2 */] = testGame(2, {turmoilExtension: true});
-
-      // Card requirement
-      setTemperature(game, 4);
-
-      setOxygenLevel(game, run.oxygen);
-      testRedsCosts(() => player.canPlay(card), player, card.cost, run.expected);
-    });
-  }
 });

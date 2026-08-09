@@ -1,11 +1,11 @@
-import {expect} from 'chai';
-import {JSONProcessor} from '@/client/components/create/JSONProcessor';
-import {defaultCreateGameModel} from '@/client/components/create/defaultCreateGameModel';
-import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
-import {BoardName} from '@/common/boards/BoardName';
-import {JSONObject} from '@/common/Types';
-import {CreateGameModel} from '@/client/components/create/CreateGameModel';
-import {CardName} from '@/common/cards/CardName';
+import { CreateGameModel } from '@/client/components/create/CreateGameModel';
+import { defaultCreateGameModel } from '@/client/components/create/defaultCreateGameModel';
+import { JSONProcessor } from '@/client/components/create/JSONProcessor';
+import { BoardName } from '@/common/boards/BoardName';
+import { CardName } from '@/common/cards/CardName';
+import { RandomMAOptionType } from '@/common/ma/RandomMAOptionType';
+import { JSONObject } from '@/common/Types';
+import { expect } from 'chai';
 
 type Case = {
   description: string,
@@ -24,35 +24,15 @@ const TEMPLATE_INPUT = {
       first: false,
     },
   ],
-  expansions: {
-    corpera: true,
-    promo: false,
-    venus: false,
-    colonies: false,
-    prelude: false,
-    prelude2: false,
-    turmoil: false,
-    community: false,
-    ares: false,
-    moon: false,
-    pathfinders: false,
-    ceo: false,
-    starwars: false,
-    underworld: false,
-    deltaProject: false,
-  },
+  expansions: {corpera: true},
+
   draftVariant: true,
   showOtherPlayersVP: false,
   customCorporationsList: [],
-  customColoniesList: [],
-  customPreludes: [],
   bannedCards: [],
   includedCards: [],
   board: 'tharsis',
   seed: 0.40189423667985547,
-  solarPhaseOption: false,
-  aresExtremeVariant: false,
-  politicalAgendasExtension: 'Standard',
   undoOption: false,
   showTimers: true,
   fastModeOption: false,
@@ -62,22 +42,11 @@ const TEMPLATE_INPUT = {
   startingCorporations: 2,
   soloTR: false,
   initialDraft: false,
-  preludeDraftVariant: false,
-  ceosDraftVariant: false,
   randomMA: 'No randomization',
   shuffleMapOption: false,
   randomFirstPlayer: true,
-  requiresVenusTrackCompletion: false,
-  requiresMoonTrackCompletion: false,
-  moonStandardProjectVariant: false,
-  moonStandardProjectVariant1: false,
-  altVenusBoard: false,
   escapeVelocityMode: false,
   escapeVelocityBonusSeconds: 2,
-  twoCorpsVariant: false,
-  customCeos: [],
-  startingCeos: 3,
-  startingPreludes: 4,
 };
 
 const TEMPLATE_EXPECTED: CreateGameModel = {
@@ -93,48 +62,24 @@ const TEMPLATE_EXPECTED: CreateGameModel = {
     {name: '', color: 'orange', beginner: false, handicap: 0, first: false},
     {name: '', color: 'pink', beginner: false, handicap: 0, first: false},
   ],
-  expansions: {
-    corpera: true,
-    promo: false,
-    venus: false,
-    colonies: false,
-    prelude: false,
-    prelude2: false,
-    turmoil: false,
-    community: false,
-    ares: false,
-    moon: false,
-    pathfinders: false,
-    ceo: false,
-    starwars: false,
-    underworld: false,
-    deltaProject: false,
-  },
+  expansions: {corpera: true},
   draftVariant: true,
   initialDraft: false,
   randomMA: 'No randomization' as RandomMAOptionType,
   modularMA: false,
   randomFirstPlayer: true,
   showOtherPlayersVP: false,
-  showColoniesList: false,
   showCorporationList: false,
-  showPreludesList: false,
   showBannedCards: false,
-  showCeosList: false,
   clonedGameId: undefined,
   showIncludedCards: false,
-  customColonies: [],
   customCorporations: [],
-  customPreludes: [],
   bannedCards: [],
   includedCards: [],
   board: 'tharsis' as BoardName,
   seed: 0.40189423667985547,
   seededGame: false,
-  solarPhaseOption: false,
   shuffleMapOption: false,
-  aresExtremeVariant: false,
-  politicalAgendasExtension: 'Standard',
   undoOption: false,
   showTimers: true,
   fastModeOption: false,
@@ -142,23 +87,11 @@ const TEMPLATE_EXPECTED: CreateGameModel = {
   includeFanMA: false,
   startingCorporations: 2,
   soloTR: false,
-  allOfficialExpansions: false,
-  requiresVenusTrackCompletion: false,
-  requiresMoonTrackCompletion: false,
-  moonStandardProjectVariant: false,
-  moonStandardProjectVariant1: false,
-  altVenusBoard: false,
   escapeVelocityMode: false,
   escapeVelocityThreshold: 30,
   escapeVelocityBonusSeconds: 2,
   escapeVelocityPeriod: 2,
   escapeVelocityPenalty: 1,
-  twoCorpsVariant: false,
-  customCeos: [],
-  startingCeos: 3,
-  startingPreludes: 4,
-  preludeDraftVariant: false,
-  ceosDraftVariant: false,
 };
 
 const cases: Array<Case> = [
@@ -183,17 +116,18 @@ const cases: Array<Case> = [
       ...TEMPLATE_INPUT,
       // 'Thorgate' and 'EcoLine' are old names; CardName.ECOLINE is canonical and should not warn
       customCorporationsList: ['Thorgate', 'EcoLine', CardName.ECOLINE],
-      customPreludes: ['Bad Prelude Name'],
+      bannedCards: ['Bad Card Name'],
     },
     expected: {
       ...TEMPLATE_EXPECTED,
       customCorporations: ['Thorgate', 'EcoLine', CardName.ECOLINE] as Array<CardName>,
-      customPreludes: ['Bad Prelude Name'] as unknown as Array<CardName>,
+      bannedCards: ['Bad Card Name'] as Array<CardName>,
+      showBannedCards: true,
     },
     expectedWarnings: [
       "Old card name 'Thorgate' in customCorporations; use 'ThorGate'",
       "Old card name 'EcoLine' in customCorporations; use 'Ecoline'",
-      "Unknown card name 'Bad Prelude Name' in customPreludes",
+      "Unknown card name 'Bad Card Name' in bannedCards",
     ],
   },
   {

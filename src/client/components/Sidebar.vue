@@ -4,15 +4,10 @@
     <div class="gen-text" v-i18n>GEN</div>
     <div class="gen-marker">{{ getGenMarker() }}</div>
   </div>
-  <div v-if="gameOptions.expansions.turmoil" :title="$t('Ruling Party')">
-    <div :class="'party-name party-name-indicator party-name--'+rulingPartyToCss()"> <span v-i18n>{{ getRulingParty() }}</span></div>
-  </div>
   <div class="global_params">
     <GlobalParameterValue :param="globalParameter.TEMPERATURE" :value="temperature"/>
     <GlobalParameterValue :param="globalParameter.OXYGEN" :value="oxygen"/>
     <GlobalParameterValue :param="globalParameter.OCEANS" :value="oceans"/>
-    <GlobalParameterValue v-if="gameOptions.expansions.venus" :param="globalParameter.VENUS" :value="venus"/>
-    <MoonGlobalParameterValue v-if="moonData" :moonData="moonData"/>
   </div>
   <div class="sidebar_item preferences_player" :title="$t('Player Color Cube')">
     <div :class="getPlayerColorCubeClass()+' player_bg_color_' + playerColor"></div>
@@ -35,12 +30,6 @@
           </i>
       </div>
   </a>
-  <a v-if="coloniesCount > 0" href="#colonies" :title="$t('Jump to colonies')">
-      <div class="sidebar_item sidebar_item_shortcut">
-          <i class="sidebar_icon sidebar_icon--colonies"></i>
-      </div>
-  </a>
-
   <div class="sidebar_item sidebar_item--info" :title="$t('Information panel')">
     <i class="sidebar_icon sidebar_icon--info"
       :class="{'sidebar_item--is-active': ui.gamesetup_detail_open}"
@@ -72,14 +61,10 @@
 import {defineComponent} from 'vue';
 import {Color} from '@/common/Color';
 import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
-import {TurmoilModel} from '@/common/models/TurmoilModel';
-import {PartyName} from '@/common/turmoil/PartyName';
 import GameSetupDetail from '@/client/components/GameSetupDetail.vue';
 import {GameOptionsModel} from '@/common/models/GameOptionsModel';
 import GlobalParameterValue from '@/client/components/GlobalParameterValue.vue';
-import MoonGlobalParameterValue from '@/client/components/moon/MoonGlobalParameterValue.vue';
 import {GlobalParameter} from '@/common/GlobalParameter';
-import {MoonModel} from '@/common/models/MoonModel';
 import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
 
 export default defineComponent({
@@ -104,10 +89,6 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    coloniesCount: {
-      type: Number,
-      required: true,
-    },
     temperature: {
       type: Number,
       required: true,
@@ -119,16 +100,6 @@ export default defineComponent({
     oceans: {
       type: Number,
       required: true,
-    },
-    venus: {
-      type: Number,
-      required: true,
-    },
-    moonData: {
-      type: Object as () => MoonModel | undefined,
-    },
-    turmoil: {
-      type: Object as () => TurmoilModel | undefined,
     },
     lastSoloGeneration: {
       type: Number,
@@ -146,7 +117,6 @@ export default defineComponent({
   components: {
     GameSetupDetail,
     GlobalParameterValue,
-    MoonGlobalParameterValue,
     PreferencesIcon,
   },
   data() {
@@ -166,28 +136,6 @@ export default defineComponent({
     },
     getGenMarker(): string {
       return `${this.generation}`;
-    },
-    rulingPartyToCss(): string {
-      if (this.turmoil?.ruling === undefined) {
-        console.warn('no party provided');
-        return '';
-      }
-      return this.turmoil.ruling.toLowerCase().split(' ').join('_');
-    },
-    getRulingParty(): string {
-      const ruling = this.turmoil?.ruling;
-      switch (ruling) {
-      case PartyName.MARS:
-        return 'Mars';
-      case PartyName.SCIENTISTS:
-        return 'Science';
-      case PartyName.KELVINISTS:
-        return 'Kelvin';
-      case undefined:
-        return '???';
-      default:
-        return ruling;
-      }
     },
   },
   computed: {

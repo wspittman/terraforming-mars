@@ -1,19 +1,18 @@
-import {expect} from 'chai';
-import {runAllActions} from '../../TestingUtils';
-import {Birds} from '../../../src/server/cards/base/Birds';
-import {CEOsFavoriteProject} from '../../../src/server/cards/base/CEOsFavoriteProject';
-import {Decomposers} from '../../../src/server/cards/base/Decomposers';
-import {SearchForLife} from '../../../src/server/cards/base/SearchForLife';
-import {SecurityFleet} from '../../../src/server/cards/base/SecurityFleet';
-import {SelfReplicatingRobots} from '../../../src/server/cards/promo/SelfReplicatingRobots';
-import {SelectCard} from '../../../src/server/inputs/SelectCard';
-import {TestPlayer} from '../../TestPlayer';
-import {ICard} from '../../../src/server/cards/ICard';
-import {testGame} from '../../TestGame';
-import {MicroMills} from '../../../src/server/cards/base/MicroMills';
-import {CardName} from '../../../src/common/cards/CardName';
-import {Tardigrades} from '../../../src/server/cards/base/Tardigrades';
-import {cast} from '../../../src/common/utils/utils';
+import { expect } from 'chai';
+import { CardName } from '../../../src/common/cards/CardName';
+import { cast } from '../../../src/common/utils/utils';
+import { Birds } from '../../../src/server/cards/base/Birds';
+import { CEOsFavoriteProject } from '../../../src/server/cards/base/CEOsFavoriteProject';
+import { Decomposers } from '../../../src/server/cards/base/Decomposers';
+import { MicroMills } from '../../../src/server/cards/base/MicroMills';
+import { SearchForLife } from '../../../src/server/cards/base/SearchForLife';
+import { SecurityFleet } from '../../../src/server/cards/base/SecurityFleet';
+import { Tardigrades } from '../../../src/server/cards/base/Tardigrades';
+import { ICard } from '../../../src/server/cards/ICard';
+import { SelectCard } from '../../../src/server/inputs/SelectCard';
+import { testGame } from '../../TestGame';
+import { runAllActions } from '../../TestingUtils';
+import { TestPlayer } from '../../TestPlayer';
 
 describe('CEOsFavoriteProject', () => {
   let card: CEOsFavoriteProject;
@@ -21,7 +20,7 @@ describe('CEOsFavoriteProject', () => {
 
   beforeEach(() => {
     card = new CEOsFavoriteProject();
-    [/* game */, player] = testGame(2);
+    [, /* game */ player] = testGame(2);
   });
 
   it('Can not play - no cards', () => {
@@ -71,18 +70,6 @@ describe('CEOsFavoriteProject', () => {
     expect(securityFleet.resourceCount).to.eq(2);
   });
 
-  it('Can play on SelfReplicatingRobots cards', () => {
-    const srr = new SelfReplicatingRobots();
-    const birds = new Birds();
-    player.playedCards.push(srr);
-    srr.targetCards.push(birds);
-    birds.resourceCount = 1;
-    cast(card.play(player), undefined);
-    runAllActions(player.game);
-    cast(player.popWaitingFor(), undefined);
-    expect(srr.targetCards[0].resourceCount).to.eq(2);
-  });
-
   it('Cannot play on card with no resources', () => {
     const birds = new Birds();
     const securityFleet = new SecurityFleet();
@@ -97,6 +84,8 @@ describe('CEOsFavoriteProject', () => {
     expect(action.cards).does.contain(securityFleet);
     expect(action.cards).does.contain(tardigrades);
     // This line really just tests SelectCard, but that's OK.
-    expect(() => action.process({type: 'card', cards: [CardName.BIRDS]})).to.throw(Error, /Card Birds not found/);
+    expect(() =>
+      action.process({ type: 'card', cards: [CardName.BIRDS] }),
+    ).to.throw(Error, /Card Birds not found/);
   });
 });

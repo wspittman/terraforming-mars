@@ -1,8 +1,8 @@
-import {shallowMount} from '@vue/test-utils';
-import {expect} from 'chai';
-import {h} from 'vue';
-import {globalConfig} from '../getLocalVue';
 import ModuleItemFilter from '@/client/components/create/ModuleItemFilter.vue';
+import { shallowMount } from '@vue/test-utils';
+import { expect } from 'chai';
+import { h } from 'vue';
+import { globalConfig } from '../getLocalVue';
 
 // Stub that renders both named slots so template content is accessible in tests.
 const PopupPanelStub = {
@@ -165,16 +165,6 @@ describe('ModuleItemFilter', () => {
   it('icon returns the correct expansion CSS class', () => {
     const wrapper = mountFilter();
     expect((wrapper.vm as any).icon('base')).to.eq('create-game-expansion-icon expansion-icon-base');
-  });
-
-  it('icon maps "colonies" to "colony" suffix', () => {
-    const wrapper = mountFilter();
-    expect((wrapper.vm as any).icon('colonies')).to.eq('create-game-expansion-icon expansion-icon-colony');
-  });
-
-  it('icon maps "moon" to "themoon" suffix', () => {
-    const wrapper = mountFilter();
-    expect((wrapper.vm as any).icon('moon')).to.eq('create-game-expansion-icon expansion-icon-themoon');
   });
 
   it('icon returns undefined when module is undefined', () => {

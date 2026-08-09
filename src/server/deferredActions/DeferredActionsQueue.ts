@@ -1,5 +1,4 @@
 import {IDeferredAction} from './DeferredAction';
-import {GiveColonyBonus} from './GiveColonyBonus';
 import {IPlayer} from '../IPlayer';
 
 export class DeferredActionsQueue {
@@ -84,14 +83,6 @@ export class DeferredActionsQueue {
   }
 
   public run(action: IDeferredAction, cb: () => void): void {
-    // Special hook for trade bonus deferred actions
-    // So that they happen for all players at the same time
-    if (action instanceof GiveColonyBonus) {
-      action.andThen(cb);
-      action.execute();
-      return;
-    }
-
     const input = action.execute();
     if (input !== undefined) {
       action.player.setWaitingFor(input, cb);

@@ -2,7 +2,6 @@ import {Units} from '../Units';
 import {CardName} from '../cards/CardName';
 import {Resource} from '../Resource';
 import {AdditionalProjectCosts, CardDiscount, StandardProjectCanPayWith} from '../cards/Types';
-import {Tag} from '../cards/Tag';
 import {Warning} from '../cards/Warning';
 
 export interface CardModel {
@@ -16,6 +15,5 @@ export interface CardModel {
     warnings?: ReadonlyArray<Warning>;
     reserveUnits?: Readonly<Units>; // Written for The Moon, but useful in other contexts.
     bonusResource?: Array<Resource>; // Used with the Mining cards and Robotic Workforce
-    cloneTag?: Tag; // Used with Pathfinders
     standardProjectCanPayWith?: StandardProjectCanPayWith; // Set for standard projects; undefined for regular project cards
 }

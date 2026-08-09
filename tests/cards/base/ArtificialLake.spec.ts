@@ -1,15 +1,15 @@
-import {expect} from 'chai';
-import {ArtificialLake} from '../../../src/server/cards/base/ArtificialLake';
+import { expect } from 'chai';
+import { SpaceType } from '../../../src/common/boards/SpaceType';
 import * as constants from '../../../src/common/constants';
-import {IGame} from '../../../src/server/IGame';
-import {SelectSpace} from '../../../src/server/inputs/SelectSpace';
-import {TestPlayer} from '../../TestPlayer';
-import {SpaceType} from '../../../src/common/boards/SpaceType';
-import {TileType} from '../../../src/common/TileType';
-import {maxOutOceans, runAllActions, setTemperature, testRedsCosts} from '../../TestingUtils';
-import {testGame} from '../../TestGame';
-import {assertPlaceOcean} from '../../assertions';
-import {cast} from '../../../src/common/utils/utils';
+import { TileType } from '../../../src/common/TileType';
+import { cast } from '../../../src/common/utils/utils';
+import { ArtificialLake } from '../../../src/server/cards/base/ArtificialLake';
+import { IGame } from '../../../src/server/IGame';
+import { SelectSpace } from '../../../src/server/inputs/SelectSpace';
+import { assertPlaceOcean } from '../../assertions';
+import { testGame } from '../../TestGame';
+import { maxOutOceans, runAllActions, setTemperature } from '../../TestingUtils';
+import { TestPlayer } from '../../TestPlayer';
 
 describe('ArtificialLake', () => {
   let card: ArtificialLake;
@@ -93,16 +93,5 @@ describe('ArtificialLake', () => {
     });
 
     expect(card.canPlay(player)).is.true;
-  });
-
-  it('Works with reds', () => {
-    const [game, player, player2] = testGame(2, {turmoilExtension: true});
-
-    // Card requirements
-    setTemperature(game, -6);
-
-    testRedsCosts(() => player.canPlay(card), player, card.cost, 3);
-    maxOutOceans(player2);
-    testRedsCosts(() => player.canPlay(card), player, card.cost, 0);
   });
 });

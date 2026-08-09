@@ -1,16 +1,11 @@
 import {CardModel} from './CardModel';
-import {ColonyModel} from './ColonyModel';
-import {Color, ColorWithNeutral} from '../Color';
+import {Color} from '../Color';
 import {PayProductionModel} from './PayProductionUnitsModel';
-import {AresData} from '../ares/AresData';
 import {Message} from '../logs/Message';
-import {PartyName} from '../turmoil/PartyName';
 import {SpaceId} from '../Types';
 import {PaymentOptions} from '../inputs/Payment';
-import {GlobalEventName} from '../turmoil/globalEvents/GlobalEventName';
 import {Warning} from '../cards/Warning';
 import {Units} from '../Units';
-import {ClaimedToken} from '../underworld/UnderworldPlayerData';
 
 export type BaseInputModel = {
   title: string | Message;
@@ -67,10 +62,6 @@ export type SelectCardModel = BaseInputModel & {
   showSelectAll: boolean;
 }
 
-export type SelectColonyModel = BaseInputModel & {
-  type: 'colony';
-  coloniesModel: ReadonlyArray<ColonyModel>;
-}
 
 export type SelectPaymentModel = BaseInputModel & {
   type: 'payment';
@@ -104,35 +95,12 @@ export type SelectAmountModel = BaseInputModel & {
   maxByDefault: boolean;
 }
 
-export type DeltaProjectInputModel = BaseInputModel & {
-  type: 'deltaProject';
-  validSteps: ReadonlyArray<number>;
-}
-
-export type SelectDelegateModel = BaseInputModel & {
-  type: 'delegate';
-  players: Array<ColorWithNeutral>;
-}
-
-export type SelectPartyModel = BaseInputModel & {
-  type: 'party';
-  parties: Array<PartyName>;
-}
 
 export type SelectProductionToLoseModel = BaseInputModel & {
   type: 'productionToLose';
   payProduction: PayProductionModel;
 }
 
-export type ShiftAresGlobalParametersModel = BaseInputModel & {
-  type: 'aresGlobalParameters';
-  aresData: AresData;
-}
-
-export type SelectGlobalEventModel = BaseInputModel & {
-  type: 'globalEvent';
-  globalEventNames: Array<GlobalEventName>;
-}
 
 export type SelectResourceModel = BaseInputModel & {
   type: 'resource';
@@ -144,12 +112,6 @@ export type SelectResourcesModel = BaseInputModel & {
   count: number;
 }
 
-export type SelectClaimedUndergroundTokenModel = BaseInputModel & {
-  type: 'claimedUndergroundToken';
-  max: number;
-  min: number;
-  tokens: ReadonlyArray<ClaimedToken>;
-}
 
 export type PlayerInputModel =
   AndOptionsModel |
@@ -160,17 +122,10 @@ export type PlayerInputModel =
   SelectCardModel |
   SelectAmountModel |
   SelectCardModel |
-  SelectColonyModel |
-  SelectDelegateModel |
-  SelectPartyModel |
   SelectPaymentModel |
   SelectPlayerModel |
   SelectProductionToLoseModel |
   SelectProjectCardToPlayModel |
   SelectSpaceModel |
-  ShiftAresGlobalParametersModel |
-  SelectGlobalEventModel |
   SelectResourceModel |
-  SelectResourcesModel |
-  SelectClaimedUndergroundTokenModel |
-  DeltaProjectInputModel;
+  SelectResourcesModel;

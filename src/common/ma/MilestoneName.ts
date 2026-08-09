@@ -21,24 +21,13 @@ export const milestoneNames = [
   'Rim Settler',
 
   // Venus
-  'Hoverlord',
 
   // Ares
-  'Networker',
 
   // The Moon
-  'One Giant Step',
-  'Lunarchitect',
-
-  // Amazonis Planitia
-  'Colonizer',
-  'Minimalist',
-  'Terran',
-  'Tropicalist',
 
   // Arabia Terra
   'Economizer',
-  'Pioneer',
   'Land Specialist',
   'Martian',
 
@@ -57,7 +46,6 @@ export const milestoneNames = [
   // Vastitas Borealis
   'V. Electrician',
   'Smith',
-  'Tradesman',
   'Irrigator',
   'Capitalist',
 
@@ -69,11 +57,8 @@ export const milestoneNames = [
   'Farmer', // And modular
 
   // Underworld
-  'Tunneler',
-  'Risktaker',
 
   // Ares Extreme
-  'Purifier',
 
   // Modular
   'Briber',
@@ -83,12 +68,9 @@ export const milestoneNames = [
   'Hydrologist',
   'Landshaper',
   'Legend4',
-  'Lobbyist',
   'Merchant',
   'Metallurgist', // Same as Smith
   'Philantropist',
-  'Pioneer4',
-  'Planetologist',
   'Producer',
   'Researcher',
   'Spacefarer4',
@@ -101,12 +83,11 @@ export const milestoneNames = [
   'Tycoon10',
 ] as const;
 
-export type MilestoneName = typeof milestoneNames[number];
+export type MilestoneName = (typeof milestoneNames)[number];
 
 const MILESTONE_RENAMES = new Map<string, MilestoneName>([
   // When renaming an award add the old name here (like the example below), and add a TODO (like the example below)
   // And remember to add a test in spec.ts.
-
   // TODO(yournamehere): remove after 2021-04-05
   // ['Electrician', 'V. Electrician'],
 ]);

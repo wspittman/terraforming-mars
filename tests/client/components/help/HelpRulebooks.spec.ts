@@ -9,5 +9,9 @@ describe('HelpRulebooks', () => {
       ...globalConfig,
     });
     expect(wrapper.exists()).to.be.true;
+    expect(wrapper.text()).to.include('Corporate Era');
+    expect(wrapper.text()).to.not.include('Venus Next');
+    expect(wrapper.text()).to.not.include('Prelude');
+    expect(wrapper.text()).to.not.include('Fan Expansions');
   });
 });

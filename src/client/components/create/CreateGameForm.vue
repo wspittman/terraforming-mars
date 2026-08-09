@@ -21,159 +21,12 @@
                         </div>
 
                         <div class="create-game-page-column">
-                            <h4 v-i18n>Expansions</h4>
-
-                            <input type="checkbox" name="allOfficialExpansions" id="allOfficialExpansions-checkbox" v-model="allOfficialExpansions">
-                            <label for="allOfficialExpansions-checkbox">
-                                <span v-i18n>All</span>
-                            </label>
+                            <h4 v-i18n>Game Version</h4>
 
                             <input type="checkbox" name="corporateEra" id="corporateEra-checkbox" v-model="expansions.corpera">
                             <label for="corporateEra-checkbox" class="expansion-button">
                                 <div class="create-game-expansion-icon expansion-icon-CE"></div>
                                 <span v-i18n>Corporate Era</span>
-                            </label>
-
-                            <input type="checkbox" name="prelude" id="prelude-checkbox" v-model="expansions.prelude">
-                            <label for="prelude-checkbox" class="expansion-button">
-                                <div class="create-game-expansion-icon expansion-icon-prelude"></div>
-                                <span v-i18n>Prelude</span>
-                            </label>
-
-                            <input type="checkbox" name="prelude2" id="prelude2-checkbox" v-model="expansions.prelude2">
-                            <label for="prelude2-checkbox" class="expansion-button">
-                                <div class="create-game-expansion-icon expansion-icon-prelude2"></div>
-                                <span v-i18n>Prelude 2</span>
-                            </label>
-
-                            <input type="checkbox" name="venusNext" id="venusNext-checkbox" v-model="expansions.venus">
-                            <label for="venusNext-checkbox" class="expansion-button">
-                            <div class="create-game-expansion-icon expansion-icon-venus"></div>
-                                <span v-i18n>Venus Next</span>
-                            </label>
-
-                            <input type="checkbox" name="colonies" id="colonies-checkbox" v-model="expansions.colonies">
-                            <label for="colonies-checkbox" class="expansion-button">
-                            <div class="create-game-expansion-icon expansion-icon-colony"></div>
-                                <span v-i18n>Colonies</span>
-                            </label>
-
-                            <input type="checkbox" name="turmoil" id="turmoil-checkbox" v-model="expansions.turmoil">
-                            <label for="turmoil-checkbox" class="expansion-button">
-                                <div class="create-game-expansion-icon expansion-icon-turmoil"></div>
-                                <span v-i18n>Turmoil</span>
-                            </label>
-
-                            <input type="checkbox" name="promo" id="promo-checkbox" v-model="expansions.promo">
-                            <label for="promo-checkbox" class="expansion-button">
-                                <div class="create-game-expansion-icon expansion-icon-promo"></div>
-                                <span v-i18n>Promos</span>&nbsp;<a :href="wikiUrls.promo" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                            </label>
-
-                            <div class="create-game-subsection-label" v-i18n>Fan-made</div>
-
-                            <input type="checkbox" name="ares" id="ares-checkbox" v-model="expansions.ares">
-                            <label for="ares-checkbox" class="expansion-button">
-                                <div class="create-game-expansion-icon expansion-icon-ares"></div>
-                                <span v-i18n>Ares</span>&nbsp;<a :href="wikiUrls.ares" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                            </label>
-
-                            <template v-if="expansions.ares">
-                                <input type="checkbox" v-model="aresExtremeVariant" id="aresExtremeVariantVariant-checkbox">
-                                <label for="aresExtremeVariantVariant-checkbox">
-                                    <div class="create-game-expansion-icon expansion-icon-ares"></div>
-                                    <span v-i18n>Extreme</span> &nbsp;<a :href="wikiUrls.aresExtreme" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                                </label>
-                            </template>
-
-                            <input type="checkbox" name="community" id="communityCards-checkbox" v-model="expansions.community">
-                            <label for="communityCards-checkbox" class="expansion-button">
-                                <div class="create-game-expansion-icon expansion-icon-community"></div>
-                                <span v-i18n>Community</span>&nbsp;<a :href="wikiUrls.community" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                            </label>
-
-                            <input type="checkbox" name="themoon" id="themoon-checkbox" v-model="expansions.moon">
-                            <label for="themoon-checkbox" class="expansion-button">
-                                <div class="create-game-expansion-icon expansion-icon-themoon"></div>
-                                <span v-i18n>The Moon</span>&nbsp;<a :href="wikiUrls.moon" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                            </label>
-
-                            <template v-if="expansions.moon">
-                              <input type="checkbox" v-model="requiresMoonTrackCompletion" id="requiresMoonTrackCompletion-checkbox">
-                              <label for="requiresMoonTrackCompletion-checkbox">
-                                  <span v-i18n>Mandatory Moon Terraforming</span>
-                              </label>
-
-                              <input type="checkbox" v-model="moonStandardProjectVariant" id="moonStandardProjectVariant2-checkbox">
-                              <label for="moonStandardProjectVariant2-checkbox">
-                                  <span v-i18n>Standard Project Variant #2</span>&nbsp;<a :href="wikiUrls.moonStandardProjectVariant" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                              </label>
-
-                              <input type="checkbox" v-model="moonStandardProjectVariant1" id="moonStandardProjectVariant1-checkbox">
-                              <label for="moonStandardProjectVariant1-checkbox">
-                                  <span v-i18n>Standard Project Variant #1</span>&nbsp;<a :href="wikiUrls.moonStandardProjectVariant" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                              </label>
-                            </template>
-
-                            <template v-if="expansions.turmoil">
-                                <input type="checkbox" name="politicalAgendas" id="politicalAgendas-checkbox" @change="politicalAgendasExtensionToggle()">
-                                <label for="politicalAgendas-checkbox" class="expansion-button">
-                                    <div class="create-game-expansion-icon expansion-icon-agendas"></div>
-                                    <span v-i18n>Agendas</span>&nbsp;<a href="https://www.notion.so/Political-Agendas-8c6b0b018a884692be29b3ef44b340a9" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                                </label>
-
-                                <div class="create-game-page-column-row" v-if="isPoliticalAgendasExtensionEnabled()">
-                                    <div>
-                                    <input type="radio" name="agendaStyle" v-model="politicalAgendasExtension" :value="getPoliticalAgendasExtensionAgendaStyle('random')" id="randomAgendaStyle-radio">
-                                    <label class="label-agendaStyle agendaStyle-random" for="randomAgendaStyle-radio">
-                                        <span class="agendas-text" v-i18n>{{ getPoliticalAgendasExtensionAgendaStyle('random') }}</span>
-                                    </label>
-                                    </div>
-
-                                    <div>
-                                    <input type="radio" name="agendaStyle" v-model="politicalAgendasExtension" :value="getPoliticalAgendasExtensionAgendaStyle('chairman')" id="chairmanAgendaStyle-radio">
-                                    <label class="label-agendaStyle agendaStyle-chairman" for="chairmanAgendaStyle-radio">
-                                        <span class="agendas-text" v-i18n>{{ getPoliticalAgendasExtensionAgendaStyle('chairman') }}</span>
-                                    </label>
-                                    </div>
-                                </div>
-                            </template>
-
-                            <input type="checkbox" name="pathfinders" id="pathfinders-checkbox" v-model="expansions.pathfinders">
-                            <label for="pathfinders-checkbox" class="expansion-button">
-                                <div class="create-game-expansion-icon expansion-icon-pathfinders"></div>
-                                <span v-i18n>Pathfinders</span>&nbsp;<a :href="wikiUrls.pathfinders" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                            </label>
-
-                            <template v-if="expansions.venus">
-                                <input type="checkbox" v-model="altVenusBoard" id="altVenusBoard-checkbox">
-                                <label for="altVenusBoard-checkbox">
-                                    <span v-i18n>Alt. Venus Board</span> &nbsp;<a :href="wikiUrls.alternativeVenusBoard" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                                </label>
-                            </template>
-
-                            <input type="checkbox" name="ceo" id="ceo-checkbox" v-model="expansions.ceo">
-                            <label for="ceo-checkbox" class="expansion-button">
-                                <div class="create-game-expansion-icon expansion-icon-ceo"></div>
-                                <span v-i18n>CEOs</span>&nbsp;<a :href="wikiUrls.ceo" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                            </label>
-
-                            <input type="checkbox" name="starwars" id="starwars-checkbox" v-model="expansions.starwars">
-                            <label for="starwars-checkbox" class="expansion-button">
-                                <div class="create-game-expansion-icon expansion-icon-starwars"></div>
-                                <span v-i18n>Star Wars</span><span> </span>&nbsp;<a :href="wikiUrls.starwars" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                            </label>
-
-                            <input type="checkbox" name="ceo" id="underworld-checkbox" v-model="expansions.underworld">
-                            <label for="underworld-checkbox" class="expansion-button">
-                                <div class="create-game-expansion-icon expansion-icon-underworld"></div>
-                                <span v-i18n>Underworld 2</span><span></span>&nbsp;<a :href="wikiUrls.underworld" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                            </label>
-
-                            <input type="checkbox" name="deltaProject" id="deltaProject-checkbox" v-model="expansions.deltaProject">
-                            <label for="deltaProject-checkbox" class="expansion-button">
-                                <div class="create-game-expansion-icon expansion-icon-deltaProject"></div>
-                                <span v-i18n>Delta Project</span>&nbsp;<span title="Alpha — work in progress">(&#945;)</span><span></span>&nbsp;<a :href="wikiUrls.deltaProject" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
                             </label>
                         </div>
 
@@ -199,27 +52,6 @@
                             <label for="startingCorpNum-checkbox">
                             <input type="number" class="create-game-corporations-count" value="2" min="1" :max="6" v-model="startingCorporations" id="startingCorpNum-checkbox">
                                 <span v-i18n>Starting Corporations</span>
-                            </label>
-
-                            <template v-if="expansions.prelude">
-                              <label for="startingPreludeENum-checkbox">
-                              <div class="create-game-expansion-icon expansion-icon-prelude"></div>
-                              <input type="number" class="create-game-corporations-count" value="4" min="4" :max="8" v-model="startingPreludes" id="startingPreludeNum-checkbox">
-                                  <span v-i18n>Starting Preludes</span>
-                              </label>
-                            </template>
-
-                            <template v-if="expansions.ceo">
-                              <label for="startingCEONum-checkbox">
-                              <div class="create-game-expansion-icon expansion-icon-ceo"></div>
-                              <input type="number" class="create-game-corporations-count" value="3" min="1" :max="6" v-model="startingCeos" id="startingCEONum-checkbox">
-                                  <span v-i18n>Starting CEOs</span>
-                              </label>
-                            </template>
-
-                            <input type="checkbox" v-model="solarPhaseOption" id="WGT-checkbox">
-                            <label for="WGT-checkbox">
-                                <span v-i18n>World Government Terraforming</span>&nbsp;<a :href="wikiUrls.worldGovernmentTerraforming" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
                             </label>
 
                             <template v-if="playersCount === 1">
@@ -275,14 +107,6 @@
                               <span v-i18n>min</span>
                             </label>
 
-                            <template v-if="expansions.prelude">
-                              <input type="checkbox" v-model="twoCorpsVariant" id="twoCorps-checkbox">
-                              <label for="twoCorps-checkbox" title="Always gain the Merger Prelude card (will be given post-draft)">
-                                    <div class="create-game-expansion-icon expansion-icon-prelude"></div>
-                                    <span v-i18n>Merger</span>&nbsp;<a :href="wikiUrls.merger" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                              </label>
-                            </template>
-
                             <input type="checkbox" v-model="shuffleMapOption" id="shuffleMap-checkbox">
                             <label for="shuffleMap-checkbox">
                                     <span v-i18n>Randomize board tiles</span>&nbsp;<a :href="wikiUrls.randomizeBoardTiles" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
@@ -305,22 +129,6 @@
                                 <span v-if="customCorporations.length">&nbsp;({{ customCorporations.length }})</span>
                             </label>
 
-                            <template v-if="expansions.prelude">
-                              <input type="checkbox" v-model="showPreludesList" id="customPreludes-checkbox">
-                              <label for="customPreludes-checkbox">
-                                  <span v-i18n>Custom Preludes list</span>
-                                  <span v-if="customPreludes.length">&nbsp;({{ customPreludes.length }})</span>
-                              </label>
-                            </template>
-
-                            <template v-if="expansions.ceo">
-                            <input type="checkbox" v-model="showCeosList" id="customCeos-checkbox">
-                              <label for="customCeos-checkbox">
-                                  <span v-i18n>Custom CEOs list</span>
-                                  <span v-if="customCeos.length">&nbsp;({{ customCeos.length }})</span>
-                              </label>
-                            </template>
-
                             <input type="checkbox" v-model="showBannedCards" id="bannedCards-checkbox">
                             <label for="bannedCards-checkbox">
                                 <span v-i18n>Exclude some cards</span>
@@ -331,20 +139,6 @@
                                 <span v-i18n>Include some cards</span>
                             </label>
 
-                            <template v-if="expansions.colonies">
-                                <input type="checkbox" v-model="showColoniesList" id="customColonies-checkbox">
-                                <label for="customColonies-checkbox">
-                                    <span v-i18n>Custom Colonies list</span>
-                                  <span v-if="customColonies.length">&nbsp;({{ customColonies.length }})</span>
-                                </label>
-                            </template>
-
-                            <template v-if="expansions.turmoil">
-                                <input type="checkbox" v-model="removeNegativeGlobalEventsOption" id="removeNegativeEvent-checkbox">
-                                <label for="removeNegativeEvent-checkbox">
-                                    <span v-i18n>Remove negative Global Events</span>&nbsp;<a :href="wikiUrls.removeNegativeGlobalEvents" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                                </label>
-                            </template>
 
                         </div>
 
@@ -366,22 +160,6 @@
                                 </label>
                                 </div>
                             </div>
-                            <div class="create-game-page-column-row" v-if="initialDraft">
-                              <div v-if="expansions.prelude">
-                                <input type="checkbox" name="preludeDraft" v-model="preludeDraftVariant" id="preludeDraft-checkbox">
-                                <label for="preludeDraft-checkbox">
-                                  <span v-i18n>Prelude Draft</span>
-                                </label>
-                              </div>
-
-                              <div v-if="expansions.ceo">
-                                <input type="checkbox" name="ceosDraft" v-model="ceosDraftVariant" id="ceosDraft-checkbox">
-                                <label for="ceosDraft-checkbox">
-                                  <span v-i18n>CEO Draft</span>
-                                </label>
-                              </div>
-                            </div>
-
                             <input type="checkbox" v-model="randomFirstPlayer" id="randomFirstPlayer-checkbox">
                             <label for="randomFirstPlayer-checkbox">
                                 <span v-i18n>Random first player</span>
@@ -419,13 +197,6 @@
                               Please don't report anything unless it breaks the game.<br>
                               These are <b>always fully random</b>.
                             </div>
-                            <template v-if="expansions.venus">
-                                <input type="checkbox" v-model="requiresVenusTrackCompletion" id="requiresVenusTrackCompletion-checkbox">
-                                <label for="requiresVenusTrackCompletion-checkbox">
-                                    <span v-i18n>Mandatory Venus Terraforming</span> &nbsp;<a :href="wikiUrls.venusTerraforming" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                                </label>
-                            </template>
-
                             <template v-if="randomMA !== RandomMAOptionType.NONE">
                               <input type="checkbox" v-model="includeFanMA" id="fanMA-checkbox">
                               <label for="fanMA-checkbox">
@@ -516,36 +287,6 @@
                 @close="showCorporationList = false"
             />
 
-            <PreludesFilter
-                ref="preludesFilter"
-                v-show="showPreludesList"
-                v-if="showPreludesList"
-                @prelude-list-changed="updateCustomPreludes"
-                :expansions="expansions"
-                :selected="customPreludes"
-                @close="showPreludesList = false"
-            />
-
-            <ColoniesFilter
-                ref="coloniesFilter"
-                v-show="showColoniesList"
-                v-if="showColoniesList"
-                @colonies-list-changed="updateCustomColonies"
-                :expansions="expansions"
-                :selected="customColonies"
-                @close="showColoniesList = false"
-            />
-
-            <CeosFilter
-                ref="ceosFilter"
-                v-show="showCeosList"
-                v-if="showCeosList"
-                @ceo-list-changed="updateCustomCeos"
-                :expansions="expansions"
-                :selected="customCeos"
-                @close="showCeosList = false"
-            />
-
             <div class="create-game--block" v-if="showBannedCards">
               <CardsFilter
                   ref="cardsFilter"
@@ -575,20 +316,14 @@ import {Color, PLAYER_COLORS} from '@/common/Color';
 import {BoardName} from '@/common/boards/BoardName';
 import {RandomBoardOption} from '@/common/boards/RandomBoardOption';
 import {CardName} from '@/common/cards/CardName';
-import CeosFilter from '@/client/components/create/CeosFilter.vue';
 import CorporationsFilter from '@/client/components/create/CorporationsFilter.vue';
-import PreludesFilter from '@/client/components/create/PreludesFilter.vue';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
-import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
-import {ColonyName} from '@/common/colonies/ColonyName';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {playerColorClass} from '@/common/utils/utils';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {GameId, JSONObject} from '@/common/Types';
-import {AgendaStyle} from '@/common/turmoil/Types';
 import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
-import {getCard} from '@/client/cards/ClientCardManifest';
 import {BoardNameType, NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
 import {vueRoot} from '@/client/components/vueRoot';
 import {CreateGameModel} from './CreateGameModel';
@@ -596,11 +331,9 @@ import {paths} from '@/common/app/paths';
 import {JSONProcessor} from './JSONProcessor';
 import {defaultCreateGameModel} from './defaultCreateGameModel';
 import {CreateGameSettingsStorage} from './CreateGameSettingsStorage';
-import {getColony} from '@/client/colonies/ClientColonyManifest';
 import {RULEBOOK_URLS, WIKI, WIKI_URLS} from '@/client/utils/WikiLinks';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
 
-const REVISED_COUNT_ALGORITHM = false;
 const createGameSettingsStorage = new CreateGameSettingsStorage();
 
 
@@ -611,7 +344,6 @@ type Refs = {
 };
 
 type FormModel = {
-  preludeToggled: boolean;
   uploading: boolean;
 };
 
@@ -620,57 +352,16 @@ export default defineComponent({
   data(): CreateGameModel & FormModel {
     return {
       ...defaultCreateGameModel(),
-      preludeToggled: false,
       uploading: false,
     };
   },
   components: {
     AppButton,
     CardsFilter,
-    CeosFilter,
-    ColoniesFilter,
     CorporationsFilter,
-    PreludesFilter,
     PreferencesIcon,
   },
   watch: {
-    allOfficialExpansions(value: boolean) {
-      this.expansions.corpera = value;
-      this.expansions.prelude = value;
-      this.expansions.venus = value;
-      this.expansions.colonies = value;
-      this.expansions.turmoil = value;
-      this.expansions.prelude2 = value;
-      this.expansions.promo = value;
-      this.solarPhaseOption = value;
-    },
-    'expansions.venus': function(value: boolean) {
-      this.solarPhaseOption = value;
-    },
-    'expansions.turmoil': function(value: boolean) {
-      if (value === false) {
-        this.politicalAgendasExtension = 'Standard';
-      }
-    },
-    initialDraft(value: boolean) {
-      if (value === true && this.preludeDraftVariant === undefined) {
-        this.preludeDraftVariant = true;
-      }
-      if (value === true && this.ceosDraftVariant === undefined) {
-        this.ceosDraftVariant = true;
-      }
-    },
-    'expansions.prelude': function(value: boolean) {
-      if (value === true && this.preludeDraftVariant === undefined) {
-        this.preludeDraftVariant = true;
-      }
-    },
-    'expansions.prelude2': function(value: boolean) {
-      if (value === true && this.preludeToggled === false && this.uploading === false) {
-        this.expansions.prelude = true;
-        this.preludeToggled = true;
-      }
-    },
     playersCount(value: number) {
       if (value === 1) {
         this.expansions.corpera = true;
@@ -708,10 +399,7 @@ export default defineComponent({
         RandomBoardOption.OFFICIAL,
         BoardName.UTOPIA_PLANITIA,
         BoardName.VASTITAS_BOREALIS_NOVA,
-        BoardName.TERRA_CIMMERIA_NOVA,
         BoardName.ARABIA_TERRA,
-        BoardName.AMAZONIS,
-        BoardName.TERRA_CIMMERIA,
         BoardName.VASTITAS_BOREALIS,
         BoardName.HOLLANDIA,
         RandomBoardOption.ALL,
@@ -756,7 +444,6 @@ export default defineComponent({
           if (!component.seededGame) {
             component.seed = Math.random();
           }
-          component.solarPhaseOption = Boolean(processor.solarPhaseOption);
         } finally {
           this.uploading = false;
         }
@@ -774,7 +461,6 @@ export default defineComponent({
     resetSettings() {
       createGameSettingsStorage.clearSettings();
       Object.assign(this, defaultCreateGameModel(), {
-        preludeToggled: false,
         uploading: false,
       });
       nextTick(() => {
@@ -827,20 +513,11 @@ export default defineComponent({
     updateCustomCorporations(customCorporations: Array<CardName>) {
       this.customCorporations = customCorporations;
     },
-    updateCustomPreludes(customPreludes: Array<CardName>) {
-      this.customPreludes = customPreludes;
-    },
     updateBannedCards(bannedCards: Array<CardName>) {
       this.bannedCards = bannedCards;
     },
     updateIncludedCards(includedCards: Array<CardName>) {
       this.includedCards = includedCards;
-    },
-    updateCustomColonies(customColonies: Array<ColonyName>) {
-      this.customColonies = customColonies;
-    },
-    updateCustomCeos(customCeos: Array<CardName>) {
-      this.customCeos = customCeos;
     },
     getPlayers(): Array<NewPlayerModel> {
       return this.players.slice(0, this.playersCount);
@@ -864,46 +541,14 @@ export default defineComponent({
         return RandomMAOptionType.NONE;
       }
     },
-    isPoliticalAgendasExtensionEnabled(): Boolean {
-      return this.politicalAgendasExtension !== 'Standard';
-    },
-    politicalAgendasExtensionToggle() {
-      if (this.politicalAgendasExtension === 'Standard') {
-        this.politicalAgendasExtension = 'Random';
-      } else {
-        this.politicalAgendasExtension = 'Standard';
-      }
-    },
-    getPoliticalAgendasExtensionAgendaStyle(type: 'random' | 'chairman'): AgendaStyle {
-      if (type === 'random') {
-        return 'Random';
-      } else if (type === 'chairman') {
-        return 'Chairman';
-      } else {
-        console.warn('AgendaStyle not found');
-        return 'Standard';
-      }
-    },
     isBeginnerToggleEnabled(): Boolean {
-      return !(this.initialDraft || this.expansions.prelude || this.expansions.venus || this.expansions.colonies || this.expansions.turmoil);
+      return !this.initialDraft;
     },
     getPlayersCountText(count: number): string {
       if (count === 1) {
         return translateText('Solo');
       }
       return count.toString();
-    },
-    deselectVenusCompletion() {
-      if (this.expansions.venus === false) {
-        this.requiresVenusTrackCompletion = false;
-      }
-    },
-    deselectMoonCompletion() {
-      if (this.expansions.moon === false) {
-        this.requiresMoonTrackCompletion = false;
-        this.moonStandardProjectVariant = false;
-        this.moonStandardProjectVariant1 = false;
-      }
     },
     getBoardColorClass(boardName: BoardName | BoardNameType): string {
       switch (boardName) {
@@ -917,12 +562,8 @@ export default defineComponent({
         return 'create-game-board-hexagon create-game-utopia-planitia';
       case BoardName.VASTITAS_BOREALIS_NOVA:
         return 'create-game-board-hexagon create-game-vastitas-borealis-nova';
-      case BoardName.AMAZONIS:
-        return 'create-game-board-hexagon create-game-amazonis';
       case BoardName.ARABIA_TERRA:
         return 'create-game-board-hexagon create-game-arabia-terra';
-      case BoardName.TERRA_CIMMERIA:
-        return 'create-game-board-hexagon create-game-terra-cimmeria';
       case BoardName.VASTITAS_BOREALIS:
         return 'create-game-board-hexagon create-game-vastitas-borealis';
       case BoardName.HOLLANDIA:
@@ -946,9 +587,6 @@ export default defineComponent({
         [BoardName.UTOPIA_PLANITIA]: 'utopia-planitia',
         [BoardName.VASTITAS_BOREALIS_NOVA]: 'vastitas-borealis-nova',
         [BoardName.VASTITAS_BOREALIS]: 'vastitas-borealis',
-        [BoardName.AMAZONIS]: 'amazonis-planatia',
-        [BoardName.TERRA_CIMMERIA]: 'terra-cimmeria',
-        [BoardName.TERRA_CIMMERIA_NOVA]: 'terra-cimmeria-nova',
         [BoardName.HOLLANDIA]: 'hollandia',
         [RandomBoardOption.OFFICIAL]: '',
         [RandomBoardOption.ALL]: '',
@@ -1007,62 +645,20 @@ export default defineComponent({
       const initialDraft = this.initialDraft;
       const randomMA = this.randomMA;
       const showOtherPlayersVP = this.showOtherPlayersVP;
-      const solarPhaseOption = this.solarPhaseOption;
       const shuffleMapOption = this.shuffleMapOption;
-      const customColonies = this.customColonies;
       const customCorporations = this.customCorporations;
-      const customPreludes = this.customPreludes;
       const bannedCards = this.bannedCards;
       const includedCards = this.includedCards;
       const board = this.board;
       const seed = this.seed;
-      const politicalAgendasExtension = this.politicalAgendasExtension;
       const undoOption = this.undoOption;
       const showTimers = this.showTimers;
       const fastModeOption = this.fastModeOption;
-      const removeNegativeGlobalEventsOption = this.removeNegativeGlobalEventsOption;
       const includeFanMA = this.includeFanMA;
       const startingCorporations = this.startingCorporations;
       const soloTR = this.soloTR;
       const randomFirstPlayer = this.randomFirstPlayer;
-      const requiresVenusTrackCompletion = this.requiresVenusTrackCompletion;
-      const twoCorpsVariant = this.twoCorpsVariant;
-      const customCeos = this.customCeos;
-      const startingCeos = this.startingCeos;
-      const startingPreludes = this.startingPreludes;
       let clonedGamedId: undefined | GameId = undefined;
-
-      // Check custom colony count
-      if (customColonies.length > 0) {
-        const playersCount = players.length;
-        let neededColoniesCount = playersCount + 2;
-        if (playersCount === 1) {
-          neededColoniesCount = 4;
-        } else if (playersCount === 2) {
-          neededColoniesCount = 5;
-        }
-
-        if (customColonies.length < neededColoniesCount) {
-          window.alert(translateTextWithParams('Must select at least ${0} colonies', [neededColoniesCount.toString()]));
-          return;
-        }
-
-        let valid = true;
-        for (const colonyName of customColonies) {
-          const colony = getColony(colonyName);
-          if (colony.expansion !== undefined && !this.expansions[colony.expansion]) {
-            valid = false;
-            break;
-          }
-        }
-        if (valid === false) {
-          const confirm = window.confirm(translateText(
-            'Some of the colonies you selected need expansions you have not enabled. Using them might break your game. Press OK to continue or Cancel to change your selections.'));
-          if (confirm === false) {
-            return;
-          }
-        }
-      }
 
       if (players.length === 1 && this.expansions.corpera === false) {
         const confirm = window.confirm(translateText(
@@ -1072,107 +668,15 @@ export default defineComponent({
         }
       }
 
-      // Check Prelude 2 + Pathfinders infinite energy production
-      let energyProductionBug = true;
-      if (customCorporations.length > 0 && !customCorporations.includes(CardName.THORGATE)) {
-        energyProductionBug = false;
-      }
-      if (this.bannedCards.includes(CardName.STANDARD_TECHNOLOGY)) {
-        energyProductionBug = false;
-      }
-
-      if (this.bannedCards.includes(CardName.SUITABLE_INFRASTRUCTURE)) {
-        energyProductionBug = false;
-      } else {
-        if (this.expansions.prelude2 === false && !this.includedCards.includes(CardName.SUITABLE_INFRASTRUCTURE)) {
-          energyProductionBug = false;
-        }
-      }
-
-      if (this.bannedCards.includes(CardName.HIGH_TEMP_SUPERCONDUCTORS)) {
-        energyProductionBug = false;
-      } else {
-        if (this.expansions.pathfinders === false && !this.includedCards.includes(CardName.HIGH_TEMP_SUPERCONDUCTORS)) {
-          energyProductionBug = false;
-        }
-      }
-
-      if (energyProductionBug === true) {
-        const confirm = window.confirm(translateText(
-          'It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production. Press OK to continue or Cancel to change your selections.'));
-        if (confirm === false) {
-          return;
-        }
-      }
-
       // Check custom corp count
       if (customCorporations.length > 0) {
-        let neededCorpsCount = players.length * startingCorporations;
-        if (REVISED_COUNT_ALGORITHM) {
-          if (this.twoCorpsVariant) {
-            // Add an additional 4 for the Merger prelude
-            // Everyone-Merger needs an additional 4 corps per player
-            //  NB: This will not cover the case when no custom corp list is set!
-            //  It _can_ come about if  the number of corps included in all expansions is still not enough.
-            neededCorpsCount = (players.length * startingCorporations) + (players.length * 4);
-          } else {
-            neededCorpsCount = players.length * startingCorporations;
-            // Merger Prelude alone needs 4 additional preludes
-            if (this.expansions.prelude && this.expansions.promo) {
-              neededCorpsCount += 4;
-            }
-          }
-        }
+        const neededCorpsCount = players.length * startingCorporations;
         if (customCorporations.length < neededCorpsCount) {
           window.alert(translateTextWithParams('Must select at least ${0} corporations', [neededCorpsCount.toString()]));
           return;
         }
-        let valid = true;
-        for (const corp of customCorporations) {
-          const card = getCard(corp);
-          for (const module of card?.compatibility ?? []) {
-            if (!this.expansions[module]) {
-              valid = false;
-            }
-          }
-        }
-        if (valid === false) {
-          const confirm = window.confirm(translateText(
-            'Some of the corps you selected need expansions you have not enabled. Using them might break your game. Press OK to continue or Cancel to change your selections.'));
-          if (confirm === false) {
-            return;
-          }
-        }
       } else {
         customCorporations.length = 0;
-      }
-
-      // TODO(kberg): this is a direct copy of the code right above.
-      // Check custom prelude count
-      if (customPreludes.length > 0) {
-        const requiredPreludeCount = players.length * startingPreludes;
-        if (customPreludes.length < requiredPreludeCount) {
-          window.alert(translateTextWithParams('Must select at least ${0} Preludes', [requiredPreludeCount.toString()]));
-          return;
-        }
-        let valid = true;
-        for (const prelude of customPreludes) {
-          const card = getCard(prelude);
-          for (const module of card?.compatibility ?? []) {
-            if (!this.expansions[module]) {
-              valid = false;
-            }
-          }
-        }
-        if (valid === false) {
-          const confirm = window.confirm(translateText(
-            'Some of the Preludes you selected need expansions you have not enabled. Using them might break your game. Press OK to continue or Cancel to change your selections.'));
-          if (confirm === false) {
-            return;
-          }
-        }
-      } else {
-        customPreludes.length = 0;
       }
 
       // Clone game checks
@@ -1207,41 +711,27 @@ export default defineComponent({
 
       const dataToSend: NewGameConfig = {
         players,
-        expansions: this.expansions,
+        corporateEra: this.expansions.corpera,
         draftVariant,
         showOtherPlayersVP,
         customCorporationsList: customCorporations,
-        customColoniesList: customColonies,
-        customCeos: customCeos,
-        customPreludes,
         bannedCards,
         includedCards,
         board,
         seed,
-        solarPhaseOption,
-        aresExtremeVariant: this.aresExtremeVariant,
-        politicalAgendasExtension: politicalAgendasExtension,
         undoOption,
         showTimers,
         fastModeOption,
-        removeNegativeGlobalEventsOption,
         includeFanMA,
         modularMA: this.modularMA,
         startingCorporations,
         soloTR,
         clonedGamedId,
         initialDraft,
-        preludeDraftVariant: this.preludeDraftVariant ?? false,
-        ceosDraftVariant: this.ceosDraftVariant ?? false,
         randomMA,
         shuffleMapOption,
         // beginnerOption,
         randomFirstPlayer,
-        requiresVenusTrackCompletion,
-        requiresMoonTrackCompletion: this.requiresMoonTrackCompletion,
-        moonStandardProjectVariant: this.moonStandardProjectVariant,
-        moonStandardProjectVariant1: this.moonStandardProjectVariant1,
-        altVenusBoard: this.altVenusBoard,
         escapeVelocity: this.escapeVelocityMode ?
           {
             thresholdMinutes: this.escapeVelocityThreshold,
@@ -1249,9 +739,6 @@ export default defineComponent({
             penaltyPeriodMinutes: this.escapeVelocityPeriod,
             penaltyVPPerPeriod: this.escapeVelocityPenalty,
           } : undefined,
-        twoCorpsVariant,
-        startingCeos,
-        startingPreludes,
       };
       return JSON.stringify(dataToSend, undefined, 4);
     },

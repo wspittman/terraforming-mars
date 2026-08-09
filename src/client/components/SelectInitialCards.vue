@@ -109,80 +109,10 @@ export default defineComponent({
         return base + this.extra(prelude);
       }));
     },
-    extra(prelude: CardName): number {
-      const card = getCardOrThrow(prelude);
-      switch (this.selectedCorporations.length === 1 ? this.selectedCorporations[0] : undefined) {
-      // For each step you increase the production of a resource ... you also gain that resource.
-      case CardName.MANUTECH:
-        return card.productionBox?.megacredits ?? 0;
-
-      // When you place a city tile, gain 3 M€.
-      case CardName.THARSIS_REPUBLIC:
-        switch (prelude) {
-        case CardName.SELF_SUFFICIENT_SETTLEMENT:
-        case CardName.EARLY_SETTLEMENT:
-        case CardName.STRATEGIC_BASE_PLANNING:
-          return 3;
-        }
-        return 0;
-
-      // When ANY microbe tag is played ... lose 4 M€ or as much as possible.
-      case CardName.PHARMACY_UNION:
-        const tags = card.tags.filter((tag) => tag === Tag.MICROBE).length;
-        return (-4 * tags);
-
-      // When a microbe tag is played, incl. this, THAT PLAYER gains 2 M€,
-      case CardName.SPLICE:
-        const microbeTags = card.tags.filter((tag) => tag === Tag.MICROBE).length;
-        return (2 * microbeTags);
-
-      // Whenever Venus is terraformed 1 step, you gain 2 M€
-      case CardName.APHRODITE:
-        switch (prelude) {
-        case CardName.VENUS_FIRST:
-          return 4;
-        case CardName.HYDROGEN_BOMBARDMENT:
-          return 2;
-        }
-        return 0;
-
-      // When any player raises any Moon Rate, gain 1M€ per step.
-      case CardName.LUNA_FIRST_INCORPORATED:
-        switch (prelude) {
-        case CardName.FIRST_LUNAR_SETTLEMENT:
-        case CardName.CORE_MINE:
-        case CardName.BASIC_INFRASTRUCTURE:
-          return 1;
-        case CardName.MINING_COMPLEX:
-          return 2;
-        }
-        return 0;
-
-      // When you place an ocean tile, gain 4MC
-      case CardName.POLARIS:
-        switch (prelude) {
-        case CardName.AQUIFER_TURBINES:
-        case CardName.POLAR_INDUSTRIES:
-          return 4;
-        case CardName.GREAT_AQUIFER:
-          return 8;
-        }
-        return 0;
-
-      // Gain 2 MC for each project card in hand.
-      case CardName.HEAD_START:
-        return this.selectedCards.length * 2;
-
-      // Gain 4MC for playing a card with no tags.
-      // Gain 1MC for playing a card with 1 tag.
-      case CardName.SAGITTA_FRONTIER_SERVICES:
-        const count = card.tags.filter((tag) => tag !== Tag.WILD).length;
-        return count === 0 ? 4 : count === 1 ? 1 : 0;
-
-      default:
-        return 0;
-      }
+    extra(_prelude: CardName): number {
+      return 0;
     },
+
     getStartingMegacredits() {
       if (this.selectedCorporations.length !== 1) {
         return NaN;
@@ -194,11 +124,6 @@ export default defineComponent({
       let starting = corporation.startingMegaCredits ?? 0;
       const cardCost = corporation.cardCost === undefined ? constants.CARD_COST : corporation.cardCost;
       starting -= this.selectedCards.length * cardCost;
-
-      if (corpName === CardName.SAGITTA_FRONTIER_SERVICES) {
-        // Effect for playing itself.
-        starting += 4;
-      }
 
       return starting;
     },

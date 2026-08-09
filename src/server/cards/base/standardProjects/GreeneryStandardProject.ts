@@ -21,12 +21,8 @@ export class GreeneryStandardProject extends StandardProjectCard {
     });
   }
 
-  public override canPayWith(player: IPlayer) {
-    if (player.tableau.has(CardName.SOYLENT_SEEDLING_SYSTEMS)) {
-      return {seeds: true};
-    } else {
-      return {};
-    }
+  public override canPayWith(_player: IPlayer) {
+    return {};
   }
 
   public override canAct(player: IPlayer): boolean {

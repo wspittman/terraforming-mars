@@ -2,7 +2,6 @@ import {Payment} from '../../common/inputs/Payment';
 import {IStandardProjectCard} from '../cards/IStandardProjectCard';
 import {CardAction, IPlayer} from '../IPlayer';
 import {SelectProjectCardToPlayResponse} from '../../common/inputs/InputResponse';
-import {CardName} from '../../common/cards/CardName';
 import {InputError} from './InputError';
 import {PaymentOptions} from '../../common/inputs/Payment';
 import {Message} from '../../common/logs/Message';
@@ -43,10 +42,6 @@ export class SelectStandardProjectToPlay extends SelectCardToPlay<IStandardProje
       steel: canPayWith.steel,
       titanium: canPayWith.titanium,
       lunaTradeFederationTitanium: this.player.canUseTitaniumAsMegacredits,
-      seeds: canPayWith.seeds,
-      auroraiData: this.player.tableau.has(CardName.AURORAI),
-      spireScience: this.player.tableau.has(CardName.SPIRE),
-      kuiperAsteroids: canPayWith.kuiperAsteroids ? this.player.tableau.has(CardName.KUIPER_COOPERATIVE) : false,
     };
 
     const reserveUnits = details.reserveUnits;

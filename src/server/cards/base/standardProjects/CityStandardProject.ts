@@ -23,12 +23,8 @@ export class CityStandardProject extends StandardProjectCard {
     });
   }
 
-  public override canPayWith(player: IPlayer) {
-    if (player.tableau.get(CardName.PREFABRICATION_OF_HUMAN_HABITATS)) {
-      return {steel: true};
-    } else {
-      return {};
-    }
+  public override canPayWith(_player: IPlayer) {
+    return {};
   }
 
   public override canAct(player: IPlayer): boolean {

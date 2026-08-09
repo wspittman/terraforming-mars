@@ -3,7 +3,6 @@ import { fail } from 'assert';
 import { expect } from 'chai';
 import { ALL_RESOURCES, Resource } from '../../../src/common/Resource';
 import { Units } from '../../../src/common/Units';
-import { CardName } from '../../../src/common/cards/CardName';
 import { Tag } from '../../../src/common/cards/Tag';
 import { cast } from '../../../src/common/utils/utils';
 import { IGame } from '../../../src/server/IGame';
@@ -161,14 +160,6 @@ describe('RoboticWorkforce', () => {
       for (const [cardName, factory] of CardManifest.entries(cards)) {
         it(cardName, () => {
           const card = new factory!.Factory();
-          // Cards that are tough to test (and might even have tests above.)
-          if (
-            card.name === CardName.SOLAR_FARM ||
-            card.name === CardName.SMALL_OPEN_PIT_MINE
-          ) {
-            return;
-          }
-
           testCard(card);
         });
       }

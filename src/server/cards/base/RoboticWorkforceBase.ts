@@ -6,7 +6,6 @@ import {ICard} from '../ICard';
 import {Behavior} from '../../behavior/Behavior';
 import {getBehaviorExecutor} from '../../behavior/BehaviorExecutor';
 import {PlayerInput} from '../../PlayerInput';
-import {CardName} from '../../../common/cards/CardName';
 import {CardType} from '../../../common/cards/CardType';
 
 export abstract class RoboticWorkforceBase extends Card {
@@ -29,8 +28,7 @@ export abstract class RoboticWorkforceBase extends Card {
   }
 
   protected isCardApplicable(card: ICard, player: IPlayer, canAfford: boolean): boolean {
-    // Exclude events unless Odyssey is in play.
-    if (card.type === CardType.EVENT && !player.tableau.has(CardName.ODYSSEY)) {
+    if (card.type === CardType.EVENT) {
       return false;
     }
 
@@ -38,11 +36,6 @@ export abstract class RoboticWorkforceBase extends Card {
       return false;
     }
 
-    // Small Open Pit Mine allows a player to choose between two options. Both are
-    // positive production so accept it rather than dig deep.
-    if (card.name === CardName.SMALL_OPEN_PIT_MINE) {
-      return true;
-    }
 
     if (card.productionBox !== undefined) {
       if (canAfford) {

@@ -2,18 +2,12 @@ import {PlayerId} from '../../common/Types';
 import {IGame} from '../IGame';
 import {IPlayer} from '../IPlayer';
 import {IAward} from './IAward';
-import {CardName} from '../../common/cards/CardName';
-import {ASIMOV_AWARD_BONUS} from '../../common/constants';
 
 export class AwardScorer {
   private scores: Map<PlayerId, number> = new Map();
   constructor(game: IGame, award: IAward) {
     for (const player of game.players) {
-      let score = award.getScore(player);
-      if (player.tableau.has(CardName.ASIMOV)) {
-        score += ASIMOV_AWARD_BONUS;
-      }
-      this.scores.set(player.id, score);
+      this.scores.set(player.id, award.getScore(player));
     }
   }
 

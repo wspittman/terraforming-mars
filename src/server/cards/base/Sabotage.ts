@@ -37,44 +37,35 @@ export class Sabotage extends Card implements IProjectCard {
   public override bespokePlay(player: IPlayer) {
     const availableActions = new OrOptions();
 
-    if (player.game.isSoloMode() && player.playedCards.has(CardName.MONS_INSURANCE)) {
-      availableActions.options.push(new SelectOption(
-        'Remove resources from the neutral oppponent',
-        'Remove plants')
-        .andThen(() => {
-          player.resolveInsuranceInSoloGame();
+    player.opponents.forEach((target) => {
+      if (target.titanium > 0 && !target.alloysAreProtected()) {
+        const amountRemoved = Math.min(3, target.titanium);
+        const optionTitle = this.title(amountRemoved, 'titanium', target);
+        availableActions.options.push(new SelectOption(optionTitle).andThen(() => {
+          target.attack(player, Resource.TITANIUM, 3, {log: true});
           return undefined;
         }));
-    } else {
-      player.opponents.forEach((target) => {
-        if (target.titanium > 0 && !target.alloysAreProtected()) {
-          const amountRemoved = Math.min(3, target.titanium);
-          const optionTitle = this.title(amountRemoved, 'titanium', target);
-          availableActions.options.push(new SelectOption(optionTitle).andThen(() => {
-            target.attack(player, Resource.TITANIUM, 3, {log: true});
-            return undefined;
-          }));
-        }
+      }
 
-        if (target.steel > 0 && !target.alloysAreProtected()) {
-          const amountRemoved = Math.min(4, target.steel);
-          const optionTitle = this.title(amountRemoved, 'steel', target);
-          availableActions.options.push(new SelectOption(optionTitle).andThen(() => {
-            target.attack(player, Resource.STEEL, 4, {log: true});
-            return undefined;
-          }));
-        }
+      if (target.steel > 0 && !target.alloysAreProtected()) {
+        const amountRemoved = Math.min(4, target.steel);
+        const optionTitle = this.title(amountRemoved, 'steel', target);
+        availableActions.options.push(new SelectOption(optionTitle).andThen(() => {
+          target.attack(player, Resource.STEEL, 4, {log: true});
+          return undefined;
+        }));
+      }
 
-        if (target.megaCredits > 0) {
-          const amountRemoved = Math.min(7, target.megaCredits);
-          const optionTitle = this.title(amountRemoved, 'M€', target);
-          availableActions.options.push(new SelectOption(optionTitle).andThen(() => {
-            target.attack(player, Resource.MEGACREDITS, 7, {log: true});
-            return undefined;
-          }));
-        }
-      });
-    }
+      if (target.megaCredits > 0) {
+        const amountRemoved = Math.min(7, target.megaCredits);
+        const optionTitle = this.title(amountRemoved, 'M€', target);
+        availableActions.options.push(new SelectOption(optionTitle).andThen(() => {
+          target.attack(player, Resource.MEGACREDITS, 7, {log: true});
+          return undefined;
+        }));
+      }
+    });
+
 
     if (availableActions.options.length > 0) {
       availableActions.options.push(new SelectOption('Do not remove resource').andThen(() => {

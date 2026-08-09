@@ -44,8 +44,8 @@ describe('SelectCard', () => {
       [aquiferPumping, roboticWorkforce])
       .andThen(cb);
 
-    expect(() => selectCards.process({type: 'card', cards: [CardName.DIRECTED_IMPACTORS]}))
-      .to.throw(Error, /Card Directed Impactors not found/);
+    expect(() => selectCards.process({type: 'card', cards: [CardName.ASTEROID]}))
+      .to.throw(Error, /Card Asteroid not found/);
   });
 
   it('Throws error when selected card was not enabled', () => {

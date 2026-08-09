@@ -322,65 +322,6 @@ describe('SelectProjectCardToPlay', () => {
     );
   });
 
-  it('using seeds', async () => {
-    // ARCTIC_ALGAE costs 12. Player has 7M€ and will use 2 seeds (Seeds are 5 MC each)
-    const wrapper = setupCardForPurchase(
-      CardName.ARCTIC_ALGAE,
-      12,
-      { megacredits: 7 },
-      { seeds: 3 },
-    );
-
-    const tester = new PaymentTester(wrapper);
-    await tester.nextTick();
-    tester.expectPayment({ megacredits: 2, seeds: 2 });
-
-    await tester.clickSave();
-    expect(saveResponse.payment).deep.eq(
-      Payment.of({ seeds: 2, megacredits: 2 }),
-    );
-  });
-
-  it('using graphene', async () => {
-    // ASTEROID_MINING costs 30. Player has 11M€ and will use 7 graphene units. (Graphene are 4MC each)
-    const wrapper = setupCardForPurchase(
-      CardName.ASTEROID_MINING,
-      30,
-      { megacredits: 17, titanium: 0 },
-      { graphene: 7, paymentOptions: { graphene: true } },
-    );
-
-    const tester = new PaymentTester(wrapper);
-    await tester.nextTick();
-    tester.expectPayment({ megacredits: 2, graphene: 7 });
-
-    await tester.clickSave();
-    expect(saveResponse.payment).deep.eq(
-      Payment.of({ graphene: 7, megacredits: 2 }),
-    );
-  });
-
-  it('initial setup allows for steel and titanium when using Last Restort Ingenuity', async () => {
-    // Earth Office costs 1, but has no building tag or space tag.
-    const wrapper = setupCardForPurchase(
-      CardName.EARTH_OFFICE,
-      0,
-      {
-        megacredits: 0,
-        steel: 4,
-        titanium: 4,
-        lastCardPlayed: CardName.LAST_RESORT_INGENUITY,
-      },
-      { paymentOptions: { steel: false, titanium: false } },
-    );
-
-    const tester = new PaymentTester(wrapper);
-    await tester.nextTick();
-
-    tester.expectIsAvailable('steel');
-    tester.expectIsAvailable('titanium');
-  });
-
   it('saveData() via PlayerInputFactory includes payment in response', async () => {
     // Reproduces: when OrOptions -> PlayerInputFactory calls saveData() with no arguments,
     // payment must still be included. Before the fix, payment was undefined in the response.

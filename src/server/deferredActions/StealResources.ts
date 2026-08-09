@@ -4,7 +4,6 @@ import {OrOptions} from '../inputs/OrOptions';
 import {SelectOption} from '../inputs/SelectOption';
 import {DeferredAction} from './DeferredAction';
 import {Priority} from './Priority';
-import {CardName} from '../../common/cards/CardName';
 import {Message} from '../../common/logs/Message';
 import {message} from '../logs/MessageBuilder';
 
@@ -34,11 +33,6 @@ export class StealResources extends DeferredAction {
         if (p.plantsAreProtected()) {
           return false;
         }
-        if (p.tableau.has(CardName.BOTANICAL_EXPERIENCE)) {
-          if (amt < minimum * 2) {
-            return false;
-          }
-        }
       }
       if ((resource === Resource.STEEL || resource === Resource.TITANIUM)) {
         if (p.alloysAreProtected()) {
@@ -63,12 +57,7 @@ export class StealResources extends DeferredAction {
     }
 
     const stealOptions = candidates.map((target) => {
-      let qtyToSteal = Math.min(target.stock.get(this.resource), this.count);
-
-      // Botanical Experience hook.
-      if (this.resource === Resource.PLANTS && target.tableau.has(CardName.BOTANICAL_EXPERIENCE)) {
-        qtyToSteal = Math.ceil(qtyToSteal / 2);
-      }
+      const qtyToSteal = Math.min(target.stock.get(this.resource), this.count);
 
       return new SelectOption(
         message('Steal ${0} ${1} from ${2}', (b) => b.number(qtyToSteal).string(this.resource).player(target)),

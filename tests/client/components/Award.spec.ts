@@ -10,7 +10,7 @@ function createAward(
   {funded: boolean, scores?: FundedAwardModel['scores']},
 ): FundedAwardModel {
   return {
-    name: `Cosmic Settler`,
+    name: `Landlord`,
     playerName: funded ? 'Bob' : undefined,
     color: funded ? 'red': undefined,
     scores,
@@ -35,7 +35,7 @@ describe('Award', () => {
       props: {award},
     });
 
-    const expected = getAward('Cosmic Settler').description;
+    const expected = getAward('Landlord').description;
     expect(wrapper.text()).to.not.include(expected);
   });
 
@@ -109,6 +109,6 @@ describe('Award', () => {
       props: {award},
     });
 
-    expect(wrapper.find('.ma-name--cosmic-settler').exists()).to.be.true;
+    expect(wrapper.find('.ma-name--landlord').exists()).to.be.true;
   });
 });

@@ -187,12 +187,7 @@ export class Game implements IGame, Logger {
     this.corporationDeck = corporationDeck;
     this.board = board;
 
-    this.players.forEach((player) => {
-      player.setup(this);
-      if (player.tableau.has(CardName.MONS_INSURANCE)) {
-        this.monsInsuranceOwner = player;
-      }
-    });
+    this.players.forEach((player) => player.setup(this));
 
     this.tags = tags;
   }
@@ -523,15 +518,6 @@ export class Game implements IGame, Logger {
   }
 
   private setNextFirstPlayer() {
-    const spaceWargamesOwner = this.getCardPlayerOrUndefined(CardName.SPACE_WARGAMES);
-    if (spaceWargamesOwner) {
-      const spaceWargames = spaceWargamesOwner.tableau.get(CardName.SPACE_WARGAMES);
-      // This was set last generation hence the -1.
-      if (spaceWargames?.generationUsed === this.generation - 1) {
-        this.overrideFirstPlayer(spaceWargamesOwner);
-        return;
-      }
-    }
     this.incrementFirstPlayer();
   }
 
@@ -654,9 +640,6 @@ export class Game implements IGame, Logger {
 
     this.players.forEach((player) => {
       player.hasIncreasedTerraformRatingThisGeneration = false;
-      if (player.tableau.has(CardName.PRESERVATION_PROGRAM)) {
-        player.preservationProgram = true;
-      }
     });
 
     if (this.gameOptions.draftVariant) {
@@ -989,14 +972,12 @@ export class Game implements IGame, Logger {
 
     // Part 3. Setup for bonuses
     const coveringExistingTile = space.tile !== undefined;
-    const arcadianCommunityBonus = space.player === player && player.tableau.has(CardName.ARCADIAN_COMMUNITIES);
-
     // Part 4. Place the tile
     this.simpleAddTile(player, space, tile);
 
     // Part 5. Collect the bonuses
     if (this.phase !== Phase.SOLAR) {
-      this.grantPlacementBonuses(player, space, coveringExistingTile, arcadianCommunityBonus);
+      this.grantPlacementBonuses(player, space, coveringExistingTile, false);
     } else {
       space.player = undefined;
     }
@@ -1149,12 +1130,9 @@ export class Game implements IGame, Logger {
       .getStandardProjects()
       .filter((card) => {
         switch (card.name) {
-        // sell patents is not displayed as a card
+        // Sell patents is not displayed as a card.
         case CardName.SELL_PATENTS_STANDARD_PROJECT:
           return false;
-          // For buffer gas, show ONLY IF in solo AND 63TR mode
-        case CardName.BUFFER_GAS_STANDARD_PROJECT:
-          return this.isSoloMode() && gameOptions.soloTR;
         default:
           return true;
         }

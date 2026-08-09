@@ -14,7 +14,7 @@ describe('PlayerInfo', () => {
       tableau: [
         {name: CardName.HELION},
         {name: CardName.ACQUIRED_COMPANY},
-        {name: CardName.BACTOVIRAL_RESEARCH},
+        {name: CardName.ALGAE},
       ],
       timer: fakeTimerModel(),
       victoryPointsBreakdown: {

@@ -23,7 +23,6 @@ import {message} from '../logs/MessageBuilder';
 import {SelectResource} from '../inputs/SelectResource';
 import {RemoveResourcesFromCard} from '../deferredActions/RemoveResourcesFromCard';
 import {MAX_OCEAN_TILES, MAX_OXYGEN_LEVEL, MAX_TEMPERATURE} from '../../common/constants';
-import {CardName} from '../../common/cards/CardName';
 import {asArray, inplaceRemove} from '../../common/utils/utils';
 import {SelectCard} from '../inputs/SelectCard';
 import {From} from '../logs/From';
@@ -415,15 +414,11 @@ export class Executor implements BehaviorExecutor {
     }
     const addResources = behavior.addResources;
     if (addResources !== undefined) {
-      if (player.game.inDoubleDown && player.game.doubleDownPrelude === card.name) {
-        player.game.log('Resources from ${0} cannot be added to ${1}', (b) => b.card(card).cardName(CardName.DOUBLE_DOWN));
-      } else {
-        const count = ctx.count(addResources);
-        player.defer(() => {
-          player.addResourceTo(card, {qty: count, log: true, from});
-          return undefined;
-        });
-      }
+      const count = ctx.count(addResources);
+      player.defer(() => {
+        player.addResourceTo(card, {qty: count, log: true, from});
+        return undefined;
+      });
     }
 
     if (behavior.addResourcesToAnyCard) {

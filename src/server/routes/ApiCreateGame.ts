@@ -7,7 +7,6 @@ import {Cloner} from '../database/Cloner';
 import {Game} from '../Game';
 import {GameOptions} from '../game/GameOptions';
 import {Player} from '../Player';
-import {Server} from '../models/ServerModel';
 import {NewGameConfig} from '../../common/game/NewGameConfig';
 import {safeCast, isGameId, isSpectatorId, isPlayerId} from '../../common/Types';
 import {generateRandomId} from '../utils/server-ids';
@@ -16,6 +15,7 @@ import {Request} from '../Request';
 import {Response} from '../Response';
 import {QuotaConfig, QuotaHandler} from '../server/QuotaHandler';
 import {durationToMilliseconds} from '../utils/durations';
+import {PLAYER_COLORS} from '../../common/Color';
 
 function parseQuotaConfig(struct: any): QuotaConfig {
   let {limit} = struct;
@@ -87,29 +87,38 @@ export class ApiCreateGame extends Handler {
           const gameReq = JSON.parse(body) as NewGameConfig;
           const gameId = safeCast(generateRandomId('g'), isGameId);
           const spectatorId = safeCast(generateRandomId('s'), isSpectatorId);
-          const players = gameReq.players.map((p) => {
-            return new Player(
-              p.name,
-              p.color,
-              p.beginner,
-              Number(p.handicap), // For some reason handicap is coming up a string.
-              safeCast(generateRandomId('p'), isPlayerId),
-            );
-          });
-          let firstPlayerIdx = 0;
-          for (let i = 0; i < gameReq.players.length; i++) {
-            if (gameReq.players[i].first === true) {
-              firstPlayerIdx = i;
-              break;
-            }
+          if (!Number.isInteger(gameReq.playerCount) || gameReq.playerCount < 2 || gameReq.playerCount > 6) {
+            throw new Error('playerCount must be an integer between 2 and 6');
           }
+          if (gameReq.player === undefined || !PLAYER_COLORS.some((color) => color === gameReq.player.color)) {
+            throw new Error('player must have a valid color');
+          }
+          const human = new Player(
+            gameReq.player.name,
+            gameReq.player.color,
+            gameReq.player.beginner,
+            Number(gameReq.player.handicap),
+            safeCast(generateRandomId('p'), isPlayerId),
+          );
+          const botColors = PLAYER_COLORS.filter((color) => color !== human.color);
+          const bots = botColors.slice(0, gameReq.playerCount - 1).map((color, index) => new Player(
+            `Bot ${index + 1}`,
+            color,
+            false,
+            0,
+            safeCast(generateRandomId('p'), isPlayerId),
+            true,
+          ));
+          const players = [human, ...bots];
+          const seed = gameReq.seed >= 0 && gameReq.seed < 1 ? gameReq.seed : Math.random();
+          const firstPlayerIdx = gameReq.randomFirstPlayer ? Math.floor(seed * players.length) : 0;
 
           const gameOptions: GameOptions = {
             bannedCards: gameReq.bannedCards,
             boardName: BoardName.THARSIS,
             clonedGamedId: gameReq.clonedGamedId,
             corporateEra: gameReq.corporateEra,
-            customCorporationsList: gameReq.customCorporationsList,
+            customCorporationsList: gameReq.customCorporations,
             draftVariant: gameReq.draftVariant,
             escapeVelocity: gameReq.escapeVelocity,
             fastModeOption: gameReq.fastModeOption,
@@ -132,11 +141,10 @@ export class ApiCreateGame extends Handler {
             const serialized = await Database.getInstance().getGameVersion(gameOptions.clonedGamedId, 0);
             game = Cloner.clone(gameId, players, firstPlayerIdx, serialized);
           } else {
-            const seed = Math.random();
             game = Game.newInstance(gameId, players, players[firstPlayerIdx], spectatorId, gameOptions, seed);
           }
           ctx.gameLoader.add(game);
-          responses.writeJson(res, ctx, Server.getSimpleGameModel(game));
+          responses.writeJson(res, ctx, {id: game.id, playerId: human.id});
         } catch (error) {
           responses.internalServerError(req, res, error);
         }

@@ -31,6 +31,7 @@ export interface SerializedPlayer {
   heat: number;
   heatProduction: number;
   id: PlayerId;
+  isBot: boolean;
   jovianTagCount: number;
   lastCardPlayed?: CardName;
   megaCreditProduction: number;

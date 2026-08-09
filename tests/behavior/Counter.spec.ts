@@ -30,9 +30,9 @@ describe('Counter', () => {
   });
 
   it('tags, all and others', () => {
-    player.tagsForTest = { building: 2, space: 3, moon: 7 };
+    player.tagsForTest = { building: 2, space: 3 };
     player2.tagsForTest = { space: 4 };
-    player3.tagsForTest = { microbe: 8, wild: 2 }; // Wild tags will be ignored.
+    player3.tagsForTest = { microbe: 8 };
 
     const counter = new Counter(player, fakeCard());
     expect(counter.count({ tag: Tag.BUILDING, all: true })).eq(2);

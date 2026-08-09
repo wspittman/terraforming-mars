@@ -5,7 +5,7 @@
       <div class="load-game-form load-game--block">
           <div class="container load-game-options">
               <div >
-                  <label for="gameId">Game, player, or spectator ID to reload:</label><br>
+                  <label for="gameId">Game or player ID to reload:</label><br>
                   <input class="form-input form-inline load-game-id" :placeholder="'Game Id'" v-model="gameId" ><br>
                   <label for="rollbackCount">Number of saves to delete before loading:</label><br>
                   <input class="form-input form-inline load-game-id" value="0" v-model="rollbackCount" ><br>
@@ -21,8 +21,7 @@ import {defineComponent} from 'vue';
 import * as constants from '@/common/constants';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {LoadGameFormModel} from '@/common/models/LoadGameFormModel';
-import {SimpleGameModel} from '@/common/models/SimpleGameModel';
-import {vueRoot} from '@/client/components/vueRoot';
+import {NewGameResponse} from '@/common/game/NewGameConfig';
 import {GameId} from '@/common/Types';
 import {paths} from '@/common/app/paths';
 
@@ -66,15 +65,8 @@ export default defineComponent({
           }
           return resp.json();
         })
-        .then((response: SimpleGameModel) => {
-          if (response.players.length === 1) {
-            window.location.href = 'player?id=' + response.players[0].id;
-            return;
-          } else {
-            window.history.replaceState(response, `${constants.APP_NAME} - Game`, 'game?id=' + response.id);
-            vueRoot(this).game = response;
-            vueRoot(this).screen = 'game-home';
-          }
+        .then((response: NewGameResponse) => {
+          window.location.href = 'player?id=' + response.playerId;
         })
         .catch((err) => {
           alert('Error loading game');

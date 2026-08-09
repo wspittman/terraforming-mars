@@ -8,6 +8,7 @@ import { IPlayer } from './IPlayer';
 import { IProjectCard } from './cards/IProjectCard';
 import { SelectCard } from './inputs/SelectCard';
 import { message } from './logs/MessageBuilder';
+import {resolvePlaceholderBotInputs} from './bots/PlaceholderBotInput';
 
 export type DraftType = 'none' | 'initial' | 'standard';
 
@@ -69,6 +70,7 @@ export abstract class Draft {
       player.needsToDraft = true;
       this.askPlayerToDraft(player, false);
     }
+    resolvePlaceholderBotInputs(this.game.players);
     if (save) {
       this.game.save();
     }

@@ -222,6 +222,7 @@ export class Player implements IPlayer {
     public beginner: boolean,
     public handicap: number = 0,
     id: PlayerId,
+    public readonly isBot: boolean = false,
   ) {
     this.id = id;
     // This seems pretty bad. The game will be set before the Player is actually
@@ -1010,6 +1011,10 @@ export class Player implements IPlayer {
   }
 
   public takeActionForFinalGreenery(): void {
+    if (this.isBot) {
+      this.game.playerIsDoneWithGame(this);
+      return;
+    }
     const resolveFinalGreeneryDeferredActions = () => {
       this.game.deferredActions.runAll(() => this.takeActionForFinalGreenery());
     };
@@ -1267,6 +1272,12 @@ export class Player implements IPlayer {
   // @ts-ignore saveBeforeTakingAction is unused at the moment.
   public takeAction(saveBeforeTakingAction: boolean = true): void {
     const game = this.game;
+
+    if (this.isBot) {
+      this.pass();
+      game.playerIsFinishedTakingActions();
+      return;
+    }
 
     if (game.deferredActions.length > 0) {
       game.deferredActions.runAll(() => this.takeAction());
@@ -1546,6 +1557,7 @@ export class Player implements IPlayer {
   public serialize(): SerializedPlayer {
     const result: SerializedPlayer = {
       id: this.id,
+      isBot: this.isBot,
       user: this.user,
       // Used only during set-up
       pickedCorporationCard: this.pickedCorporationCard?.name,
@@ -1632,6 +1644,7 @@ export class Player implements IPlayer {
       d.beginner,
       Number(d.handicap),
       d.id,
+      d.isBot,
     );
 
     player.actionsTakenThisGame = d.actionsTakenThisGame;

@@ -28,7 +28,7 @@ export class SelectInitialCards extends OptionsInput<undefined> {
   }
 
   constructor(
-    private player: IPlayer,
+    public readonly player: IPlayer,
     cb: (corporation: ICorporationCard) => undefined,
   ) {
     super('initialCards', '', []);

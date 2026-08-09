@@ -1,12 +1,11 @@
 import * as responses from '../server/responses';
 import {Database} from '../database/Database';
-import {Server} from '../models/ServerModel';
 import {Handler} from './Handler';
 import {Context} from './IHandler';
 import {LoadGameFormModel} from '../../common/models/LoadGameFormModel';
 import {Request} from '../Request';
 import {Response} from '../Response';
-import {GameId, isGameId, isPlayerId, isSpectatorId} from '../../common/Types';
+import {GameId, isGameId, isPlayerId} from '../../common/Types';
 
 export class LoadGame extends Handler {
   public static readonly INSTANCE = new LoadGame();
@@ -18,8 +17,8 @@ export class LoadGame extends Handler {
     if (isGameId(id)) {
       return id;
     }
-    if (isPlayerId(id) || isSpectatorId(id)) {
-      console.log(`Finding game for player/spectator ${id}`);
+    if (isPlayerId(id)) {
+      console.log(`Finding game for player ${id}`);
       return await Database.getInstance().getGameId(id);
     }
     return undefined;
@@ -50,7 +49,11 @@ export class LoadGame extends Handler {
             console.warn(`unable to find ${gameId} in database`);
             responses.notFound(req, res, 'game_id not found');
           } else {
-            responses.writeJson(res, ctx, Server.getSimpleGameModel(game));
+            const humanPlayers = game.players.filter((player) => !player.isBot);
+            if (humanPlayers.length !== 1) {
+              throw new Error(`game ${game.id} must contain exactly one human player`);
+            }
+            responses.writeJson(res, ctx, {id: game.id, playerId: humanPlayers[0].id});
           }
         } catch (error) {
           responses.internalServerError(req, res, error);

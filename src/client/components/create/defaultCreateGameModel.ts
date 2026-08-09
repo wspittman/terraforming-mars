@@ -4,18 +4,8 @@ import {CreateGameModel} from './CreateGameModel';
 
 export function defaultCreateGameModel(): CreateGameModel {
   return {
-    firstIndex: 1,
-    playersCount: 1,
-    players: [
-      {name: '', color: 'red', beginner: false, handicap: 0, first: false},
-      {name: '', color: 'green', beginner: false, handicap: 0, first: false},
-      {name: '', color: 'yellow', beginner: false, handicap: 0, first: false},
-      {name: '', color: 'blue', beginner: false, handicap: 0, first: false},
-      {name: '', color: 'black', beginner: false, handicap: 0, first: false},
-      {name: '', color: 'purple', beginner: false, handicap: 0, first: false},
-      {name: '', color: 'orange', beginner: false, handicap: 0, first: false},
-      {name: '', color: 'pink', beginner: false, handicap: 0, first: false},
-    ],
+    playersCount: 4,
+    player: {name: '', color: 'red', beginner: false, handicap: 0},
     expansions: {...DEFAULT_EXPANSIONS},
     draftVariant: true,
     initialDraft: false,

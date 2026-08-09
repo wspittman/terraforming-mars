@@ -1,6 +1,7 @@
 import CreateGameForm from '@/client/components/create/CreateGameForm.vue';
 import { CreateGameSettingsStorage } from '@/client/components/create/CreateGameSettingsStorage';
 import { BoardName } from '@/common/boards/BoardName';
+import { RandomMAOptionType } from '@/common/ma/RandomMAOptionType';
 import { JSONObject } from '@/common/Types';
 import { mount, shallowMount } from '@vue/test-utils';
 import { expect } from 'chai';
@@ -41,10 +42,36 @@ describe('CreateGameForm', () => {
     expect(wrapper.exists()).to.be.true;
   });
 
+  it('does not show unsupported game options', () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+
+    expect(wrapper.text()).not.to.include('Game Version');
+    expect(wrapper.find('#corporateEra-checkbox').exists()).to.be.false;
+    expect(wrapper.find('#escapevelocity-checkbox').exists()).to.be.false;
+    expect(wrapper.find('#shuffleMap-checkbox').exists()).to.be.false;
+    expect(wrapper.find('#randomMA-checkbox').exists()).to.be.false;
+    expect(wrapper.find('#fastMode-checkbox').exists()).to.be.false;
+    expect(wrapper.find('.player-handicap').exists()).to.be.false;
+  });
 
   it('restores the last saved game settings on load', async () => {
     new CreateGameSettingsStorage(localStorage).saveSettings(createGameSettings({
       corporateEra: false,
+      escapeVelocity: {
+        thresholdMinutes: 30,
+        bonusSectionsPerAction: 2,
+        penaltyPeriodMinutes: 2,
+        penaltyVPPerPeriod: 1,
+      },
+      fastModeOption: true,
+      randomMA: RandomMAOptionType.LIMITED,
+      shuffleMapOption: true,
+      players: [
+        {name: 'Alice', color: 'red', beginner: false, handicap: 3},
+        {name: 'Bob', color: 'blue', beginner: false, handicap: 2},
+      ],
     }));
 
     const wrapper = shallowMount(CreateGameForm, {
@@ -57,7 +84,12 @@ describe('CreateGameForm', () => {
     expect((wrapper.vm as any).players[1].name).eq('Bob');
     expect((wrapper.vm as any).board).eq(BoardName.THARSIS);
     expect((wrapper.vm as any).draftVariant).eq(false);
-    expect((wrapper.vm as any).expansions.corpera).eq(false);
+    expect((wrapper.vm as any).expansions.corpera).eq(true);
+    expect((wrapper.vm as any).escapeVelocityMode).eq(undefined);
+    expect((wrapper.vm as any).fastModeOption).eq(undefined);
+    expect((wrapper.vm as any).randomMA).eq(undefined);
+    expect((wrapper.vm as any).shuffleMapOption).eq(undefined);
+    expect((wrapper.vm as any).players.every((player: {handicap: number}) => player.handicap === 0)).eq(true);
   });
 
   it('shows warnings when restoring saved settings', async () => {

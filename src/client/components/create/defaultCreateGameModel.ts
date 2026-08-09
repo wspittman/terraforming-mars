@@ -1,7 +1,5 @@
-import * as constants from '@/common/constants';
 import {BoardName} from '@/common/boards/BoardName';
 import {DEFAULT_EXPANSIONS} from '@/common/cards/GameModule';
-import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {CreateGameModel} from './CreateGameModel';
 
 export function defaultCreateGameModel(): CreateGameModel {
@@ -21,8 +19,6 @@ export function defaultCreateGameModel(): CreateGameModel {
     expansions: {...DEFAULT_EXPANSIONS},
     draftVariant: true,
     initialDraft: false,
-    randomMA: RandomMAOptionType.NONE,
-    modularMA: false,
     randomFirstPlayer: true,
     showOtherPlayersVP: false,
     // beginnerOption: false,
@@ -35,19 +31,11 @@ export function defaultCreateGameModel(): CreateGameModel {
     board: BoardName.THARSIS,
     seed: Math.random(),
     seededGame: false,
-    shuffleMapOption: false,
     undoOption: false,
     showTimers: true,
-    fastModeOption: false,
     removeNegativeGlobalEventsOption: false,
-    includeFanMA: false,
     startingCorporations: 2,
     soloTR: false,
     clonedGameId: undefined,
-    escapeVelocityMode: false,
-    escapeVelocityThreshold: constants.DEFAULT_ESCAPE_VELOCITY_THRESHOLD,
-    escapeVelocityBonusSeconds: constants.DEFAULT_ESCAPE_VELOCITY_BONUS_SECONDS,
-    escapeVelocityPeriod: constants.DEFAULT_ESCAPE_VELOCITY_PERIOD,
-    escapeVelocityPenalty: constants.DEFAULT_ESCAPE_VELOCITY_PENALTY,
   };
 }

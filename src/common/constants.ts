@@ -64,11 +64,6 @@ export const MAXIMUM_LOGISTIC_RATE = 8;
 export const SEED_VALUE = 5;
 export const DATA_VALUE = 3;
 
-// Escape Velocity
-export const DEFAULT_ESCAPE_VELOCITY_THRESHOLD = 30;
-export const DEFAULT_ESCAPE_VELOCITY_BONUS_SECONDS = 2;
-export const DEFAULT_ESCAPE_VELOCITY_PERIOD = 2;
-export const DEFAULT_ESCAPE_VELOCITY_PENALTY = 1;
 export const BONUS_SECONDS_PER_ACTION = 5;
 
 // Leaders/CEOs

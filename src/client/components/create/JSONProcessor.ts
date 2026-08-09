@@ -42,15 +42,6 @@ export class JSONProcessor {
     }
     initializeArrayFieldWithBackup(json_constants.OLD_CUSTOM_CORPORATIONS, json_constants.CUSTOM_CORPORATIONS);
     initializeArrayFieldWithBackup(json_constants.OLD_BANNED_CARDS, json_constants.BANNED_CARDS);
-    const ev = json.escapeVelocity as JSONObject;
-    if (ev !== undefined && typeof ev === 'object') {
-      json.escapeVelocityMode = true;
-      json.escapeVelocityBonusSeconds = ev['bonusSectionsPerAction'];
-      json.escapeVelocityPenalty = ev['penaltyVPPerPeriod'];
-      json.escapeVelocityPeriod = ev['penaltyPeriodMinutes'];
-      json.escapeVelocityThreshold = Number.parseInt(ev['thresholdMinutes'] as string ?? '');
-    }
-
     function set<T>(field: string): Array<T> {
       return cast(json[field] ?? [], Array) as Array<T>;
     }
@@ -62,12 +53,6 @@ export class JSONProcessor {
     this.model.showBannedCards = this.bannedCards.length > 0;
     this.model.showIncludedCards = this.includedCards.length > 0;
 
-    const legacyExpansions = json.expansions as JSONObject | undefined;
-    const corporateEra = json.corporateEra ?? legacyExpansions?.corpera ?? json[json_constants.CORPORATEERA];
-    if (typeof corporateEra === 'boolean') {
-      this.model.expansions.corpera = corporateEra;
-    }
-
     const ignoredFields = [
       // Instead of ignoring these fields, let them pass through to the model.
       // json_constants.CUSTOM_CORPORATIONS,
@@ -76,11 +61,20 @@ export class JSONProcessor {
       // json_constants.INCLUDED_CARDS,
       json_constants.OLD_BANNED_CARDS,
       json_constants.OLD_CUSTOM_CORPORATIONS,
-      json_constants.CORPORATEERA,
       'corporateEra',
       'board',
       'expansions',
       'escapeVelocity',
+      'escapeVelocityMode',
+      'escapeVelocityBonusSeconds',
+      'escapeVelocityPenalty',
+      'escapeVelocityPeriod',
+      'escapeVelocityThreshold',
+      'fastModeOption',
+      'includeFanMA',
+      'modularMA',
+      'randomMA',
+      'shuffleMapOption',
       'players',
       'constants'];
     for (const k in json) {
@@ -96,7 +90,7 @@ export class JSONProcessor {
     }
 
     for (let i = 0; i < players.length; i++) {
-      this.model.players[i] = players[i];
+      this.model.players[i] = {...players[i], handicap: 0};
     }
 
     this.validateCardNames('customCorporations', this.model.customCorporations);

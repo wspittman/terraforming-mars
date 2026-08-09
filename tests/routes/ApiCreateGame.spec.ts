@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import { BoardName } from '../../src/common/boards/BoardName';
-import { RandomBoardOption } from '../../src/common/boards/RandomBoardOption';
 import { NewGameConfig } from '../../src/common/game/NewGameConfig';
 import { statusCode } from '../../src/common/http/statusCode';
 import { RandomMAOptionType } from '../../src/common/ma/RandomMAOptionType';
@@ -23,25 +22,6 @@ describe('ApiCreateGame', () => {
     apiCreateGame = new ApiCreateGame([{ limit: 99999, perMs: 1 }]);
   });
 
-  it('Official random boards do not include fan maps', () => {
-    expect(ApiCreateGame.boardOptions(RandomBoardOption.OFFICIAL)).deep.eq([
-      BoardName.THARSIS,
-      BoardName.HELLAS,
-      BoardName.ELYSIUM,
-    ]);
-  });
-  it('Fully random boards do include fan maps', () => {
-    expect(ApiCreateGame.boardOptions(RandomBoardOption.ALL)).deep.eq([
-      BoardName.THARSIS,
-      BoardName.HELLAS,
-      BoardName.ELYSIUM,
-      BoardName.UTOPIA_PLANITIA,
-      BoardName.VASTITAS_BOREALIS_NOVA,
-      BoardName.ARABIA_TERRA,
-      BoardName.VASTITAS_BOREALIS,
-      BoardName.HOLLANDIA,
-    ]);
-  });
 
   it('no get', async () => {
     await scaffolding.get(apiCreateGame, res);
@@ -63,7 +43,7 @@ describe('ApiCreateGame', () => {
           },
         ],
         corporateEra: true,
-        board: RandomBoardOption.OFFICIAL,
+        board: 'hellas' as BoardName,
         seed: 0,
         randomFirstPlayer: false,
         clonedGamedId: undefined,
@@ -97,6 +77,7 @@ describe('ApiCreateGame', () => {
     expect(game).is.not.undefined;
     expect(game!.players[0].name).eq('Robot');
     expect(game!.gameOptions.corporateEra).is.true;
+    expect(game!.gameOptions.boardName).eq(BoardName.THARSIS);
   });
 
   it('red rover solo game', async () => {

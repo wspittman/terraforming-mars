@@ -3,8 +3,6 @@ import { MultiSet } from 'mnemonist';
 import { SpaceName } from '../../src/common/boards/SpaceName';
 import { SpaceType } from '../../src/common/boards/SpaceType';
 import { SeededRandom } from '../../src/common/utils/Random';
-import { AmazonisBoard } from '../../src/server/boards/AmazonisBoard';
-import { ArabiaTerraBoard } from '../../src/server/boards/ArabiaTerraBoard';
 import { preservingShuffle } from '../../src/server/boards/BoardBuilder';
 import { TharsisBoard } from '../../src/server/boards/TharsisBoard';
 import { DEFAULT_GAME_OPTIONS } from '../../src/server/game/GameOptions';
@@ -58,31 +56,6 @@ describe('BoardBuilder', () => {
       new SeededRandom(seed));
       const reservedSpaces = [SpaceName.NOCTIS_CITY, ...board.volcanicSpaceIds].map((id) => board.getSpaceOrThrow(id).spaceType);
       expect(reservedSpaces, `for seed ${seed}`).deep.eq([SpaceType.LAND, SpaceType.LAND, SpaceType.LAND, SpaceType.LAND, SpaceType.LAND]);
-    }
-  });
-
-  it('Randomized maps preserve cove spaces', () => {
-    for (let idx = 0; idx < 500; idx++) {
-      const seed = Math.random();
-      const board = ArabiaTerraBoard.newInstance({
-        ...DEFAULT_GAME_OPTIONS,
-        shuffleMapOption: true,
-      },
-      new SeededRandom(seed));
-      const reservedSpaces = board.volcanicSpaceIds.map((id) => board.getSpaceOrThrow(id).spaceType);
-      expect(reservedSpaces, `for seed ${seed}`).deep.eq([SpaceType.COVE, SpaceType.LAND, SpaceType.LAND, SpaceType.LAND]);
-    }
-  });
-
-  it('Randomized maps do not have spaces bonuses on restricted spaces #6593', () => {
-    for (let idx = 0; idx < 500; idx++) {
-      const seed = Math.random();
-      const board = AmazonisBoard.newInstance({
-        ...DEFAULT_GAME_OPTIONS,
-        shuffleMapOption: true,
-      },
-      new SeededRandom(seed));
-      expect(board.getSpaces(SpaceType.RESTRICTED)[0].bonus).is.empty;
     }
   });
 });

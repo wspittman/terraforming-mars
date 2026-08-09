@@ -9,11 +9,4 @@ export type Key = {
 
 export const LEGENDS: Record<BoardName, Array<Key>> = {
   [BoardName.THARSIS]: [],
-  [BoardName.HELLAS]: [],
-  [BoardName.ELYSIUM]: [],
-  [BoardName.ARABIA_TERRA]: [],
-  [BoardName.UTOPIA_PLANITIA]: [],
-  [BoardName.VASTITAS_BOREALIS_NOVA]: [],
-  [BoardName.VASTITAS_BOREALIS]: [],
-  [BoardName.HOLLANDIA]: [],
 };

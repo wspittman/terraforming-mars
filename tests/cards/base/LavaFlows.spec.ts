@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { BoardName } from '../../../src/common/boards/BoardName';
 import { TileType } from '../../../src/common/TileType';
 import { cast } from '../../../src/common/utils/utils';
 import { LavaFlows } from '../../../src/server/cards/base/LavaFlows';
@@ -34,15 +33,6 @@ describe('LavaFlows', () => {
     expect(card.canPlay(player)).is.not.true;
   });
 
-  it('All land spaces are available on Hellas', () => {
-    // With two players, there's no solo setup, so all spaces will be available.
-    [game, player] = testGame(2, { boardName: BoardName.HELLAS });
-
-    cast(card.play(player), undefined);
-    runAllActions(game);
-    const action = cast(player.popWaitingFor(), SelectSpace);
-    expect(action.spaces).deep.eq(game.board.getAvailableSpacesOnLand(player));
-  });
 
   it('Should play', () => {
     cast(card.play(player), undefined);

@@ -135,16 +135,6 @@ export default defineComponent({
         case SpaceType.OCEAN:
           css += ' board-space-type-ocean';
           break;
-        case SpaceType.COVE:
-          if (this.highlight !== 'volcanic') {
-            // Custom for Arabia Terra's space Tikhonarov.
-            css += ' board-space-type-cove';
-          } else {
-            css += ' board-space-type-volcanic-cove';
-          }
-          break;
-        case SpaceType.RESTRICTED:
-          break;
         default:
           css += ' board-space-type-land';
 

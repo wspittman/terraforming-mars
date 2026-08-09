@@ -2,17 +2,10 @@ import { BoardName } from '../common/boards/BoardName';
 import { TileType } from '../common/TileType';
 import { GameId, isPlayerId, safeCast } from '../common/Types';
 import { Random } from '../common/utils/Random';
-import { ArabiaTerraBoard } from './boards/ArabiaTerraBoard';
 import { Board } from './boards/Board';
-import { ElysiumBoard } from './boards/ElysiumBoard';
-import { HellasBoard } from './boards/HellasBoard';
-import { HollandiaBoard } from './boards/HollandiaBoard';
 import { MarsBoard } from './boards/MarsBoard';
 import { Space } from './boards/Space';
 import { TharsisBoard } from './boards/TharsisBoard';
-import { UtopiaPlanitiaBoard } from './boards/UtopiaPlanitiaBoard';
-import { VastitasBorealisBoard } from './boards/VastitasBorealisBoard';
-import { VastitasBorealisNovaBoard } from './boards/VastitasBorealisNovaBoard';
 import { GameOptions } from './game/GameOptions';
 import { IGame } from './IGame';
 import { IPlayer } from './IPlayer';
@@ -23,25 +16,9 @@ type BoardFactory = (new (spaces: ReadonlyArray<Space>) => MarsBoard) & {
   newInstance: (gameOptions: GameOptions, rng: Random) => MarsBoard;
 };
 
-// When renaming a board, add the old name here so saved games can still be loaded.
-const BOARD_RENAMES = new Map<string, BoardName>([
-  ['vastitas borealis novus', BoardName.VASTITAS_BOREALIS_NOVA],
-]);
-
-export function normalizeBoardName(name: string): BoardName {
-  return BOARD_RENAMES.get(name) ?? (name as BoardName);
-}
-
 const boards: Record<BoardName, BoardFactory> = {
   [BoardName.THARSIS]: TharsisBoard,
-  [BoardName.HELLAS]: HellasBoard,
-  [BoardName.ELYSIUM]: ElysiumBoard,
-  [BoardName.UTOPIA_PLANITIA]: UtopiaPlanitiaBoard,
-  [BoardName.VASTITAS_BOREALIS_NOVA]: VastitasBorealisNovaBoard,
-  [BoardName.ARABIA_TERRA]: ArabiaTerraBoard,
-  [BoardName.VASTITAS_BOREALIS]: VastitasBorealisBoard,
-  [BoardName.HOLLANDIA]: HollandiaBoard,
-} satisfies Record<BoardName, BoardFactory>;
+};
 
 export class GameSetup {
   public static newBoard(gameOptions: GameOptions, rng: Random): MarsBoard {

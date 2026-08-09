@@ -6,12 +6,8 @@ export const SpaceName = {
   DAWN_CITY: '71',
   STRATOPOLIS: '72',
   MAXWELL_BASE: '73',
-  HELLAS_OCEAN_TILE: '61',
 
   STANFORD_TORUS: '69',
-
-  // Vastitas Borealis
-  VASTITAS_BOREALIS_NORTH_POLE: '33',
 
   // Pathfinders
   CERES_SPACEPORT: '75',

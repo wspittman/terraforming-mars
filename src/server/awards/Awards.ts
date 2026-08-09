@@ -98,48 +98,6 @@ export const awardManifest: MAManifest<AwardName, IAward> = {
       'Thermalist',
       'Miner',
     ],
-    [BoardName.HELLAS]: [
-      'Cultivator',
-      'Magnate',
-      'Space Baron',
-      'Excentric',
-      'Contractor',
-    ],
-    [BoardName.ELYSIUM]: [
-      'Celebrity',
-      'Industrialist',
-      'Desert Settler',
-      'Estate Dealer',
-      'Benefactor',
-    ],
-    [BoardName.ARABIA_TERRA]: [
-      'Cosmic Settler',
-      'Botanist',
-      'Promoter',
-      'Zoologist',
-      'A. Manufacturer',
-    ],
-    [BoardName.VASTITAS_BOREALIS]: [
-      'Forecaster',
-      'Edgedancer',
-      'Visionary',
-      'Naturalist',
-      'Voyager',
-    ],
-    [BoardName.UTOPIA_PLANITIA]: [
-      'Edgedancer',
-      'Investor',
-      'Botanist',
-      'Incorporator',
-      'Metropolist',
-    ],
-    [BoardName.VASTITAS_BOREALIS_NOVA]: [
-      'Traveller',
-      'Highlander',
-      'Promoter',
-      'Blacksmith',
-    ],
-    [BoardName.HOLLANDIA]: [],
   },
   create: (name: string): IAward | undefined => {
     try {

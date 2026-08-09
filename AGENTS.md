@@ -97,15 +97,7 @@ This fork supports only the Base game and optional Corporate Era cards. Do not r
 
 ### Board System
 
-Adding a new board touches several files:
-
-1. **`BoardName` enum entry** (`src/common/boards/BoardName.ts`)
-2. **Board class** (`src/server/boards/<BoardName>.ts`) - extends `Board`/`MarsBoard`
-3. **`GameSetup.ts`** - register the factory in the `boards` record
-4. **`src/server/awards/Awards.ts`** - add a board entry (can be `[]`)
-5. **`src/server/milestones/Milestones.ts`** - add a board entry (can be `[]`)
-6. **`src/client/components/Legends.ts`** - add a board entry (can be `[]`)
-7. **`tests/routes/ApiCreateGame.spec.ts`** - add to the fan-map list if applicable
+This fork supports only the default Tharsis board. Do not add or restore alternate, expansion, randomized, or fan-made boards.
 
 ### Client Components
 

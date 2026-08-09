@@ -30,21 +30,6 @@
                             </label>
                         </div>
 
-                        <div class="create-game-page-column">
-                            <h4 v-i18n>Board</h4>
-
-                            <div v-for="boardName in boards" :key="boardName">
-                              <div v-if="boardName==='utopia planitia'" class="create-game-subsection-label" v-i18n>Fan-made</div>
-                              <input type="radio" :value="boardName" name="board" v-model="board" :id="boardName+'-checkbox'">
-                              <label :for="boardName+'-checkbox'" class="expansion-button">
-                                  <span :class="getBoardColorClass(boardName)">&#x2B22;</span>
-                                  <span class="capitalized" v-i18n>{{ boardName }}</span>
-                                  <template v-if="boardName !== RandomBoardOption.OFFICIAL && boardName !== RandomBoardOption.ALL">
-                                    &nbsp;<a :href="boardHref(boardName)" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                                  </template>
-                              </label>
-                            </div>
-                        </div>
 
                         <div class="create-game-page-column">
                             <h4 v-i18n>Options</h4>
@@ -313,8 +298,6 @@ import * as constants from '@/common/constants';
 
 import {defineComponent, nextTick} from 'vue';
 import {Color, PLAYER_COLORS} from '@/common/Color';
-import {BoardName} from '@/common/boards/BoardName';
-import {RandomBoardOption} from '@/common/boards/RandomBoardOption';
 import {CardName} from '@/common/cards/CardName';
 import CorporationsFilter from '@/client/components/create/CorporationsFilter.vue';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
@@ -324,15 +307,15 @@ import {playerColorClass} from '@/common/utils/utils';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {GameId, JSONObject} from '@/common/Types';
 import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
-import {BoardNameType, NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
 import {vueRoot} from '@/client/components/vueRoot';
 import {CreateGameModel} from './CreateGameModel';
 import {paths} from '@/common/app/paths';
 import {JSONProcessor} from './JSONProcessor';
 import {defaultCreateGameModel} from './defaultCreateGameModel';
 import {CreateGameSettingsStorage} from './CreateGameSettingsStorage';
-import {RULEBOOK_URLS, WIKI, WIKI_URLS} from '@/client/utils/WikiLinks';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
+import {NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
+import {RULEBOOK_URLS, WIKI_URLS} from '@/client/utils/WikiLinks';
 
 const createGameSettingsStorage = new CreateGameSettingsStorage();
 
@@ -379,9 +362,6 @@ export default defineComponent({
     typedRefs(): Refs {
       return this.$refs as Refs;
     },
-    RandomBoardOption(): typeof RandomBoardOption {
-      return RandomBoardOption;
-    },
     RandomMAOptionType(): typeof RandomMAOptionType {
       return RandomMAOptionType;
     },
@@ -390,20 +370,6 @@ export default defineComponent({
     },
     PLAYER_COLORS(): typeof PLAYER_COLORS {
       return PLAYER_COLORS;
-    },
-    boards() {
-      return [
-        BoardName.THARSIS,
-        BoardName.HELLAS,
-        BoardName.ELYSIUM,
-        RandomBoardOption.OFFICIAL,
-        BoardName.UTOPIA_PLANITIA,
-        BoardName.VASTITAS_BOREALIS_NOVA,
-        BoardName.ARABIA_TERRA,
-        BoardName.VASTITAS_BOREALIS,
-        BoardName.HOLLANDIA,
-        RandomBoardOption.ALL,
-      ];
     },
   },
   methods: {
@@ -550,48 +516,11 @@ export default defineComponent({
       }
       return count.toString();
     },
-    getBoardColorClass(boardName: BoardName | BoardNameType): string {
-      switch (boardName) {
-      case BoardName.THARSIS:
-        return 'create-game-board-hexagon create-game-tharsis';
-      case BoardName.HELLAS:
-        return 'create-game-board-hexagon create-game-hellas';
-      case BoardName.ELYSIUM:
-        return 'create-game-board-hexagon create-game-elysium';
-      case BoardName.UTOPIA_PLANITIA:
-        return 'create-game-board-hexagon create-game-utopia-planitia';
-      case BoardName.VASTITAS_BOREALIS_NOVA:
-        return 'create-game-board-hexagon create-game-vastitas-borealis-nova';
-      case BoardName.ARABIA_TERRA:
-        return 'create-game-board-hexagon create-game-arabia-terra';
-      case BoardName.VASTITAS_BOREALIS:
-        return 'create-game-board-hexagon create-game-vastitas-borealis';
-      case BoardName.HOLLANDIA:
-        return 'create-game-board-hexagon create-game-hollandia';
-      default:
-        return 'create-game-board-hexagon create-game-random';
-      }
-    },
     getPlayerCubeColorClass(color: Color): string {
       return playerColorClass(color, 'bg');
     },
     getPlayerContainerColorClass(color: Color): string {
       return playerColorClass(color, 'bg_transparent');
-    },
-    boardHref(boardName: BoardName | RandomBoardOption) {
-      const options: Record<BoardName | RandomBoardOption, string> = {
-        [BoardName.THARSIS]: 'tharsis',
-        [BoardName.HELLAS]: 'hellas',
-        [BoardName.ELYSIUM]: 'elysium',
-        [BoardName.ARABIA_TERRA]: 'arabia-terra',
-        [BoardName.UTOPIA_PLANITIA]: 'utopia-planitia',
-        [BoardName.VASTITAS_BOREALIS_NOVA]: 'vastitas-borealis-nova',
-        [BoardName.VASTITAS_BOREALIS]: 'vastitas-borealis',
-        [BoardName.HOLLANDIA]: 'hollandia',
-        [RandomBoardOption.OFFICIAL]: '',
-        [RandomBoardOption.ALL]: '',
-      };
-      return `${WIKI}/Maps#${options[boardName]}`;
     },
     async serializeSettings() {
       let players = this.players.slice(0, this.playersCount);

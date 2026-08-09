@@ -1,21 +1,15 @@
 import { expect } from 'chai';
 import { TileType } from '../../src/common/TileType';
-import { SpaceBonus } from '../../src/common/boards/SpaceBonus';
 import { SpaceType } from '../../src/common/boards/SpaceType';
-import * as constants from '../../src/common/constants';
 import { SeededRandom } from '../../src/common/utils/Random';
 import { toID } from '../../src/common/utils/utils';
-import { IGame } from '../../src/server/IGame';
 import { MarsBoard } from '../../src/server/boards/MarsBoard';
-import { Space } from '../../src/server/boards/Space';
 import { TharsisBoard } from '../../src/server/boards/TharsisBoard';
 import {
   DEFAULT_GAME_OPTIONS,
   GameOptions,
 } from '../../src/server/game/GameOptions';
-import { testGame } from '../TestGame';
 import { TestPlayer } from '../TestPlayer';
-import { maxOutOceans, setTemperature } from '../TestingUtils';
 
 describe('MarsBoard', () => {
   let board: MarsBoard;
@@ -125,84 +119,5 @@ describe('MarsBoard', () => {
       '62',
       '63',
     ]);
-  });
-
-  describe('canAffordPlacementBonuses', () => {
-    let game: IGame;
-    let space: Space;
-
-    beforeEach(() => {
-      [game, player] = testGame(1);
-      space = game.board.getSpaceOrThrow('15');
-      space.bonus = [];
-    });
-
-    it('No bonuses is always affordable', () => {
-      player.megaCredits = 0;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.true;
-    });
-
-    it('Ignores bonuses not subject to a cost', () => {
-      space.bonus = [
-        SpaceBonus.PLANT,
-        SpaceBonus.STEEL,
-        SpaceBonus.DRAW_CARD,
-        SpaceBonus.HEAT,
-      ];
-      player.megaCredits = 0;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.true;
-    });
-
-    it('OCEAN bonus requires Hellas ocean cost', () => {
-      space.bonus = [SpaceBonus.OCEAN];
-      player.megaCredits = constants.HELLAS_BONUS_OCEAN_COST - 1;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.false;
-      player.megaCredits = constants.HELLAS_BONUS_OCEAN_COST;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.true;
-    });
-
-    it('OCEAN bonus is free when oceans are maxed out', () => {
-      space.bonus = [SpaceBonus.OCEAN];
-      maxOutOceans(player);
-      player.megaCredits = 0;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.true;
-    });
-
-    it('TEMPERATURE bonus requires Vastitas Borealis temperature cost', () => {
-      space.bonus = [SpaceBonus.TEMPERATURE];
-      player.megaCredits =
-        constants.VASTITAS_BOREALIS_BONUS_TEMPERATURE_COST - 1;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.false;
-      player.megaCredits = constants.VASTITAS_BOREALIS_BONUS_TEMPERATURE_COST;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.true;
-    });
-
-    it('TEMPERATURE bonus is free when temperature is maxed out', () => {
-      space.bonus = [SpaceBonus.TEMPERATURE];
-      setTemperature(game, constants.MAX_TEMPERATURE);
-      player.megaCredits = 0;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.true;
-    });
-
-    it('TEMPERATURE_4MC bonus requires Vastitas Borealis Nova temperature cost', () => {
-      space.bonus = [SpaceBonus.TEMPERATURE_4MC];
-      player.megaCredits =
-        constants.VASTITAS_BOREALIS_NOVA_BONUS_TEMPERATURE_COST - 1;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.false;
-      player.megaCredits =
-        constants.VASTITAS_BOREALIS_NOVA_BONUS_TEMPERATURE_COST;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.true;
-    });
-
-
-    it('Sums multiple unaffordable bonuses', () => {
-      space.bonus = [SpaceBonus.OCEAN, SpaceBonus.TEMPERATURE];
-      // Each bonus is checked independently, so M€ shortage on either fails.
-      player.megaCredits = constants.HELLAS_BONUS_OCEAN_COST - 1;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.false;
-      player.megaCredits =
-        constants.VASTITAS_BOREALIS_BONUS_TEMPERATURE_COST - 1;
-      expect(MarsBoard.canAffordPlacementBonuses(player, space)).is.false;
-    });
   });
 });

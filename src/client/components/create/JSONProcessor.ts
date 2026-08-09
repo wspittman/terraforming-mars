@@ -78,6 +78,7 @@ export class JSONProcessor {
       json_constants.OLD_CUSTOM_CORPORATIONS,
       json_constants.CORPORATEERA,
       'corporateEra',
+      'board',
       'expansions',
       'escapeVelocity',
       'players',

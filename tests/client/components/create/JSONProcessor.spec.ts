@@ -121,7 +121,7 @@ const cases: Array<Case> = [
     expected: {
       ...TEMPLATE_EXPECTED,
       customCorporations: ['Thorgate', 'EcoLine', CardName.ECOLINE] as Array<CardName>,
-      bannedCards: ['Bad Card Name'] as Array<CardName>,
+      bannedCards: ['Bad Card Name'] as unknown as Array<CardName>,
       showBannedCards: true,
     },
     expectedWarnings: [

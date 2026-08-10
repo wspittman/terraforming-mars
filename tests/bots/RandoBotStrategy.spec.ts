@@ -2,23 +2,70 @@ import {expect} from 'chai';
 import {CardName} from '@/common/cards/CardName';
 import {Game} from '@/server/Game';
 import {Player} from '@/server/Player';
-import {resolvePlaceholderBotInputs} from '@/server/bots/PlaceholderBotInput';
+import {resolveBotInputs} from '@/server/bots/BotInput';
 import {cardsFromJSON} from '@/server/createCard';
 import {SelectCard} from '@/server/inputs/SelectCard';
 import {Phase} from '@/common/Phase';
 import * as constants from '@/common/constants';
 import {maxOutOceans, runAllActions, setOxygenLevel, setTemperature} from '../TestingUtils';
+import {RandoBotStrategy} from '@/server/bots/RandoBotStrategy';
+import {CrediCor} from '@/server/cards/corporation/CrediCor';
+import {EcoLine} from '@/server/cards/corporation/EcoLine';
+import {SelectSpace} from '@/server/inputs/SelectSpace';
+import {ConstRandom} from '@/common/utils/Random';
+import {selectRobotNames} from '@/server/bots/BotUtils';
 
-describe('PlaceholderBot', () => {
-  it('selects its first corporation and no starting project cards', () => {
+describe('RandoBotStrategy', () => {
+  it('selects distinct robot names', () => {
+    expect(selectRobotNames(3, new ConstRandom(0))).deep.eq(['Bolt', 'Gizmo', 'Pixel']);
+  });
+
+  it('selects the corporation with the most starting money and no project cards', () => {
     const bot = new Player('bot', 'red', false, 0, 'p-bot', true);
     const human = new Player('human', 'blue', false, 0, 'p-human');
 
     Game.newInstance('game', [human, bot], human, 'spectator');
 
-    expect(bot.pickedCorporationCard).eq(bot.dealtCorporationCards[0]);
+    expect(bot.botStrategy).eq('rando');
+    const highestStartingMoney = Math.max(...bot.dealtCorporationCards.map((card) => card.startingMegaCredits));
+    expect(bot.pickedCorporationCard?.startingMegaCredits).eq(highestStartingMoney);
     expect(bot.cardsInHand).is.empty;
     expect(bot.getWaitingFor()).is.undefined;
+  });
+
+  it('uses heat before plants', () => {
+    const bot = new Player('bot', 'red', false, 0, 'p-bot', true);
+    const human = new Player('human', 'blue', false, 0, 'p-human');
+    const game = Game.newInstance('game', [human, bot], human, 'spectator');
+    bot.clearWaitingFor();
+    bot.heat = constants.HEAT_FOR_TEMPERATURE;
+    bot.plants = bot.plantsNeededForGreenery;
+    const temperature = game.getTemperature();
+
+    expect(new RandoBotStrategy().takeAction(bot)).is.true;
+
+    expect(game.getTemperature()).eq(temperature + 2);
+    expect(bot.heat).eq(0);
+    expect(bot.plants).eq(bot.plantsNeededForGreenery);
+  });
+
+  it('places a tile in a random valid location', () => {
+    const bot = new Player('bot', 'red', false, 0, 'p-bot', true);
+    const human = new Player('human', 'blue', false, 0, 'p-human');
+    const game = Game.newInstance('game', [human, bot], human, 'spectator');
+    const spaces = game.board.getAvailableSpacesForGreenery(bot).slice(0, 2);
+    const input = new SelectSpace('Choose a space', spaces);
+
+    const response = new RandoBotStrategy().selectInput(input, new ConstRandom(0.75));
+
+    expect(response).deep.eq({type: 'space', spaceId: spaces[1].id});
+  });
+
+  it('selects the richest corporation independently of deal order', () => {
+    const strategy = new RandoBotStrategy();
+
+    expect(strategy.selectCorporation([new EcoLine(), new CrediCor()])?.name).eq(CardName.CREDICOR);
+    expect(strategy.selectCorporation([new CrediCor(), new EcoLine()])?.name).eq(CardName.CREDICOR);
   });
 
   it('selects the first available draft card', () => {
@@ -38,7 +85,7 @@ describe('PlaceholderBot', () => {
       return undefined;
     }));
 
-    resolvePlaceholderBotInputs([human, bot]);
+    resolveBotInputs([human, bot]);
 
     expect(selected).deep.eq([CardName.ALGAE]);
     expect(bot.getWaitingFor()).is.undefined;
@@ -60,30 +107,34 @@ describe('PlaceholderBot', () => {
       return undefined;
     }));
 
-    resolvePlaceholderBotInputs([bot]);
+    resolveBotInputs([bot]);
 
     expect(selected).is.empty;
   });
 
-  it('passes its action and preserves bot identity when serialized', () => {
+  it('uses a standard project with 15 M€ and preserves its strategy when serialized', () => {
     const bot = new Player('bot', 'red', false, 0, 'p-bot', true);
     const human = new Player('human', 'blue', false, 0, 'p-human');
     const game = Game.newInstance('game', [human, bot], human, 'spectator');
     human.clearWaitingFor();
     bot.clearWaitingFor();
 
+    bot.megaCredits = 15;
     bot.takeAction();
 
     expect(game.hasPassedThisActionPhase(bot)).is.true;
-    expect(Player.deserialize(bot.serialize()).isBot).is.true;
+    expect(bot.standardProjectsThisGeneration).not.is.empty;
+    const restored = Player.deserialize(bot.serialize());
+    expect(restored.isBot).is.true;
+    expect(restored.botStrategy).eq('rando');
   });
 
   it('lets a human-plus-bots game reach the end', () => {
     const human = new Player('human', 'blue', false, 0, 'p-human');
     const bots = [
-      new Player('Bot 1', 'red', false, 0, 'p-bot-1', true),
-      new Player('Bot 2', 'green', false, 0, 'p-bot-2', true),
-      new Player('Bot 3', 'yellow', false, 0, 'p-bot-3', true),
+      new Player('Bolt', 'red', false, 0, 'p-bot-1', true),
+      new Player('Gizmo', 'green', false, 0, 'p-bot-2', true),
+      new Player('Pixel', 'yellow', false, 0, 'p-bot-3', true),
     ];
     const game = Game.newInstance('game', [human, ...bots], human, 'spectator');
     for (const player of game.players) {

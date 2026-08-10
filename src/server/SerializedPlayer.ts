@@ -5,6 +5,7 @@ import {SerializedCard} from './SerializedCard';
 import {SerializedTimer} from '../common/SerializedTimer';
 import {GlobalParameter} from '../common/GlobalParameter';
 import {DiscordId} from './server/auth/discord';
+import {BotStrategyName} from './bots/BotStrategy';
 
 export interface SerializedPlayer {
   actionsTakenThisGame: number;
@@ -32,6 +33,7 @@ export interface SerializedPlayer {
   heatProduction: number;
   id: PlayerId;
   isBot: boolean;
+  botStrategy?: BotStrategyName;
   jovianTagCount: number;
   lastCardPlayed?: CardName;
   megaCreditProduction: number;

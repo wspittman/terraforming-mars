@@ -16,6 +16,8 @@ import {Response} from '../Response';
 import {QuotaConfig, QuotaHandler} from '../server/QuotaHandler';
 import {durationToMilliseconds} from '../utils/durations';
 import {PLAYER_COLORS} from '../../common/Color';
+import {SeededRandom} from '../../common/utils/Random';
+import {selectRobotNames} from '../bots/BotUtils';
 
 function parseQuotaConfig(struct: any): QuotaConfig {
   let {limit} = struct;
@@ -93,6 +95,7 @@ export class ApiCreateGame extends Handler {
           if (gameReq.player === undefined || !PLAYER_COLORS.some((color) => color === gameReq.player.color)) {
             throw new Error('player must have a valid color');
           }
+          const seed = gameReq.seed >= 0 && gameReq.seed < 1 ? gameReq.seed : Math.random();
           const human = new Player(
             gameReq.player.name,
             gameReq.player.color,
@@ -101,8 +104,9 @@ export class ApiCreateGame extends Handler {
             safeCast(generateRandomId('p'), isPlayerId),
           );
           const botColors = PLAYER_COLORS.filter((color) => color !== human.color);
+          const botNames = selectRobotNames(gameReq.playerCount - 1, new SeededRandom(seed));
           const bots = botColors.slice(0, gameReq.playerCount - 1).map((color, index) => new Player(
-            `Bot ${index + 1}`,
+            botNames[index],
             color,
             false,
             0,
@@ -110,7 +114,6 @@ export class ApiCreateGame extends Handler {
             true,
           ));
           const players = [human, ...bots];
-          const seed = gameReq.seed >= 0 && gameReq.seed < 1 ? gameReq.seed : Math.random();
           const firstPlayerIdx = gameReq.randomFirstPlayer ? Math.floor(seed * players.length) : 0;
 
           const gameOptions: GameOptions = {

@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import { TileType } from '../../src/common/TileType';
-import { SpaceType } from '../../src/common/boards/SpaceType';
 import { SeededRandom } from '../../src/common/utils/Random';
 import { toID } from '../../src/common/utils/utils';
 import { MarsBoard } from '../../src/server/boards/MarsBoard';

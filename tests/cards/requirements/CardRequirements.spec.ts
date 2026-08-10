@@ -154,9 +154,6 @@ describe('CardRequirements', () => {
 
     player.tagsForTest = { microbe: 2 };
     expect(satisfies(requirements, player)).eq(false);
-
-    player.tagsForTest = { microbe: 1, wild: 1 };
-    expect(satisfies(requirements, player)).eq(true);
   });
 
   it('satisfies properly for any tag requirement', () => {

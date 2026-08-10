@@ -21,6 +21,7 @@ import {IPlayer} from './IPlayer';
 import {Player} from './Player';
 import {PlayerId, GameId, SpectatorId, SpaceId} from '../common/Types';
 import {PlayerInput} from './PlayerInput';
+import {resolvePlaceholderBotInputs} from './bots/PlaceholderBotInput';
 import {Resource} from '../common/Resource';
 import {AndThen, DeferredAction, SimpleDeferredAction} from './deferredActions/DeferredAction';
 import {Priority} from './deferredActions/Priority';
@@ -550,6 +551,7 @@ export class Game implements IGame, Logger {
         player.setWaitingFor(this.selectInitialCards(player));
       }
     }
+    resolvePlaceholderBotInputs(this.players);
   }
 
   public gotoResearchPhase(): void {
@@ -559,6 +561,7 @@ export class Game implements IGame, Logger {
     this.players.forEach((player) => {
       player.runResearchPhase();
     });
+    resolvePlaceholderBotInputs(this.players);
   }
 
   private gotoDraftPhase(): void {

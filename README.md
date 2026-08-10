@@ -4,6 +4,16 @@ This is a personal fork of [terraforming-mars/terraforming-mars](https://github.
 
 Other functionality from the upstream repo has been liberally removed. Only the **Base game** and optional **Corporate Era** cards are supported.
 
+## Server bots
+
+New multiplayer games contain one human and between one and five server-controlled placeholder bots. The create-game page configures the human and the total player count; bot names, colors, and credentials are managed entirely by the server. The original one-player solo mode remains available.
+
+Each bot selects its first dealt corporation, keeps the first available card while drafting, buys no project cards, and passes every action round. Bot identity is stored with the game so this behavior survives a server restart. See `.plans/server-bots/task_plan.md` for the phased migration and the later removal of obsolete multi-human coordination.
+
+Creating or loading a game opens the human player directly. The former player-link lobby and cross-player waiting indicators have been removed; bot credentials and pending inputs are not exposed to the browser.
+
+To play, open **Create New Game**, choose **Solo** or a total of two to six players, configure the human player, and create the game. In multiplayer games, the server fills every remaining seat with a bot. The browser then opens the human player's board.
+
 ## Local setup
 
 The project requires Node.js 22.
@@ -17,7 +27,8 @@ npm start
 Validation
 
 ```bash
-npm run lint:fix
+npm run build:test
+npm run lint
 npm run test
 ```
 

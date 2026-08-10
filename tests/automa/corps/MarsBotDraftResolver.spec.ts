@@ -4,7 +4,6 @@ import {MarsBotDraftPriority} from '../../../src/server/automa/MarsBotCorpTypes'
 import {Tag} from '../../../src/common/cards/Tag';
 import {MarsBotBoard} from '../../../src/server/automa/MarsBotBoard';
 import {THARSIS_MARSBOT_BOARD} from '../../../src/server/automa/boards/TharsisMarsBot';
-import {fakeCard} from '../../TestingUtils';
 import {CarbonateProcessing} from '../../../src/server/cards/base/CarbonateProcessing';
 import {Asteroid} from '../../../src/server/cards/base/Asteroid';
 import {BigAsteroid} from '../../../src/server/cards/base/BigAsteroid';

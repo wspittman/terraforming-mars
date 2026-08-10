@@ -7,9 +7,6 @@
     <template v-else>
       {{ $t('Waiting for other players') }}
     </template>
-    <template v-if="playersWaitingFor.length > 0">
-      (⌛ <span v-for="color in playersWaitingFor" class="log-player" :class="playerColorClass(color, 'bg')" :key="color">{{ getPlayerName(color) }}</span>)
-    </template>
   </template>
   <div v-if="waitingfor !== undefined" class="wf-root">
     <template v-if="preferences().experimental_ui && playerView.game.phase === Phase.ACTION">
@@ -37,7 +34,6 @@ import * as constants from '@/common/constants';
 import raw_settings from '@/genfiles/settings.json';
 import {vueRoot} from '@/client/components/vueRoot';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
-import {playerColorClass} from '@/common/utils/utils';
 import {PlayerViewModel, ViewModel} from '@/common/models/PlayerModel';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {SoundManager} from '@/client/utils/SoundManager';
@@ -45,29 +41,18 @@ import {WaitingForModel} from '@/common/models/WaitingForModel';
 import {Phase} from '@/common/Phase';
 import {paths} from '@/common/app/paths';
 import {statusCode} from '@/common/http/statusCode';
-import {isPlayerId} from '@/common/Types';
 import {InputResponse} from '@/common/inputs/InputResponse';
 import {INVALID_RUN_ID, AppErrorResponse} from '@/common/app/AppErrorId';
-import {Color} from '@/common/Color';
 import {gameDocumentTitle} from '../utils/documentTitle';
 import {setFaviconStatus, setFaviconTurnFrame} from '@/client/utils/favicon';
 
 let ui_update_timeout_id: number | undefined;
-let documentTitleTimer: number | undefined;
+let turnIndicatorTimer: number | undefined;
 let animationFrame = 0;
 
-// The spinning ◑◒◐◓ symbol used to indicate it's your turn.
-const TURN_SEQUENCE = '◑◒◐◓';
-
-// On a desktop browser the favicon is visible in the tab, so we spin it there
-// rather than cluttering the document title. Mobile browsers don't show tab
-// favicons, so they keep animating the title instead.
-function isDesktopBrowser(): boolean {
-  return !/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-}
+const TURN_FRAME_COUNT = 4;
 
 type DataModel = {
-  playersWaitingFor: Array<Color>
   suspend: boolean,
   savedPlayerView: PlayerViewModel | undefined;
 }
@@ -88,33 +73,19 @@ export default defineComponent({
   },
   data(): DataModel {
     return {
-      playersWaitingFor: [],
       suspend: false,
       savedPlayerView: undefined,
     };
   },
   methods: {
-    getPlayerName(color: Color): string {
-      const player = this.playerView.players.find((p) => p.color === color);
-      return player ? player.name : color;
-    },
-    animateTitle() {
-      if (!getPreferences().animated_title) {
+    animateTurnIndicator() {
+      const preferences = getPreferences();
+      if (!preferences.animated_title || !preferences.experimental_ui) {
         return;
       }
 
-      animationFrame = (animationFrame + 1) % TURN_SEQUENCE.length;
-      const experimental = getPreferences().experimental_ui;
-      // The favicon annotation is an experimental feature.
-      if (experimental) {
-        setFaviconTurnFrame(animationFrame);
-      }
-      // Existing behavior spins the symbol in the document title. With
-      // experimental UI on a desktop browser we show it only in the tab favicon
-      // instead; otherwise keep animating the title.
-      if (!(experimental && isDesktopBrowser())) {
-        document.title = TURN_SEQUENCE[animationFrame] + ' ' + gameDocumentTitle(this.playerView.game);
-      }
+      animationFrame = (animationFrame + 1) % TURN_FRAME_COUNT;
+      setFaviconTurnFrame(animationFrame);
     },
     onsave(out: InputResponse) {
       this.fetchPlayerInput(
@@ -194,7 +165,6 @@ export default defineComponent({
         xhr.onload = () => {
           if (xhr.status === statusCode.ok) {
             const result = xhr.response as WaitingForModel;
-            this.playersWaitingFor = result.waitingFor;
             if (result.result === 'GO') {
               // Will only apply to player, not spectator.
               root.updatePlayer();
@@ -203,12 +173,7 @@ export default defineComponent({
               return;
             } else if (result.result === 'REFRESH') {
               // Something changed, let's refresh UI
-              if (isPlayerId(this.playerView.id)) {
-                root.updatePlayer();
-              } else {
-                root.updateSpectator();
-              }
-
+              root.updatePlayer();
               return;
             }
             vueApp.waitForUpdate();
@@ -259,22 +224,18 @@ export default defineComponent({
     showRefresh(): boolean {
       return this.suspend === true && this.savedPlayerView !== undefined;
     },
-    playerName(color: Color) {
-      const player = this.playerView.players.find((p) => p.color === color);
-      return player?.name ?? '';
-    },
   },
   mounted() {
     document.title = gameDocumentTitle(this.playerView.game);
     if (getPreferences().experimental_ui) {
       setFaviconStatus(this.waitingfor !== undefined ? 'turn' : 'idle');
     }
-    window.clearInterval(documentTitleTimer);
+    window.clearInterval(turnIndicatorTimer);
     if (this.waitingfor === undefined || this.waitingfor.optional) {
       this.waitForUpdate();
     }
-    if (this.playerView.players.length > 1 && this.waitingfor !== undefined && !this.waitingfor.optional) {
-      documentTitleTimer = window.setInterval(() => this.animateTitle(), 1000);
+    if (getPreferences().experimental_ui && this.waitingfor !== undefined && !this.waitingfor.optional) {
+      turnIndicatorTimer = window.setInterval(() => this.animateTurnIndicator(), 1000);
     }
   },
   computed: {
@@ -284,11 +245,7 @@ export default defineComponent({
     preferences(): typeof getPreferences {
       return getPreferences;
     },
-    playerColorClass(): typeof playerColorClass {
-      return playerColorClass;
-    },
   },
 });
 
 </script>
-

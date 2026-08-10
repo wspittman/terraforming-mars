@@ -1,11 +1,9 @@
-import * as json_constants from '@/client/components/create/json';
 import {JSONObject} from '../../../common/Types';
 import {CreateGameModel} from './CreateGameModel';
 import {PLAYER_COLORS} from '@/common/Color';
 import {NewPlayerModel} from '@/common/game/NewGameConfig';
 import {CardName} from '@/common/cards/CardName';
 import {cast} from '@/common/utils/utils';
-import {CARD_RENAMES} from '@/common/cards/CardRenames';
 
 export class JSONProcessor {
   public model: CreateGameModel;
@@ -21,46 +19,24 @@ export class JSONProcessor {
   public applyJSON(json: JSONObject) {
     json = JSON.parse(JSON.stringify(json)); // Make a copy so as to not change the original data.
 
-    const players = cast(json['players'], Array<NewPlayerModel>);
-    const validationErrors = this.validatePlayers(players);
+    const player = cast(json['player'], Object) as NewPlayerModel;
+    const validationErrors = this.validatePlayer(player);
     if (validationErrors.length > 0) {
       throw new Error(validationErrors.join('\n'));
     }
 
-    if (json.corporationsDraft !== undefined) {
-      this.warnings.push('Corporations draft is no longer available. Future versions might just raise an error, so edit your JSON file.');
-    }
-
-    // Ensures that outdated array fields are still applied.
-    function initializeArrayFieldWithBackup(oldFieldName: string, newFieldName: string) {
-      const oldValue = json[oldFieldName];
-      const newValue = json[newFieldName];
-
-      if (newValue === undefined || cast(newValue, Array).length === 0) {
-        json[newFieldName] = oldValue || [];
-      }
-    }
-    initializeArrayFieldWithBackup(json_constants.OLD_CUSTOM_CORPORATIONS, json_constants.CUSTOM_CORPORATIONS);
-    initializeArrayFieldWithBackup(json_constants.OLD_BANNED_CARDS, json_constants.BANNED_CARDS);
     function set<T>(field: string): Array<T> {
       return cast(json[field] ?? [], Array) as Array<T>;
     }
 
-    this.bannedCards = set(json_constants.BANNED_CARDS);
-    this.includedCards = set(json_constants.INCLUDED_CARDS);
+    this.bannedCards = set('bannedCards');
+    this.includedCards = set('includedCards');
 
-    this.model.playersCount = players.length;
+    this.model.playersCount = Number(json['playerCount']);
     this.model.showBannedCards = this.bannedCards.length > 0;
     this.model.showIncludedCards = this.includedCards.length > 0;
 
     const ignoredFields = [
-      // Instead of ignoring these fields, let them pass through to the model.
-      // json_constants.CUSTOM_CORPORATIONS,
-      // json_constants.CUSTOM_PRELUDES,
-      // json_constants.BANNED_CARDS,
-      // json_constants.INCLUDED_CARDS,
-      json_constants.OLD_BANNED_CARDS,
-      json_constants.OLD_CUSTOM_CORPORATIONS,
       'corporateEra',
       'board',
       'expansions',
@@ -75,7 +51,8 @@ export class JSONProcessor {
       'modularMA',
       'randomMA',
       'shuffleMapOption',
-      'players',
+      'player',
+      'playerCount',
       'constants'];
     for (const k in json) {
       if (ignoredFields.includes(k)) {
@@ -89,9 +66,7 @@ export class JSONProcessor {
       }
     }
 
-    for (let i = 0; i < players.length; i++) {
-      this.model.players[i] = {...players[i], handicap: 0};
-    }
+    this.model.player = {...player, handicap: 0};
 
     this.validateCardNames('customCorporations', this.model.customCorporations);
     this.validateCardNames('bannedCards', this.bannedCards);
@@ -102,29 +77,17 @@ export class JSONProcessor {
     const validNames = new Set<string>(Object.values(CardName));
     for (const name of names) {
       if (!validNames.has(name)) {
-        const canonical = CARD_RENAMES.get(name);
-        if (canonical !== undefined) {
-          this.warnings.push(`Old card name '${name}' in ${fieldLabel}; use '${canonical}'`);
-        } else {
-          this.warnings.push(`Unknown card name '${name}' in ${fieldLabel}`);
-        }
+        this.warnings.push(`Unknown card name '${name}' in ${fieldLabel}`);
       }
     }
   }
 
-  private validatePlayers(players: Array<NewPlayerModel>): Array<string> {
+  private validatePlayer(player: NewPlayerModel): Array<string> {
     const errors = [];
 
-    // Ensure colors are valid and distinct
-    const colors = new Set(players.map((p) => p.color));
-    for (const color of colors) {
-      // `as any` is OK here since this just validates `color`.
-      if (PLAYER_COLORS.indexOf(color as any) === -1) {
-        errors.push(color + ' is not a color');
-      }
-    }
-    if (colors.size !== players.length) {
-      errors.push('Colors are duplicated');
+    // `as any` is OK here since this just validates `color`.
+    if (PLAYER_COLORS.indexOf(player.color as any) === -1) {
+      errors.push(player.color + ' is not a color');
     }
     return errors;
   }

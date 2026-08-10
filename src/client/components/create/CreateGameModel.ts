@@ -11,10 +11,9 @@ export type CreateGameModel = {
   customCorporations: Array<CardName>;
   draftVariant: boolean;
   expansions: Record<Expansion, boolean>,
-  firstIndex: number;
   includedCards: Array<CardName>;
   initialDraft: boolean;
-  players: Array<NewPlayerModel>;
+  player: NewPlayerModel;
   playersCount: number;
   randomFirstPlayer: boolean;
   removeNegativeGlobalEventsOption: boolean;

@@ -17,10 +17,6 @@
         v-else-if="screen === 'create-game-form'"
       />
       <LoadGameForm v-else-if="screen === 'load'"/>
-      <GameHome
-        v-else-if="screen === 'game-home' && game !== undefined"
-        :game="game"
-      />
       <PlayerHome
         v-else-if="screen === 'player-home' && playerView !== undefined"
         :player-view="playerView"
@@ -58,7 +54,6 @@ const AdminHome = defineAsyncComponent(() => import(/* webpackChunkName: "admin"
 const CardList = defineAsyncComponent(() => import(/* webpackChunkName: "card-list" */ '@/client/components/cardlist/CardList.vue'));
 const CreateGameForm = defineAsyncComponent(() => import(/* webpackChunkName: "create-game" */ '@/client/components/create/CreateGameForm.vue'));
 const GameEnd = defineAsyncComponent(() => import(/* webpackChunkName: "game-end" */ '@/client/components/GameEnd.vue'));
-const GameHome = defineAsyncComponent(() => import(/* webpackChunkName: "game-home" */ '@/client/components/GameHome.vue'));
 const GamesOverview = defineAsyncComponent(() => import(/* webpackChunkName: "games-overview" */ '@/client/components/GamesOverview.vue'));
 const Help = defineAsyncComponent(() => import(/* webpackChunkName: "help" */ '@/client/components/help/Help.vue'));
 const LoginHome = defineAsyncComponent(() => import(/* webpackChunkName: "login" */ '@/client/components/auth/LoginHome.vue'));
@@ -69,7 +64,6 @@ const StartScreen = defineAsyncComponent(() => import(/* webpackChunkName: "star
 import {$t, setTranslationContext} from '@/client/directives/i18n';
 import {paths} from '@/common/app/paths';
 import {PlayerViewModel, ViewModel} from '@/common/models/PlayerModel';
-import {SimpleGameModel} from '@/common/models/SimpleGameModel';
 import {SpectatorModel} from '@/common/models/SpectatorModel';
 import {isPlayerId, isSpectatorId} from '@/common/Types';
 import {hasShowModal, showModal, windowHasHTMLDialogElement} from './HTMLDialogElementCompatibility';
@@ -81,7 +75,6 @@ type Screen = 'admin' |
             'create-game-form' |
             'cards' |
             'empty' |
-            'game-home' |
             'games-overview' |
             'help' |
             'load' |
@@ -106,7 +99,6 @@ export type MainAppData = {
     playerkey: number;
     isServerSideRequestInProgress: boolean;
     componentsVisibility: {[x: string]: boolean};
-    game: SimpleGameModel | undefined;
     login: string | undefined;
 }
 
@@ -135,7 +127,6 @@ export default defineComponent({
         'pinned_player_4': false,
         'turmoil_parties': false,
       } as {[x: string]: boolean},
-      game: undefined as SimpleGameModel | undefined,
       playerView: undefined,
       spectator: undefined,
       login: undefined,
@@ -145,7 +136,6 @@ export default defineComponent({
     StartScreen,
     CreateGameForm,
     LoadGameForm,
-    GameHome,
     PlayerHome,
     SpectatorHome,
     GameEnd,
@@ -263,28 +253,6 @@ export default defineComponent({
       } else {
         alert('Bad id URL parameter.');
       }
-    } else if (currentPathname === paths.GAME) {
-      const url = paths.API_GAME + window.location.search;
-      fetch(url)
-        .then((resp) => {
-          if (!resp.ok) {
-            throw new Error(`Error getting game data: ${resp.statusText}`);
-          }
-          return resp.json();
-        })
-        .then((appGame: SimpleGameModel) => {
-          app.screen = 'game-home';
-          app.game = appGame;
-          window.history.replaceState(
-            appGame,
-            `${constants.APP_NAME} - Game`,
-            `${paths.GAME}?id=${appGame.id}`,
-          );
-        })
-        .catch((err) => {
-          alert('Error getting game data');
-          console.error(err);
-        });
     } else if (currentPathname === paths.GAMES_OVERVIEW) {
       app.screen = 'games-overview';
     } else if (currentPathname === paths.NEW_GAME) {

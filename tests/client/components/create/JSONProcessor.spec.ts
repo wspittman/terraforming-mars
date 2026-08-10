@@ -14,20 +14,18 @@ type Case = {
 }
 
 const TEMPLATE_INPUT = {
-  players: [
-    {
-      name: 'You',
-      color: 'red',
-      beginner: false,
-      handicap: 4,
-      first: false,
-    },
-  ],
+  player: {
+    name: 'You',
+    color: 'red',
+    beginner: false,
+    handicap: 4,
+  },
+  playerCount: 4,
   corporateEra: false,
 
   draftVariant: true,
   showOtherPlayersVP: false,
-  customCorporationsList: [],
+  customCorporations: [],
   bannedCards: [],
   includedCards: [],
   board: 'tharsis',
@@ -53,18 +51,8 @@ const TEMPLATE_INPUT = {
 };
 
 const TEMPLATE_EXPECTED: CreateGameModel = {
-  firstIndex: 1,
-  playersCount: 1,
-  players: [
-    {name: 'You', color: 'red', beginner: false, handicap: 0, first: false},
-    {name: '', color: 'green', beginner: false, handicap: 0, first: false},
-    {name: '', color: 'yellow', beginner: false, handicap: 0, first: false},
-    {name: '', color: 'blue', beginner: false, handicap: 0, first: false},
-    {name: '', color: 'black', beginner: false, handicap: 0, first: false},
-    {name: '', color: 'purple', beginner: false, handicap: 0, first: false},
-    {name: '', color: 'orange', beginner: false, handicap: 0, first: false},
-    {name: '', color: 'pink', beginner: false, handicap: 0, first: false},
-  ],
+  playersCount: 4,
+  player: {name: 'You', color: 'red', beginner: false, handicap: 0},
   expansions: {corpera: true},
   draftVariant: true,
   initialDraft: false,
@@ -94,10 +82,10 @@ const cases: Array<Case> = [
     expected: TEMPLATE_EXPECTED,
   },
   {
-    description: 'outdated custom corporation list',
+    description: 'custom corporation list',
     input: {
       ...TEMPLATE_INPUT,
-      customCorporationsList: [CardName.ECOLINE],
+      customCorporations: [CardName.ECOLINE],
     }, expected: {
       ...TEMPLATE_EXPECTED,
       customCorporations: [CardName.ECOLINE],
@@ -107,8 +95,7 @@ const cases: Array<Case> = [
     description: 'warns on unrecognized card names in custom lists',
     input: {
       ...TEMPLATE_INPUT,
-      // 'Thorgate' and 'EcoLine' are old names; CardName.ECOLINE is canonical and should not warn
-      customCorporationsList: ['Thorgate', 'EcoLine', CardName.ECOLINE],
+      customCorporations: ['Thorgate', 'EcoLine', CardName.ECOLINE],
       bannedCards: ['Bad Card Name'],
     },
     expected: {
@@ -118,8 +105,8 @@ const cases: Array<Case> = [
       showBannedCards: true,
     },
     expectedWarnings: [
-      "Old card name 'Thorgate' in customCorporations; use 'ThorGate'",
-      "Old card name 'EcoLine' in customCorporations; use 'Ecoline'",
+      "Unknown card name 'Thorgate' in customCorporations",
+      "Unknown card name 'EcoLine' in customCorporations",
       "Unknown card name 'Bad Card Name' in bannedCards",
     ],
   },

@@ -113,9 +113,6 @@
       <PlayerSetupView :playerView="playerView" :tileView="tileView"/>
     </template>
 
-    <div v-if="game.spectatorId">
-      <a :href="'/spectator?id=' +game.spectatorId" target="_blank" rel="noopener noreferrer" v-i18n>Spectator link</a>
-    </div>
     <PurgeWarning :expectedPurgeTimeMs="game.expectedPurgeTimeMs"/>
     <KeyboardShortcuts v-show="keyboardShortcutOpened" @close="keyboardShortcutOpened = false"/>
   </div>

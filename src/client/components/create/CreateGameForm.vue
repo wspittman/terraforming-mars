@@ -1,17 +1,13 @@
 <template>
         <div id="create-game" class="create-game">
             <h1><span v-i18n>{{ constants.APP_NAME }}</span> — <span v-i18n>Create New Game</span></h1>
-            <div class="changelog"><a :href="wikiUrls.changelog" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank"><u v-i18n>Read our changelog to get the latest updates.</u></a></div>
-            <div class="discord-invite" v-if="playersCount===1">
-              (<span v-i18n>Looking for people to play with</span>? <a :href="constants.DISCORD_INVITE" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank"><u v-i18n>Join us on Discord</u></a>.)
-            </div>
 
             <div class="create-game-form create-game-panel create-game--block">
 
                 <div class="create-game-options">
                     <div class="create-game-page-container">
                         <div class="create-game-page-column">
-                            <h4 v-i18n>№ of Players</h4>
+                            <h4 v-i18n>Players</h4>
                             <div v-for="pCount in [1,2,3,4,5,6]" :key="pCount">
                               <input type="radio" :value="pCount" name="playersCount" v-model="playersCount" :id="pCount+'-radio'">
                               <label :for="pCount+'-radio'">
@@ -117,7 +113,7 @@
                         <div class="create-game-players-cont">
                             <div class="container">
                                 <div class="columns">
-                                  <template v-for="(newPlayer, index) in getPlayers()" :key="index">
+                                  <template v-for="(newPlayer, index) in [player]" :key="index">
                                     <div>
                                       <div :class="'form-group col6 create-game-player '+getPlayerContainerColorClass(newPlayer.color)">
                                           <div>
@@ -142,10 +138,6 @@
 
                                               <!-- </template> -->
 
-                                              <label class="form-radio form-inline" v-if="!randomFirstPlayer">
-                                                  <input type="radio" name="firstIndex" :value="index + 1" v-model="firstIndex">
-                                                  <i class="form-icon"></i> <span v-i18n>Goes First?</span>
-                                              </label>
                                           </div>
                                       </div>
                                     </div>
@@ -223,7 +215,7 @@ import {JSONProcessor} from './JSONProcessor';
 import {defaultCreateGameModel} from './defaultCreateGameModel';
 import {CreateGameSettingsStorage} from './CreateGameSettingsStorage';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
-import {NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
+import {NewGameConfig, NewGameResponse} from '@/common/game/NewGameConfig';
 import {RULEBOOK_URLS, WIKI_URLS} from '@/client/utils/WikiLinks';
 
 const createGameSettingsStorage = new CreateGameSettingsStorage();
@@ -383,9 +375,6 @@ export default defineComponent({
     updateIncludedCards(includedCards: Array<CardName>) {
       this.includedCards = includedCards;
     },
-    getPlayers(): Array<NewPlayerModel> {
-      return this.players.slice(0, this.playersCount);
-    },
     isBeginnerToggleEnabled(): Boolean {
       return !this.initialDraft;
     },
@@ -393,7 +382,8 @@ export default defineComponent({
       if (count === 1) {
         return translateText('Solo');
       }
-      return count.toString();
+      const botLabel = count === 2 ? 'bot' : 'bots';
+      return translateTextWithParams('${0} human + ${1} ${2}', ['1', String(count - 1), botLabel]);
     },
     getPlayerCubeColorClass(color: Color): string {
       return playerColorClass(color, 'bg');
@@ -402,52 +392,10 @@ export default defineComponent({
       return playerColorClass(color, 'bg_transparent');
     },
     async serializeSettings() {
-      let players = this.players.slice(0, this.playersCount);
-
-      if (this.randomFirstPlayer) {
-        // Shuffle players array to assign each player a random seat around the table
-        players = players.map((a) => ({sort: Math.random(), value: a}))
-          .sort((a, b) => a.sort - b.sort)
-          .map((a) => a.value);
-        this.firstIndex = Math.floor(this.seed * this.playersCount) + 1;
+      const player = this.player;
+      if (player.name === '') {
+        player.name = this.$t('You');
       }
-
-      // Auto assign an available color if there are duplicates
-      const uniqueColors = new Set(players.map((player) => player.color));
-      if (uniqueColors.size !== players.length) {
-        const usedColors: Set<Color> = new Set();
-        // This filter retains the default player color order.
-        const unusedColors = PLAYER_COLORS.filter((c) => !uniqueColors.has(c));
-        for (const player of players) {
-          const color = player.color;
-          if (usedColors.has(color)) {
-            // Pulling off the front of the list also helps retain the default player color order.
-            player.color = unusedColors.shift() as Color;
-            usedColors.add(color);
-          } else {
-            usedColors.add(color);
-          }
-        }
-      }
-
-      // Set player name automatically if not entered
-      const isSoloMode = this.playersCount === 1;
-
-      this.players.forEach((player) => {
-        if (player.name === '') {
-          if (isSoloMode) {
-            player.name = this.$t('You');
-          } else {
-            const defaultPlayerName = this.$t(player.color.charAt(0).toUpperCase() + player.color.slice(1));
-            player.name = defaultPlayerName;
-          }
-        }
-      });
-
-      players.map((player: any) => {
-        player.first = (this.firstIndex === player.index);
-        return player;
-      });
 
       const draftVariant = this.draftVariant;
       const initialDraft = this.initialDraft;
@@ -466,7 +414,7 @@ export default defineComponent({
 
       // Check custom corp count
       if (customCorporations.length > 0) {
-        const neededCorpsCount = players.length * startingCorporations;
+        const neededCorpsCount = this.playersCount * startingCorporations;
         if (customCorporations.length < neededCorpsCount) {
           window.alert(translateTextWithParams('Must select at least ${0} corporations', [neededCorpsCount.toString()]));
           return;
@@ -496,7 +444,7 @@ export default defineComponent({
           return;
         }
         clonedGamedId = this.clonedGameId;
-        if (gameData.playerCount !== players.length) {
+        if (gameData.playerCount !== this.playersCount) {
           alert(this.$t('Player count mismatch'));
           this.playersCount = gameData.playerCount;
           return;
@@ -506,11 +454,12 @@ export default defineComponent({
       }
 
       const dataToSend: NewGameConfig = {
-        players,
+        player,
+        playerCount: this.playersCount,
         corporateEra: true,
         draftVariant,
         showOtherPlayersVP,
-        customCorporationsList: customCorporations,
+        customCorporations,
         bannedCards,
         includedCards,
         board,
@@ -539,15 +488,8 @@ export default defineComponent({
         return;
       }
       createGameSettingsStorage.saveSettings(JSON.parse(dataToSend) as JSONObject);
-      const onSuccess = (json: any) => {
-        if (json.players.length === 1) {
-          window.location.href = 'player?id=' + json.players[0].id;
-          return;
-        } else {
-          window.history.replaceState(json, `${constants.APP_NAME} - Game`, 'game?id=' + json.id);
-          vueRoot(this).game = json;
-          vueRoot(this).screen = 'game-home';
-        }
+      const onSuccess = (json: NewGameResponse) => {
+        window.location.href = 'player?id=' + json.playerId;
       };
 
       fetch(paths.API_CREATEGAME, {'method': 'POST', 'body': dataToSend, 'headers': {'Content-Type': 'application/json'}})

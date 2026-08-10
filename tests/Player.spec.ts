@@ -201,6 +201,7 @@ describe('Player', () => {
   it('serialization test', () => {
     const json: SerializedPlayer = {
       id: 'p-blue',
+      isBot: false,
       autoPass: false,
       pickedCorporationCard: CardName.THARSIS_REPUBLIC,
       terraformRating: 20,

@@ -12,10 +12,8 @@ import { globalConfig } from '../getLocalVue';
 // Minimal serialized Create Game payload used by settings restore tests.
 function createGameSettings(overrides: JSONObject = {}): JSONObject {
   return {
-    players: [
-      {name: 'Alice', color: 'red', beginner: false, handicap: 0},
-      {name: 'Bob', color: 'blue', beginner: false, handicap: 0},
-    ],
+    player: {name: 'Alice', color: 'red', beginner: false, handicap: 0},
+    playerCount: 4,
     corporateEra: true,
     board: 'hellas',
     draftVariant: false,
@@ -40,6 +38,28 @@ describe('CreateGameForm', () => {
       ...globalConfig,
     });
     expect(wrapper.exists()).to.be.true;
+  });
+
+  it('configures one human and server-controlled opponents', () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+
+    expect(wrapper.findAll('.create-game-player')).has.length(1);
+    expect(wrapper.text()).to.include('1 human + 3 bots');
+    expect(wrapper.find('[id="1-radio"]').exists()).is.true;
+  });
+
+  it('shows solo options without multiplayer options for one player', async () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+
+    await wrapper.setData({playersCount: 1});
+
+    expect(wrapper.text()).to.include('Solo');
+    expect(wrapper.find('#soloTR-checkbox').exists()).is.true;
+    expect(wrapper.text()).not.to.include('Multiplayer Options');
   });
 
   it('does not show unsupported game options', () => {
@@ -68,10 +88,8 @@ describe('CreateGameForm', () => {
       fastModeOption: true,
       randomMA: RandomMAOptionType.LIMITED,
       shuffleMapOption: true,
-      players: [
-        {name: 'Alice', color: 'red', beginner: false, handicap: 3},
-        {name: 'Bob', color: 'blue', beginner: false, handicap: 2},
-      ],
+      player: {name: 'Alice', color: 'red', beginner: false, handicap: 3},
+      playerCount: 2,
     }));
 
     const wrapper = shallowMount(CreateGameForm, {
@@ -80,8 +98,7 @@ describe('CreateGameForm', () => {
     await wrapper.vm.$nextTick();
 
     expect((wrapper.vm as any).playersCount).eq(2);
-    expect((wrapper.vm as any).players[0].name).eq('Alice');
-    expect((wrapper.vm as any).players[1].name).eq('Bob');
+    expect((wrapper.vm as any).player.name).eq('Alice');
     expect((wrapper.vm as any).board).eq(BoardName.THARSIS);
     expect((wrapper.vm as any).draftVariant).eq(false);
     expect((wrapper.vm as any).expansions.corpera).eq(true);
@@ -89,7 +106,7 @@ describe('CreateGameForm', () => {
     expect((wrapper.vm as any).fastModeOption).eq(undefined);
     expect((wrapper.vm as any).randomMA).eq(undefined);
     expect((wrapper.vm as any).shuffleMapOption).eq(undefined);
-    expect((wrapper.vm as any).players.every((player: {handicap: number}) => player.handicap === 0)).eq(true);
+    expect((wrapper.vm as any).player.handicap).eq(0);
   });
 
   it('shows warnings when restoring saved settings', async () => {
@@ -147,11 +164,8 @@ describe('CreateGameForm', () => {
     });
 
     expect(() => (wrapper.vm as any).applySettings(createGameSettings({
-      players: [
-        {name: 'Alice', color: 'red', beginner: false, handicap: 0},
-        {name: 'Bob', color: 'red', beginner: false, handicap: 0},
-      ],
-    }))).throws('Colors are duplicated');
+      player: {name: 'Alice', color: 'chartreuse', beginner: false, handicap: 0},
+    }))).throws('chartreuse is not a color');
     expect((wrapper.vm as any).uploading).eq(false);
   });
 
@@ -167,8 +181,7 @@ describe('CreateGameForm', () => {
       });
       (wrapper.vm as any).playersCount = 2;
       (wrapper.vm as any).randomFirstPlayer = false;
-      (wrapper.vm as any).players[0].name = 'Alice';
-      (wrapper.vm as any).players[1].name = 'Bob';
+      (wrapper.vm as any).player.name = 'Alice';
 
       await (wrapper.vm as any).createGame();
 
@@ -176,7 +189,8 @@ describe('CreateGameForm', () => {
       expect(savedSettings?.board).eq(BoardName.THARSIS);
       expect(savedSettings?.corporateEra).eq(true);
       expect(savedSettings?.expansions).eq(undefined);
-      expect((savedSettings?.players as Array<{name: string}>).map((player) => player.name)).deep.eq(['Alice', 'Bob']);
+      expect((savedSettings?.player as {name: string}).name).eq('Alice');
+      expect(savedSettings?.playerCount).eq(2);
     } finally {
       global.fetch = originalFetch;
       global.alert = originalAlert;

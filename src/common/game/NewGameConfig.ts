@@ -2,7 +2,7 @@ import {BoardName} from '../boards/BoardName';
 import {CardName} from '../cards/CardName';
 import {Color} from '../Color';
 import {RandomMAOptionType} from '../ma/RandomMAOptionType';
-import {GameId} from '../Types';
+import {GameId, PlayerId} from '../Types';
 
 export type BoardNameType = BoardName
 
@@ -11,7 +11,6 @@ export interface NewPlayerModel {
   color: Color;
   beginner: boolean;
   handicap: number;
-  first: boolean;
 }
 
 export type EscapeVelocityOptions = {
@@ -29,7 +28,8 @@ export type EscapeVelocityOptions = {
  * Like GameOptions, but the data structure sent from the new game page.
  */
 export interface NewGameConfig {
-  players: Array<NewPlayerModel>;
+  player: NewPlayerModel;
+  playerCount: number;
   corporateEra: boolean;
   board: BoardNameType;
   seed: number;
@@ -54,8 +54,13 @@ export interface NewGameConfig {
   randomMA: RandomMAOptionType;
   includeFanMA: boolean,
   soloTR: boolean; // Solo victory by getting TR 63 by game end
-  customCorporationsList: Array<CardName>;
+  customCorporations: Array<CardName>;
   bannedCards: Array<CardName>;
   includedCards: Array<CardName>;
   escapeVelocity: EscapeVelocityOptions | undefined;
 }
+
+export type NewGameResponse = {
+  id: GameId;
+  playerId: PlayerId;
+};

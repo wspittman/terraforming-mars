@@ -306,6 +306,8 @@ export interface IPlayer {
 
   /** Player has prestated they want to pass on their next turn */
   autopass: boolean;
+  /** True when this participant is controlled locally by the placeholder server bot. */
+  readonly isBot: boolean;
   /** Player is done taking actions this generation. */
   pass(): void;
   takeActionForFinalGreenery(): void;

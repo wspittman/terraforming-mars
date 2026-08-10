@@ -1,5 +1,3 @@
-import {Color} from '../Color';
-
 export type WaitingForModel = {
   result:
     /** App is now waiting for this player to provide input. Refresh state. */
@@ -9,6 +7,4 @@ export type WaitingForModel = {
     /** Nothing available yet. */
     'WAIT',
 
-  /** List of players waiting for. */
-  waitingFor: Array<Color>,
 }

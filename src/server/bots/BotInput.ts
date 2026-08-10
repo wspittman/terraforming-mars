@@ -1,8 +1,8 @@
 import {IPlayer} from '@/server/IPlayer';
 import {getBotStrategy} from './BotStrategy';
 
-/** Resolves the setup, draft, and research inputs used by placeholder bots. */
-export function resolvePlaceholderBotInputs(players: ReadonlyArray<IPlayer>): void {
+/** Resolves pending inputs for bot players. */
+export function resolveBotInputs(players: ReadonlyArray<IPlayer>): void {
   for (const player of players) {
     if (!player.isBot) {
       continue;

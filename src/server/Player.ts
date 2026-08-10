@@ -36,7 +36,7 @@ import { IAward } from './awards/IAward';
 import { getBehaviorExecutor } from './behavior/BehaviorExecutor';
 import { Counter } from './behavior/Counter';
 import { assignBotStrategy, BotStrategyName, getBotStrategy } from './bots/BotStrategy';
-import { resolvePlaceholderBotInputs } from './bots/PlaceholderBotInput';
+import { resolveBotInputs } from './bots/BotInput';
 import { ConvertHeat } from './cards/base/standardActions/ConvertHeat';
 import { ConvertPlants } from './cards/base/standardActions/ConvertPlants';
 import { SellPatentsStandardProject } from './cards/base/standardProjects/SellPatentsStandardProject';
@@ -1299,7 +1299,7 @@ export class Player implements IPlayer {
       }
       this.incrementActionsTaken();
       game.deferredActions.runAll(() => this.takeAction());
-      resolvePlaceholderBotInputs([this]);
+      resolveBotInputs([this]);
       return;
     }
 

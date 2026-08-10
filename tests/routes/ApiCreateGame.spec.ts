@@ -8,6 +8,7 @@ import { ApiCreateGame } from '../../src/server/routes/ApiCreateGame';
 import { FakeClock } from '../common/FakeClock';
 import { MockRequest, MockResponse } from './HttpMocks';
 import { RouteTestScaffolding } from './RouteTestScaffolding';
+import { ROBOT_NAMES } from '../../src/server/bots/BotUtils';
 
 describe('ApiCreateGame', () => {
   let scaffolding: RouteTestScaffolding;
@@ -75,7 +76,10 @@ describe('ApiCreateGame', () => {
     expect(game).is.not.undefined;
     expect(model.playerId).eq(game!.players[0].id);
     expect(model).not.to.have.property('players');
-    expect(game!.players.map((player) => player.name)).deep.eq(['Human', 'Bot 1', 'Bot 2', 'Bot 3']);
+    expect(game!.players[0].name).eq('Human');
+    const botNames = game!.players.slice(1).map((player) => player.name);
+    expect(new Set(botNames).size).eq(3);
+    expect(botNames.every((name) => ROBOT_NAMES.includes(name as typeof ROBOT_NAMES[number]))).is.true;
     expect(game!.players.map((player) => player.isBot)).deep.eq([false, true, true, true]);
     expect(game!.gameOptions.corporateEra).is.true;
     expect(game!.gameOptions.boardName).eq(BoardName.THARSIS);

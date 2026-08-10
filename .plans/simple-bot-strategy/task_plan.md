@@ -10,6 +10,7 @@ Implement reusable bot-strategy infrastructure and a first strategy that chooses
 2. **Design reusable strategy boundaries and tests** — complete
 3. **Implement strategy and integration** — complete
 4. **Verify, document, commit, and open PR** — complete
+5. **Address bot naming and reuse review feedback** — complete
 
 ## Key Questions
 
@@ -22,4 +23,5 @@ Implement reusable bot-strategy infrastructure and a first strategy that chooses
 | Error | Attempt | Resolution |
 | --- | --- | --- |
 | Server build initially failed on generic `SelectCard` types and a missing generated settings file | 1 | Added the card generic/type annotations and generated static JSON before rebuilding. |
+| Follow-up server build lacked generated `src/genfiles/settings.json` | 1 | Run `npm run make:json` before repeating the build. |
 | Multi-file patch included a nonexistent Player import context | 1 | Split the patch and inspect exact import locations before editing. |

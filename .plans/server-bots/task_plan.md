@@ -45,6 +45,13 @@ Complete
 - [x] Add server and client regression coverage.
 - **Status:** complete
 
+### Phase 6: Stable Page Title
+
+- [x] Remove turn animation characters from the document title.
+- [x] Retain the optional experimental favicon turn animation.
+- [x] Add client regression coverage.
+- **Status:** complete
+
 ## Key Questions
 
 1. Where is a player input submitted and where can bot inputs be resolved without HTTP?
@@ -58,6 +65,7 @@ Complete
 | -------- | --------- |
 | Make bots deterministic placeholders rather than strategic agents. | The requested first corporation/first draft/no purchase/pass policy should be predictable and only needs to let games progress. |
 | Defer broad network-code deletion until the bot loop and single-human creation flow exist. | Removing coordination prematurely risks breaking the existing route used to enter and exercise games. |
+| Keep title text stable while limiting animation to the experimental favicon. | This removes the requested page-title spinner without discarding the separate opt-in visual indicator. |
 
 ## Errors Encountered
 

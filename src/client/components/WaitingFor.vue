@@ -47,18 +47,10 @@ import {gameDocumentTitle} from '../utils/documentTitle';
 import {setFaviconStatus, setFaviconTurnFrame} from '@/client/utils/favicon';
 
 let ui_update_timeout_id: number | undefined;
-let documentTitleTimer: number | undefined;
+let turnIndicatorTimer: number | undefined;
 let animationFrame = 0;
 
-// The spinning ◑◒◐◓ symbol used to indicate it's your turn.
-const TURN_SEQUENCE = '◑◒◐◓';
-
-// On a desktop browser the favicon is visible in the tab, so we spin it there
-// rather than cluttering the document title. Mobile browsers don't show tab
-// favicons, so they keep animating the title instead.
-function isDesktopBrowser(): boolean {
-  return !/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-}
+const TURN_FRAME_COUNT = 4;
 
 type DataModel = {
   suspend: boolean,
@@ -86,23 +78,14 @@ export default defineComponent({
     };
   },
   methods: {
-    animateTitle() {
-      if (!getPreferences().animated_title) {
+    animateTurnIndicator() {
+      const preferences = getPreferences();
+      if (!preferences.animated_title || !preferences.experimental_ui) {
         return;
       }
 
-      animationFrame = (animationFrame + 1) % TURN_SEQUENCE.length;
-      const experimental = getPreferences().experimental_ui;
-      // The favicon annotation is an experimental feature.
-      if (experimental) {
-        setFaviconTurnFrame(animationFrame);
-      }
-      // Existing behavior spins the symbol in the document title. With
-      // experimental UI on a desktop browser we show it only in the tab favicon
-      // instead; otherwise keep animating the title.
-      if (!(experimental && isDesktopBrowser())) {
-        document.title = TURN_SEQUENCE[animationFrame] + ' ' + gameDocumentTitle(this.playerView.game);
-      }
+      animationFrame = (animationFrame + 1) % TURN_FRAME_COUNT;
+      setFaviconTurnFrame(animationFrame);
     },
     onsave(out: InputResponse) {
       this.fetchPlayerInput(
@@ -247,12 +230,12 @@ export default defineComponent({
     if (getPreferences().experimental_ui) {
       setFaviconStatus(this.waitingfor !== undefined ? 'turn' : 'idle');
     }
-    window.clearInterval(documentTitleTimer);
+    window.clearInterval(turnIndicatorTimer);
     if (this.waitingfor === undefined || this.waitingfor.optional) {
       this.waitForUpdate();
     }
-    if (this.playerView.players.length > 1 && this.waitingfor !== undefined && !this.waitingfor.optional) {
-      documentTitleTimer = window.setInterval(() => this.animateTitle(), 1000);
+    if (getPreferences().experimental_ui && this.waitingfor !== undefined && !this.waitingfor.optional) {
+      turnIndicatorTimer = window.setInterval(() => this.animateTurnIndicator(), 1000);
     }
   },
   computed: {

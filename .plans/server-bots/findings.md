@@ -21,6 +21,7 @@
 - Existing game tests already provide helpers to maximize the three global parameters and drive the final production/end-game transition; an end-to-end bot test can combine those helpers with a real human-plus-bots game rather than mocking `gameIsOver`.
 - The repository test type-check currently has five stale errors in automa/removed-tag tests, which Phase 4 should clean up so verification can be authoritative.
 - Phase 2 accidentally changed the valid player-count range from one-to-six to two-to-six and removed the solo radio button and `soloTR` control; the game engine itself still retains and normalizes solo rules.
+- `WaitingFor.vue` still prepends `◑◒◐◓` frames to `document.title` once per second while the human has required input; the same timer also drives an experimental favicon animation.
 
 ## Technical Decisions
 
@@ -34,6 +35,7 @@
 | Drop all legacy settings and optional bot serialization handling. | The user explicitly said neither saved settings nor in-progress games need backward compatibility. |
 | Add a lifecycle test at the game-engine boundary. | It exercises real setup, bot turn passing, final production, and termination without making a slow browser test the only completion proof. |
 | Treat `playerCount === 1` as original solo mode and larger counts as one human plus bots. | Bot multiplayer is additive and must not replace the board game's existing solo option. |
+| Keep title text stable while limiting animation to the experimental favicon. | This directly removes the requested page-title spinner without discarding the separate opt-in visual indicator. |
 
 ## Resources
 

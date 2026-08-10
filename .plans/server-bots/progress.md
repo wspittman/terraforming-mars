@@ -42,6 +42,14 @@
 - **Actions taken:** Restored the Solo player-count choice and TR63 option, hid multiplayer-only settings for solo, accepted one-player API requests without creating bots, verified engine solo normalization, documented both play modes, and captured `/tmp/create-game-with-solo.png`.
 - **Files created/modified:** `src/client/components/create/CreateGameForm.vue`, `src/server/routes/ApiCreateGame.ts`, focused route/client tests, `README.md`, and `.plans/server-bots/*`.
 
+### Phase 6: Stable Page Title
+
+- **Status:** complete
+- **Started:** 2026-08-09
+- **Completed:** 2026-08-09
+- **Actions taken:** Removed the document-title animation path, renamed the remaining timer around its favicon-only responsibility, limited it to the experimental UI, and added a regression test asserting the page title remains stable.
+- **Files created/modified:** `src/client/components/WaitingFor.vue`, `tests/client/components/WaitingFor.spec.ts`, and `.plans/server-bots/*`.
+
 ## Test Results
 
 | Test | Input | Expected | Actual | Status |
@@ -70,3 +78,5 @@
 | Solo create form | `npx cross-env NODE_ENV=development mochapack --reporter dot --require tests/client/components/setup.ts "tests/client/components/create/CreateGameForm.spec.ts"` | Solo and multiplayer controls render in their correct modes. | 9 passing. | pass |
 | Complete verification | `npm run build:test && npm run lint && npm run build && npm test` | Types, lint, production build, and all tests pass. | Completed successfully; client reported 288 passing. | pass |
 | Solo UI screenshot | `npx -y playwright@1.55.0 screenshot --viewport-size=1440,1000 http://127.0.0.1:8080/new-game /tmp/create-game-with-solo.png` | Solo choice is visible alongside bot multiplayer counts. | Screenshot captured. | pass |
+| Stable title component spec | `npx cross-env NODE_ENV=development mochapack --reporter dot --require tests/client/components/setup.ts "tests/client/components/WaitingFor.spec.ts"` | Turn indication never prefixes the page title with spinner characters. | 3 passing. | pass |
+| Complete verification | `npm run build:test && npm run lint && npm run build && npm test` | Types, lint, production build, and all tests pass. | Completed successfully. | pass |

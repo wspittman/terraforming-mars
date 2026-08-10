@@ -38,6 +38,13 @@ Complete
 - [x] Update README documentation for the final local-only workflow.
 - **Status:** complete
 
+### Phase 5: Preserve Original Solo Play
+
+- [x] Restore one-player creation alongside human-plus-bot games.
+- [x] Restore solo-only creation options without showing multiplayer options.
+- [x] Add server and client regression coverage.
+- **Status:** complete
+
 ## Key Questions
 
 1. Where is a player input submitted and where can bot inputs be resolved without HTTP?

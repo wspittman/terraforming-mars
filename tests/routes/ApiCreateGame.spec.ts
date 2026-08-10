@@ -81,6 +81,50 @@ describe('ApiCreateGame', () => {
     expect(game!.gameOptions.boardName).eq(BoardName.THARSIS);
   });
 
+  it('creates an original solo game without bots', async () => {
+    const post = scaffolding.post(apiCreateGame, res);
+    const emit = Promise.resolve().then(() => {
+      const newGameConfig: NewGameConfig = {
+        player: {name: 'Solo Human', color: 'red', beginner: false, handicap: 0},
+        playerCount: 1,
+        corporateEra: true,
+        board: BoardName.THARSIS,
+        seed: 0,
+        randomFirstPlayer: false,
+        clonedGamedId: undefined,
+        undoOption: false,
+        showTimers: false,
+        fastModeOption: false,
+        showOtherPlayersVP: false,
+        modularMA: false,
+        draftVariant: true,
+        initialDraft: false,
+        startingCorporations: 2,
+        shuffleMapOption: false,
+        randomMA: RandomMAOptionType.NONE,
+        includeFanMA: false,
+        soloTR: true,
+        customCorporations: [],
+        bannedCards: [],
+        includedCards: [],
+        escapeVelocity: undefined,
+      };
+      req.emitter.emit('data', JSON.stringify(newGameConfig));
+      req.emitter.emit('end');
+    });
+
+    await Promise.all([emit, post]);
+
+    const model = JSON.parse(res.content) as NewGameResponse;
+    const game = await scaffolding.ctx.gameLoader.getGame(model.id);
+    expect(res.statusCode).eq(statusCode.ok);
+    expect(game?.players).has.length(1);
+    expect(game?.players[0].isBot).is.false;
+    expect(game?.isSoloMode()).is.true;
+    expect(game?.gameOptions.soloTR).is.true;
+    expect(game?.gameOptions.draftVariant).is.false;
+  });
+
   it('red rover solo game', async () => {
     const post = scaffolding.post(apiCreateGame, res);
     const emit = Promise.resolve().then(() => {

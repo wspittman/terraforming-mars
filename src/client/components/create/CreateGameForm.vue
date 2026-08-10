@@ -8,7 +8,7 @@
                     <div class="create-game-page-container">
                         <div class="create-game-page-column">
                             <h4 v-i18n>Players</h4>
-                            <div v-for="pCount in [2,3,4,5,6]" :key="pCount">
+                            <div v-for="pCount in [1,2,3,4,5,6]" :key="pCount">
                               <input type="radio" :value="pCount" name="playersCount" v-model="playersCount" :id="pCount+'-radio'">
                               <label :for="pCount+'-radio'">
                                   {{ getPlayersCountText(pCount) }}
@@ -23,6 +23,13 @@
                             <input type="number" class="create-game-corporations-count" value="2" min="1" :max="6" v-model="startingCorporations" id="startingCorpNum-checkbox">
                                 <span v-i18n>Starting Corporations</span>
                             </label>
+
+                            <template v-if="playersCount === 1">
+                            <input type="checkbox" v-model="soloTR" id="soloTR-checkbox">
+                            <label for="soloTR-checkbox">
+                                <span v-i18n>63 TR solo mode</span>&nbsp;<a :href="wikiUrls.trSoloMode" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
+                            </label>
+                            </template>
 
                             <!-- <input type="checkbox" v-model="beginnerOption" id="beginnerOption-checkbox">
                             <label for="beginnerOption-checkbox">
@@ -73,7 +80,7 @@
 
                         </div>
 
-                        <div class="create-game-page-column">
+                        <div class="create-game-page-column" v-if="playersCount > 1">
                             <h4 v-i18n>Multiplayer Options</h4>
 
                             <div class="create-game-page-column-row">
@@ -194,7 +201,7 @@ import {defineComponent, nextTick} from 'vue';
 import {Color, PLAYER_COLORS} from '@/common/Color';
 import {CardName} from '@/common/cards/CardName';
 import CorporationsFilter from '@/client/components/create/CorporationsFilter.vue';
-import {translateTextWithParams} from '@/client/directives/i18n';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {playerColorClass} from '@/common/utils/utils';
@@ -372,6 +379,9 @@ export default defineComponent({
       return !this.initialDraft;
     },
     getPlayersCountText(count: number): string {
+      if (count === 1) {
+        return translateText('Solo');
+      }
       const botLabel = count === 2 ? 'bot' : 'bots';
       return translateTextWithParams('${0} human + ${1} ${2}', ['1', String(count - 1), botLabel]);
     },

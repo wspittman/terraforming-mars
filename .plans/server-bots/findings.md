@@ -5,7 +5,7 @@
 - A multiplayer-sized game has exactly one human participant; every other participant runs on the server.
 - Placeholder bots choose the first corporation, choose the first available draft card, buy no cards, and always pass during action rounds.
 - Remove multi-human communication code only when it becomes unnecessary under the local single-human model.
-- This session implements only Phase 4, per the repository planning workflow.
+- This session implements only Phase 5, per the repository planning workflow.
 
 ## Research Findings
 
@@ -20,6 +20,7 @@
 - Spectator support remains broader than human-to-human coordination and is still used by administrative/game-end views; Phase 3 can remove player-facing spectator links and spectator waiting polls without coupling this phase to a full persistence migration.
 - Existing game tests already provide helpers to maximize the three global parameters and drive the final production/end-game transition; an end-to-end bot test can combine those helpers with a real human-plus-bots game rather than mocking `gameIsOver`.
 - The repository test type-check currently has five stale errors in automa/removed-tag tests, which Phase 4 should clean up so verification can be authoritative.
+- Phase 2 accidentally changed the valid player-count range from one-to-six to two-to-six and removed the solo radio button and `soloTR` control; the game engine itself still retains and normalizes solo rules.
 
 ## Technical Decisions
 
@@ -32,6 +33,7 @@
 | Keep the waiting endpoint but make it player-only and omit other players' input state. | Polling is required for the human client, but cross-player readiness information is not. |
 | Drop all legacy settings and optional bot serialization handling. | The user explicitly said neither saved settings nor in-progress games need backward compatibility. |
 | Add a lifecycle test at the game-engine boundary. | It exercises real setup, bot turn passing, final production, and termination without making a slow browser test the only completion proof. |
+| Treat `playerCount === 1` as original solo mode and larger counts as one human plus bots. | Bot multiplayer is additive and must not replace the board game's existing solo option. |
 
 ## Resources
 

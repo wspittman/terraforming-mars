@@ -47,7 +47,19 @@ describe('CreateGameForm', () => {
 
     expect(wrapper.findAll('.create-game-player')).has.length(1);
     expect(wrapper.text()).to.include('1 human + 3 bots');
-    expect(wrapper.find('[id="1-radio"]').exists()).is.false;
+    expect(wrapper.find('[id="1-radio"]').exists()).is.true;
+  });
+
+  it('shows solo options without multiplayer options for one player', async () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+
+    await wrapper.setData({playersCount: 1});
+
+    expect(wrapper.text()).to.include('Solo');
+    expect(wrapper.find('#soloTR-checkbox').exists()).is.true;
+    expect(wrapper.text()).not.to.include('Multiplayer Options');
   });
 
   it('does not show unsupported game options', () => {

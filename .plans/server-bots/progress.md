@@ -34,6 +34,14 @@
 - **Actions taken:** Added a real four-seat lifecycle test that maximizes Mars, lets the human and all bots pass, resolves production, and reaches the end phase; removed stale expansion-era assertions/imports that prevented test compilation; ran the complete server/client test, lint, type-check, and build commands; finalized README usage and validation documentation.
 - **Files created/modified:** `tests/bots/PlaceholderBot.spec.ts`, stale test cleanup in `tests/{automa,behavior,boards,cards}`, `README.md`, and `.plans/server-bots/*`.
 
+### Phase 5: Preserve Original Solo Play
+
+- **Status:** complete
+- **Started:** 2026-08-09
+- **Completed:** 2026-08-09
+- **Actions taken:** Restored the Solo player-count choice and TR63 option, hid multiplayer-only settings for solo, accepted one-player API requests without creating bots, verified engine solo normalization, documented both play modes, and captured `/tmp/create-game-with-solo.png`.
+- **Files created/modified:** `src/client/components/create/CreateGameForm.vue`, `src/server/routes/ApiCreateGame.ts`, focused route/client tests, `README.md`, and `.plans/server-bots/*`.
+
 ## Test Results
 
 | Test | Input | Expected | Actual | Status |
@@ -58,3 +66,7 @@
 | Complete tests | `npm test` | All server and client tests pass. | Completed successfully; client reported 287 passing. | pass |
 | Complete lint | `npm run lint` | Server, Vue, and stylesheet lint pass. | Completed successfully. | pass |
 | Full build | `npm run build` | Static assets, server, and production client compile. | Completed successfully. | pass |
+| Solo create route | `npx mocha --import=tsx --require tests/testing/setup.ts "tests/routes/ApiCreateGame.spec.ts"` | One-player requests create an original solo game without bots. | 10 passing. | pass |
+| Solo create form | `npx cross-env NODE_ENV=development mochapack --reporter dot --require tests/client/components/setup.ts "tests/client/components/create/CreateGameForm.spec.ts"` | Solo and multiplayer controls render in their correct modes. | 9 passing. | pass |
+| Complete verification | `npm run build:test && npm run lint && npm run build && npm test` | Types, lint, production build, and all tests pass. | Completed successfully; client reported 288 passing. | pass |
+| Solo UI screenshot | `npx -y playwright@1.55.0 screenshot --viewport-size=1440,1000 http://127.0.0.1:8080/new-game /tmp/create-game-with-solo.png` | Solo choice is visible alongside bot multiplayer counts. | Screenshot captured. | pass |

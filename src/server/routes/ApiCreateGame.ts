@@ -87,8 +87,8 @@ export class ApiCreateGame extends Handler {
           const gameReq = JSON.parse(body) as NewGameConfig;
           const gameId = safeCast(generateRandomId('g'), isGameId);
           const spectatorId = safeCast(generateRandomId('s'), isSpectatorId);
-          if (!Number.isInteger(gameReq.playerCount) || gameReq.playerCount < 2 || gameReq.playerCount > 6) {
-            throw new Error('playerCount must be an integer between 2 and 6');
+          if (!Number.isInteger(gameReq.playerCount) || gameReq.playerCount < 1 || gameReq.playerCount > 6) {
+            throw new Error('playerCount must be an integer between 1 and 6');
           }
           if (gameReq.player === undefined || !PLAYER_COLORS.some((color) => color === gameReq.player.color)) {
             throw new Error('player must have a valid color');

@@ -29,6 +29,7 @@ import {PlayedCards} from './cards/PlayedCards';
 import {From} from './logs/From';
 import {Tag} from '../common/cards/Tag';
 import {SelectStandardProjectToPlay} from './inputs/SelectStandardProjectToPlay';
+import {BotStrategyName} from './bots/BotStrategy';
 
 /**
  * Represents additional costs a player must pay to execute an action.
@@ -55,6 +56,7 @@ export type CanAffordOptions = Partial<PaymentOptions> & {
 export type CardAction = 'add' | 'discard' | 'nothing' | 'double-down';
 
 export interface IPlayer {
+  botStrategy: BotStrategyName | undefined;
   readonly id: PlayerId;
   name: string;
   color: Color;

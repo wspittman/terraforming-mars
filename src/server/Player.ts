@@ -35,6 +35,8 @@ import {
 import { IAward } from './awards/IAward';
 import { getBehaviorExecutor } from './behavior/BehaviorExecutor';
 import { Counter } from './behavior/Counter';
+import { assignBotStrategy, BotStrategyName, getBotStrategy } from './bots/BotStrategy';
+import { resolvePlaceholderBotInputs } from './bots/PlaceholderBotInput';
 import { ConvertHeat } from './cards/base/standardActions/ConvertHeat';
 import { ConvertPlants } from './cards/base/standardActions/ConvertPlants';
 import { SellPatentsStandardProject } from './cards/base/standardProjects/SellPatentsStandardProject';
@@ -88,6 +90,7 @@ const DEFAULT_GLOBAL_PARAMETER_STEPS = {
 } as const;
 
 export class Player implements IPlayer {
+  public botStrategy: BotStrategyName | undefined;
   public readonly id: PlayerId;
   protected waitingFor?: PlayerInput;
   protected waitingForCb?: () => void;
@@ -239,6 +242,9 @@ export class Player implements IPlayer {
 
   public setup(game: IGame) {
     this.game = game;
+    if (this.isBot && this.botStrategy === undefined) {
+      this.botStrategy = assignBotStrategy(game.rng);
+    }
     (this.opponents as Array<IPlayer>).push(
       ...game.players.filter((p) => p !== this),
     );
@@ -1274,8 +1280,26 @@ export class Player implements IPlayer {
     const game = this.game;
 
     if (this.isBot) {
-      this.pass();
-      game.playerIsFinishedTakingActions();
+      game.phase = Phase.ACTION;
+      if (
+        game.hasPassedThisActionPhase(this) ||
+        (this.allOtherPlayersHavePassed() === false &&
+          this.actionsTakenThisRound >= this.availableActionsThisRound)
+      ) {
+        this.actionsTakenThisRound = 0;
+        this.availableActionsThisRound = 2;
+        game.resettable = true;
+        game.playerIsFinishedTakingActions();
+        return;
+      }
+      if (!getBotStrategy(this.botStrategy).takeAction(this)) {
+        this.pass();
+        game.playerIsFinishedTakingActions();
+        return;
+      }
+      this.incrementActionsTaken();
+      game.deferredActions.runAll(() => this.takeAction());
+      resolvePlaceholderBotInputs([this]);
       return;
     }
 
@@ -1558,6 +1582,7 @@ export class Player implements IPlayer {
     const result: SerializedPlayer = {
       id: this.id,
       isBot: this.isBot,
+      botStrategy: this.botStrategy,
       user: this.user,
       // Used only during set-up
       pickedCorporationCard: this.pickedCorporationCard?.name,
@@ -1646,6 +1671,7 @@ export class Player implements IPlayer {
       d.id,
       d.isBot,
     );
+    player.botStrategy = d.botStrategy;
 
     player.actionsTakenThisGame = d.actionsTakenThisGame;
     player.actionsThisGeneration = new Set(d.actionsThisGeneration);

@@ -200,7 +200,7 @@ describeDatabaseSuite({
       const db = dbFactory();
       const player = TestPlayer.BLACK.newPlayer();
       const player2 = TestPlayer.RED.newPlayer();
-      const game = Game.newInstance('gameid', [player, player2], player, 'spectatorid', {draftVariant: false, undoOption: true});
+      const game = Game.newInstance('gameid', [player, player2], player, 'spectatorid', {undoOption: true});
 
       await db.awaitAllSaves();
 
@@ -274,7 +274,7 @@ describeDatabaseSuite({
       const db = dbFactory();
       const player = TestPlayer.BLACK.newPlayer();
       const player2 = TestPlayer.RED.newPlayer();
-      const game = Game.newInstance('gameid', [player, player2], player2, 'spectatorid', {draftVariant: false, undoOption: true});
+      const game = Game.newInstance('gameid', [player, player2], player2, 'spectatorid', {undoOption: true});
       // Adding to the GameLoader because this is manually managed by the Game route, which is the real place responsible for
       // creating new games.
       GameLoader.getInstance().add(game);

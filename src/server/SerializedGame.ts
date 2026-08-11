@@ -17,12 +17,10 @@ export type SerializedGameOptions = Pick<GameOptions,
   'boardName' |
   'corporateEra' |
   'customCorporationsList' |
-  'draftVariant' |
   'escapeVelocity' |
   'fastModeOption' |
   'includeFanMA' |
   'includedCards' |
-  'initialDraftVariant' |
   'modularMA' |
   'randomMA' |
   'showOtherPlayersVP' |
@@ -53,7 +51,6 @@ export type SerializedGame = {
     generation: number;
     globalsPerGeneration: Array<Partial<Record<GlobalParameter, number>>>;
     id: GameId;
-    initialDraftIteration: number;
     lastSaveId: number;
     milestones: Array<MilestoneName>;
     name: string;

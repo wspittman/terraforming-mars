@@ -40,7 +40,7 @@ describe('drafting and serialization', () => {
   });
 
   it('2 player - project draft - server after partial draft', async () => {
-    const [game, player1, player2] = testGame(2, {draftVariant: true});
+    const [game, player1, player2] = testGame(2);
 
     game.generation = 1;
     // This moves into draft phase
@@ -61,7 +61,7 @@ describe('drafting and serialization', () => {
   });
 
   it('2 player - project draft - server reset during first draft round', async () => {
-    const [game] = testGame(2, {draftVariant: true});
+    const [game] = testGame(2);
 
     game.generation = 1;
     // This moves into draft phase
@@ -684,12 +684,10 @@ const stored = {
     'includedCards': [],
     'corporateEra': true,
     'customCorporationsList': [],
-    'draftVariant': true,
     'escapeVelocityMode': false,
     'escapeVelocityBonusSeconds': 2,
     'fastModeOption': false,
     'includeFanMA': false,
-    'initialDraftVariant': false,
     'randomMA': 'No randomization',
     'showOtherPlayersVP': false,
     'showTimers': true,
@@ -707,7 +705,6 @@ const stored = {
     },
   ],
   'id': 'gff5c1affc4be',
-  'initialDraftIteration': 1,
   'lastSaveId': 3,
   'milestones': [
     'Terraformer',

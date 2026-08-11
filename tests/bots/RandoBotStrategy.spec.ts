@@ -26,6 +26,15 @@ describe('RandoBotStrategy', () => {
 
     Game.newInstance('game', [human, bot], human, 'spectator');
 
+    for (let round = 1; round < 10; round++) {
+      const input = human.getWaitingFor();
+      if (!(input instanceof SelectCard)) {
+        throw new Error('Human is not drafting');
+      }
+      human.clearWaitingFor();
+      input.process({type: 'card', cards: [input.cards[0].name]});
+    }
+
     expect(bot.botStrategy).eq('rando');
     const highestStartingMoney = Math.max(...bot.dealtCorporationCards.map((card) => card.startingMegaCredits));
     expect(bot.pickedCorporationCard?.startingMegaCredits).eq(highestStartingMoney);

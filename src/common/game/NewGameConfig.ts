@@ -47,8 +47,6 @@ export interface NewGameConfig {
   modularMA: boolean;
 
   // Variants
-  draftVariant: boolean;
-  initialDraft: boolean; // initialDraftVariant: boolean;
   startingCorporations: number;
   shuffleMapOption: boolean;
   randomMA: RandomMAOptionType;

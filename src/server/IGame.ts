@@ -228,14 +228,6 @@ export interface IGame extends Logger {
   logIllegalState(description: string, metadata: {}): void;
 
   /**
-   * Drafting before the first generation goes through up to 4 iterations:
-   * 1. first 5 project cards,
-   * 2. second 5 project cards
-   * 3. [optional] preludes
-   * 4. [optional] CEOs
-   */
-  initialDraftIteration: number;
-  /**
    * When drafting n cards, this counts the each step in the draft.
    * When players get all the cards, this is 1. After everybody drafts a card,
    * this is round 2.

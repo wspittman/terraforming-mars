@@ -51,8 +51,6 @@ describe('ApiCreateGame', () => {
         fastModeOption: false,
         showOtherPlayersVP: false,
         modularMA: false,
-        draftVariant: false,
-        initialDraft: false,
         startingCorporations: 0,
         shuffleMapOption: false,
         randomMA: RandomMAOptionType.NONE,
@@ -101,8 +99,6 @@ describe('ApiCreateGame', () => {
         fastModeOption: false,
         showOtherPlayersVP: false,
         modularMA: false,
-        draftVariant: true,
-        initialDraft: false,
         startingCorporations: 2,
         shuffleMapOption: false,
         randomMA: RandomMAOptionType.NONE,
@@ -126,7 +122,6 @@ describe('ApiCreateGame', () => {
     expect(game?.players[0].isBot).is.false;
     expect(game?.isSoloMode()).is.true;
     expect(game?.gameOptions.soloTR).is.true;
-    expect(game?.gameOptions.draftVariant).is.false;
   });
 
   it('red rover solo game', async () => {

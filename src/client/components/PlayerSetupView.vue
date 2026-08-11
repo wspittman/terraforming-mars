@@ -1,6 +1,6 @@
 <template>
   <div class="player_home_block player_home_block--setup nofloat">
-    <template v-if="isInitialDraftingPhase">
+    <template v-if="game.phase === Phase.INITIALDRAFTING">
       <div v-for="card in playerView.dealtCorporationCards" :key="card.name" class="cardbox">
         <Card :card="card"/>
       </div>
@@ -101,8 +101,8 @@ export default defineComponent({
     game(): GameModel {
       return this.playerView.game;
     },
-    isInitialDraftingPhase(): boolean {
-      return (this.game.phase === Phase.INITIALDRAFTING) && this.game.gameOptions.initialDraftVariant;
+    Phase(): typeof Phase {
+      return Phase;
     },
   },
   components: {

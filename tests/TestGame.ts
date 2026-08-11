@@ -4,6 +4,7 @@ import {GameOptions} from '../src/server/game/GameOptions';
 import {TestPlayer} from './TestPlayer';
 import {SelectInitialCards} from '../src/server/inputs/SelectInitialCards';
 import {Deck} from '../src/server/cards/Deck';
+import {Phase} from '../src/common/Phase';
 
 export type TestGameOptions = GameOptions & {
   /* skip initial card selection */
@@ -46,9 +47,15 @@ export function testGame(count: number, customOptions?: Partial<TestGameOptions>
     const game = Game.newInstance(`game-id${idSuffix}`, players, players[0], `spectator-id${idSuffix}`, customOptions, 0);
     if (customOptions?.skipInitialCardSelection !== false) {
       for (const player of players) {
-      /* Removes waitingFor if it is SelectInitialCards. Used when wanting it cleared out for further testing. */
-        if (player.getWaitingFor() instanceof SelectInitialCards) {
+        /* Removes initial setup input so the game is ready for focused tests. */
+        if (game.phase === Phase.INITIALDRAFTING || player.getWaitingFor() instanceof SelectInitialCards) {
           player.popWaitingFor();
+        }
+        if (game.phase === Phase.INITIALDRAFTING) {
+          game.projectDeck.drawPile.push(...player.draftHand, ...player.draftedCards);
+          player.draftHand = [];
+          player.draftedCards = [];
+          player.needsToDraft = undefined;
         }
       }
     }

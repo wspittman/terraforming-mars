@@ -16,7 +16,7 @@ export type DraftType = 'none' | 'initial' | 'standard';
  * Drafting terminology:
  *
  * Draft iteration: A complete cycle of draft rounds. In the standard draft, there are 4 draft rounds in a draft iteration.
- *  In the initial draft, there are 2 iterations, or up to 3 with preludes.
+ *  The initial draft is one ten-card iteration.
  * Draft round: A single pass through the players, where each player gets to pick a card.
  */
 
@@ -255,7 +255,7 @@ class InitialDraft extends Draft {
   }
 
   override draw(_player: IPlayer) {
-    return this.game.projectDeck.drawN(this.game, 5, 'bottom');
+    return this.game.projectDeck.drawN(this.game, 10, 'bottom');
   }
 
   override cardsToKeep(_player: IPlayer): number {
@@ -263,26 +263,16 @@ class InitialDraft extends Draft {
   }
 
   override passDirection() {
-    return this.game.initialDraftIteration === 2 ? 'before' : 'after';
+    return 'before' as const;
   }
 
   override endRound() {
-    this.game.initialDraftIteration++;
-    // TODO(kberg): Move this to runDraftRound.
     this.game.draftRound = 1;
-
-    switch (this.game.initialDraftIteration) {
-    case 2:
-      this.startDraft();
-      break;
-    case 3:
-      for (const player of this.game.players) {
-        player.dealtProjectCards = player.draftedCards;
-        player.draftedCards = [];
-      }
-      this.game.gotoInitialResearchPhase();
-      break;
+    for (const player of this.game.players) {
+      player.dealtProjectCards = player.draftedCards;
+      player.draftedCards = [];
     }
+    this.game.gotoInitialResearchPhase();
   }
 }
 

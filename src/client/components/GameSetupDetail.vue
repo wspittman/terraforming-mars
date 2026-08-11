@@ -19,13 +19,6 @@
               <div v-if="gameOptions.randomMA === RandomMAOptionType.UNLIMITED" class="game-config generic" v-i18n>Full randomized</div>
             </li>
 
-            <li v-if="playerNumber > 1">
-              <div class="setup-item" v-i18n>Draft:</div>
-              <div v-if="gameOptions.initialDraftVariant" class="game-config generic" v-i18n>Initial</div>
-              <div v-if="gameOptions.draftVariant" class="game-config generic" v-i18n>Research phase</div>
-              <div v-if="!gameOptions.initialDraftVariant && !gameOptions.draftVariant" class="game-config generic" v-i18n>Off</div>
-            </li>
-
             <li v-if="gameOptions.escapeVelocity !== undefined">
               <div class="create-game-expansion-icon expansion-icon-escape-velocity"></div>
               <span>{{escapeVelocityDescription}}</span>

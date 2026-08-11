@@ -108,7 +108,6 @@ export class Game implements IGame, Logger {
 
   // Drafting
   public draftRound: number = 1;
-  public initialDraftIteration: number = 1;
 
   // Milestones and awards
   public claimedMilestones: Array<ClaimedMilestone> = [];
@@ -236,8 +235,6 @@ export class Game implements IGame, Logger {
     }
 
     if (players.length === 1) {
-      gameOptions.draftVariant = false;
-      gameOptions.initialDraftVariant = false;
       gameOptions.randomMA = RandomMAOptionType.NONE;
 
       // Single player game player starts with 14TR
@@ -285,9 +282,9 @@ export class Game implements IGame, Logger {
         });
       }
 
-      if (!player.beginner || gameOptions.initialDraftVariant) {
+      if (!player.beginner || players.length > 1) {
         player.dealtCorporationCards.push(...corporationDeck.drawN(game, gameOptions.startingCorporations));
-        if (gameOptions.initialDraftVariant === false) {
+        if (players.length === 1) {
           player.dealtProjectCards.push(...projectDeck.drawN(game, 10));
         }
       } else {
@@ -311,10 +308,9 @@ export class Game implements IGame, Logger {
     return game;
   }
 
-  /** Properly starts the game with the project draft, or initial research phase. */
+  /** Starts multiplayer games with the project draft and solo games with initial research. */
   private gotoInitialPhase(): void {
-    // Initial Draft
-    if (this.gameOptions.initialDraftVariant) {
+    if (!this.isSoloMode()) {
       this.phase = Phase.INITIALDRAFTING;
       newInitialDraft(this).startDraft();
     } else {
@@ -347,12 +343,10 @@ export class Game implements IGame, Logger {
         boardName: this.gameOptions.boardName,
         corporateEra: this.gameOptions.corporateEra,
         customCorporationsList: this.gameOptions.customCorporationsList,
-        draftVariant: this.gameOptions.draftVariant,
         escapeVelocity: this.gameOptions.escapeVelocity,
         fastModeOption: this.gameOptions.fastModeOption,
         includeFanMA: this.gameOptions.includeFanMA,
         includedCards: this.gameOptions.includedCards,
-        initialDraftVariant: this.gameOptions.initialDraftVariant,
         modularMA: this.gameOptions.modularMA,
         randomMA: this.gameOptions.randomMA,
         showOtherPlayersVP: this.gameOptions.showOtherPlayersVP,
@@ -366,7 +360,6 @@ export class Game implements IGame, Logger {
       generation: this.generation,
       globalsPerGeneration: this.globalsPerGeneration,
       id: this.id,
-      initialDraftIteration: this.initialDraftIteration,
       lastSaveId: this.lastSaveId,
       milestones: this.milestones.map(toName),
       name: this.name,
@@ -643,7 +636,7 @@ export class Game implements IGame, Logger {
       player.hasIncreasedTerraformRatingThisGeneration = false;
     });
 
-    if (this.gameOptions.draftVariant) {
+    if (!this.isSoloMode()) {
       this.gotoDraftPhase();
     } else {
       this.gotoResearchPhase();
@@ -1226,21 +1219,13 @@ export class Game implements IGame, Logger {
     game.temperature = d.temperature;
     game.activePlayer = game.getPlayerById(d.activePlayer);
     game.draftRound = d.draftRound;
-    game.initialDraftIteration = d.initialDraftIteration;
     game.someoneHasRemovedOtherPlayersPlants = d.someoneHasRemovedOtherPlayersPlants;
     game.globalsPerGeneration = d.globalsPerGeneration;
 
     // Still in Draft or Research of generation 1
     if (game.generation === 1 && players.some((p) => p.playedCards.filter(isICorporationCard).length === 0)) {
       if (game.phase === Phase.INITIALDRAFTING) {
-        switch (game.initialDraftIteration) {
-        case 1:
-          newInitialDraft(game).restoreDraft();
-          break;
-        case 2:
-          newInitialDraft(game).restoreDraft();
-          break;
-        }
+        newInitialDraft(game).restoreDraft();
       } else {
         game.gotoInitialResearchPhase();
       }

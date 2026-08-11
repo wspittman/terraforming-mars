@@ -16,7 +16,6 @@ function createGameSettings(overrides: JSONObject = {}): JSONObject {
     playerCount: 4,
     corporateEra: true,
     board: 'hellas',
-    draftVariant: false,
     ...overrides,
   };
 }
@@ -74,6 +73,8 @@ describe('CreateGameForm', () => {
     expect(wrapper.find('#randomMA-checkbox').exists()).to.be.false;
     expect(wrapper.find('#fastMode-checkbox').exists()).to.be.false;
     expect(wrapper.find('.player-handicap').exists()).to.be.false;
+    expect(wrapper.find('#draft-checkbox').exists()).to.be.false;
+    expect(wrapper.find('#initialDraft-checkbox').exists()).to.be.false;
   });
 
   it('restores the last saved game settings on load', async () => {
@@ -100,7 +101,6 @@ describe('CreateGameForm', () => {
     expect((wrapper.vm as any).playersCount).eq(2);
     expect((wrapper.vm as any).player.name).eq('Alice');
     expect((wrapper.vm as any).board).eq(BoardName.THARSIS);
-    expect((wrapper.vm as any).draftVariant).eq(false);
     expect((wrapper.vm as any).expansions.corpera).eq(true);
     expect((wrapper.vm as any).escapeVelocityMode).eq(undefined);
     expect((wrapper.vm as any).fastModeOption).eq(undefined);
@@ -153,7 +153,6 @@ describe('CreateGameForm', () => {
     await wrapper.vm.$nextTick();
 
     expect((wrapper.vm as any).board).eq(BoardName.THARSIS);
-    expect((wrapper.vm as any).draftVariant).eq(true);
     expect(settingsStorage.loadSettings()).eq(undefined);
     expect(wrapper.findAllComponents({name: 'AppButton'}).map((button) => button.props('title'))).includes('Reset');
   });

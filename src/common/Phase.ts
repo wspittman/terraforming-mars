@@ -20,7 +20,7 @@ export enum Phase {
    */
   RESEARCH = 'research',
 
-  /** The standard drafting phase, as described by the official rules variant. */
+  /** The standard between-generation drafting phase. */
   DRAFTING = 'drafting',
 
   /** Maps to rulebook action phase */

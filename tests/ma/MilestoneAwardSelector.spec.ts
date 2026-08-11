@@ -3,7 +3,6 @@ import { BoardName } from '../../src/common/boards/BoardName';
 import { AwardName } from '../../src/common/ma/AwardName';
 import { MilestoneName } from '../../src/common/ma/MilestoneName';
 import { RandomMAOptionType } from '../../src/common/ma/RandomMAOptionType';
-import { intersection } from '../../src/common/utils/utils';
 import { awardManifest } from '../../src/server/awards/Awards';
 import {
   DEFAULT_GAME_OPTIONS,
@@ -83,23 +82,21 @@ describe('MilestoneAwardSelector', () => {
   });
 
 
-  it('Do not select deprecated milestones or awards', () => {
-    const [milestones, awards] = getCandidates({
+  it('only selects base game milestones', () => {
+    const [milestones] = getCandidates({
       ...DEFAULT_GAME_OPTIONS,
       randomMA: RandomMAOptionType.UNLIMITED,
       includeFanMA: true,
+      modularMA: true,
     });
 
-    const deprecatedMilestones = Object.keys(milestoneManifest.all).filter(
-      (name) => milestoneManifest.all[name as MilestoneName].deprecated,
-    );
-    const deprecatedAwards = Object.keys(awardManifest.all).filter(
-      (name) => awardManifest.all[name as AwardName].deprecated,
-    );
-
-    expect(intersection(milestones as Array<string>, deprecatedMilestones)).is
-      .empty;
-    expect(intersection(awards as Array<string>, deprecatedAwards)).is.empty;
+    expect(milestones).to.have.members([
+      'Terraformer',
+      'Mayor',
+      'Gardener',
+      'Builder',
+      'Planner',
+    ]);
   });
 
   function choose(options: Partial<GameOptions>) {

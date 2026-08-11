@@ -53,7 +53,6 @@ import {sum, toID, toName} from '../common/utils/utils';
 import {OrOptions} from './inputs/OrOptions';
 import {SelectOption} from './inputs/SelectOption';
 import {SelectSpace} from './inputs/SelectSpace';
-import {maybeRenamedMilestone} from '../common/ma/MilestoneName';
 import {maybeRenamedAward} from '../common/ma/AwardName';
 import {IStandardProjectCard} from './cards/IStandardProjectCard';
 import {ICard} from './cards/ICard';
@@ -1195,14 +1194,7 @@ export class Game implements IGame, Logger {
     game.spectatorId = d.spectatorId;
     game.createdTime = new Date(d.createdTimeMs);
 
-    const milestones: Array<IMilestone> = [];
-    d.milestones.forEach((milestoneName) => {
-      milestoneName = maybeRenamedMilestone(milestoneName);
-      const milestone = milestoneManifest.create(milestoneName);
-      if (milestone !== undefined) {
-        milestones.push(milestone);
-      }
-    });
+    const milestones = d.milestones.map(milestoneManifest.createOrThrow);
 
     game.milestones = milestones;
     game.claimedMilestones = deserializeClaimedMilestones(d.claimedMilestones, players, milestones);

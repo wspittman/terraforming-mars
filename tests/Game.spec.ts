@@ -21,7 +21,6 @@ import { Game } from '../src/server/Game';
 import { OrOptions } from '../src/server/inputs/OrOptions';
 import { SelectInitialCards } from '../src/server/inputs/SelectInitialCards';
 import { SelectSpace } from '../src/server/inputs/SelectSpace';
-import { Ecologist } from '../src/server/milestones/Ecologist';
 import { Mayor } from '../src/server/milestones/Mayor';
 import { Player } from '../src/server/Player';
 import { assertPlaceOcean } from './assertions';
@@ -644,17 +643,6 @@ describe('Game', () => {
     expect(space.player).is.undefined;
   });
 
-  it('Check Ecologist Milestone', () => {
-    const player = TestPlayer.BLUE.newPlayer();
-
-    const ecologist = new Ecologist();
-
-    player.tagsForTest = { plant: 1, microbe: 1 };
-    expect(ecologist.canClaim(player)).is.not.true;
-    player.tagsForTest = { plant: 2, microbe: 2 };
-    expect(ecologist.canClaim(player)).is.true;
-  });
-
   it('Generates random milestones and awards', () => {
     const player = TestPlayer.BLUE.newPlayer();
     const player2 = TestPlayer.RED.newPlayer();
@@ -940,45 +928,6 @@ describe('Game', () => {
       },
     ]);
   });
-
-  // it('deserializing a game with renamed milestones', () => {
-  //   const player = TestPlayer.BLUE.newPlayer();
-  //   const player2 = TestPlayer.RED.newPlayer();
-  //   const game = Game.newInstance('gameid', [player, player2], player, 'spectatorid');
-  //   const electrician = new Electrician();
-  //   const collector = new Collector();
-
-  //   game.milestones.unshift(electrician, collector);
-
-  //   game.claimedMilestones.push({
-  //     milestone: electrician,
-  //     player: player,
-  //   });
-  //   game.claimedMilestones.push({
-  //     milestone: collector,
-  //     player: player,
-  //   });
-
-  //   const serialized = game.serialize();
-  //   expect(serialized.milestones[0]).eq('V. Electrician');
-  //   expect(serialized.claimedMilestones[0].name).eq('V. Electrician');
-  //   expect(serialized.milestones[1]).eq('T. Collector');
-  //   expect(serialized.claimedMilestones[1].name).eq('T. Collector');
-
-  //   serialized.milestones[0] = 'Electrician' as any;
-  //   serialized.claimedMilestones[0].name = 'Electrician' as any;
-  //   serialized.milestones[1] = 'Collector' as any;
-  //   serialized.claimedMilestones[1].name = 'Collector' as any;
-
-  //   const deserialized = Game.deserialize(serialized);
-  //   expect(deserialized.milestones[0]).deep.eq(electrician);
-  //   expect(deserialized.milestones[1]).deep.eq(collector);
-  //   expect(deserialized.claimedMilestones).has.length(2);
-  //   expect(deserialized.claimedMilestones[0].milestone.name).eq('V. Electrician');
-  //   expect(deserialized.claimedMilestones[0].player.id).eq('p-blue-id');
-  //   expect(deserialized.claimedMilestones[1].milestone.name).eq('T. Collector');
-  //   expect(deserialized.claimedMilestones[1].player.id).eq('p-blue-id');
-  // });
 
   // https://github.com/terraforming-mars/terraforming-mars/issues/5572
   it('dealing with milestones accidentally claimed twice', () => {

@@ -10,3 +10,8 @@
 - Updated the help text and removed obsolete setup-detail, settings, model, serialization, restore, and wiki-link code.
 - Focused server and client tests pass, TypeScript builds pass after generating ignored prerequisites, and the full lint suite passes.
 - Completed final diff checks and verification; ready to commit and open the pull request.
+- Began a feedback phase after the full suite was reported failing; the first local run required generating ignored CSS before it could execute.
+- Reproduced the 20 server failures. The shared `testGame` fixture left the now-mandatory initial draft input and 10 dealt draft cards active in tests that intentionally skip setup.
+- Updated `testGame` to clear initial-draft state and return its cards to the project deck, restoring the pre-feature fixture contract without weakening production behavior.
+- Updated the bot corporation-selection test to complete the mandatory human draft before asserting the bot's initial purchase decision.
+- Verified all 1,399 server tests and all 289 client tests pass (client prerequisites generated separately because they are ignored build artifacts).

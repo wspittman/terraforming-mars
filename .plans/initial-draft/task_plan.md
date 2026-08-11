@@ -16,6 +16,10 @@ Make the custom initial draft mandatory: deal ten cards to every player, draft o
    - Update relevant docs if user-visible setup documentation references removed options.
 4. **Verification and delivery** — complete
    - Run focused tests, builds/lints as appropriate, review the diff, commit, and create a pull request.
+5. **Full-suite regression fixes** — complete
+   - Reproduce the reported `npm run test` failures with all generated prerequisites present.
+   - Fix test helpers and expectations that assumed multiplayer games skipped initial drafting.
+   - Run the complete test suite, commit the corrections, and update the pull request.
 
 ## Key Questions
 
@@ -30,3 +34,6 @@ Make the custom initial draft mandatory: deal ten cards to every player, draft o
 | `npm run build:server` could not find generated `genfiles/settings.json`. | 1 | Generate required static JSON with the repository's build prerequisite before rerunning compilation. |
 | Bulk removal deleted test fixture declarations whose lines also contained removed options. | 1 | Restored the declarations without the obsolete option properties, then reran compilation. |
 | Focused client test compilation could not find generated `src/genfiles/cards.json`. | 1 | Run the `make:cards` prerequisite before rerunning the client test. |
+| Full server suite could not start because ignored `build/styles.css` was absent. | 1 | Generate CSS with the repository prerequisite, then rerun the full suite to expose the reported regressions. |
+| Bot regression test used the `TestPlayer`-only `popWaitingFor` helper on a production `Player`. | 1 | Read and clear the production player's input explicitly before processing the draft selection. |
+| `npm run test` reached the client suite without ignored generated JSON assets in this fresh workspace. | 1 | Regenerate the documented client prerequisites and rerun the client suite; this is unrelated to the draft regression. |

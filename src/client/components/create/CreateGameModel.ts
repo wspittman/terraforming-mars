@@ -9,10 +9,8 @@ export type CreateGameModel = {
   board: BoardNameType;
   clonedGameId: GameId | undefined;
   customCorporations: Array<CardName>;
-  draftVariant: boolean;
   expansions: Record<Expansion, boolean>,
   includedCards: Array<CardName>;
-  initialDraft: boolean;
   player: NewPlayerModel;
   playersCount: number;
   randomFirstPlayer: boolean;

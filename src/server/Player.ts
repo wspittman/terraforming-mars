@@ -599,7 +599,7 @@ export class Player implements IPlayer {
   }
 
   public runResearchPhase(): void {
-    if (!this.game.gameOptions.draftVariant || this.game.isSoloMode()) {
+    if (this.game.isSoloMode()) {
       this.draftedCards = newStandardDraft(this.game).draw(this);
     }
 

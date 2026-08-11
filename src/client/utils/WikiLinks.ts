@@ -12,7 +12,5 @@ export const WIKI_URLS = {
   trSoloMode: `${WIKI}/Variants#tr-solo-mode`,
   allowUndo: `${WIKI}/Variants#allow-undo`,
   setPredefinedGame: `${WIKI}/Variants#set-predefined-game`,
-  initialDraft: `${WIKI}/Variants#initial-draft`,
   showRealtimeVP: `${WIKI}/Variants#show-real-time-vp`,
-  beginnerCorporation: `${WIKI}/Variants#beginner-corporation`,
 } as const;

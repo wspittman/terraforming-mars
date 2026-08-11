@@ -83,21 +83,6 @@
                         <div class="create-game-page-column" v-if="playersCount > 1">
                             <h4 v-i18n>Multiplayer Options</h4>
 
-                            <div class="create-game-page-column-row">
-                                <div>
-                                <input type="checkbox" name="draftVariant" v-model="draftVariant" id="draft-checkbox">
-                                <label for="draft-checkbox">
-                                    <span v-i18n>Draft variant</span>
-                                </label>
-                                </div>
-
-                                <div>
-                                <input type="checkbox" name="initialDraft" v-model="initialDraft" id="initialDraft-checkbox">
-                                <label for="initialDraft-checkbox">
-                                    <span v-i18n>Initial Draft variant</span>&nbsp;<a :href="wikiUrls.initialDraft" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                                </label>
-                                </div>
-                            </div>
                             <input type="checkbox" v-model="randomFirstPlayer" id="randomFirstPlayer-checkbox">
                             <label for="randomFirstPlayer-checkbox">
                                 <span v-i18n>Random first player</span>
@@ -128,16 +113,6 @@
                                                   </label>
                                                 </div>
                                               </template>
-                                          </div>
-                                          <div>
-                                              <!-- <template v-if="beginnerOption"> -->
-                                                  <label v-if="isBeginnerToggleEnabled()" class="form-switch form-inline create-game-beginner-option-label">
-                                                      <input type="checkbox" v-model="newPlayer.beginner">
-                                                      <i class="form-icon"></i> <span v-i18n>Beginner?</span>&nbsp;<a :href="wikiUrls.beginnerCorporation" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
-                                                  </label>
-
-                                              <!-- </template> -->
-
                                           </div>
                                       </div>
                                     </div>
@@ -375,9 +350,6 @@ export default defineComponent({
     updateIncludedCards(includedCards: Array<CardName>) {
       this.includedCards = includedCards;
     },
-    isBeginnerToggleEnabled(): Boolean {
-      return !this.initialDraft;
-    },
     getPlayersCountText(count: number): string {
       if (count === 1) {
         return translateText('Solo');
@@ -397,8 +369,6 @@ export default defineComponent({
         player.name = this.$t('You');
       }
 
-      const draftVariant = this.draftVariant;
-      const initialDraft = this.initialDraft;
       const showOtherPlayersVP = this.showOtherPlayersVP;
       const customCorporations = this.customCorporations;
       const bannedCards = this.bannedCards;
@@ -457,7 +427,6 @@ export default defineComponent({
         player,
         playerCount: this.playersCount,
         corporateEra: true,
-        draftVariant,
         showOtherPlayersVP,
         customCorporations,
         bannedCards,
@@ -472,7 +441,6 @@ export default defineComponent({
         startingCorporations,
         soloTR,
         clonedGamedId,
-        initialDraft,
         randomMA: RandomMAOptionType.NONE,
         shuffleMapOption: false,
         // beginnerOption,

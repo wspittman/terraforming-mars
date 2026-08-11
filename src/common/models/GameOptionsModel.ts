@@ -7,11 +7,9 @@ export type GameOptionsModel = {
   boardName: BoardName,
   bannedCards: ReadonlyArray<CardName>;
   corporateEra: boolean,
-  draftVariant: boolean,
   escapeVelocity?: EscapeVelocityOptions,
   fastModeOption: boolean,
   includedCards: ReadonlyArray<CardName>;
-  initialDraftVariant: boolean,
   showOtherPlayersVP: boolean,
   showTimers: boolean,
   shuffleMapOption: boolean,

@@ -84,7 +84,6 @@ function simpleGameOptions(): GameOptions {
   return {
     ...DEFAULT_GAME_OPTIONS,
     corporateEra: false,
-    initialDraftVariant: false,
     showTimers: false,
     startingCorporations: 0,
 

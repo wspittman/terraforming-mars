@@ -3,15 +3,14 @@
       <ul>
         <li>
           <input type="checkbox" id="initial-draft">
-          <label for="initial-draft" class="first"><span v-i18n>Initial Drafting (optional variant)</span></label>
+          <label for="initial-draft" class="first"><span v-i18n>Initial Drafting</span></label>
             <ul>
               <li v-i18n>Draw 3 corporation cards</li>
               <li>
                 <span v-i18n>Draw 4 prelude cards</span>
                 <div class="expansion-icon expansion-icon-prelude"></div>
               </li>
-              <li v-i18n>Draw 5 project cards. Draft. Pick one card and pass to the player above in turn order. Repeat until you have 5 cards.</li>
-              <li v-i18n>Draw 5 more project cards. Draft and pass to the player below in turn order instead.</li>
+              <li v-i18n>Draw 10 project cards. Draft one card and pass the rest to the player above in turn order. Repeat until you have 10 cards.</li>
               <li>
                 <span v-i18n>Draft the prelude cards. Pick one card and pass to the player above in turn order. Repeat until you have 4 preludes.</span>
                 <div class="expansion-icon expansion-icon-prelude"></div>
@@ -39,7 +38,7 @@
               <label for="research-phase"><span v-i18n>Research Phase (Generation 2+)</span></label>
               <ul>
                 <li v-i18n>Draw four project cards</li>
-                <li v-i18n>(Optional variant: draft the cards. Pick one pass to the player below in even generation and above in odd generation. Repeat until you have four cards.)</li>
+                <li v-i18n>Draft the cards. Pick one and pass the rest to the player below in even generations and above in odd generations. Repeat until you have four cards.</li>
                 <li v-i18n>Decide how many cards to buy</li>
               </ul>
             </li>

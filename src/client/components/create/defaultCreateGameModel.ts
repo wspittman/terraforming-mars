@@ -7,8 +7,6 @@ export function defaultCreateGameModel(): CreateGameModel {
     playersCount: 4,
     player: {name: '', color: 'red', beginner: false, handicap: 0},
     expansions: {...DEFAULT_EXPANSIONS},
-    draftVariant: true,
-    initialDraft: false,
     randomFirstPlayer: true,
     showOtherPlayersVP: false,
     // beginnerOption: false,

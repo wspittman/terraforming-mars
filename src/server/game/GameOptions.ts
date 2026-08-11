@@ -18,8 +18,6 @@ export type GameOptions = {
   corporateEra: boolean;
 
   // Variants
-  draftVariant: boolean;
-  initialDraftVariant: boolean;
   // corporationsDraft: boolean;
   startingCorporations: number;
   shuffleMapOption: boolean;
@@ -42,11 +40,9 @@ export const DEFAULT_GAME_OPTIONS: GameOptions = {
   clonedGamedId: undefined,
   corporateEra: true,
   customCorporationsList: [],
-  draftVariant: false,
   escapeVelocity: undefined,
   fastModeOption: false,
   includeFanMA: false,
-  initialDraftVariant: false,
   modularMA: false,
   randomMA: RandomMAOptionType.NONE,
   showOtherPlayersVP: false,

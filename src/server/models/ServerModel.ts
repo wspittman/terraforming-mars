@@ -351,12 +351,10 @@ export class Server {
     return {
       boardName: options.boardName,
       bannedCards: options.bannedCards,
-      draftVariant: options.draftVariant,
       escapeVelocity: options.escapeVelocity,
       corporateEra: options.corporateEra,
       fastModeOption: options.fastModeOption,
       includedCards: options.includedCards,
-      initialDraftVariant: options.initialDraftVariant,
       showOtherPlayersVP: options.showOtherPlayersVP,
       showTimers: options.showTimers,
       shuffleMapOption: options.shuffleMapOption,

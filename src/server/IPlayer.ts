@@ -334,7 +334,7 @@ export interface IPlayer {
   clearWaitingFor(): void;
   serialize(): SerializedPlayer;
 
-  /** Returns the cost a player must spend to claim a milestone. Public for Briber. */
+  /** Returns the cost a player must spend to claim a milestone. */
   milestoneCost(): number;
 
   /** Shorthand for deferring evaluating a PlayerInput */

@@ -958,12 +958,8 @@ export class Player implements IPlayer {
       });
     };
 
-    const baseCost = this.milestoneCost();
-    const cost = baseCost + (milestone.name === 'Briber' ? 12 : 0);
-    const reserveUnits = milestone.name === 'Merchant' ? Units.every(2) : Units.EMPTY;
-    this.game.defer(new SelectPaymentDeferred(this, cost, {
+    this.game.defer(new SelectPaymentDeferred(this, this.milestoneCost(), {
       title: 'Select how to pay for milestone',
-      reserveUnits,
     })).andThen(recordClaim);
   }
 

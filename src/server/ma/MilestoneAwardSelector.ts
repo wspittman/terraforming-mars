@@ -149,9 +149,7 @@ export function getCandidates(
     return true;
   }
 
-  const candidateMilestones = milestoneNames.filter((name) =>
-    include(name, milestoneManifest),
-  );
+  const candidateMilestones = [...milestoneNames];
   const candidateAwards = awardNames.filter((name) =>
     include(name, awardManifest),
   );

@@ -25,10 +25,14 @@ export class AquiferStandardProject extends StandardProjectCard {
   }
 
   public override canAct(player: IPlayer): boolean {
-    if (!player.game.canAddOcean()) {
-      this.addWarning('maxoceans');
+    if (!this.isGlobalParameterAvailable(player)) {
+      return false;
     }
     return super.canAct(player);
+  }
+
+  public override isGlobalParameterAvailable(player: IPlayer): boolean {
+    return player.game.canAddOcean();
   }
 
   actionEssence(player: IPlayer): void {

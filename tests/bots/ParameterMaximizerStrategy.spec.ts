@@ -14,7 +14,7 @@ import {EcoLine} from '@/server/cards/corporation/EcoLine';
 describe('ParameterMaximizerStrategy', () => {
   it('is one of the strategies available for random assignment', () => {
     expect(assignBotStrategy(new ConstRandom(0))).eq('rando');
-    expect(assignBotStrategy(new ConstRandom(0.75))).eq('parameter-maximizer');
+    expect(assignBotStrategy(new ConstRandom(0.5))).eq('parameter-maximizer');
   });
 
   it('selects the corporation with the highest starting money', () => {

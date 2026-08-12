@@ -37,7 +37,7 @@ describe('RandoBotStrategy', () => {
       input.process({type: 'card', cards: [input.cards[0].name]});
     }
 
-    expect(['rando', 'parameter-maximizer']).to.include(bot.botStrategy);
+    expect(['rando', 'parameter-maximizer', 'landlord']).to.include(bot.botStrategy);
     expect(bot.cardsInHand).is.empty;
     expect(bot.getWaitingFor()).is.undefined;
   });

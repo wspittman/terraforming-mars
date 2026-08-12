@@ -12,9 +12,8 @@
       </dialog>
     </section>
     <div class="main-container">
-      <StartScreen v-if="screen === 'start-screen'"/>
       <CreateGameForm
-        v-else-if="screen === 'create-game-form'"
+        v-if="screen === 'create-game-form'"
       />
       <LoadGameForm v-else-if="screen === 'load'"/>
       <PlayerHome
@@ -60,7 +59,6 @@ const LoginHome = defineAsyncComponent(() => import(/* webpackChunkName: "login"
 const LoadGameForm = defineAsyncComponent(() => import(/* webpackChunkName: "load-game" */ '@/client/components/LoadGameForm.vue'));
 const PlayerHome = defineAsyncComponent(() => import(/* webpackChunkName: "player-home" */ '@/client/components/PlayerHome.vue'));
 const SpectatorHome = defineAsyncComponent(() => import(/* webpackChunkName: "spectator-home" */ '@/client/components/SpectatorHome.vue'));
-const StartScreen = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreen.vue'));
 import {$t, setTranslationContext} from '@/client/directives/i18n';
 import {paths} from '@/common/app/paths';
 import {PlayerViewModel, ViewModel} from '@/common/models/PlayerModel';
@@ -81,7 +79,6 @@ type Screen = 'admin' |
             'login-home' |
             'player-home' |
             'spectator-home' |
-            'start-screen' |
             'the-end';
 export type MainAppData = {
     screen: Screen;
@@ -133,7 +130,6 @@ export default defineComponent({
     };
   },
   components: {
-    StartScreen,
     CreateGameForm,
     LoadGameForm,
     PlayerHome,
@@ -255,7 +251,7 @@ export default defineComponent({
       }
     } else if (currentPathname === paths.GAMES_OVERVIEW) {
       app.screen = 'games-overview';
-    } else if (currentPathname === paths.NEW_GAME) {
+    } else if (currentPathname === '' || currentPathname === paths.NEW_GAME) {
       app.screen = 'create-game-form';
     } else if (currentPathname === paths.LOAD) {
       app.screen = 'load';
@@ -270,7 +266,7 @@ export default defineComponent({
     } else if (currentPathname === paths.LOGIN) {
       app.screen = 'login-home';
     } else {
-      app.screen = 'start-screen';
+      app.screen = 'create-game-form';
     }
   },
 });

@@ -1,6 +1,9 @@
 <template>
         <div id="create-game" class="create-game">
-            <h1><span v-i18n>{{ constants.APP_NAME }}</span> — <span v-i18n>Create New Game</span></h1>
+            <div class="create-game-header">
+              <h1><span v-i18n>{{ constants.APP_NAME }}</span> — <span v-i18n>Create New Game</span></h1>
+              <a class="create-game-cards-link" href="/cards" v-i18n>Cards encyclopedia</a>
+            </div>
 
             <div class="create-game-form create-game-panel create-game--block">
 

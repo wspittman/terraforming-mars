@@ -1248,8 +1248,9 @@ export class Player implements IPlayer {
   }
 
   public getStandardProjectOption(): SelectStandardProjectToPlay {
-    const standardProjects: Array<IStandardProjectCard> =
-      this.game.getStandardProjects();
+    const standardProjects: Array<IStandardProjectCard> = this.game
+      .getStandardProjects()
+      .filter((card) => card.isGlobalParameterAvailable(this));
 
     return new SelectStandardProjectToPlay(this, standardProjects, {
       enabled: standardProjects.map((card) => card.canAct(this)),
@@ -1419,12 +1420,6 @@ export class Player implements IPlayer {
         'Convert 8 heat into temperature',
         'Convert heat',
       ).andThen(() => convertHeat.action(this));
-      if (convertHeat.warnings.size > 0) {
-        option.warnings = Array.from(convertHeat.warnings);
-        if (convertHeat.warnings.has('maxtemp')) {
-          option.eligibleForDefault = false;
-        }
-      }
       action.options.push(option);
     }
 

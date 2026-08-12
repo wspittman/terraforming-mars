@@ -2,7 +2,8 @@ import { expect } from 'chai';
 import { WaterSplittingPlant } from '../../../src/server/cards/base/WaterSplittingPlant';
 import { IGame } from '../../../src/server/IGame';
 import { testGame } from '../../TestGame';
-import { maxOutOceans } from '../../TestingUtils';
+import { maxOutOceans, setOxygenLevel } from '../../TestingUtils';
+import {MAX_OXYGEN_LEVEL} from '../../../src/common/constants';
 import { TestPlayer } from '../../TestPlayer';
 
 describe('WaterSplittingPlant', () => {
@@ -38,6 +39,10 @@ describe('WaterSplittingPlant', () => {
     expect(game.getOxygenLevel()).to.eq(1);
   });
 
+  it('Cannot act when oxygen is maximized', () => {
+    player.energy = 3;
+    setOxygenLevel(game, MAX_OXYGEN_LEVEL);
 
-  // canAct needs bespoke behavior, or better behavior in the execu
+    expect(card.canAct(player)).is.false;
+  });
 });

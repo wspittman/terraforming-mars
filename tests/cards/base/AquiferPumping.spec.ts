@@ -40,10 +40,10 @@ describe('AquiferPumping', () => {
   });
 
 
-  it('Can act if can pay even after oceans are maxed', () => {
+  it('Cannot act after oceans are maxed', () => {
     maxOutOceans(player);
     player.megaCredits = 8;
 
-    expect(card.canAct(player)).is.true;
+    expect(card.canAct(player)).is.false;
   });
 });

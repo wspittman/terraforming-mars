@@ -12,6 +12,8 @@ export interface IStandardProjectCard extends ICard {
   reserveUnits?: Units;
   /** Whether the player meets all prerequisites to use this standard project. */
   canAct(player: IPlayer): boolean;
+  /** Whether this project's global-parameter effect is still available. */
+  isGlobalParameterAvailable(player: IPlayer): boolean;
   /** Which non-megacredit resources (steel, titanium, seeds, etc.) are accepted as payment for this project. */
   canPayWith(player: IPlayer): StandardProjectCanPayWith;
   /** Base cost minus any applicable discounts. */

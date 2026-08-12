@@ -6,6 +6,7 @@ import { IGame } from '../../../../src/server/IGame';
 import { testGame } from '../../../TestGame';
 import { runAllActions, setTemperature } from '../../../TestingUtils';
 import { TestPlayer } from '../../../TestPlayer';
+import {CardName} from '../../../../src/common/cards/CardName';
 
 describe('AsteroidStandardProject', () => {
   let card: AsteroidStandardProject;
@@ -37,20 +38,16 @@ describe('AsteroidStandardProject', () => {
     expect(game.getTemperature()).eq(-28);
   });
 
-  it('Paying when the global parameter is at its goal is a valid stall action', () => {
+  it('Cannot act when temperature is maximized', () => {
     player.megaCredits = 14;
-    expect(card.canAct(player)).eq(true);
-
     setTemperature(game, MAX_TEMPERATURE);
 
-    expect(player.terraformRating).eq(20);
-    expect(card.canAct(player)).eq(true);
+    expect(card.canAct(player)).eq(false);
+  });
 
-    card.payAndExecute(player, Payment.of({megacredits: card.cost}));
-    runAllActions(game);
+  it('Is omitted from standard projects when temperature is maximized', () => {
+    setTemperature(game, MAX_TEMPERATURE);
 
-    expect(game.getTemperature()).eq(MAX_TEMPERATURE);
-    expect(player.terraformRating).eq(20);
-    expect(player.megaCredits).eq(0);
+    expect(player.getStandardProjectOption().cards.map((card) => card.name)).not.to.include(CardName.ASTEROID_STANDARD_PROJECT);
   });
 });

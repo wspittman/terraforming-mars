@@ -33,6 +33,9 @@ export class WaterImportFromEuropa extends Card implements IActionCard, IProject
     });
   }
   public canAct(player: IPlayer): boolean {
+    if (!player.game.canAddOcean()) {
+      return false;
+    }
     return player.canAfford({cost: ACTION_COST, titanium: true, tr: {oceans: 1}});
   }
   public action(player: IPlayer) {

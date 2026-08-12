@@ -37,21 +37,10 @@ describe('AquiferStandardProject', () => {
     expect(game.board.getOceanSpaces()).has.length(1);
   });
 
-  it('Paying when the global parameter is at its goal is a valid stall action', () => {
+  it('Cannot act when oceans are maximized', () => {
     player.megaCredits = 18;
-    expect(card.canAct(player)).eq(true);
-
     maxOutOceans(player);
 
-    player.megaCredits = 18;
-    expect(player.terraformRating).eq(23);
-    expect(card.canAct(player)).eq(true);
-
-    card.payAndExecute(player, Payment.of({megacredits: card.cost}));
-    runAllActions(game);
-
-    expect(game.board.getOceanSpaces()).has.length(9);
-    expect(player.terraformRating).eq(23);
-    expect(player.megaCredits).eq(0);
+    expect(card.canAct(player)).eq(false);
   });
 });

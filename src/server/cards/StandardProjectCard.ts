@@ -68,6 +68,10 @@ export abstract class StandardProjectCard extends Card implements IStandardProje
     return player.canAfford(this.canPlayOptions(player));
   }
 
+  public isGlobalParameterAvailable(_player: IPlayer): boolean {
+    return true;
+  }
+
   public canPayWith(_player: IPlayer): StandardProjectCanPayWith {
     return {};
   }

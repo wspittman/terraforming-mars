@@ -2,6 +2,7 @@ import {Behavior} from '../behavior/Behavior';
 import {IPlayer} from '../IPlayer';
 import {Card, StaticCardProperties} from './Card';
 import {getBehaviorExecutor} from '../behavior/BehaviorExecutor';
+import {hasAvailableActionEffect} from '../behavior/ActionEffect';
 
 // Same as StaticCardProperties, but action is expected.
 export interface StaticActionCardProperties extends StaticCardProperties {
@@ -19,6 +20,9 @@ export abstract class ActionCard extends Card {
   public canAct(player: IPlayer) {
     if (this.properties.action === undefined) {
       throw new Error('action not defined');
+    }
+    if (!hasAvailableActionEffect(this.properties.action, player)) {
+      return false;
     }
     if (!getBehaviorExecutor().canExecute(this.properties.action, player, this)) {
       return false;

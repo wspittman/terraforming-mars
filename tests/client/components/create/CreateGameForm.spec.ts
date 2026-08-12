@@ -39,6 +39,16 @@ describe('CreateGameForm', () => {
     expect(wrapper.exists()).to.be.true;
   });
 
+  it('links to the cards encyclopedia', () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+
+    const link = wrapper.find('.create-game-cards-link');
+    expect(link.text()).eq('Cards encyclopedia');
+    expect(link.attributes('href')).eq('/cards');
+  });
+
   it('configures one human and server-controlled opponents', () => {
     const wrapper = shallowMount(CreateGameForm, {
       ...globalConfig,

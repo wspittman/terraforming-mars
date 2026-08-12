@@ -7,5 +7,6 @@ describe('App', () => {
   it('mounts without errors', () => {
     const wrapper = shallowMount(App, globalConfig);
     expect(wrapper.exists()).to.be.true;
+    expect((wrapper.vm as any).screen).eq('create-game-form');
   });
 });

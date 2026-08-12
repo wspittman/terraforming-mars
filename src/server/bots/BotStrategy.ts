@@ -7,20 +7,22 @@ import {ICard} from '@/server/cards/ICard';
 import {ICorporationCard} from '@/server/cards/corporation/ICorporationCard';
 import {SelectCard} from '@/server/inputs/SelectCard';
 import {RandoBotStrategy} from './RandoBotStrategy';
+import {ParameterMaximizerStrategy} from './ParameterMaximizerStrategy';
 
-export const BOT_STRATEGY_NAMES = ['rando'] as const;
+export const BOT_STRATEGY_NAMES = ['rando', 'parameter-maximizer'] as const;
 export type BotStrategyName = typeof BOT_STRATEGY_NAMES[number];
 
 export interface BotStrategy {
   readonly name: BotStrategyName;
-  selectCorporation(cards: ReadonlyArray<ICorporationCard>): ICorporationCard | undefined;
-  selectCard(input: SelectCard<ICard>): Array<CardName>;
+  selectCorporation(cards: ReadonlyArray<ICorporationCard>, random: Random): ICorporationCard | undefined;
+  selectCard(input: SelectCard<ICard>, random: Random): Array<CardName>;
   takeAction(player: IPlayer): boolean;
   selectInput(input: PlayerInput, random: Random): InputResponse;
 }
 
 const STRATEGIES: Readonly<Record<BotStrategyName, BotStrategy>> = {
-  rando: new RandoBotStrategy(),
+  'rando': new RandoBotStrategy(),
+  'parameter-maximizer': new ParameterMaximizerStrategy(),
 };
 
 export function assignBotStrategy(random: Random): BotStrategyName {

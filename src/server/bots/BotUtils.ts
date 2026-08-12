@@ -43,6 +43,44 @@ export function tryConvertPlants(player: IPlayer): boolean {
   return true;
 }
 
+export function tryClaimMilestone(player: IPlayer): boolean {
+  const cost = player.milestoneCost();
+  if (player.megaCredits < cost) {
+    return false;
+  }
+  const milestone = player.claimableMilestones()[0];
+  if (milestone === undefined) {
+    return false;
+  }
+  player.pay(Payment.of({megacredits: cost}));
+  player.game.claimedMilestones.push({player, milestone});
+  player.game.log('${0} claimed ${1} milestone', (b) => b.player(player).milestone(milestone));
+  return true;
+}
+
+export function tryFundAward(player: IPlayer): boolean {
+  const cost = player.game.getAwardFundingCost();
+  if (player.megaCredits < cost || player.game.allAwardsFunded()) {
+    return false;
+  }
+  const award = player.game.awards.find((award) => {
+    if (player.game.hasBeenFunded(award)) {
+      return false;
+    }
+    const score = award.getScore(player);
+    const nextClosestScore = Math.max(...player.game.players
+      .filter((candidate) => candidate !== player)
+      .map((candidate) => award.getScore(candidate)));
+    return score > cost / 2 && score >= nextClosestScore * 1.2;
+  });
+  if (award === undefined) {
+    return false;
+  }
+  player.megaCredits -= cost;
+  player.game.fundAward(player, award);
+  return true;
+}
+
 export function tryStandardProject(player: IPlayer, minimumMegaCredits: number): boolean {
   if (player.megaCredits < minimumMegaCredits) {
     return false;

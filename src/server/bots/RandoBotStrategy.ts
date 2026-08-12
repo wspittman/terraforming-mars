@@ -8,39 +8,42 @@ import {ICorporationCard} from '@/server/cards/corporation/ICorporationCard';
 import {SelectCard} from '@/server/inputs/SelectCard';
 import {SelectInitialCards} from '@/server/inputs/SelectInitialCards';
 import {SelectSpace} from '@/server/inputs/SelectSpace';
-import type {BotStrategy} from './BotStrategy';
+import type {BotStrategy, BotStrategyName} from './BotStrategy';
 import {
   selectRandomElement,
-  selectWealthiestCorporation,
+  tryClaimMilestone,
+  tryFundAward,
   tryConvertHeat,
   tryConvertPlants,
   tryStandardProject,
 } from './BotUtils';
 
 export class RandoBotStrategy implements BotStrategy {
-  public readonly name = 'rando';
+  public readonly name: BotStrategyName = 'rando';
 
-  public selectCorporation(cards: ReadonlyArray<ICorporationCard>): ICorporationCard | undefined {
-    return selectWealthiestCorporation(cards);
+  public selectCorporation(cards: ReadonlyArray<ICorporationCard>, random: Random): ICorporationCard | undefined {
+    return selectRandomElement(cards, random);
   }
 
-  public selectCard(input: SelectCard<ICard>): Array<CardName> {
+  public selectCard(input: SelectCard<ICard>, random: Random): Array<CardName> {
     if (input.config.min === 0) {
       return [];
     }
-    const card = input.cards.find((_, index) => input.config.enabled?.[index] !== false);
+    const card = selectRandomElement(input.cards.filter((_, index) => input.config.enabled?.[index] !== false), random);
     return card === undefined ? [] : [card.name];
   }
 
   public takeAction(player: IPlayer): boolean {
-    return tryConvertHeat(player) ||
+    return tryClaimMilestone(player) ||
+      tryFundAward(player) ||
+      tryConvertHeat(player) ||
       tryConvertPlants(player) ||
-      tryStandardProject(player, 15);
+      tryStandardProject(player, 14);
   }
 
   public selectInput(input: PlayerInput, random: Random): InputResponse {
     if (input instanceof SelectInitialCards) {
-      const corporation = this.selectCorporation(input.player.dealtCorporationCards);
+      const corporation = this.selectCorporation(input.player.dealtCorporationCards, random);
       if (corporation === undefined) {
         throw new Error(`Bot ${input.player.id} has no corporation to select`);
       }
@@ -53,7 +56,7 @@ export class RandoBotStrategy implements BotStrategy {
       };
     }
     if (input instanceof SelectCard) {
-      return {type: 'card', cards: this.selectCard(input)};
+      return {type: 'card', cards: this.selectCard(input, random)};
     }
     if (input instanceof SelectSpace) {
       const space = selectRandomElement(input.spaces, random);

@@ -14,3 +14,4 @@
 - Added milestone claiming as the first action priority for both strategies.
 - Restricted award funding to scores above half the award cost with at least a 20% lead over the runner-up.
 - Added regression coverage for milestone priority and both award thresholds.
+- Added the existing `claimableMilestones()` method to `IPlayer`, resolving the reported TypeScript error.

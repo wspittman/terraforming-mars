@@ -30,6 +30,7 @@ import {From} from './logs/From';
 import {Tag} from '../common/cards/Tag';
 import {SelectStandardProjectToPlay} from './inputs/SelectStandardProjectToPlay';
 import {BotStrategyName} from './bots/BotStrategy';
+import {IMilestone} from './milestones/IMilestone';
 
 /**
  * Represents additional costs a player must pay to execute an action.
@@ -337,6 +338,8 @@ export interface IPlayer {
 
   /** Returns the cost a player must spend to claim a milestone. */
   milestoneCost(): number;
+  /** Returns the milestones the player currently qualifies and can pay to claim. */
+  claimableMilestones(): Array<IMilestone>;
 
   /** Shorthand for deferring evaluating a PlayerInput */
   defer(input: PlayerInput | undefined | void | (() => PlayerInput | undefined | void), priority?: Priority): void;

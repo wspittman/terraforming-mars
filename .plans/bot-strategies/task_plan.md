@@ -20,6 +20,9 @@ Update RandoBot behavior, add a parameter-focused strategy, and randomly assign 
    - Claim an affordable qualifying milestone before evaluating awards.
    - Fund an award only when the bot's score exceeds half its cost and leads the runner-up by 20%.
    - Add focused regression tests, verify, commit, and update the PR.
+5. **IPlayer milestone contract** — complete
+   - Expose `claimableMilestones()` on `IPlayer` so bot utilities compile against the interface.
+   - Re-run compilation, focused tests, and lint; commit the fix.
 
 ## Key Decisions
 
@@ -36,3 +39,4 @@ Update RandoBot behavior, add a parameter-focused strategy, and randomly assign 
 | TypeScript did not narrow a mutable parameter inside callbacks | 1 | Moved project lookup into a typed helper. |
 | Parameter project test compared a Set with an Array | 1 | Expanded the Set before asserting its contents. |
 | `npm run build:server` could not find generated `genfiles/settings.json` | 1 | Ran `npm run make:json`, then the server build succeeded. |
+| `BotUtils` called `claimableMilestones()` through `IPlayer`, but the interface omitted it | 1 | Added the existing `Player` method to the `IPlayer` contract. |

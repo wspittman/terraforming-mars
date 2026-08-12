@@ -35,8 +35,12 @@ import {
 import { IAward } from './awards/IAward';
 import { getBehaviorExecutor } from './behavior/BehaviorExecutor';
 import { Counter } from './behavior/Counter';
-import { assignBotStrategy, BotStrategyName, getBotStrategy } from './bots/BotStrategy';
 import { resolveBotInputs } from './bots/BotInput';
+import {
+  assignBotStrategy,
+  BotStrategyName,
+  getBotStrategy,
+} from './bots/BotStrategy';
 import { ConvertHeat } from './cards/base/standardActions/ConvertHeat';
 import { ConvertPlants } from './cards/base/standardActions/ConvertPlants';
 import { SellPatentsStandardProject } from './cards/base/standardProjects/SellPatentsStandardProject';
@@ -161,7 +165,6 @@ export class Player implements IPlayer {
   // It's almost always 2, but certain cards can change this value (Mars Maths, Tool with the First Order)
   public availableActionsThisRound = 2;
 
-
   // Stats
   public actionsTakenThisGame: number = 0;
   public victoryPointsByGeneration: Array<number> = [];
@@ -194,7 +197,6 @@ export class Player implements IPlayer {
     return this.stock.heat;
   }
 
-
   public set megaCredits(megacredits: number) {
     this.stock.megacredits = megacredits;
   }
@@ -218,7 +220,6 @@ export class Player implements IPlayer {
   public set heat(heat: number) {
     this.stock.heat = heat;
   }
-
 
   constructor(
     public name: string,
@@ -246,8 +247,12 @@ export class Player implements IPlayer {
     if (this.isBot && this.botStrategy === undefined) {
       this.botStrategy = assignBotStrategy(game.rng);
     }
-    if (this.botStrategy === 'parameter-maximizer' && this.botParameter === undefined) {
-      this.botParameter = GLOBAL_PARAMETERS[game.rng.nextInt(GLOBAL_PARAMETERS.length)];
+    if (
+      this.botStrategy === 'parameter-maximizer' &&
+      this.botParameter === undefined
+    ) {
+      this.botParameter =
+        GLOBAL_PARAMETERS[game.rng.nextInt(GLOBAL_PARAMETERS.length)];
     }
     (this.opponents as Array<IPlayer>).push(
       ...game.players.filter((p) => p !== this),
@@ -426,7 +431,6 @@ export class Player implements IPlayer {
 
   public resolveInsuranceInSoloGame() {}
 
-
   public getPlayedEventsCount(): number {
     return this.playedCards.eventCount;
   }
@@ -550,10 +554,7 @@ export class Player implements IPlayer {
   public getPlayableActionCards(): Array<ICard & IActionCard> {
     const result: Array<ICard & IActionCard> = [];
     for (const card of this.tableau) {
-      if (
-        isIActionCard(card) &&
-        !this.actionsThisGeneration.has(card.name)
-      ) {
+      if (isIActionCard(card) && !this.actionsThisGeneration.has(card.name)) {
         if (card.canAct(this)) {
           result.push(card);
         }
@@ -737,7 +738,6 @@ export class Player implements IPlayer {
       this.pay(payment);
     }
 
-
     if (selectedCard.type !== CardType.PROXY) {
       this.lastCardPlayed = selectedCard.name;
       this.game.log('${0} played ${1}', (b) =>
@@ -813,7 +813,6 @@ export class Player implements IPlayer {
     for (const effectCard of this.playedCards) {
       this.defer(effectCard.onCardPlayed?.(this, card));
     }
-
 
     /* A player responding to any other player's card played. */
     for (const somePlayer of this.game.playersInGenerationOrder) {
@@ -962,9 +961,13 @@ export class Player implements IPlayer {
       });
     };
 
-    this.game.defer(new SelectPaymentDeferred(this, this.milestoneCost(), {
-      title: 'Select how to pay for milestone',
-    })).andThen(recordClaim);
+    this.game
+      .defer(
+        new SelectPaymentDeferred(this, this.milestoneCost(), {
+          title: 'Select how to pay for milestone',
+        }),
+      )
+      .andThen(recordClaim);
   }
 
   public milestoneCost() {
@@ -1097,7 +1100,6 @@ export class Player implements IPlayer {
         );
       }
     }
-
 
     const cost = this.getCardCost(card);
     const paymentOptionsForCard = this.paymentOptionsForCard(card);
@@ -1337,7 +1339,6 @@ export class Player implements IPlayer {
       }
     }
 
-
     if (this.pendingInitialActions.length > 0) {
       const orOptions = new OrOptions();
 
@@ -1411,12 +1412,6 @@ export class Player implements IPlayer {
       action.options.push(milestoneOption);
     }
 
-    // Convert Plants
-    const convertPlants = new ConvertPlants();
-    if (convertPlants.canAct(this)) {
-      action.options.push(convertPlants.action(this));
-    }
-
     // Convert Heat
     const convertHeat = new ConvertHeat();
     if (convertHeat.canAct(this)) {
@@ -1427,16 +1422,10 @@ export class Player implements IPlayer {
       action.options.push(option);
     }
 
-    // Action cards
-    if (this.getPlayableActionCards().length > 0) {
-      action.options.push(this.playActionCard());
-    }
-
-
-    // Playable cards
-    const playableCards = this.getPlayableCards();
-    if (playableCards.length !== 0) {
-      action.options.push(new SelectProjectCardToPlay(this, playableCards));
+    // Convert Plants
+    const convertPlants = new ConvertPlants();
+    if (convertPlants.canAct(this)) {
+      action.options.push(convertPlants.action(this));
     }
 
     // End turn
@@ -1448,6 +1437,23 @@ export class Player implements IPlayer {
     ) {
       action.options.push(this.endTurnOption());
     }
+
+    // Action cards
+    if (this.getPlayableActionCards().length > 0) {
+      action.options.push(this.playActionCard());
+    }
+
+    // Playable cards
+    const playableCards = this.getPlayableCards();
+    if (playableCards.length !== 0) {
+      action.options.push(new SelectProjectCardToPlay(this, playableCards));
+    }
+
+    // Standard Projects
+    action.options.push(this.getStandardProjectOption());
+
+    // Pass
+    action.options.push(this.passOption());
 
     // Fund award
     const fundingCost = this.awardFundingCost();
@@ -1462,12 +1468,6 @@ export class Player implements IPlayer {
         .map((award: IAward) => this.fundAward(award));
       action.options.push(remainingAwards);
     }
-
-    // Standard Projects
-    action.options.push(this.getStandardProjectOption());
-
-    // Pass
-    action.options.push(this.passOption());
 
     // Sell patents
     const sellPatents = new SellPatentsStandardProject();

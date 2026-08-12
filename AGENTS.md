@@ -15,6 +15,7 @@ We will be liberally removing functionality that is unnecessary to achieve this 
 - If you are working with or from a plan, review to ensure that the plan files are structured correctly and up to date.
 - Ensure error cases are handled gracefully, predictably, and provide enough information for future maintainers.
 - Update `README.md` and any relevant `AGENTS.md` files as necessary when changes affect them.
+- `npm run lint:fix`, `npm run test`, and `npm run build` must all succeed before a change is considered finished.
 
 ---
 

@@ -34,6 +34,7 @@ export interface SerializedPlayer {
   id: PlayerId;
   isBot: boolean;
   botStrategy?: BotStrategyName;
+  botParameter?: GlobalParameter;
   jovianTagCount: number;
   lastCardPlayed?: CardName;
   megaCreditProduction: number;

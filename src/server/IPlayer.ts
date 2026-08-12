@@ -57,6 +57,7 @@ export type CardAction = 'add' | 'discard' | 'nothing' | 'double-down';
 
 export interface IPlayer {
   botStrategy: BotStrategyName | undefined;
+  botParameter: GlobalParameter | undefined;
   readonly id: PlayerId;
   name: string;
   color: Color;

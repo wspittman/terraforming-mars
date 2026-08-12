@@ -7,7 +7,7 @@ import { Color } from '../common/Color';
 import * as constants from '../common/constants';
 import { MILESTONE_COST } from '../common/constants';
 import { VictoryPointsBreakdown } from '../common/game/VictoryPointsBreakdown';
-import { GlobalParameter } from '../common/GlobalParameter';
+import { GLOBAL_PARAMETERS, GlobalParameter } from '../common/GlobalParameter';
 import { InputResponse } from '../common/inputs/InputResponse';
 import {
   DEFAULT_PAYMENT_VALUES,
@@ -91,6 +91,7 @@ const DEFAULT_GLOBAL_PARAMETER_STEPS = {
 
 export class Player implements IPlayer {
   public botStrategy: BotStrategyName | undefined;
+  public botParameter: GlobalParameter | undefined;
   public readonly id: PlayerId;
   protected waitingFor?: PlayerInput;
   protected waitingForCb?: () => void;
@@ -244,6 +245,9 @@ export class Player implements IPlayer {
     this.game = game;
     if (this.isBot && this.botStrategy === undefined) {
       this.botStrategy = assignBotStrategy(game.rng);
+    }
+    if (this.botStrategy === 'parameter-maximizer' && this.botParameter === undefined) {
+      this.botParameter = GLOBAL_PARAMETERS[game.rng.nextInt(GLOBAL_PARAMETERS.length)];
     }
     (this.opponents as Array<IPlayer>).push(
       ...game.players.filter((p) => p !== this),
@@ -1574,6 +1578,7 @@ export class Player implements IPlayer {
       id: this.id,
       isBot: this.isBot,
       botStrategy: this.botStrategy,
+      botParameter: this.botParameter,
       user: this.user,
       // Used only during set-up
       pickedCorporationCard: this.pickedCorporationCard?.name,
@@ -1663,6 +1668,7 @@ export class Player implements IPlayer {
       d.isBot,
     );
     player.botStrategy = d.botStrategy;
+    player.botParameter = d.botParameter;
 
     player.actionsTakenThisGame = d.actionsTakenThisGame;
     player.actionsThisGeneration = new Set(d.actionsThisGeneration);

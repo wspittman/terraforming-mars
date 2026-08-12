@@ -9,7 +9,7 @@ export function resolveBotInputs(players: ReadonlyArray<IPlayer>): void {
     }
     const input = player.getWaitingFor();
     if (input !== undefined) {
-      player.process(getBotStrategy(player.botStrategy).selectInput(input, player.game.rng));
+      player.process(getBotStrategy(player.botStrategy).selectInput(input, player.game.rng, player));
     }
   }
 }

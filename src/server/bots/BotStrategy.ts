@@ -8,8 +8,9 @@ import {ICorporationCard} from '@/server/cards/corporation/ICorporationCard';
 import {SelectCard} from '@/server/inputs/SelectCard';
 import {RandoBotStrategy} from './RandoBotStrategy';
 import {ParameterMaximizerStrategy} from './ParameterMaximizerStrategy';
+import {LandlordStrategy} from './LandlordStrategy';
 
-export const BOT_STRATEGY_NAMES = ['rando', 'parameter-maximizer'] as const;
+export const BOT_STRATEGY_NAMES = ['rando', 'parameter-maximizer', 'landlord'] as const;
 export type BotStrategyName = typeof BOT_STRATEGY_NAMES[number];
 
 export interface BotStrategy {
@@ -17,12 +18,13 @@ export interface BotStrategy {
   selectCorporation(cards: ReadonlyArray<ICorporationCard>, random: Random): ICorporationCard | undefined;
   selectCard(input: SelectCard<ICard>, random: Random): Array<CardName>;
   takeAction(player: IPlayer): boolean;
-  selectInput(input: PlayerInput, random: Random): InputResponse;
+  selectInput(input: PlayerInput, random: Random, player?: IPlayer): InputResponse;
 }
 
 const STRATEGIES: Readonly<Record<BotStrategyName, BotStrategy>> = {
   'rando': new RandoBotStrategy(),
   'parameter-maximizer': new ParameterMaximizerStrategy(),
+  'landlord': new LandlordStrategy(),
 };
 
 export function assignBotStrategy(random: Random): BotStrategyName {

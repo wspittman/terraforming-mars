@@ -41,7 +41,7 @@ export class RandoBotStrategy implements BotStrategy {
       tryStandardProject(player, 14);
   }
 
-  public selectInput(input: PlayerInput, random: Random): InputResponse {
+  public selectInput(input: PlayerInput, random: Random, _player?: IPlayer): InputResponse {
     if (input instanceof SelectInitialCards) {
       const corporation = this.selectCorporation(input.player.dealtCorporationCards, random);
       if (corporation === undefined) {

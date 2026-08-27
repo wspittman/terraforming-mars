@@ -32,9 +32,6 @@
         "paths": {
             "@/*": ["./src/*"]
         },
-        "plugins": [
-            { "transform": "transformer-module" },
-        ]
 
     },
     // This gives the VS Code IDE its magic.

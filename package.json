@@ -34,12 +34,12 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^25.5.0",
     "@types/pg": "^7.14.7",
-    "@types/uuid": "^11.0.0",
     "@typescript-eslint/eslint-plugin": "^8.62.1",
     "@typescript-eslint/parser": "^8.60.1",
     "@vue/test-utils": "^2.0.0",
     "chai": "^6.2.2",
     "chai-as-promised": "^8.0.2",
+    "chokidar": "^5.0.0",
     "compression-webpack-plugin": "^12.0.0",
     "css-loader": "^7.1.4",
     "eslint": "^10.0.0",
@@ -47,6 +47,7 @@
     "fork-ts-checker-webpack-plugin": "^9.1.0",
     "globals": "^17.6.0",
     "jsdom": "^29.1.1",
+    "knip": "^6.32.3",
     "less": "^4.8.1",
     "less-loader": "^13.0.0",
     "mocha": "^11.7.5",
@@ -63,8 +64,7 @@
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "vue-loader": "^17.0.0",
-    "vue-tsc": "^3.3.6",
-    "zlib": "^1.0.5"
+    "vue-tsc": "^3.3.6"
   },
   "optionalDependencies": {
     "better-sqlite3": "^12.10.0",
@@ -99,7 +99,8 @@
     "test:client": "cross-env NODE_ENV=development mochapack --require tests/client/components/setup.ts \"tests/client/**/*.spec.ts\"",
     "test:client:watch": "cross-env NODE_ENV=development mochapack --watch --require tests/client/components/setup.ts \"tests/client/**/*.spec.ts\"",
     "dev:client": "cross-env NODE_ENV=development webpack --watch",
-    "dev:server": "cross-env NODE_ENV=development tsx watch --clear-screen=false src/server/server.ts"
+    "dev:server": "cross-env NODE_ENV=development tsx watch --clear-screen=false src/server/server.ts",
+    "knip": "knip"
   },
   "repository": {
     "type": "git",
@@ -110,5 +111,25 @@
   "bugs": {
     "url": "https://github.com/terraforming-mars/terraforming-mars/issues"
   },
-  "homepage": "https://github.com/terraforming-mars/terraforming-mars#readme"
+  "homepage": "https://github.com/terraforming-mars/terraforming-mars#readme",
+  "knip": {
+    "entry": [
+      "src/client/{main,sw}.ts",
+      "src/styles/common.less",
+      "scripts/*.ts",
+      "tests/**/*.spec.ts",
+      "tests/**/setup.ts"
+    ],
+    "project": [
+      "src/**/*.{ts,vue,less}",
+      "scripts/**/*.ts",
+      "tests/**/*.ts"
+    ],
+    "include": [
+      "files",
+      "dependencies",
+      "unlisted",
+      "unresolved"
+    ]
+  }
 }

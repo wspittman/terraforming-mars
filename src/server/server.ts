@@ -1,35 +1,33 @@
-
 import '@/server/init';
-require('console-stamp')(
-  console,
-  {format: ':date(yyyy-mm-dd HH:MM:ss Z)'},
-);
-import {markAsLiveServer} from '@/server/utils/server';
+import { markAsLiveServer } from '@/server/utils/server';
+require('console-stamp')(console, { format: ':date(yyyy-mm-dd HH:MM:ss Z)' });
 // Must run first.
 markAsLiveServer();
 
-import https from 'https';
-import http from 'http';
 import fs from 'fs';
+import http from 'http';
+import https from 'https';
 import * as v8 from 'node:v8';
-import raw_settings from '../genfiles/settings.json';
 import prometheus from 'prom-client';
+import raw_settings from '../genfiles/settings.json';
 import * as responses from './server/responses';
-import ansi from 'ansi-escape-sequences';
 
-import {Database} from '@/server/database/Database';
-import {runId, serverId} from '@/server/utils/server-ids';
-import {processRequest} from '@/server/server/requestProcessor';
-import {timeAsync} from '@/server/utils/timer';
-import {GameLoader} from '@/server/database/GameLoader';
-import {globalInitialize} from '@/server/globalInitialize';
-import {SessionManager} from '@/server/server/auth/SessionManager';
+import { Database } from '@/server/database/Database';
+import { GameLoader } from '@/server/database/GameLoader';
+import { globalInitialize } from '@/server/globalInitialize';
+import { SessionManager } from '@/server/server/auth/SessionManager';
+import { processRequest } from '@/server/server/requestProcessor';
+import { runId, serverId } from '@/server/utils/server-ids';
+import { timeAsync } from '@/server/utils/timer';
 
 process.on('uncaughtException', (err: any) => {
   console.error('UNCAUGHT EXCEPTION', err);
 });
 
-function requestHandler(req: http.IncomingMessage, res: http.ServerResponse): void {
+function requestHandler(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+): void {
   processRequest(req, res).catch((error) => {
     responses.internalServerError(req, res, error);
   });
@@ -68,19 +66,19 @@ const metrics = {
 };
 
 function createServer(): http.Server | https.Server {
-// If they've set up https
+  // If they've set up https
   if (process.env.KEY_PATH && process.env.CERT_PATH) {
     const httpsHowto =
-  'https://nodejs.org/en/knowledge/HTTP/servers/how-to-create-a-HTTPS-server/';
+      'https://nodejs.org/en/knowledge/HTTP/servers/how-to-create-a-HTTPS-server/';
     if (!fs.existsSync(process.env.KEY_PATH)) {
       console.error(
         'TLS KEY_PATH is set in .env, but cannot find key! Check out ' +
-    httpsHowto,
+          httpsHowto,
       );
     } else if (!fs.existsSync(process.env.CERT_PATH)) {
       console.error(
         'TLS CERT_PATH is set in .env, but cannot find cert! Check out' +
-    httpsHowto,
+          httpsHowto,
       );
     }
     const options = {
@@ -102,25 +100,28 @@ async function start() {
 
   const server = createServer();
 
-  await timeAsync(Database.getInstance().initialize())
-    .then((v) => {
-      metrics.startDatabase.set(v.duration);
-    });
+  await timeAsync(Database.getInstance().initialize()).then((v) => {
+    metrics.startDatabase.set(v.duration);
+  });
 
   // Initialize the session manager after initializing the database.
   await SessionManager.getInstance().initialize();
 
   try {
-    Database.getInstance().stats().then((stats) => {
-      console.log(JSON.stringify(stats, undefined, 2));
-    });
+    Database.getInstance()
+      .stats()
+      .then((stats) => {
+        console.log(JSON.stringify(stats, undefined, 2));
+      });
   } catch (err) {
     // Do not fail. Just continue. Stats aren't vital.
     console.error(err);
   }
   GameLoader.getInstance().maintenance();
 
-  console.log(`Starting ${raw_settings.head}, built at ${raw_settings.builtAt}`);
+  console.log(
+    `Starting ${raw_settings.head}, built at ${raw_settings.builtAt}`,
+  );
 
   const port = process.env.PORT || 8080;
   const host = process.env.HOST;
@@ -130,11 +131,13 @@ async function start() {
     console.log(`Starting server on port ${port}`);
   }
 
-  server.listen({port: port, host: host});
+  server.listen({ port: port, host: host });
 
   if (!process.env.SERVER_ID) {
-    console.log(`The secret serverId for this server is ${ansi.style.bold}${serverId}${ansi.style.reset}.`);
-    console.log(`Administrative routes can be found at admin?serverId=${serverId}`);
+    console.log(`The secret serverId for this server is ${serverId}.`);
+    console.log(
+      `Administrative routes can be found at admin?serverId=${serverId}`,
+    );
   }
   console.log(`The public run ID is ${runId}`);
   console.log('Server is ready.');

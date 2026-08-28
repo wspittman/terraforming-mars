@@ -1,14 +1,36 @@
 <template>
   <dialog ref="dialog" class="bug-dialog">
-    <p class="center"><span v-i18n>Copy the text below and then paste it in</span><br>
-        <a href="https://github.com/terraforming-mars/terraforming-mars/issues/new?template=from-heroku.md" target="_blank"  v-i18n>a GitHub issue</a>
-        <span v-i18n>or the</span> <a href="https://discord.com/channels/737945098695999559/742721510376210583" target="_blank"  v-i18n>#bug-reports Discord channel</a>
+    <p class="center">
+      <span v-i18n>Copy the text below and then paste it in</span><br >
+      <a
+        href="https://github.com/terraforming-mars/terraforming-mars/issues/new?template=from-heroku.md"
+        target="_blank"
+        v-i18n
+        >a GitHub issue</a
+      >
+      <span v-i18n>or the</span>
+      <a
+        href="https://discord.com/channels/737945098695999559/742721510376210583"
+        target="_blank"
+        v-i18n
+        >#bug-reports Discord channel</a
+      >
     </p>
-    <textarea ref="textarea" readonly rows="6" cols = "50" v-model="message"></textarea>
+    <textarea
+      ref="textarea"
+      readonly
+      rows="6"
+      cols="50"
+      v-model="message"
+    ></textarea>
     <div class="dialog-menu centered-content">
       <div>
-        <button class="btn btn-lg btn-primary" @click="copyTextArea" v-i18n>Copy to Clipboard</button>
-        <div :class="{ center: true, invisible: !showCopied }" v-i18n>Copied!</div>
+        <button class="btn btn-lg btn-primary" @click="copyTextArea" v-i18n>
+          Copy to Clipboard
+        </button>
+        <div :class="{ center: true, invisible: !showCopied }" v-i18n>
+          Copied!
+        </div>
       </div>
       <form method="dialog">
         <button class="btn btn-lg" v-i18n>Close</button>
@@ -18,32 +40,36 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
-import {showModal, windowHasHTMLDialogElement} from '@/client/components/HTMLDialogElementCompatibility';
+import { defineComponent } from 'vue';
+import {
+  showModal,
+  windowHasHTMLDialogElement,
+} from '@/client/components/HTMLDialogElementCompatibility';
 import raw_settings from '@/genfiles/settings.json';
-import {vueRoot} from '@/client/components/vueRoot';
-import {PlayerViewModel} from '@/common/models/PlayerModel';
-import {SpectatorId} from '@/common/Types';
-import {getPreferences} from '../utils/PreferencesManager';
-
-import dialogPolyfill from 'dialog-polyfill';
-
+import { vueRoot } from '@/client/components/vueRoot';
+import { PlayerViewModel } from '@/common/models/PlayerModel';
+import { SpectatorId } from '@/common/Types';
+import { getPreferences } from '../utils/PreferencesManager';
 
 function browser(): string {
   // Taken from https://stackoverflow.com/questions/5916900/how-can-you-detect-the-version-of-a-browser
-  const ua= navigator.userAgent;
-  let match = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+  const ua = navigator.userAgent;
+  let match =
+    ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) ||
+    [];
   if (/trident/i.test(match[1])) {
     const temp = /\brv[ :]+(\d+)/g.exec(ua) || [];
-    return 'IE '+(temp[1] || '');
+    return 'IE ' + (temp[1] || '');
   }
-  if (match[1]=== 'Chrome') {
+  if (match[1] === 'Chrome') {
     const temp = ua.match(/\b(OPR|Edge)\/(\d+)/);
     if (temp !== null) {
       return temp.slice(1).join(' ').replace('OPR', 'Opera');
     }
   }
-  match = match[2] ? [match[1], match[2]] : [navigator.appName, navigator.appVersion, '-?'];
+  match = match[2] ?
+    [match[1], match[2]] :
+    [navigator.appName, navigator.appVersion, '-?'];
   const temp = ua.match(/version\/(\d+)/i);
   if (temp !== null) {
     match.splice(1, 1, temp[1]);
@@ -80,8 +106,13 @@ export default defineComponent({
     },
     url(playerView: PlayerViewModel | undefined) {
       const url = new URL(window.location.href);
-      const spectatorId: SpectatorId | undefined = playerView?.game?.spectatorId;
-      if (spectatorId && url.pathname === '/player' && url.searchParams.has('id')) {
+      const spectatorId: SpectatorId | undefined =
+        playerView?.game?.spectatorId;
+      if (
+        spectatorId &&
+        url.pathname === '/player' &&
+        url.searchParams.has('id')
+      ) {
         url.searchParams.set('id', spectatorId);
         url.pathname = '/spectator';
       }
@@ -93,28 +124,24 @@ export default defineComponent({
         url: this.url(playerView),
       };
       if (playerView !== undefined) {
-        Object.assign(
-          content,
-          {
-            color: playerView.thisPlayer.color,
-            gameVersion: playerView.game.gameOptions.corporateEra ? 'Corporate Era' : 'Base',
-            step: playerView.game.step,
-          });
-      }
-      Object.assign(content,
-        {
-          version: raw_settings.head,
-          builtAt: raw_settings.builtAt,
-          browser: browser(),
-          experimental_ui: getPreferences().experimental_ui,
+        Object.assign(content, {
+          color: playerView.thisPlayer.color,
+          gameVersion: playerView.game.gameOptions.corporateEra ?
+            'Corporate Era' :
+            'Base',
+          step: playerView.game.step,
         });
+      }
+      Object.assign(content, {
+        version: raw_settings.head,
+        builtAt: raw_settings.builtAt,
+        browser: browser(),
+        experimental_ui: getPreferences().experimental_ui,
+      });
       this.message = JSON.stringify(content, null, 2);
     },
   },
   mounted() {
-    if (!windowHasHTMLDialogElement()) {
-      dialogPolyfill.registerDialog(this.typedRefs.dialog);
-    }
     this.setMessage();
   },
 });

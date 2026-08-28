@@ -7,11 +7,9 @@
   },
   "private": true,
   "dependencies": {
-    "ansi-escape-sequences": "^6.2.2",
     "chart.js": "^4.4.7",
     "console-stamp": "3.1.2",
     "cross-env": "^10.1.0",
-    "dialog-polyfill": "^0.5.1",
     "dotenv": "^17.3.1",
     "html-escaper": "^3.0.3",
     "markdown-it": "^14.3.0",
@@ -25,7 +23,6 @@
   "devDependencies": {
     "@eslint/js": "^10.0.0",
     "@stylistic/stylelint-plugin": "^5.2.1",
-    "@types/ansi-escape-sequences": "^4.0.4",
     "@types/better-sqlite3": "^7.6.13",
     "@types/chai": "^5.2.3",
     "@types/chai-as-promised": "^8.0.2",
@@ -34,7 +31,6 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^25.5.0",
     "@types/pg": "^7.14.7",
-    "@types/uuid": "^11.0.0",
     "@typescript-eslint/eslint-plugin": "^8.62.1",
     "@typescript-eslint/parser": "^8.60.1",
     "@vue/test-utils": "^2.0.0",
@@ -63,8 +59,7 @@
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "vue-loader": "^17.0.0",
-    "vue-tsc": "^3.3.6",
-    "zlib": "^1.0.5"
+    "vue-tsc": "^3.3.6"
   },
   "optionalDependencies": {
     "better-sqlite3": "^12.10.0",

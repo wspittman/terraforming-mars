@@ -3,7 +3,9 @@
     <form method="dialog">
       <p v-i18n class="newlines">{{ message }}</p>
       <menu class="dialog-menu centered-content">
-        <button class="btn btn-lg btn-primary" @click="accept()" v-i18n>Yes</button>
+        <button class="btn btn-lg btn-primary" @click="accept()" v-i18n>
+          Yes
+        </button>
         <button class="btn btn-lg" @click="dismiss()" v-i18n>No</button>
       </menu>
       <template v-if="enableDontShowAgainCheckbox">
@@ -15,11 +17,11 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
-import {showModal, windowHasHTMLDialogElement} from '@/client/components/HTMLDialogElementCompatibility';
-
-import dialogPolyfill from 'dialog-polyfill';
-
+import { defineComponent } from 'vue';
+import {
+  showModal,
+  windowHasHTMLDialogElement,
+} from '@/client/components/HTMLDialogElementCompatibility';
 
 type Refs = {
   dialog: HTMLDialogElement;
@@ -65,10 +67,6 @@ export default defineComponent({
       showModal(this.typedRefs.dialog);
     },
   },
-  mounted() {
-    if (!windowHasHTMLDialogElement()) {
-      dialogPolyfill.registerDialog(this.typedRefs.dialog);
-    }
-  },
+  mounted() {},
 });
 </script>

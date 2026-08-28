@@ -1,7 +1,6 @@
 @import (inline) "../../node_modules/spectre.css/dist/spectre.min.css";
 @import (inline) "../../node_modules/spectre.css/dist/spectre-exp.min.css";
 @import (inline) "../../node_modules/spectre.css/dist/spectre-icons.min.css";
-@import (inline) "../../node_modules/dialog-polyfill/dialog-polyfill.css";
 @import "./variables.less";
 @import "./mixins.less";
 
@@ -107,7 +106,9 @@ a:active {
 @font-face {
   font-family: Prototype;
   src: url(./assets/Prototype-pl.ttf);
-  unicode-range: U+0104-0107, U+0118-0119, U+0141-0144, U+00D3, U+00F3, U+015A, U+015B, U+0179, U+017A-017C; /* Polish glyphs */
+  unicode-range:
+    U+0104-0107, U+0118-0119, U+0141-0144, U+00D3, U+00F3, U+015A, U+015B,
+    U+0179, U+017A-017C; /* Polish glyphs */
 }
 
 body {
@@ -119,7 +120,9 @@ body {
 
 h1 {
   filter: drop-shadow(4px 4px 4px black);
-  text-shadow: -1px -1px 1px #aaaa, 1px 1px 1px #333a;
+  text-shadow:
+    -1px -1px 1px #aaaa,
+    1px 1px 1px #333a;
   padding: 1px 15px;
   border-radius: 8px;
 }

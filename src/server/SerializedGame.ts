@@ -19,10 +19,7 @@ export type SerializedGameOptions = Pick<GameOptions,
   'customCorporationsList' |
   'escapeVelocity' |
   'fastModeOption' |
-  'includeFanMA' |
   'includedCards' |
-  'modularMA' |
-  'randomMA' |
   'showOtherPlayersVP' |
   'showTimers' |
   'shuffleMapOption' |

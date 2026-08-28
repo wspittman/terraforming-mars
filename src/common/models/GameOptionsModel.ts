@@ -1,5 +1,4 @@
 import {BoardName} from '../boards/BoardName';
-import {RandomMAOptionType} from '../ma/RandomMAOptionType';
 import {CardName} from '../cards/CardName';
 import {EscapeVelocityOptions} from '../game/NewGameConfig';
 
@@ -14,7 +13,6 @@ export type GameOptionsModel = {
   showTimers: boolean,
   shuffleMapOption: boolean,
   soloTR: boolean,
-  randomMA: RandomMAOptionType,
   twoCorpsVariant: boolean,
   undoOption: boolean,
 }

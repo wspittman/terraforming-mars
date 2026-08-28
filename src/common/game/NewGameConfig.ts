@@ -1,7 +1,6 @@
 import {BoardName} from '../boards/BoardName';
 import {CardName} from '../cards/CardName';
 import {Color} from '../Color';
-import {RandomMAOptionType} from '../ma/RandomMAOptionType';
 import {GameId, PlayerId} from '../Types';
 
 export type BoardNameType = BoardName
@@ -44,13 +43,9 @@ export interface NewGameConfig {
   fastModeOption: boolean;
   showOtherPlayersVP: boolean;
 
-  modularMA: boolean;
-
   // Variants
   startingCorporations: number;
   shuffleMapOption: boolean;
-  randomMA: RandomMAOptionType;
-  includeFanMA: boolean,
   soloTR: boolean; // Solo victory by getting TR 63 by game end
   customCorporations: Array<CardName>;
   bannedCards: Array<CardName>;

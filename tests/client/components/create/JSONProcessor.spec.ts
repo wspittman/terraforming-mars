@@ -33,11 +33,8 @@ const TEMPLATE_INPUT = {
   showTimers: true,
   fastModeOption: false,
   removeNegativeGlobalEventsOption: false,
-  includeFanMA: false,
-  modularMA: false,
   startingCorporations: 2,
   soloTR: false,
-  randomMA: 'No randomization',
   shuffleMapOption: false,
   randomFirstPlayer: true,
   escapeVelocity: {

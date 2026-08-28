@@ -9,7 +9,7 @@ import {PlayerInput} from '@/server/PlayerInput';
 import {SelectSpace} from '@/server/inputs/SelectSpace';
 import type {BotStrategy} from './BotStrategy';
 import {
-  selectRandomElement,
+  selectHighestScoringElement,
   selectWealthiestCorporation,
   tryClaimMilestone,
   tryConvertHeat,
@@ -43,12 +43,16 @@ export class LandlordStrategy extends RandoBotStrategy implements BotStrategy {
 
     if (input.title === 'Select space for city tile') {
       return this.selectPreferredSpace(input.spaces, random, (space) =>
-        player.game.board.getAdjacentSpaces(space).filter(Board.isGreenerySpace).length);
+        this.commonPlacementScore(player, space,
+          player.game.board.getAdjacentSpaces(space).filter(Board.isGreenerySpace).length));
     }
     if (input.title === 'Select space for greenery tile') {
-      return this.selectPreferredSpace(input.spaces, random, (space) =>
-        player.game.board.getAdjacentSpaces(space)
-          .filter((adjacent) => Board.isCitySpace(adjacent) && adjacent.player === player).length);
+      return this.selectPreferredSpace(input.spaces, random, (space) => {
+        const adjacentCities = player.game.board.getAdjacentSpaces(space).filter(Board.isCitySpace);
+        const ownedCities = adjacentCities.filter((adjacent) => adjacent.player === player).length;
+        const opponentCities = adjacentCities.length - ownedCities;
+        return this.commonPlacementScore(player, space, ownedCities, -opponentCities);
+      });
     }
     return super.selectInput(input, random, player);
   }
@@ -74,13 +78,21 @@ export class LandlordStrategy extends RandoBotStrategy implements BotStrategy {
   private selectPreferredSpace(
     spaces: ReadonlyArray<Space>,
     random: Random,
-    score: (space: Space) => number,
+    score: (space: Space) => ReadonlyArray<number>,
   ): InputResponse {
-    const bestScore = Math.max(...spaces.map(score));
-    const space = selectRandomElement(spaces.filter((space) => score(space) === bestScore), random);
+    const space = selectHighestScoringElement(spaces, score, random);
     if (space === undefined) {
       throw new Error(`Bot strategy ${this.name} has no space to select`);
     }
     return {type: 'space', spaceId: space.id};
+  }
+
+  private commonPlacementScore(
+    player: IPlayer,
+    space: Space,
+    ...strategyScore: ReadonlyArray<number>
+  ): ReadonlyArray<number> {
+    const adjacentOceans = player.game.board.getAdjacentSpaces(space).filter(Board.isOceanSpace).length;
+    return [...strategyScore, adjacentOceans, space.bonus.length];
   }
 }

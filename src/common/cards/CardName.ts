@@ -312,13 +312,4 @@ export enum CardName {
   // Proxy for when Executor is used for Global Events.
   GLOBAL_EVENT_PROXY = 'Global Event Proxy',
 
-  // Automa
-  AUTOMA_METEOR_SHOWER = 'Automa: Meteor Shower',
-  AUTOMA_INVASIVE_SPECIES = 'Automa: Invasive Species',
-  AUTOMA_RESEARCH_AND_DEVELOPMENT = 'Automa: Research and Development',
-  AUTOMA_OVERACHIEVEMENT = 'Automa: Overachievement',
-  AUTOMA_EXPEDITED_CONSTRUCTION = 'Automa: Expedited Construction',
-  AUTOMA_LOBBYISTS = 'Automa: Lobbyists',
-  AUTOMA_LOCAL_NEURAL_INSTANCE = 'Automa: Local Neural Instance',
-  AUTOMA_CORPORATE_COMPETITION = 'Automa: Corporate Competition',
 }

@@ -25,6 +25,38 @@ export function selectRandomElement<T>(items: ReadonlyArray<T>, random: Random):
   return items.length === 0 ? undefined : items[random.nextInt(items.length)];
 }
 
+/** Selects an item with the highest lexicographic score, breaking complete ties at random. */
+export function selectHighestScoringElement<T>(
+  items: ReadonlyArray<T>,
+  score: (item: T) => ReadonlyArray<number>,
+  random: Random,
+): T | undefined {
+  let bestScore: ReadonlyArray<number> | undefined;
+  let bestItems: Array<T> = [];
+  for (const item of items) {
+    const itemScore = score(item);
+    const comparison = bestScore === undefined ? 1 : compareScores(itemScore, bestScore);
+    if (comparison > 0) {
+      bestScore = itemScore;
+      bestItems = [item];
+    } else if (comparison === 0) {
+      bestItems.push(item);
+    }
+  }
+  return selectRandomElement(bestItems, random);
+}
+
+function compareScores(a: ReadonlyArray<number>, b: ReadonlyArray<number>): number {
+  const length = Math.max(a.length, b.length);
+  for (let i = 0; i < length; i++) {
+    const difference = (a[i] ?? 0) - (b[i] ?? 0);
+    if (difference !== 0) {
+      return difference;
+    }
+  }
+  return 0;
+}
+
 export function tryConvertHeat(player: IPlayer): boolean {
   const convertHeat = new ConvertHeat();
   if (!convertHeat.canAct(player)) {

@@ -56,6 +56,40 @@ describe('LandlordStrategy', () => {
     expect(response).deep.eq({type: 'space', spaceId: ownAdjacent.id});
   });
 
+  it('avoids an opponent city when placing greenery by one of its own cities', () => {
+    const [game, bot, human] = newGame();
+    game.simpleAddTile(bot, game.board.getSpaceOrThrow('17'), {tileType: TileType.CITY});
+    game.simpleAddTile(human, game.board.getSpaceOrThrow('18'), {tileType: TileType.CITY});
+    const spaces = [game.board.getSpaceOrThrow('24'), game.board.getSpaceOrThrow('25')];
+
+    const response = new LandlordStrategy().selectInput(
+      new SelectSpace('Select space for greenery tile', spaces), new ConstRandom(0), bot);
+
+    expect(response).deep.eq({type: 'space', spaceId: '24'});
+  });
+
+  it('uses ocean adjacency before placement bonuses to break placement ties', () => {
+    const [game, bot, human] = newGame();
+    game.simpleAddTile(human, game.board.getSpaceOrThrow('04'), {tileType: TileType.OCEAN});
+    const spaces = ['05', '25'].map((id) => game.board.getSpaceOrThrow(id));
+
+    const response = new LandlordStrategy().selectInput(
+      new SelectSpace('Select space for greenery tile', spaces), new ConstRandom(0), bot);
+
+    expect(response).deep.eq({type: 'space', spaceId: '05'});
+  });
+
+  it('uses placement bonuses when ocean adjacency ties', () => {
+    const [game, bot, human] = newGame();
+    game.simpleAddTile(human, game.board.getSpaceOrThrow('04'), {tileType: TileType.OCEAN});
+    const spaces = ['05', '09', '10'].map((id) => game.board.getSpaceOrThrow(id));
+
+    const response = new LandlordStrategy().selectInput(
+      new SelectSpace('Select space for greenery tile', spaces), new ConstRandom(0), bot);
+
+    expect(response).deep.eq({type: 'space', spaceId: '09'});
+  });
+
   it('buys greenery before a city when it can build beside its city', () => {
     const [game, bot] = newGame();
     const city = game.board.getAvailableSpacesForCity(bot)[0];

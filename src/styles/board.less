@@ -16,15 +16,19 @@
   margin-top: 20px;
 }
 
+.board-without-venus {
+  background: url(./assets/board/mars-without-venus.png) no-repeat;
+}
+
 .board-legend {
   position: absolute;
   margin: -67px 0 0 -100px;
   z-index: 5;
-  pointer-events: none
+  pointer-events: none;
 }
 
 .board-caption {
-  font-family: Tahoma,Verdana,Segoe,sans-serif;
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
   font-size: 10px;
   font-weight: bold;
   fill: white;
@@ -54,7 +58,6 @@
   &.board-space-bonus-pos--only {
     margin: 15px 0 0 14px;
   }
-
 
   &.board-space-bonus-pos--1 {
     margin: 15px 0 0 5px;
@@ -92,7 +95,6 @@
   background: url(./assets/resources/heat.png) no-repeat;
   background-size: 16px;
 }
-
 
 .board-space-bonus--bonustemperature {
   background: url(./assets/board/bonus_temperature.png);
@@ -180,7 +182,7 @@
 // overlay icon centered over a backing hex
 // defaults to the tan special.png hex; others, for instance, ocean tiles,
 // pass the ocean hex instead.
-.special-tile-board(@icon, @backing: './assets/tiles/special.png') {
+.special-tile-board(@icon, @backing: "./assets/tiles/special.png") {
   background:
     url(@icon) no-repeat center / 50px,
     url(@backing) no-repeat center / 46px;
@@ -191,51 +193,52 @@
 }
 
 .board-space-tile--mohole_area {
-  .special-tile-board('./assets/tiles/special_tile_icons/mohole_area.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/mohole_area.png");
 }
 
 .board-space-tile--commercial_district {
-  .special-tile-board('./assets/tiles/special_tile_icons/commerical_district.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/commerical_district.png");
 }
 
 .board-space-tile--ecological_zone {
-  .special-tile-board('./assets/tiles/special_tile_icons/ecological_zone.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/ecological_zone.png");
 }
 
 .board-space-tile--industrial_center {
-  .special-tile-board('./assets/tiles/special_tile_icons/industrial_center.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/industrial_center.png");
 }
 
 .board-space-tile--lava_flows {
-  .special-tile-board('./assets/tiles/special_tile_icons/lava_flows.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/lava_flows.png");
 }
 
-.board-space-tile--mining_area, .board-space-tile--mining_rights {
-  .special-tile-board('./assets/tiles/special_tile_icons/mining_area.png');
+.board-space-tile--mining_area,
+.board-space-tile--mining_rights {
+  .special-tile-board("./assets/tiles/special_tile_icons/mining_area.png");
 }
 
 .board-space-tile--natural_preserve {
-  .special-tile-board('./assets/tiles/special_tile_icons/natural_preserve.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/natural_preserve.png");
 }
 
 .board-space-tile--nuclear_zone {
-  .special-tile-board('./assets/tiles/special_tile_icons/nuclear_zone.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/nuclear_zone.png");
 }
 
 .board-space-tile--restricted_area {
-  .special-tile-board('./assets/tiles/special_tile_icons/restricted_area.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/restricted_area.png");
 }
 
 .board-space-tile--great_dam {
-  .special-tile-board('./assets/tiles/special_tile_icons/great_dam.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/great_dam.png");
 }
 
 .board-space-tile--deimos_down {
-  .special-tile-board('./assets/tiles/special_tile_icons/deimos.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/deimos.png");
 }
 
 .board-space-tile--magnetic_field_generators {
-  .special-tile-board('./assets/tiles/special_tile_icons/magnetic_field_gen.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/magnetic_field_gen.png");
 }
 
 .board-space-tile--new-holland {
@@ -406,7 +409,15 @@
     width: 88px;
   }
 
-  &.board-space-69, &.board-space-70, &.board-space-71, &.board-space-72, &.board-space-73, &.board-space-75, &.board-space-76, &.board-space-77, &.board-space-78 {
+  &.board-space-69,
+  &.board-space-70,
+  &.board-space-71,
+  &.board-space-72,
+  &.board-space-73,
+  &.board-space-75,
+  &.board-space-76,
+  &.board-space-77,
+  &.board-space-78 {
     .board-space-text {
       margin-top: -15px;
     }
@@ -427,7 +438,7 @@
     position: absolute;
     padding: 8px 0 6px 0px;
     color: black;
-    background-color: rgba(255, 255, 255, .6);
+    background-color: rgba(255, 255, 255, 0.6);
     clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   }
 
@@ -456,20 +467,42 @@
 }
 
 @keyframes board-tile-blink-animation {
-  0% { filter: opacity(1)}
-  49% { filter: opacity(1)}
-  70% { filter: opacity(0.4)}
-  99% { filter: opacity(0.4)}
-  100% { filter: opacity(1)}
+  0% {
+    filter: opacity(1);
+  }
+  49% {
+    filter: opacity(1);
+  }
+  70% {
+    filter: opacity(0.4);
+  }
+  99% {
+    filter: opacity(0.4);
+  }
+  100% {
+    filter: opacity(1);
+  }
 }
 
 @keyframes board-tile-highlight-animation {
-  0% { opacity: 1; }
-  10% { opacity: 0; }
-  20% { opacity: 1; }
-  30% { opacity: 0; }
-  40% { opacity: 0; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 1;
+  }
+  10% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .board-space-type-land {
@@ -499,12 +532,12 @@
   height: 100%;
 }
 
-.board-ocean-checkmark{
+.board-ocean-checkmark {
   margin-left: 20px;
   margin-bottom: -1px;
 }
 
-.board-hidden-tile{
+.board-hidden-tile {
   opacity: 0.4;
 }
 

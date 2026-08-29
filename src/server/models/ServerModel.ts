@@ -359,7 +359,6 @@ export class Server {
       showTimers: options.showTimers,
       shuffleMapOption: options.shuffleMapOption,
       soloTR: options.soloTR,
-      randomMA: options.randomMA,
       twoCorpsVariant: options.twoCorpsVariant,
       undoOption: options.undoOption,
     };

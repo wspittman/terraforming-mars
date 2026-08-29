@@ -3,7 +3,6 @@ import { BoardName } from '../src/common/boards/BoardName';
 import { SpaceBonus } from '../src/common/boards/SpaceBonus';
 import * as constants from '../src/common/constants';
 import { GlobalParameter } from '../src/common/GlobalParameter';
-import { RandomMAOptionType } from '../src/common/ma/RandomMAOptionType';
 import { Phase } from '../src/common/Phase';
 import { Resource } from '../src/common/Resource';
 import { TileType } from '../src/common/TileType';
@@ -643,37 +642,19 @@ describe('Game', () => {
     expect(space.player).is.undefined;
   });
 
-  it('Generates random milestones and awards', () => {
+  it('Uses the base milestones and awards', () => {
     const player = TestPlayer.BLUE.newPlayer();
     const player2 = TestPlayer.RED.newPlayer();
-    const gameOptions = {
-      boardName: BoardName.THARSIS,
-      randomMA: RandomMAOptionType.UNLIMITED,
-    };
     const game = Game.newInstance(
       'gameid',
       [player, player2],
       player,
       'spectatorid',
-      gameOptions,
+      {boardName: BoardName.THARSIS},
     );
 
-    const prevMilestones = game.milestones.map(toName).sort();
-    const prevAwards = game.awards.map(toName).sort();
-
-    const game2 = Game.newInstance(
-      'game-foobar2',
-      [player, player2],
-      player,
-      'spectatorid',
-      gameOptions,
-    );
-
-    const milestones = game2.milestones.map(toName).sort();
-    const awards = game2.awards.map(toName).sort();
-
-    expect(prevMilestones).to.not.eq(milestones);
-    expect(prevAwards).to.not.eq(awards);
+    expect(game.milestones.map(toName)).deep.eq(['Terraformer', 'Mayor', 'Gardener', 'Builder', 'Planner']);
+    expect(game.awards.map(toName)).deep.eq(['Landlord', 'Scientist', 'Banker', 'Thermalist', 'Miner']);
   });
 
   // https://github.com/terraforming-mars/terraforming-mars/issues/5572

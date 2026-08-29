@@ -14,8 +14,8 @@ import {Tile} from './Tile';
 import {LogMessageBuilder} from './logs/LogMessageBuilder';
 import {LogHelper} from './LogHelper';
 import {LogMessage} from '../common/logs/LogMessage';
-import {milestoneManifest} from './milestones/Milestones';
-import {awardManifest} from './awards/Awards';
+import {createMilestone, milestones} from './milestones/Milestones';
+import {awards, createAward, createAwardOrThrow} from './awards/Awards';
 import {Phase} from '../common/Phase';
 import {IPlayer} from './IPlayer';
 import {Player} from './Player';
@@ -32,12 +32,10 @@ import {PlaceOceanTile} from './deferredActions/PlaceOceanTile';
 import {SerializedGame} from './SerializedGame';
 import {SpaceBonus} from '../common/boards/SpaceBonus';
 import {TileType} from '../common/TileType';
-import {RandomMAOptionType} from '../common/ma/RandomMAOptionType';
 import {GameSetup} from './GameSetup';
 import {GameCards} from './GameCards';
 import {GlobalParameter} from '../common/GlobalParameter';
 import {SeededRandom, UnseededRandom} from '../common/utils/Random';
-import {chooseMilestonesAndAwards} from './ma/MilestoneAwardSelector';
 import {BoardType} from './boards/BoardType';
 import {MultiSet} from 'mnemonist';
 import {GameLoader} from './database/GameLoader';
@@ -235,8 +233,6 @@ export class Game implements IGame, Logger {
     }
 
     if (players.length === 1) {
-      gameOptions.randomMA = RandomMAOptionType.NONE;
-
       // Single player game player starts with 14TR
       players[0].setTerraformRating(14);
     }
@@ -247,9 +243,8 @@ export class Game implements IGame, Logger {
     game.createdTime = new Date();
 
 
-    const {milestones, awards} = chooseMilestonesAndAwards(gameOptions);
-    game.milestones = milestones.map(milestoneManifest.createOrThrow);
-    game.awards = awards.map(awardManifest.createOrThrow);
+    game.milestones = milestones.map(createMilestone);
+    game.awards = awards.map(createAwardOrThrow);
 
 
     // and 2 neutral cities and forests on board
@@ -345,10 +340,7 @@ export class Game implements IGame, Logger {
         customCorporationsList: this.gameOptions.customCorporationsList,
         escapeVelocity: this.gameOptions.escapeVelocity,
         fastModeOption: this.gameOptions.fastModeOption,
-        includeFanMA: this.gameOptions.includeFanMA,
         includedCards: this.gameOptions.includedCards,
-        modularMA: this.gameOptions.modularMA,
-        randomMA: this.gameOptions.randomMA,
         showOtherPlayersVP: this.gameOptions.showOtherPlayersVP,
         showTimers: this.gameOptions.showTimers,
         shuffleMapOption: this.gameOptions.shuffleMapOption,
@@ -1187,7 +1179,7 @@ export class Game implements IGame, Logger {
     game.spectatorId = d.spectatorId;
     game.createdTime = new Date(d.createdTimeMs);
 
-    const milestones = d.milestones.map(milestoneManifest.createOrThrow);
+    const milestones = d.milestones.map(createMilestone);
 
     game.milestones = milestones;
     game.claimedMilestones = deserializeClaimedMilestones(d.claimedMilestones, players, milestones);
@@ -1195,7 +1187,7 @@ export class Game implements IGame, Logger {
     const awards: Array<IAward> = [];
     d.awards.forEach((awardName) => {
       awardName = maybeRenamedAward(awardName);
-      const award = awardManifest.create(awardName);
+      const award = createAward(awardName);
       if (award !== undefined) {
         awards.push(award);
       }

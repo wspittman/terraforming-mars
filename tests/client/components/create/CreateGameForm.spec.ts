@@ -1,7 +1,6 @@
 import CreateGameForm from '@/client/components/create/CreateGameForm.vue';
 import { CreateGameSettingsStorage } from '@/client/components/create/CreateGameSettingsStorage';
 import { BoardName } from '@/common/boards/BoardName';
-import { RandomMAOptionType } from '@/common/ma/RandomMAOptionType';
 import { JSONObject } from '@/common/Types';
 import { mount, shallowMount } from '@vue/test-utils';
 import { expect } from 'chai';
@@ -97,7 +96,6 @@ describe('CreateGameForm', () => {
         penaltyVPPerPeriod: 1,
       },
       fastModeOption: true,
-      randomMA: RandomMAOptionType.LIMITED,
       shuffleMapOption: true,
       player: {name: 'Alice', color: 'red', beginner: false, handicap: 3},
       playerCount: 2,
@@ -114,7 +112,6 @@ describe('CreateGameForm', () => {
     expect((wrapper.vm as any).expansions.corpera).eq(true);
     expect((wrapper.vm as any).escapeVelocityMode).eq(undefined);
     expect((wrapper.vm as any).fastModeOption).eq(undefined);
-    expect((wrapper.vm as any).randomMA).eq(undefined);
     expect((wrapper.vm as any).shuffleMapOption).eq(undefined);
     expect((wrapper.vm as any).player.handicap).eq(0);
   });

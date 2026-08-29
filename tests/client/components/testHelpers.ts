@@ -4,7 +4,6 @@ import {GameModel} from '@/common/models/GameModel';
 import {GameOptionsModel} from '@/common/models/GameOptionsModel';
 import {TimerModel} from '@/common/models/TimerModel';
 import {Phase} from '@/common/Phase';
-import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {BoardName} from '@/common/boards/BoardName';
 import {Color} from '@/common/Color';
 import {Resource} from '@/common/Resource';
@@ -52,7 +51,6 @@ export function fakeGameOptionsModel(overrides?: RecursivePartial<GameOptionsMod
     showTimers: false,
     shuffleMapOption: false,
     soloTR: false,
-    randomMA: RandomMAOptionType.NONE,
     twoCorpsVariant: false,
     undoOption: false,
     ...overrides,

@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import { BoardName } from '../../src/common/boards/BoardName';
 import { NewGameConfig } from '../../src/common/game/NewGameConfig';
 import { statusCode } from '../../src/common/http/statusCode';
-import { RandomMAOptionType } from '../../src/common/ma/RandomMAOptionType';
 import { NewGameResponse } from '../../src/common/game/NewGameConfig';
 import { ApiCreateGame } from '../../src/server/routes/ApiCreateGame';
 import { FakeClock } from '../common/FakeClock';
@@ -50,11 +49,8 @@ describe('ApiCreateGame', () => {
         showTimers: false,
         fastModeOption: false,
         showOtherPlayersVP: false,
-        modularMA: false,
         startingCorporations: 0,
         shuffleMapOption: false,
-        randomMA: RandomMAOptionType.NONE,
-        includeFanMA: false,
         soloTR: false,
         customCorporations: [],
         bannedCards: [],
@@ -98,11 +94,8 @@ describe('ApiCreateGame', () => {
         showTimers: false,
         fastModeOption: false,
         showOtherPlayersVP: false,
-        modularMA: false,
         startingCorporations: 2,
         shuffleMapOption: false,
-        randomMA: RandomMAOptionType.NONE,
-        includeFanMA: false,
         soloTR: true,
         customCorporations: [],
         bannedCards: [],

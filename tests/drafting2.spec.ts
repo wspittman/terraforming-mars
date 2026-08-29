@@ -687,8 +687,6 @@ const stored = {
     'escapeVelocityMode': false,
     'escapeVelocityBonusSeconds': 2,
     'fastModeOption': false,
-    'includeFanMA': false,
-    'randomMA': 'No randomization',
     'showOtherPlayersVP': false,
     'showTimers': true,
     'shuffleMapOption': false,

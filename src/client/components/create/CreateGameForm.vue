@@ -183,7 +183,6 @@ import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {playerColorClass} from '@/common/utils/utils';
-import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {GameId, JSONObject} from '@/common/Types';
 import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
 import {vueRoot} from '@/client/components/vueRoot';
@@ -439,12 +438,9 @@ export default defineComponent({
         undoOption,
         showTimers,
         fastModeOption: false,
-        includeFanMA: false,
-        modularMA: false,
         startingCorporations,
         soloTR,
         clonedGamedId,
-        randomMA: RandomMAOptionType.NONE,
         shuffleMapOption: false,
         // beginnerOption,
         randomFirstPlayer,

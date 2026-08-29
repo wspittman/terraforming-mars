@@ -8,8 +8,8 @@ import {GameModule} from '../../common/cards/GameModule';
 import {ClientCard} from '../../common/cards/ClientCard';
 import {isICorporationCard} from '../cards/corporation/ICorporationCard';
 import {Units} from '../../common/Units';
-import {milestoneManifest} from '../milestones/Milestones';
-import {awardManifest} from '../awards/Awards';
+import {createMilestone} from '../milestones/Milestones';
+import {createAwardOrThrow} from '../awards/Awards';
 import {awardNames} from '../../common/ma/AwardName';
 import {milestoneNames} from '../../common/ma/MilestoneName';
 import {ClientAward, ClientMilestone} from '../../common/ma/ClientMilestoneAward';
@@ -108,7 +108,7 @@ class MilestoneProcessor {
     milestoneNames.forEach((name) => {
       MilestoneProcessor.json.push({
         name,
-        description: milestoneManifest.createOrThrow(name).description,
+        description: createMilestone(name).description,
         requirements: undefined,
       });
     });
@@ -121,7 +121,7 @@ class AwardProcessor {
     awardNames.forEach((name) => {
       AwardProcessor.json.push({
         name,
-        description: awardManifest.createOrThrow(name).description,
+        description: createAwardOrThrow(name).description,
         requirements: undefined,
       });
     });

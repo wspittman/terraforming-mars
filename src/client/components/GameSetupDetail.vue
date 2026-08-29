@@ -11,14 +11,6 @@
               <span v-if="gameOptions.shuffleMapOption" class="game-config generic" v-i18n>(randomized tiles)</span>
             </li>
 
-            <li v-if="playerNumber > 1">
-              <div class="setup-item" v-i18n>Milestones and Awards:</div>
-
-              <div v-if="gameOptions.randomMA === RandomMAOptionType.NONE" class="game-config generic" v-i18n>Board-defined</div>
-              <div v-if="gameOptions.randomMA === RandomMAOptionType.LIMITED" class="game-config generic" v-i18n>Randomized with limited synergy</div>
-              <div v-if="gameOptions.randomMA === RandomMAOptionType.UNLIMITED" class="game-config generic" v-i18n>Full randomized</div>
-            </li>
-
             <li v-if="gameOptions.escapeVelocity !== undefined">
               <div class="create-game-expansion-icon expansion-icon-escape-velocity"></div>
               <span>{{escapeVelocityDescription}}</span>
@@ -47,7 +39,6 @@
 import {defineComponent} from 'vue';
 import {GameOptionsModel} from '@/common/models/GameOptionsModel';
 import {BoardName} from '@/common/boards/BoardName';
-import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {translateTextWithParams} from '@/client/directives/i18n';
 
 const boardColorClass: Record<BoardName, string> = {
@@ -87,9 +78,6 @@ export default defineComponent({
           ev.penaltyPeriodMinutes.toString(),
           ev.bonusSectionsPerAction.toString(),
         ]);
-    },
-    RandomMAOptionType(): typeof RandomMAOptionType {
-      return RandomMAOptionType;
     },
   },
 });

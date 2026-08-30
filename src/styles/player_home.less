@@ -183,12 +183,7 @@ each(@players, {
     drop-shadow(-.5px -.5px 0 black);
 }
 
-.tag-escape {
-  background-image: url(./assets/expansion_icons/expansion_icon_escapeVelocity.png);
-  background-size: 56px;
-  background-position: -8px;
-  border-radius: 18px;
-}
+
 .tag-city-count {
   background-image: url(./assets/tiles/city.png);
   border-radius: 0px !important;
@@ -202,37 +197,13 @@ each(@players, {
   background-position: 0px;
 }
 
-.tag-colony-count {
-  background: url(./assets/tiles/colony.png) no-repeat;
-  background-size: 34px;
-  border-radius: 0px;
-  box-shadow: none;
-}
 
-.tag-influence-count {
-  background-image: url(./assets/misc/influence.png);
-  .tag-count-icon();
-}
 
-.tag-excavation-count {
-  background-image: url(./assets/underworld/excavate.png);
-  .tag-count-icon();
-}
 
-.tag-underground-token-count {
-  background-image: url(./assets/underworld/underground-token-background.png);
-  .tag-count-icon();
-}
 
-.tag-corruption-count {
-  background-image: url(./assets/underworld/corruption.png);
-  .tag-count-icon();
-}
 
-.tag-negative-vp {
-  background-image: url(./assets/underworld/negative-vp.png);
-  .tag-count-icon();
-}
+
+
 
 .player-board-blue-action-counter{
   margin-top: 8px;
@@ -435,50 +406,7 @@ each(@players, {
 
     @ma-name:
       terraformer, mayor, gardener, builder, planner,
-      landlord, banker, scientist, thermalist, miner,
-
-      generalist, specialist, ecologist, tycoon, legend,
-      celebrity, industrialist, desert-settler, estate-dealer, benefactor,
-
-      diversifier, tactician, polar-explorer, energizer, rim-settler,
-      cultivator, magnate, space-baron, excentric, contractor,
-
-      hoverlord, venuphile,
-
-      networker, entrepreneur,
-
-      lunar-magnate, lunarchitect, full-moon, one-giant-step,
-
-      economizer, pioneer, land-specialist, martian,
-      cosmic-settler, botanist, promoter, zoologist, a-manufacturer,
-
-      v-electrician, v-spacefarer, smith, tradesman, irrigator, capitalist,
-      forecaster, edgedancer, visionary, naturalist, voyager,
-
-      rugged, purifier,
-
-      agronomist, engineer, farmer,
-
-      colonizer, minimalist, terran, tropicalist,
-      curator, tourist, a-engineer, a-zoologist,
-
-      t-collector, firestarter, terra-pioneer, spacefarer, gambler,
-      biologist, t-politician, urbanist, warmonger,
-      incorporator, manufacturer, politician,
-
-      administrator, constructor, founder, highlander, hydrologist, investor,
-      landscaper, metropolist, mogul, thawer, traveller, blacksmith,
-
-      collector, electrician, fundraiser, geologist, landshaper, lobbyist, philantropist,
-      planetologist, producer, researcher, sponsor, forester, breeder, thermoengineer,
-
-      kingpin, excavator, tunneler, risktaker,
-
-      architect, c-forester, coastguard,
-
-      builder7, legend4, pioneer4, metallurgist, spacefarer4, tactician4,
-      terraformer29, terran5, trader, tycoon10, suburbian, briber, merchant,
-    ;
+      landlord, banker, scientist, thermalist, miner;
     each(@ma-name, {
     .ma-name--@{value} {
       background-image: url("assets/ma/@{value}.png");
@@ -498,12 +426,6 @@ each(@players, {
       line-height: 15px;
       text-align: center;
     }
-  }
-}
-
-.with-turmoil {
-  .ma-name--terraformer {
-    background-image: url(./assets/ma/terraformer26.png) !important;
   }
 }
 
@@ -570,86 +492,7 @@ each(@players, {
   }
 }
 
-.player_home_colony_cont {
-  margin: 0 auto;
 
-  .player_home_colony {
-    display: inline-block;
-    vertical-align: top;
-    margin: 0px 0px 10px 0px;
-  }
-  .inactiveColony {
-    transform: scale(.9);
-    opacity: .7;
-  }
-}
-
-.discarded-colonies-for-aridor {
-  margin-bottom: 25px;
-  margin-top: -25px;
-
-  .small_colony {
-    transform:scale(.5);
-    width: 220px;
-    height: 150px;
-    margin-top: 0px;
-  }
-}
-
-.colonies-fleets-cont {
-  position: absolute;
-  margin: -62px 0 0 160px;
-}
-
-.colonies-player-fleets {
-  height: 70px;
-  display: inline-block;
-  vertical-align: top;
-}
-
-.colonies-fleet {
-  background: url(./assets/colony_ships.png) no-repeat;
-  width: 70px;
-  height: 70px;
-  display: inline-block;
-  vertical-align: top;
-
-  &.colonies-fleet-black {
-    background-position: 0 0;
-  }
-
-  &.colonies-fleet-yellow {
-    background-position: -70px 0;
-  }
-
-  &.colonies-fleet-green {
-    background-position: -140px 0;
-  }
-
-  &.colonies-fleet-red {
-    background-position: -207px 0;
-  }
-
-  &.colonies-fleet-blue {
-    background-position: -272px 0;
-  }
-
-  &.colonies-fleet-purple {
-    background-position: -342px 0;
-  }
-
-  &.colonies-fleet-orange {
-    background-position: -416px 0;
-  }
-
-  &.colonies-fleet-pink {
-    background-position: -490px 0;
-  }
-}
-
-.player_home_block--underground-tokens {
-  height: 50px;
-}
 
 .deck-size {
   position: absolute;

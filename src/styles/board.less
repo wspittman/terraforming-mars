@@ -16,11 +16,7 @@
   margin-top: 20px;
 }
 
-.board-with-venus{
-  background: url(./assets/board/mars.png) no-repeat;
-}
-
-.board-without-venus{
+.board-without-venus {
   background: url(./assets/board/mars-without-venus.png) no-repeat;
 }
 
@@ -28,11 +24,11 @@
   position: absolute;
   margin: -67px 0 0 -100px;
   z-index: 5;
-  pointer-events: none
+  pointer-events: none;
 }
 
 .board-caption {
-  font-family: Tahoma,Verdana,Segoe,sans-serif;
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
   font-size: 10px;
   font-weight: bold;
   fill: white;
@@ -62,7 +58,6 @@
   &.board-space-bonus-pos--only {
     margin: 15px 0 0 14px;
   }
-
 
   &.board-space-bonus-pos--1 {
     margin: 15px 0 0 5px;
@@ -101,7 +96,6 @@
   background-size: 16px;
 }
 
-
 .board-space-bonus--bonustemperature {
   background: url(./assets/board/bonus_temperature.png);
   background-repeat: no-repeat;
@@ -114,16 +108,6 @@
 
 .board-space-bonus--bonustemperature4mc {
   background: url(./assets/board/bonus_temperature-4mc.png);
-  background-repeat: no-repeat;
-  background-size: 32px 21px;
-  width: 36px;
-  height: 21px;
-  background-position: center;
-  filter: saturate(1.5);
-}
-
-.board-space-bonus--colony {
-  background: url(./assets/board/colony.png);
   background-repeat: no-repeat;
   background-size: 32px 21px;
   width: 36px;
@@ -147,14 +131,6 @@
   background-size: 16px;
 }
 
-.board-space-bonus--energy-production {
-  background: url(./assets/pathfinders/energy-production.png) no-repeat;
-  // The production box and viz border require a size change.
-  background-size: 20px;
-  width: 20px;
-  height: 20px;
-}
-
 .board-space-bonus--energy {
   background: url(./assets/resources/power.png) no-repeat;
   background-size: 16px;
@@ -162,11 +138,6 @@
 
 .board-space-bonus--science {
   background: url(./assets/resources/science.png) no-repeat;
-  background-size: 16px;
-}
-
-.board-space-bonus--delegate {
-  background: url(./assets/misc/delegate.png) no-repeat;
   background-size: 16px;
 }
 
@@ -211,7 +182,7 @@
 // overlay icon centered over a backing hex
 // defaults to the tan special.png hex; others, for instance, ocean tiles,
 // pass the ocean hex instead.
-.special-tile-board(@icon, @backing: './assets/tiles/special.png') {
+.special-tile-board(@icon, @backing: "./assets/tiles/special.png") {
   background:
     url(@icon) no-repeat center / 50px,
     url(@backing) no-repeat center / 46px;
@@ -222,51 +193,52 @@
 }
 
 .board-space-tile--mohole_area {
-  .special-tile-board('./assets/tiles/special_tile_icons/mohole_area.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/mohole_area.png");
 }
 
 .board-space-tile--commercial_district {
-  .special-tile-board('./assets/tiles/special_tile_icons/commerical_district.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/commerical_district.png");
 }
 
 .board-space-tile--ecological_zone {
-  .special-tile-board('./assets/tiles/special_tile_icons/ecological_zone.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/ecological_zone.png");
 }
 
 .board-space-tile--industrial_center {
-  .special-tile-board('./assets/tiles/special_tile_icons/industrial_center.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/industrial_center.png");
 }
 
 .board-space-tile--lava_flows {
-  .special-tile-board('./assets/tiles/special_tile_icons/lava_flows.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/lava_flows.png");
 }
 
-.board-space-tile--mining_area, .board-space-tile--mining_rights {
-  .special-tile-board('./assets/tiles/special_tile_icons/mining_area.png');
+.board-space-tile--mining_area,
+.board-space-tile--mining_rights {
+  .special-tile-board("./assets/tiles/special_tile_icons/mining_area.png");
 }
 
 .board-space-tile--natural_preserve {
-  .special-tile-board('./assets/tiles/special_tile_icons/natural_preserve.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/natural_preserve.png");
 }
 
 .board-space-tile--nuclear_zone {
-  .special-tile-board('./assets/tiles/special_tile_icons/nuclear_zone.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/nuclear_zone.png");
 }
 
 .board-space-tile--restricted_area {
-  .special-tile-board('./assets/tiles/special_tile_icons/restricted_area.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/restricted_area.png");
 }
 
 .board-space-tile--great_dam {
-  .special-tile-board('./assets/tiles/special_tile_icons/great_dam.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/great_dam.png");
 }
 
 .board-space-tile--deimos_down {
-  .special-tile-board('./assets/tiles/special_tile_icons/deimos.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/deimos.png");
 }
 
 .board-space-tile--magnetic_field_generators {
-  .special-tile-board('./assets/tiles/special_tile_icons/magnetic_field_gen.png');
+  .special-tile-board("./assets/tiles/special_tile_icons/magnetic_field_gen.png");
 }
 
 .board-space-tile--new-holland {
@@ -293,14 +265,6 @@
   z-index: 3;
   margin: 8px 0 0 4px;
   filter: drop-shadow(2px 2px 3px black);
-}
-
-.occupied-colony-space {
-  position: absolute;
-  background: rgba(0,0,0,0.7);
-  width: 53px;
-  height: 46px;
-  z-index: 1;
 }
 
 .board-cube--red {
@@ -445,7 +409,15 @@
     width: 88px;
   }
 
-  &.board-space-69, &.board-space-70, &.board-space-71, &.board-space-72, &.board-space-73, &.board-space-75, &.board-space-76, &.board-space-77, &.board-space-78 {
+  &.board-space-69,
+  &.board-space-70,
+  &.board-space-71,
+  &.board-space-72,
+  &.board-space-73,
+  &.board-space-75,
+  &.board-space-76,
+  &.board-space-77,
+  &.board-space-78 {
     .board-space-text {
       margin-top: -15px;
     }
@@ -466,7 +438,7 @@
     position: absolute;
     padding: 8px 0 6px 0px;
     color: black;
-    background-color: rgba(255, 255, 255, .6);
+    background-color: rgba(255, 255, 255, 0.6);
     clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   }
 
@@ -495,20 +467,42 @@
 }
 
 @keyframes board-tile-blink-animation {
-  0% { filter: opacity(1)}
-  49% { filter: opacity(1)}
-  70% { filter: opacity(0.4)}
-  99% { filter: opacity(0.4)}
-  100% { filter: opacity(1)}
+  0% {
+    filter: opacity(1);
+  }
+  49% {
+    filter: opacity(1);
+  }
+  70% {
+    filter: opacity(0.4);
+  }
+  99% {
+    filter: opacity(0.4);
+  }
+  100% {
+    filter: opacity(1);
+  }
 }
 
 @keyframes board-tile-highlight-animation {
-  0% { opacity: 1; }
-  10% { opacity: 0; }
-  20% { opacity: 1; }
-  30% { opacity: 0; }
-  40% { opacity: 0; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 1;
+  }
+  10% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .board-space-type-land {
@@ -530,15 +524,6 @@
   background-color: #0af4;
 }
 
-.board-space-type-cove {
-  background: url(./assets/pathfinders/cove.png) no-repeat;
-}
-
-.board-space-type-volcanic-cove {
-  background: url(./assets/pathfinders/volcanic-cove.png) no-repeat;
-  background-color: #8304;
-}
-
 .board-space-type-deflection-zone {
   background: url(./assets/hex_white.png) no-repeat;
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
@@ -547,12 +532,12 @@
   height: 100%;
 }
 
-.board-ocean-checkmark{
+.board-ocean-checkmark {
   margin-left: 20px;
   margin-bottom: -1px;
 }
 
-.board-hidden-tile{
+.board-hidden-tile {
   opacity: 0.4;
 }
 
@@ -577,98 +562,4 @@
     padding-top: 14px;
     text-align: center;
   }
-}
-
-.gagarin {
-  &.visited {
-    filter: brightness(.7)
-  }
-  position: absolute;
-  margin: 7px 0 0 14px;
-  background: url(./assets/pathfinders/gagarin.png);
-  background-size: 16px;
-  width: 16px;
-  height: 9px;
-}
-
-.board-cube--cathedral {
-  position: absolute;
-  margin: 3px 0 0 14px;
-  background: url(./assets/promo/cathedral.png);
-  background-size: 20px;
-  width: 20px;
-  height: 20px;
-}
-
-.board-cube--nomad {
-  position: absolute;
-  background: linear-gradient(to bottom right, gold, goldenrod, gold);
-  width: 15px;
-  height: 15px;
-  z-index: 3;
-  margin: 8px 0 0 16px;
-  border: 1px solid black;
-}
-
-@token_types: card1, card2,
-  corruption1, corruption2,
-  steel1production,
-  titanium2, titanium1production,
-  plant2, plant3, plant1production,
-  titaniumandplant,
-  energy1production, heat2production,
-  microbe1, microbe2, tr, ocean,
-  data1pertemp, microbe1pertemp, plant2pertemp, steel2pertemp, titanium1pertemp,
-  mcprod1pertemp, microbe2pertemp,oceanrequirementmod,
-  oxygenrequirementmod, temprequirementmod,
-  steel2plant, energy2, sciencetag, planttag, volcanicoceanspace, place6mc,
-  anyresource1;
-
-each(@token_types, {
-.underground-token--@{value} {
-  background-image: url("assets/underworld/underground-resource--@{value}.png");
-}
-})
-
-.underground-excavator {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  z-index: 3;
-  border-radius: @radius_circle;
-  margin: 7px 0 0 21px;
-  filter: drop-shadow(2px 2px 3px black);
-  // box-shadow: -5px 8.66px 5px 0 #00000080
-}
-
-.underground-excavator--red {
-  background-color: @player_red;
-}
-
-.underground-excavator--blue {
-  background-color: @player_blue;
-}
-
-.underground-excavator--black {
-  background-color: @player_black;
-}
-
-.underground-excavator--yellow {
-  background-color: @player_yellow;
-}
-
-.underground-excavator--green {
-  background-color: @player_green;
-}
-
-.underground-excavator--purple {
-  background-color: @player_purple;
-}
-
-.underground-excavator--orange {
-  background-color: @player_orange;
-}
-
-.underground-excavator--pink {
-  background-color: @player_pink;
 }

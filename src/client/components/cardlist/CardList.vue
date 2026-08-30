@@ -159,7 +159,6 @@ import {defineComponent} from 'vue';
 import {CardType} from '@/common/cards/CardType';
 import {CardName} from '@/common/cards/CardName';
 import {getEnumStringValues, toName} from '@/common/utils/utils';
-import {getPreferences} from '@/client/utils/PreferencesManager';
 import {byType, getCard, getCardOrThrow, getCards} from '@/client/cards/ClientCardManifest';
 import {GameModule, GAME_MODULES} from '@/common/cards/GameModule';
 import {Tag} from '@/common/cards/Tag';
@@ -411,10 +410,6 @@ export default defineComponent({
     },
     awardModel(name: AwardName): FundedAwardModel {
       return {name, playerName: undefined, color: undefined, scores: []};
-    },
-    // experimentalUI might not be used at the moment, but it's fine to just leave it here.
-    experimentalUI(): boolean {
-      return getPreferences().experimental_ui;
     },
     // Reports how long it took to resize every card title once they've all been
     // fitted. Each CardTitle defers its fit until document.fonts.ready, so we

@@ -38,12 +38,6 @@
       </div>
       <div class="preferences_panel_item">
         <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.enable_sounds" data-test="enable_sounds">
-          <i class="form-icon"></i> <span v-i18n>Enable sounds</span>
-        </label>
-      </div>
-      <div class="preferences_panel_item">
-        <label class="form-switch">
           <input type="checkbox" @change="updatePreferences" v-model="prefs.hide_animated_sidebar" data-test="hide_animated_sidebar">
           <i class="form-icon"></i> <span v-i18n>Hide sidebar notification</span>
         </label>
@@ -72,23 +66,6 @@
         </label>
       </div>
 
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.animated_title" data-test="animated_title">
-          <i class="form-icon"></i>
-          <span v-i18n>Animated Title</span>
-          <span class="tooltip tooltip-left" :data-tooltip="$t('Show spinning circle in window title on your turn.')">&#9432;</span>
-        </label>
-      </div>
-
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.experimental_ui" data-test="experimental_ui">
-          <i class="form-icon"></i>
-          <span v-i18n>Experimental UI</span>
-          <span class="tooltip tooltip-left" :data-tooltip="$t('Test out any possible new experimental UI features for feedback.')">&#9432;</span>
-        </label>
-      </div>
       <div class="preferences_panel_actions">
         <button class="btn btn-lg btn-primary" @click="okClicked" v-i18n>Ok</button>
         <button class="btn btn-lg btn-primary" @click="showBugDialog" v-i18n>Report a bug</button>

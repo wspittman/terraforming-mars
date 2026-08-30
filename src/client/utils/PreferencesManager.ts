@@ -1,6 +1,5 @@
 export type Preferences = {
   learner_mode: boolean,
-  enable_sounds: boolean,
   magnify_cards: boolean,
   show_alerts: boolean,
   hide_hand: boolean,
@@ -17,15 +16,12 @@ export type Preferences = {
   hide_discount_on_cards: boolean,
   hide_animated_sidebar: boolean,
   symbol_overlay: boolean,
-  animated_title: boolean,
-  experimental_ui: boolean,
 }
 
 export type Preference = keyof Preferences;
 
 const defaults: Preferences = {
   learner_mode: true,
-  enable_sounds: true,
   magnify_cards: true,
   show_alerts: true,
   hide_hand: false,
@@ -43,9 +39,6 @@ const defaults: Preferences = {
   hide_animated_sidebar: false,
 
   symbol_overlay: false,
-  animated_title: true,
-
-  experimental_ui: false,
 };
 
 export class PreferencesManager {

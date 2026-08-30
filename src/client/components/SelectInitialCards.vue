@@ -32,7 +32,7 @@ import {PlayerInputModel, SelectCardModel, SelectInitialCardsModel} from '@/comm
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import SelectCard from '@/client/components/SelectCard.vue';
 import ConfirmDialog from '@/client/components/common/ConfirmDialog.vue';
-import {getPreferences, Preferences, PreferencesManager} from '@/client/utils/PreferencesManager';
+import {Preferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {SelectInitialCardsResponse} from '@/common/inputs/InputResponse';
 import * as titles from '@/common/inputs/SelectInitialCards';
 import {sum} from '@/common/utils/utils';
@@ -241,24 +241,14 @@ export default defineComponent({
     },
     corpCardOption() {
       const option = getOption(this.playerinput.options, titles.SELECT_CORPORATION_TITLE);
-      if (getPreferences().experimental_ui) {
-        option.min = 1;
-        option.max = option.cards.length;
-      }
       return option;
     },
     preludeCardOption() {
       const option = getOption(this.playerinput.options, titles.SELECT_PRELUDE_TITLE);
-      if (getPreferences().experimental_ui) {
-        option.max = option.cards.length;
-      }
       return option;
     },
     ceoCardOption() {
       const option = getOption(this.playerinput.options, titles.SELECT_CEO_TITLE);
-      if (getPreferences().experimental_ui) {
-        option.max = option.cards.length;
-      }
       return option;
     },
     projectCardOption() {

@@ -87,10 +87,10 @@
           <div class="text-overview" v-i18n>[ toggle cards filters ]</div>
         </div>
         <div v-for="card in getCardsByType(thisPlayer.tableau, [CardType.CORPORATION])" :key="card.name" class="cardbox">
-            <Card :card="card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color"/>
+            <Card :card="card" :actionUsed="isCardActivated(card, thisPlayer)"/>
         </div>
         <div v-show="isVisible('ACTIVE')" v-for="card in activeTableauCards" :key="card.name" class="cardbox">
-            <Card :card="card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color"/>
+            <Card :card="card" :actionUsed="isCardActivated(card, thisPlayer)"/>
         </div>
 
         <StackedCards v-show="isVisible('AUTOMATED')" :cards="automatedTableauCards" />

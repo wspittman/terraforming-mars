@@ -1,18 +1,9 @@
 <template>
 <div>
-  <div v-if="experimentalUI()" v-i18n>
-    <label>
-      <input type="checkbox" v-model="showReorder" > Reorder Cards
-    </label>
-  </div>
   <div class="sortable-cards">
-    <div ref="draggers" :class="{ 'dragging': Boolean(dragCard) }" v-for="(card, index) in getSortedCards()" :key="card.name" draggable="true" @dragend="onDragEnd()" @dragstart="onDragStart(card.name)" @dragover.prevent="onDragOver(card.name, $event)">
-      <div ref="cardbox" class="cardbox" @click="clickMethod">
+    <div ref="draggers" :class="{ 'dragging': Boolean(dragCard) }" v-for="card in getSortedCards()" :key="card.name" draggable="true" @dragend="onDragEnd()" @dragstart="onDragStart(card.name)" @dragover.prevent="onDragOver(card.name, $event)">
+      <div ref="cardbox" class="cardbox">
         <Card :card="card"/>
-        <div v-if="showReorder" class="reorder-banners-container">
-          <div class="reorder-banners-left" v-if="index > 0"></div>
-          <div class="reorder-banners-right" v-if="index < cards.length - 1"></div>
-        </div>
       </div>
     </div>
   </div>
@@ -25,11 +16,8 @@ import Card from '@/client/components/card/Card.vue';
 import {CardName} from '@/common/cards/CardName';
 import {CardModel} from '@/common/models/CardModel';
 import {CardOrderStorage} from '@/client/utils/CardOrderStorage';
-import {getPreferences} from '@/client/utils/PreferencesManager';
 
 type DataModel = {
-  /** When true use the point-and-click reorder UI */
-  showReorder: boolean;
   /** Mapping from card name to its order */
   cardOrder: {[x: string]: number};
   /** When defined, it is the name of the card being dragged. */
@@ -69,7 +57,6 @@ export default defineComponent({
       }
     }
     return {
-      showReorder: false,
       cardOrder: cardOrder,
       dragCard: undefined,
     };
@@ -104,42 +91,6 @@ export default defineComponent({
       cardNames.splice(cardNames.indexOf(source) + (insertAfter ? 1 : 0), 0, draggedCard);
       cardNames.forEach((cardName, index) => this.cardOrder[cardName] = index + 1);
       CardOrderStorage.updateCardOrder(this.playerId, this.cardOrder);
-    },
-    doNotDragAndDropOnReorder() {
-      return this.showReorder ? 'do-not-drag-and-drop' : '';
-    },
-    clickMethod(e: MouseEvent) {
-      if (!this.showReorder) {
-        return;
-      }
-      const target = e.currentTarget as HTMLElement;
-      if (!target) {
-        return;
-      }
-      if (target.matches('.sortable-cards *')) {
-        const rect = target.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width;
-        const direction = x <= 0.25 ? -1.5 : x >= 0.75 ? 1.5 : null;
-        if (direction) {
-          const cardTitle = target.querySelector('.card-title');
-          if (cardTitle) {
-            const textContent = cardTitle.textContent;
-            if (textContent) {
-              const thisCard = textContent.trim();
-              this.cardOrder[thisCard] += direction;
-              Object.entries(this.cardOrder)
-                .sort((a, b) => a[1]-b[1])
-                .forEach((entry, i) => {
-                  this.cardOrder[entry[0]] = i+1;
-                });
-              CardOrderStorage.updateCardOrder(this.playerId, this.cardOrder);
-            }
-          }
-        }
-      }
-    },
-    experimentalUI(): boolean {
-      return getPreferences().experimental_ui;
     },
   },
 });

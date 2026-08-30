@@ -9,13 +9,6 @@
     </template>
   </template>
   <div v-if="waitingfor !== undefined" class="wf-root">
-    <template v-if="preferences().experimental_ui && playerView.game.phase === Phase.ACTION">
-      <input type="checkbox" name="suspend" id="suspend-checkbox" v-model="suspend" @change="updateSuspend">
-      <label for="suspend-checkbox">
-        <span v-i18n>Suspend</span>
-      </label>
-      <div v-if="showRefresh()">Refresh<span class="reset"></span></div>
-    </template>
     <PlayerInputFactory :players="playerView.players"
                           :playerView="playerView"
                           :playerinput="waitingfor"
@@ -35,28 +28,14 @@ import raw_settings from '@/genfiles/settings.json';
 import {vueRoot} from '@/client/components/vueRoot';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel, ViewModel} from '@/common/models/PlayerModel';
-import {getPreferences} from '@/client/utils/PreferencesManager';
-import {SoundManager} from '@/client/utils/SoundManager';
 import {WaitingForModel} from '@/common/models/WaitingForModel';
-import {Phase} from '@/common/Phase';
 import {paths} from '@/common/app/paths';
 import {statusCode} from '@/common/http/statusCode';
 import {InputResponse} from '@/common/inputs/InputResponse';
 import {INVALID_RUN_ID, AppErrorResponse} from '@/common/app/AppErrorId';
 import {gameDocumentTitle} from '../utils/documentTitle';
-import {setFaviconStatus, setFaviconTurnFrame} from '@/client/utils/favicon';
 
 let ui_update_timeout_id: number | undefined;
-let turnIndicatorTimer: number | undefined;
-let animationFrame = 0;
-
-const TURN_FRAME_COUNT = 4;
-
-type DataModel = {
-  suspend: boolean,
-  savedPlayerView: PlayerViewModel | undefined;
-}
-
 const CANNOT_CONTACT_SERVER = 'Unable to reach the server. It may be restarting or down for maintenance.';
 
 export default defineComponent({
@@ -71,22 +50,7 @@ export default defineComponent({
       default: undefined,
     },
   },
-  data(): DataModel {
-    return {
-      suspend: false,
-      savedPlayerView: undefined,
-    };
-  },
   methods: {
-    animateTurnIndicator() {
-      const preferences = getPreferences();
-      if (!preferences.animated_title || !preferences.experimental_ui) {
-        return;
-      }
-
-      animationFrame = (animationFrame + 1) % TURN_FRAME_COUNT;
-      setFaviconTurnFrame(animationFrame);
-    },
     onsave(out: InputResponse) {
       this.fetchPlayerInput(
         paths.PLAYER_INPUT + '?id=' + this.playerView.id,
@@ -138,18 +102,13 @@ export default defineComponent({
         });
     },
     updatePlayerView(playerView: PlayerViewModel | undefined) {
-      if (this.suspend === false) {
-        const root = vueRoot(this);
-        root.screen = 'empty';
-        root.playerView = playerView;
-        root.playerkey++;
-        root.screen = 'player-home';
-        if (this.playerView.game.phase === 'end' && window.location.pathname !== paths.THE_END) {
-          window.location = window.location as any as (string & Location);
-        }
-        this.savedPlayerView = undefined;
-      } else {
-        this.savedPlayerView = playerView;
+      const root = vueRoot(this);
+      root.screen = 'empty';
+      root.playerView = playerView;
+      root.playerkey++;
+      root.screen = 'player-home';
+      if (this.playerView.game.phase === 'end' && window.location.pathname !== paths.THE_END) {
+        window.location = window.location as any as (string & Location);
       }
     },
     waitForUpdate() {
@@ -187,10 +146,6 @@ export default defineComponent({
       ui_update_timeout_id = window.setTimeout(askForUpdate, raw_settings.waitingForTimeout);
     },
     notify() {
-      if (getPreferences().enable_sounds) {
-        SoundManager.playActivePlayerSound();
-      }
-
       if (Notification.permission !== 'granted') {
         Notification.requestPermission();
       } else if (Notification.permission === 'granted') {
@@ -216,35 +171,12 @@ export default defineComponent({
         }
       }
     },
-    updateSuspend() {
-      if (this.suspend === false && this.savedPlayerView !== undefined) {
-        this.updatePlayerView(this.savedPlayerView);
-      }
-    },
-    showRefresh(): boolean {
-      return this.suspend === true && this.savedPlayerView !== undefined;
-    },
   },
   mounted() {
     document.title = gameDocumentTitle(this.playerView.game);
-    if (getPreferences().experimental_ui) {
-      setFaviconStatus(this.waitingfor !== undefined ? 'turn' : 'idle');
-    }
-    window.clearInterval(turnIndicatorTimer);
     if (this.waitingfor === undefined || this.waitingfor.optional) {
       this.waitForUpdate();
     }
-    if (getPreferences().experimental_ui && this.waitingfor !== undefined && !this.waitingfor.optional) {
-      turnIndicatorTimer = window.setInterval(() => this.animateTurnIndicator(), 1000);
-    }
-  },
-  computed: {
-    Phase(): typeof Phase {
-      return Phase;
-    },
-    preferences(): typeof getPreferences {
-      return getPreferences;
-    },
   },
 });
 

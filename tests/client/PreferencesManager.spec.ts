@@ -20,8 +20,6 @@ describe('PreferencesManager', () => {
   it('default values', () => {
     const values = instance.values();
     expect(values.hide_active_cards).eq(false);
-    expect(values.enable_sounds).eq(true);
-    expect(values.animated_title).eq(true);
   });
 
   it('setter updates storage and references', () => {

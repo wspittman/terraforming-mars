@@ -49,7 +49,6 @@ import raw_settings from '@/genfiles/settings.json';
 import { vueRoot } from '@/client/components/vueRoot';
 import { PlayerViewModel } from '@/common/models/PlayerModel';
 import { SpectatorId } from '@/common/Types';
-import { getPreferences } from '../utils/PreferencesManager';
 
 function browser(): string {
   // Taken from https://stackoverflow.com/questions/5916900/how-can-you-detect-the-version-of-a-browser
@@ -136,7 +135,6 @@ export default defineComponent({
         version: raw_settings.head,
         builtAt: raw_settings.builtAt,
         browser: browser(),
-        experimental_ui: getPreferences().experimental_ui,
       });
       this.message = JSON.stringify(content, null, 2);
     },

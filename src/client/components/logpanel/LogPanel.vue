@@ -32,8 +32,6 @@ import {LogMessage} from '@/common/logs/LogMessage';
 import {PublicPlayerModel, ViewModel} from '@/common/models/PlayerModel';
 import {playerColorClass} from '@/common/utils/utils';
 import {Color} from '@/common/Color';
-import {SoundManager} from '@/client/utils/SoundManager';
-import {getPreferences} from '@/client/utils/PreferencesManager';
 import {ParticipantId, SpaceId} from '@/common/Types';
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
 import CardPanel from '@/client/components/logpanel/CardPanel.vue';
@@ -134,9 +132,6 @@ export default defineComponent({
           }
           messages.splice(0, messages.length);
           messages.push(...data);
-          if (getPreferences().enable_sounds && window.location.search.includes('experimental=1') ) {
-            SoundManager.newLog();
-          }
           if (generation === this.generation) {
             this.$nextTick(this.scrollToEnd);
           }

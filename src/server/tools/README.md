@@ -6,7 +6,6 @@ Before use them build the project `npm run build`
 
 ... then run any of compilled scripts from build directory `node <path-to-the-toolname>.js`
 
-
 It is possible to run these tools "directly" by using ts-node package
 
 1. Install ts-node on your machine `npm install -g ts-node`
@@ -29,6 +28,7 @@ POSTGRES_HOST=<postges:...> node build/src/tools/export_game.js <game id | playe
 ```
 
 ### Description
+
 This tool extracts the entire history of a game from a database and stores it in the local filesystem database.
 
 If you plan to extract from the local SQLite database, have no environment variables. If you're extracting
@@ -37,16 +37,3 @@ You might as well then just run `cp -R`
 
 (Read https://github.com/terraforming-mars/terraforming-mars/wiki/Databases#maintenance
 to get advice on setting up your `POSTGRES_HOST` environment variable.)
-
-## Analyze MA
-
-Starts a local web server that you can use to get results of MA synergy. To run,
-
-```sh
-npm run build:server
-node build/src/server/tools/analyze_ma.js
-```
-
-And then point your browser to http://localhost:8081
-
-Warning: this is a fragile tool, and it might fail or hide errors.

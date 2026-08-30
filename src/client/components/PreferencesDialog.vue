@@ -89,15 +89,6 @@
           <span class="tooltip tooltip-left" :data-tooltip="$t('Test out any possible new experimental UI features for feedback.')">&#9432;</span>
         </label>
       </div>
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.debug_view" data-test="debug_view">
-          <i class="form-icon"></i>
-          <span v-i18n>Debug View</span>
-          <span class="tooltip tooltip-left" :data-tooltip="$t('Add information useful for development and debugging.')">&#9432;</span>
-        </label>
-      </div>
-
       <div class="preferences_panel_actions">
         <button class="btn btn-lg btn-primary" @click="okClicked" v-i18n>Ok</button>
         <button class="btn btn-lg btn-primary" @click="showBugDialog" v-i18n>Report a bug</button>

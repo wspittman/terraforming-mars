@@ -29,11 +29,6 @@
                 <div class="help-icon-label" v-i18n>Jovian</div>
                 </div>
             <div>
-                <div class="resource-tag tag-venus"></div>
-                <div class="help-icon-label" v-i18n>Venus</div>
-                <div class="expansion-icon expansion-icon-venus"></div>
-            </div>
-            <div>
                 <div class="resource-tag tag-plant"></div>
                 <div class="help-icon-label" v-i18n>Plant</div>
             </div>
@@ -49,37 +44,9 @@
                 <div class="resource-tag tag-city"></div>
                 <div class="help-icon-label" v-i18n>City</div>
             </div>
-            <br>
-            <div>
-                <div class="resource-tag tag-wild"></div>
-                <div class="help-icon-label" v-i18n>Wild</div>
-                <div class="expansion-icon expansion-icon-prelude"></div>
-                <div class="expansion-icon expansion-icon-colony"></div>
-                <div class="expansion-icon expansion-icon-turmoil"></div>
-
-            </div>
             <div>
                 <div class="resource-tag tag-event"></div>
                 <div class="help-icon-label" v-i18n>Event</div>
-            </div>
-            <br>
-            <div>
-                <div class="help-icon-sublabel" v-i18n>Fan Expansion Tags</div>
-            </div>
-            <div>
-                <div class="resource-tag tag-moon"></div>
-                <div class="help-icon-label" v-i18n>Moon</div>
-                <div class="expansion-icon expansion-icon-themoon"></div>
-            </div>
-            <div>
-                <div class="resource-tag tag-mars"></div>
-                <div class="help-icon-label" v-i18n>Mars</div>
-                <div class="expansion-icon expansion-icon-pathfinders"></div>
-            </div>
-            <div>
-                <div class="resource-tag tag-clone"></div>
-                <div class="help-icon-label" v-i18n>Clone</div>
-                <div class="expansion-icon expansion-icon-pathfinders"></div>
             </div>
 
         </div>
@@ -131,76 +98,6 @@
                 <div class="help-icon-resource science"></div>
                 <div class="help-icon-label" v-i18n>Science</div>
             </div>
-            <div>
-                <div class="help-icon-resource floater"></div>
-                <div class="help-icon-label" v-i18n>Floater</div>
-            </div>
-            <div>
-                <div class="help-icon-resource asteroid"></div>
-                <div class="help-icon-label" v-i18n>Asteroid</div>
-                <div class="expansion-icon expansion-icon-venus"></div>
-                <div class="expansion-icon expansion-icon-promo"></div>
-            </div>
-            <div>
-                <div class="help-icon-resource preservation"></div>
-                <div class="help-icon-label" v-i18n>Preservation</div>
-                <div class="expansion-icon expansion-icon-turmoil"></div>
-            </div>
-            <div>
-                <div class="help-icon-resource camp"></div>
-                <div class="help-icon-label" v-i18n>Camp</div>
-                <div class="expansion-icon expansion-icon-colony"></div>
-            </div>
-            <div>
-                <div class="help-icon-resource disease"></div>
-                <div class="help-icon-label" v-i18n>Disease</div>
-                <div class="expansion-icon expansion-icon-promo"></div>
-            </div>
-            <!-- <br>
-            <div class="help-icon-sublabel" v-i18n>
-                Fan Expansion Card Resources
-            </div>
-            <div>
-                <div class="help-icon-resource resource-cube"></div>
-                <div class="help-icon-label" v-i18n>Resource cube</div>
-                <div class="expansion-icon expansion-icon-themoon"></div>
-            </div>
-            <div>
-                <div class="help-icon-resource data"></div>
-                <div class="help-icon-label" v-i18n>Data</div>
-                <div class="expansion-icon expansion-icon-themoon"></div>
-                <div class="expansion-icon expansion-icon-pathfinders"></div>
-            </div>
-            <div>
-                <div class="help-icon-resource syndicate-fleet"></div>
-                <div class="help-icon-label" v-i18n>Syndicate Fleet</div>
-                <div class="expansion-icon expansion-icon-themoon"></div>
-            </div>
-            <div>
-                <div class="help-icon-resource venusian-habitat"></div>
-                <div class="help-icon-label" v-i18n>Venusian Habitat</div>
-                <div class="expansion-icon expansion-icon-pathfinders"></div>
-            </div>
-            <div>
-                <div class="help-icon-resource specialized-robot"></div>
-                <div class="help-icon-label" v-i18n>Specialized Robot</div>
-                <div class="expansion-icon expansion-icon-pathfinders"></div>
-            </div>
-            <div>
-                <div class="help-icon-resource seed"></div>
-                <div class="help-icon-label" v-i18n>Seed</div>
-                <div class="expansion-icon expansion-icon-pathfinders"></div>
-            </div>
-            <div>
-                <div class="help-icon-resource agenda"></div>
-                <div class="help-icon-label" v-i18n>Agenda</div>
-                <div class="expansion-icon expansion-icon-pathfinders"></div>
-            </div>
-            <div>
-                <div class="help-icon-resource orbital"></div>
-                <div class="help-icon-label" v-i18n>Orbital</div>
-                <div class="expansion-icon expansion-icon-pathfinders"></div>
-            </div> -->
         </div>
 
         <div class="help-icons-column">
@@ -241,10 +138,6 @@
                 <div class="tile help-icon-param-box-ocean"></div>
                 <div class="help-icon-label" v-i18n>Oceans</div>
             </div>
-            <div>
-                <div class="tile help-icon-param-box-venus"></div>
-                <div class="help-icon-label" v-i18n>Venus</div>
-            </div>
         </div>
         <div class="help-icons-column">
             <div>
@@ -261,26 +154,6 @@
             <div>
                 <div class="help-other-symbols"><div class="help-icon-card card"></div></div>
                 <div class="help-icon-label" v-i18n>Project Card</div>
-            </div>
-            <div>
-                <div class="help-other-symbols"><div class="tile colony"></div></div>
-                <div class="help-icon-label" v-i18n>Colony</div>
-            </div>
-            <div>
-                <div class="help-other-symbols"><div class="tile trade"></div></div>
-                <div class="help-icon-label" v-i18n>Trade</div>
-            </div>
-            <div>
-                <div class="help-other-symbols"><div class="tile fleet"></div></div>
-                <div class="help-icon-label" v-i18n>Trade Fleet</div>
-            </div>
-            <div>
-                <div class="help-other-symbols"><div class="help-icon-delegate"></div></div>
-                <div class="help-icon-label" v-i18n>Delegate</div>
-            </div>
-            <div>
-                <div class="help-other-symbols"><div class="help-icon-influence influence"></div></div>
-                <div class="help-icon-label" v-i18n>Influence</div>
             </div>
         </div>
     </div>

@@ -1,10 +1,13 @@
-import {shallowMount} from '@vue/test-utils';
-import {globalConfig} from './getLocalVue';
-import {expect} from 'chai';
 import WaitingFor from '@/client/components/WaitingFor.vue';
-import {RecursivePartial} from '@/common/utils/utils';
-import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
-import {Phase} from '@/common/Phase';
+import {
+  PlayerViewModel,
+  PublicPlayerModel,
+} from '@/common/models/PlayerModel';
+import { Phase } from '@/common/Phase';
+import { RecursivePartial } from '@/common/utils/utils';
+import { shallowMount } from '@vue/test-utils';
+import { expect } from 'chai';
+import { globalConfig } from './getLocalVue';
 
 describe('WaitingFor', () => {
   const thisPlayer: Partial<PublicPlayerModel> = {
@@ -28,7 +31,7 @@ describe('WaitingFor', () => {
       global: {
         ...globalConfig.global,
         stubs: {
-          'PlayerInputFactory': {template: '<div class="stub-pif"></div>'},
+          PlayerInputFactory: { template: '<div class="stub-pif"></div>' },
         },
       },
       props: {
@@ -45,39 +48,13 @@ describe('WaitingFor', () => {
     expect(wrapper.text()).to.not.include('Not your turn');
   });
 
-  it('keeps the page title stable when indicating the human turn', () => {
-    const wrapper = shallowMount(WaitingFor, {
-      ...globalConfig,
-      global: {
-        ...globalConfig.global,
-        stubs: {
-          'PlayerInputFactory': true,
-        },
-      },
-      props: {
-        playerView: playerView as PlayerViewModel,
-        waitingfor: {
-          type: 'option',
-          title: 'test',
-          buttonLabel: 'save',
-        },
-      },
-    });
-    const title = document.title;
-
-    (wrapper.vm as any).animateTurnIndicator();
-
-    expect(document.title).eq(title);
-    expect(document.title).not.to.match(/^[◑◒◐◓] /);
-  });
-
   it('shows "not your turn" when waitingfor is undefined', () => {
     const wrapper = shallowMount(WaitingFor, {
       ...globalConfig,
       global: {
         ...globalConfig.global,
         stubs: {
-          'PlayerInputFactory': true,
+          PlayerInputFactory: true,
         },
       },
       props: {

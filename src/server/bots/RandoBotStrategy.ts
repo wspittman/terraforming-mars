@@ -15,6 +15,7 @@ import {
   tryFundAward,
   tryConvertHeat,
   tryConvertPlants,
+  trySellPatents,
   tryStandardProject,
 } from './BotUtils';
 
@@ -34,7 +35,8 @@ export class RandoBotStrategy implements BotStrategy {
   }
 
   public takeAction(player: IPlayer): boolean {
-    return tryClaimMilestone(player) ||
+    return trySellPatents(player) ||
+      tryClaimMilestone(player) ||
       tryFundAward(player) ||
       tryConvertHeat(player) ||
       tryConvertPlants(player) ||

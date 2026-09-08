@@ -1295,6 +1295,18 @@ export class Player implements IPlayer {
         game.playerIsFinishedTakingActions();
         return;
       }
+      const corporation = this.pendingInitialActions[0];
+      if (corporation !== undefined) {
+        game.log('${0} took the first action of ${1} corporation', (b) =>
+          b.player(this).card(corporation),
+        );
+        this.defer(corporation.initialAction?.(this));
+        inplaceRemove(this.pendingInitialActions, corporation);
+        this.incrementActionsTaken();
+        game.deferredActions.runAll(() => this.takeAction());
+        resolveBotInputs([this]);
+        return;
+      }
       if (!getBotStrategy(this.botStrategy).takeAction(this)) {
         this.pass();
         game.playerIsFinishedTakingActions();

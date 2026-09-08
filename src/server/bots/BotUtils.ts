@@ -3,6 +3,7 @@ import {Random} from '@/common/utils/Random';
 import {IPlayer} from '@/server/IPlayer';
 import {ConvertHeat} from '@/server/cards/base/standardActions/ConvertHeat';
 import {ConvertPlants} from '@/server/cards/base/standardActions/ConvertPlants';
+import {SellPatentsStandardProject} from '@/server/cards/base/standardProjects/SellPatentsStandardProject';
 import {ICorporationCard} from '@/server/cards/corporation/ICorporationCard';
 
 export const ROBOT_NAMES = ['Bolt', 'Gizmo', 'Pixel', 'Rivet', 'Servo'] as const;
@@ -72,6 +73,16 @@ export function tryConvertPlants(player: IPlayer): boolean {
     return false;
   }
   player.defer(convertPlants.action(player));
+  return true;
+}
+
+export function trySellPatents(player: IPlayer): boolean {
+  const sellPatents = new SellPatentsStandardProject();
+  if (!sellPatents.canAct(player)) {
+    return false;
+  }
+  const cards = player.cardsInHand.map((card) => card.name);
+  sellPatents.action(player).process({type: 'card', cards});
   return true;
 }
 

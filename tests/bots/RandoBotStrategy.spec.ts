@@ -16,6 +16,7 @@ import {ConstRandom} from '@/common/utils/Random';
 import {selectRobotNames} from '@/server/bots/BotUtils';
 import {Thermalist} from '@/server/awards/Thermalist';
 import {Terraformer} from '@/server/milestones/Terraformer';
+import {TharsisRepublic} from '@/server/cards/corporation/TharsisRepublic';
 
 describe('RandoBotStrategy', () => {
   it('selects distinct robot names', () => {
@@ -180,6 +181,38 @@ describe('RandoBotStrategy', () => {
     resolveBotInputs([bot]);
 
     expect(selected).is.empty;
+  });
+
+  it('takes a corporation first action', () => {
+    const bot = new Player('bot', 'red', false, 0, 'p-bot', true);
+    const human = new Player('human', 'blue', false, 0, 'p-human');
+    const game = Game.newInstance('game', [human, bot], human, 'spectator');
+    human.clearWaitingFor();
+    bot.clearWaitingFor();
+    const corporation = new TharsisRepublic();
+    bot.playedCards.push(corporation);
+    bot.pendingInitialActions.push(corporation);
+
+    bot.takeAction();
+
+    expect(bot.pendingInitialActions).is.empty;
+    expect(game.board.getCitiesOnMars()).has.length(1);
+    expect(bot.actionsTakenThisGame).is.greaterThan(0);
+  });
+
+  it('sells every card in its hand', () => {
+    const bot = new Player('bot', 'red', false, 0, 'p-bot', true);
+    const human = new Player('human', 'blue', false, 0, 'p-human');
+    Game.newInstance('game', [human, bot], human, 'spectator');
+    human.clearWaitingFor();
+    bot.clearWaitingFor();
+    bot.cardsInHand.push(...cardsFromJSON([CardName.ACQUIRED_COMPANY, CardName.ALGAE]));
+    bot.megaCredits = 0;
+
+    expect(new RandoBotStrategy().takeAction(bot)).is.true;
+
+    expect(bot.cardsInHand).is.empty;
+    expect(bot.megaCredits).eq(2);
   });
 
   it('uses a standard project with 14 M€ and preserves its strategy when serialized', () => {
